@@ -1,0 +1,86 @@
+.admin-container {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.admin-orders {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-order {
+  border: 1px solid #eee;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.admin-order-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.admin-order-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.admin-id {
+  font-weight: 600;
+}
+
+.admin-status {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.admin-status.paid {
+  color: green;
+}
+
+.admin-status.pending {
+  color: orange;
+}
+
+.admin-order {
+  cursor: pointer;
+}
+
+.admin-order-items {
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 0.5rem;
+}
+
+.admin-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  font-size: 0.85rem;
+  padding: 0.25rem 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.admin-actions {
+  margin-top: 0.75rem;
+}
+
+.admin-buttons button {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+  border: 1px solid #000;
+  background: #fff;
+  cursor: pointer;
+}
+
+.admin-buttons button:hover {
+  background: #000;
+  color: #fff;
+}

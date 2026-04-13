@@ -1,0 +1,58 @@
+.orders-page {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.orders-header {
+  margin-bottom: 20px;
+}
+
+.orders-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.orders-form input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.orders-form button {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.order-card {
+  border: 1px solid #eee;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.order-status.paid {
+  color: green;
+}
+
+.order-status.pending {
+  color: orange;
+}
+
+.order-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.order-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}

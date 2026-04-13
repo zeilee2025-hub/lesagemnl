@@ -1,0 +1,72 @@
+/* =============================== */
+/* SHOP PAGE */
+/* =============================== */
+
+.shop {
+  padding: 2rem;
+}
+
+/* 🔝 TOP BAR */
+.shop-topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+#search-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+}
+
+#sort-select {
+  padding: 0.75rem;
+}
+
+/* 🧩 FILTERS */
+.shop-filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.filter-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  background: none;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background: black;
+  color: white;
+}
+
+/* 🧱 GRID */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+/* =========================
+   🔍 NO RESULTS
+========================= */
+
+.no-results {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.no-results-title {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.no-results-sub {
+  font-size: 12px;
+  opacity: 0.5;
+  margin-top: 8px;
+}

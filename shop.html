@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Shop — LÉ SAGE MNL</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="stylesheet" href="./css/footer.css" />
+  <link rel="stylesheet" href="./css/pages/shop.css" />
+
+  <!-- ICONS -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="shop-page">
+
+  <!-- ================= HEADER ================= -->
+  <header>
+
+    <!-- 🔥 ANNOUNCEMENT BAR -->
+    <div class="announcement-bar">
+      <div class="announcement-track">
+        <span class="announcement-group">
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+        </span>
+
+        <span class="announcement-group">
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- 🔥 NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-container container">
+
+        <div class="nav-left">
+          <ul class="nav-links">
+            <li><a href="./index.html" class="nav-link">HOME</a></li>
+            <li><a href="./shop.html" class="nav-link active">SHOP</a></li>
+            <li><a href="./lookbook.html" class="nav-link">LOOKBOOK</a></li> <!-- ✅ FIXED -->
+            <li><a href="./about.html" class="nav-link">ABOUT</a></li>
+          </ul>
+        </div>
+
+        <div class="nav-right">
+
+          <!-- SEARCH -->
+          <div class="search-wrapper">
+            <span class="nav-icon" id="search-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+              </svg>
+            </span>
+
+            <input 
+              type="text" 
+              id="search-input" 
+              class="search-input" 
+              placeholder="Search"
+            />
+          </div>
+
+          <!-- CART -->
+          <span class="nav-icon cart-icon" id="cart-icon">
+            <i data-lucide="shopping-bag"></i>
+            <span id="cart-badge" class="cart-badge">0</span>
+          </span>
+
+        </div>
+      </div>
+    </nav>
+
+  </header>
+
+  <!-- ================= SHOP ================= -->
+  <section class="shop">
+
+    <div class="shop-controls container">
+
+      <div class="shop-filters">
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="tops">Tops</button>
+        <button class="filter-btn" data-category="bottoms">Bottoms</button>
+        <button class="filter-btn" data-category="accessories">Accessories</button>
+      </div>
+
+      <div class="shop-sort">
+        <select id="sort-select">
+          <option value="newest">Newest</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div id="product-grid" class="product-grid"></div>
+
+  </section>
+
+  <!-- ================= QUICK ADD MODAL ================= -->
+  <div id="quick-add-overlay" class="quick-add-overlay"></div>
+
+  <div id="quick-add-modal" class="quick-add-modal">
+
+    <div class="quick-add-content">
+      <button id="quick-add-close" class="quick-add-close">×</button>
+
+      <h3 id="qa-title"></h3>
+      <p id="qa-price"></p>
+      
+      <div id="qa-colors"></div>
+      
+      <div id="qa-sizes" class="qa-sizes"></div>
+
+      <button id="qa-add-btn" class="qa-add-btn" disabled>
+        ADD TO CART
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ================= CART DRAWER ================= -->
+  <div id="cart-overlay" class="cart-overlay"></div>
+
+  <div id="cart-drawer" class="cart-drawer">
+
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button id="close-cart" class="close-cart">×</button>
+    </div>
+
+    <div id="cart-items" class="cart-items"></div>
+
+    <div class="cart-footer">
+      <p id="cart-total">Total: ₱0</p>
+    </div>
+
+  </div>
+
+  <!-- FOOTER MOUNT -->
+  <div id="footer-container"></div>
+
+  <!-- JS -->
+  <script type="module" src="./js/pages/shop.js"></script>
+  <script type="module" src="./js/components/navbar.js"></script>
+
+  <!-- ✅🔥 FIX: FORCE LOAD FOOTER -->
+  <script type="module">
+    import { loadFooter } from "./js/components/footerLoader.js";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadFooter();
+    });
+  </script>
+
+  <!-- ICON INIT -->
+  <script>
+    lucide.createIcons();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout | LÉ SAGE MNL</title>
+
+  <!-- STYLES -->
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="stylesheet" href="./css/pages/checkout.css" />
+
+  <!-- LUCIDE ICONS (REQUIRED) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="checkout-page">
+
+  <!-- ================= CHECKOUT HEADER ================= -->
+  <header class="checkout-header">
+    <div class="nav-container">
+
+      <!-- LOGO -->
+      <a href="./index.html" class="checkout-header__logo">
+        <img src="assets/logo.png" alt="LÉ SAGE MNL Logo">
+      </a>
+
+      <!-- CART -->
+      <a href="./cart.html" class="checkout-header__cart">
+        <i data-lucide="shopping-bag"></i>
+        <span id="cart-badge" class="cart-badge">0</span>
+      </a>
+
+    </div>
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main class="checkout">
+
+    <div class="checkout__container">
+
+      <!-- LEFT: FORM -->
+      <section class="checkout__left">
+
+        <!-- CONTACT -->
+        <div class="checkout__section">
+          <h2 class="checkout__title">Contact</h2>
+
+          <input 
+            type="email" 
+            id="checkout-email" 
+            class="checkout__input"
+            placeholder="Email"
+          />
+
+          <label class="checkout__checkbox">
+            <input type="checkbox" id="checkout-marketing" />
+            <span>Email me with news and offers</span>
+          </label>
+        </div>
+
+        <!-- DELIVERY -->
+        <div class="checkout__section">
+          <h2 class="checkout__title">Delivery</h2>
+
+          <!-- NAME -->
+          <div class="checkout__row">
+            <input type="text" id="checkout-first-name" class="checkout__input" placeholder="First name"/>
+            <input type="text" id="checkout-last-name" class="checkout__input" placeholder="Last name"/>
+          </div>
+
+          <!-- PHONE -->
+          <input type="text" id="checkout-phone" class="checkout__input" placeholder="Phone"/>
+
+          <!-- ADDRESS -->
+          <div class="form-group">
+            <label>Address</label>
+            <input 
+              type="text" 
+              id="checkout-address" 
+              class="checkout__input" 
+              placeholder="Street address (include barangay)"
+            />
+          </div>
+
+          <!-- APARTMENT -->
+          <input 
+            type="text" 
+            id="checkout-apartment" 
+            class="checkout__input" 
+            placeholder="Apartment, suite, unit (optional)"
+          />
+
+          <!-- PROVINCE -->
+          <div class="form-group" style="position: relative;">
+            <label>Province</label>
+
+            <input 
+              type="text" 
+              id="checkout-province-input"
+              class="checkout__input"
+              placeholder="Search province..."
+              autocomplete="off"
+            />
+
+            <div id="province-dropdown" class="dropdown-list"></div>
+          </div>
+
+          <!-- CITY -->
+          <div class="form-group">
+            <label>City / Municipality</label>
+            <select id="checkout-city" class="checkout__input">
+              <option value="">Select City</option>
+            </select>
+          </div>
+
+          <!-- POSTAL -->
+          <div class="form-group">
+            <label>Postal Code</label>
+            <input 
+              type="text" 
+              id="checkout-postal" 
+              class="checkout__input" 
+              placeholder="Postal code (e.g. 1800)"
+            />
+          </div>
+
+        </div>
+
+        <!-- PAYMENT -->
+        <div class="checkout__section">
+          <h2 class="checkout__title">Payment</h2>
+
+          <p class="checkout__payment-sub">
+            All transactions are secure and encrypted.
+          </p>
+
+          <div class="payment-unified">
+
+            <div class="payment-unified__top">
+              <span class="payment-unified__label">
+                Secure Payments via PayMongo
+              </span>
+
+              <div class="payment-unified__logos">
+
+                <div class="pay-badge">
+                  <img src="./assets/payments/mastercard.png" alt="Mastercard" />
+                </div>
+
+                <div class="pay-badge">
+                  <img src="./assets/payments/visa.png" alt="Visa" />
+                </div>
+
+                <div class="pay-badge">
+                  <img src="./assets/payments/gcash.png" alt="GCash" />
+                </div>
+
+                <div class="pay-badge">
+                  <img src="./assets/payments/qrph.png" alt="QR Ph" />
+                </div>
+
+              </div>
+            </div>
+
+            <div class="payment-unified__bottom">
+              You’ll be redirected to PayMongo to complete your purchase.
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- RIGHT: SUMMARY -->
+      <aside class="checkout__right">
+  <div id="checkout-items" class="summary__items"></div>
+  <div id="checkout-summary"></div>
+</aside>
+
+    </div>
+
+  </main>
+
+  <!-- INIT ICONS -->
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <!-- PAGE LOGIC -->
+  <script type="module" src="./js/pages/checkout.js"></script>
+
+</body>
+</html>

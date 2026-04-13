@@ -1,0 +1,171 @@
+/* ===============================
+   📄 ABOUT PAGE
+================================ */
+
+.about {
+  background: var(--color-black);
+  color: var(--color-white);
+  padding-bottom: 100px;
+}
+
+/* ===============================
+   HERO
+================================ */
+
+.about__hero {
+  padding-top: 50px;   /* 🔥 controls vertical position */
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+/* 🔥 BRAND LOGO */
+.about__brand-logo {
+  display: block;
+  margin: 0 auto;
+  width: 1000px;/* 🔥 balanced size */
+  max-width: 80%;
+  height: auto;
+}
+
+/* 🔥 SUBTITLE */
+.about__subtitle {
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 5000;
+  letter-spacing: 3px;
+  margin-top: 8px;
+}
+
+/* ===============================
+   STATEMENT (PRIMARY)
+================================ */
+
+.about__statement {
+  text-align: center;
+  padding: 20px 20px;
+}
+
+.about__statement p {
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+/* ===============================
+   TEXT BLOCKS
+================================ */
+
+.about__section {
+  text-align: center;
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 20px 20px;
+  line-height: 1.7;
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.about__section--center {
+  text-align: center;
+}
+
+/* ===============================
+   STATEMENT (SECONDARY)
+================================ */
+
+.about__statement--soft {
+  margin-top: 30px;
+}
+
+.about__statement--soft p {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+/* ===============================
+   CLOSING
+================================ */
+
+.about__closing {
+  text-align: center;
+  padding: 60px 20px 0;
+}
+
+.about__closing p {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+/* 🔥 REMOVE if not used (optional) */
+/* .about__logo {
+  display: block;
+  margin: 28px auto 0;
+  width: 110px;
+  height: auto;
+} */
+
+/* ===============================
+   📱 MOBILE
+================================ */
+
+@media (max-width: 768px) {
+
+  .about {
+    padding-bottom: 80px;
+  }
+
+  .about__hero {
+    padding-top: 40px;
+    padding-bottom: 20px;
+  }
+
+  .about__brand-logo {
+    width: 140px;
+  }
+
+  .about__subtitle {
+    font-size: 12px;
+  }
+
+  .about__statement {
+    padding: 20px 16px;
+  }
+
+  .about__statement p {
+    font-size: 20px;
+  }
+
+  .about__statement--soft p {
+    font-size: 16px;
+  }
+
+  .about__section {
+    padding: 16px;
+    font-size: 14px;
+  }
+
+  .about__closing {
+    padding: 40px 16px 0;
+  }
+
+  .about__closing p {
+    font-size: 18px;
+  }
+}
+
+/* ===============================
+   PAGE OFFSET
+================================ */
+
+body.about-page {
+  padding-top: calc(var(--announcement-height) + 60px);
+}

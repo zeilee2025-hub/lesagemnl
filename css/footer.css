@@ -1,0 +1,232 @@
+/* =========================
+   FOOTER BASE
+========================= */
+
+.footer {
+  background: #0e0e0e;
+  color: #eaeaea;
+  padding: 80px 40px 40px;
+  font-family: inherit;
+
+   overflow: hidden;
+}
+
+.footer::before,
+.footer::after {
+  display: none !important;
+}
+
+/* =========================
+   TOP LAYOUT
+========================= */
+
+.footer__top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+
+  padding: 0 40px; /* ✅ match navbar */
+  margin-bottom: 60px;
+}
+
+/* =========================
+   LEFT (LINKS)
+========================= */
+
+.footer__title {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  margin-bottom: 20px;
+  color: #888;
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer__links a {
+  font-size: 14px;
+  color: #eaeaea;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.footer__links a:hover {
+  opacity: 0.6;
+}
+
+/* =========================
+   RIGHT (NEWSLETTER)
+========================= */
+
+.footer__headline {
+  font-size: 18px;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.footer__subtext {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 20px;
+  max-width: 320px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.footer__form {
+  display: flex;
+  gap: 10px;
+}
+
+.footer__form input {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid #333;
+  color: #fff;
+  font-size: 14px;
+}
+
+.footer__form input::placeholder {
+  color: #666;
+}
+
+.footer__form input:focus {
+  outline: none;
+  border-color: #888;
+}
+
+/* BUTTON */
+
+.footer__form button {
+  padding: 12px 20px;
+  background: #fff;
+  color: #000;
+  border: none;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.footer__form button:hover {
+  opacity: 0.8;
+}
+
+/* =========================
+   MESSAGE
+========================= */
+
+.footer__message {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.footer__message.success {
+  color: #4caf50;
+}
+
+.footer__message.error {
+  color: #ff4d4d;
+}
+
+/* =========================
+   BOTTOM
+========================= */
+
+.footer__bottom {
+  border-top: 1px solid #222;
+
+  padding: 20px 40px 0; /* ✅ match navbar */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* SOCIAL */
+
+.footer__socials {
+  display: flex;
+  gap: 16px;
+}
+
+.footer__socials img {
+  width: 18px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.footer__socials img:hover {
+  opacity: 1;
+}
+
+/* =========================
+   COPYRIGHT BLOCK (UPDATED)
+========================= */
+
+.footer__copy {
+  font-size: 12px;
+  color: #777;
+  margin: 0;
+}
+
+.footer__built {
+  font-size: 11px;
+  color: #555;
+  margin-top: 4px;
+}
+
+/* CREDIT LINK */
+
+.footer__credit {
+  text-decoration: none;
+  color: #aaa;
+  margin-left: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.footer__credit:hover {
+  opacity: 1;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 60px 20px 30px;
+  }
+
+  .footer__top {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .footer__form {
+    flex-direction: column;
+  }
+
+  .footer__form button {
+    width: 100%;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    align-items: center; /* ✅ added */
+  }
+}
+
+.footer__socials img {
+  width: 18px;
+  height: 18px;
+  filter: invert(1);
+}

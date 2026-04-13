@@ -1,0 +1,284 @@
+/* =========================
+   LOOKBOOK PAGE
+========================= */
+
+.lookbook-page {
+  background: #000;
+}
+
+
+/* ❌ REMOVED position: relative (was creating stacking context) */
+/* .lookbook-main {
+  position: relative;
+} */
+
+
+/* =========================
+    NAVBAR
+========================= */
+
+.lookbook-page .navbar {
+  background: transparent;
+  border-bottom: none;
+}
+
+.lookbook-page .navbar.scrolled {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+
+/* =========================
+   🎬 VIDEO HERO
+========================= */
+
+.lookbook-hero {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.lookbook-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.lookbook-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1;
+}
+
+
+/* =========================
+   🖼 SOLO IMAGE
+========================= */
+
+.lookbook-solo {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.lookbook-solo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+
+/* =========================
+   ✨ MARQUEE
+========================= */
+
+.marquee--lookbook {
+  position: relative;
+}
+
+
+/* =========================
+   🎞 CAROUSEL SECTION
+========================= */
+
+.lookbook-carousel-section {
+  width: 100%;
+  background: #000;
+  padding: 0;
+}
+
+
+/* =========================
+   🔥 CAROUSEL (FULL BLEED)
+========================= */
+
+.lookbook-carousel {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.lookbook-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ❌ REMOVED will-change (causing GPU layer conflict) */
+
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.lookbook-track:active {
+  cursor: grabbing;
+}
+
+.lookbook-slide {
+  min-width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 0;
+}
+
+
+/* =========================
+   🖼 IMAGE SYSTEM
+========================= */
+
+.lookbook-image {
+  flex: 1 1 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.lookbook-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+
+/* =========================
+   🔥 SOLO SLIDE
+========================= */
+
+.lookbook-slide.solo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lookbook-slide.solo .lookbook-image {
+  width: 100%;
+  max-width: 1100px;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+
+/* =========================
+   🔘 LOOKBOOK DOTS (FILL STYLE)
+========================= */
+
+.lookbook-dots {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 5;
+}
+
+.lookbook-dots .dot {
+  width: 20px;
+  height: 4px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.lookbook-dots .dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.lookbook-dots .dot.active::after {
+  animation: dotFill 3.5s linear forwards;
+}
+
+@keyframes dotFill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+
+/* =========================
+   📱 RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .lookbook-hero {
+    height: 85vh;
+  }
+
+  .lookbook-solo {
+    height: 85vh;
+  }
+
+  .lookbook-carousel {
+    height: 85vh;
+  }
+
+  .lookbook-dots {
+    bottom: 25px;
+  }
+
+}
+
+
+/* =========================
+   🔥 LOOKBOOK NAVBAR FIX
+========================= */
+
+.lookbook-hero,
+.lookbook-solo {
+  overflow: visible;
+}
+
+
+/* =========================
+   🔥 FIX: PREVENT CAROUSEL FROM OVERLAPPING NAVBAR
+========================= */
+
+.lookbook-carousel,
+.lookbook-track {
+  z-index: 0;
+}
+
+.lookbook-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32px;
+  color: rgba(255,255,255,0.8);
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 5;
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lookbook-carousel:hover .lookbook-arrow {
+  opacity: 1;
+}
+
+.lookbook-arrow.left {
+  left: 20px;
+}
+
+.lookbook-arrow.right {
+  right: 20px;
+}

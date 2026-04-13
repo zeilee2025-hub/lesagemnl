@@ -1,0 +1,184 @@
+{
+  "regions": [
+
+    {
+      "name": "NCR",
+      "provinces": [
+        {
+          "name": "Metro Manila",
+          "cities": [
+            "Manila","Quezon City","Makati","Taguig","Pasig",
+            "Parañaque","Las Piñas","Muntinlupa","Caloocan",
+            "Malabon","Navotas","Valenzuela","Marikina",
+            "San Juan","Pasay","Mandaluyong","Pateros"
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Region I",
+      "provinces": [
+        { "name": "Ilocos Norte", "cities": ["Laoag","Batac"] },
+        { "name": "Ilocos Sur", "cities": ["Vigan","Candon"] },
+        { "name": "La Union", "cities": ["San Fernando"] },
+        { "name": "Pangasinan", "cities": ["Dagupan","Urdaneta","Alaminos"] }
+      ]
+    },
+
+    {
+      "name": "Region II",
+      "provinces": [
+        { "name": "Cagayan", "cities": ["Tuguegarao"] },
+        { "name": "Isabela", "cities": ["Ilagan","Santiago"] },
+        { "name": "Nueva Vizcaya", "cities": ["Bayombong"] },
+        { "name": "Quirino", "cities": ["Cabarroguis"] }
+      ]
+    },
+
+    {
+      "name": "Region III",
+      "provinces": [
+        { "name": "Aurora", "cities": ["Baler"] },
+        { "name": "Bataan", "cities": ["Balanga"] },
+        { "name": "Bulacan", "cities": ["Malolos","Meycauayan","San Jose del Monte"] },
+        { "name": "Nueva Ecija", "cities": ["Cabanatuan","Gapan"] },
+        { "name": "Pampanga", "cities": ["Angeles","San Fernando"] },
+        { "name": "Tarlac", "cities": ["Tarlac City"] },
+        { "name": "Zambales", "cities": ["Olongapo"] }
+      ]
+    },
+
+    {
+      "name": "Region IV-A",
+      "provinces": [
+        { "name": "Cavite", "cities": ["Bacoor","Imus","Dasmariñas","Tagaytay"] },
+        { "name": "Laguna", "cities": ["Calamba","Santa Rosa","San Pablo"] },
+        { "name": "Batangas", "cities": ["Batangas City","Lipa","Tanauan"] },
+        { "name": "Rizal", "cities": ["Antipolo","Taytay","Cainta"] },
+        { "name": "Quezon", "cities": ["Lucena"] }
+      ]
+    },
+
+    {
+      "name": "Region IV-B",
+      "provinces": [
+        { "name": "Palawan", "cities": ["Puerto Princesa"] },
+        { "name": "Oriental Mindoro", "cities": ["Calapan"] },
+        { "name": "Occidental Mindoro", "cities": ["Mamburao"] },
+        { "name": "Marinduque", "cities": ["Boac"] },
+        { "name": "Romblon", "cities": ["Romblon"] }
+      ]
+    },
+
+    {
+      "name": "Region V",
+      "provinces": [
+        { "name": "Albay", "cities": ["Legazpi","Ligao"] },
+        { "name": "Camarines Norte", "cities": ["Daet"] },
+        { "name": "Camarines Sur", "cities": ["Naga","Iriga"] },
+        { "name": "Catanduanes", "cities": ["Virac"] },
+        { "name": "Masbate", "cities": ["Masbate City"] },
+        { "name": "Sorsogon", "cities": ["Sorsogon City"] }
+      ]
+    },
+
+    {
+      "name": "Region VI",
+      "provinces": [
+        { "name": "Aklan", "cities": ["Kalibo"] },
+        { "name": "Antique", "cities": ["San Jose"] },
+        { "name": "Capiz", "cities": ["Roxas"] },
+        { "name": "Iloilo", "cities": ["Iloilo City","Passi"] },
+        { "name": "Negros Occidental", "cities": ["Bacolod","San Carlos"] },
+        { "name": "Guimaras", "cities": ["Jordan"] }
+      ]
+    },
+
+    {
+      "name": "Region VII",
+      "provinces": [
+        { "name": "Cebu", "cities": ["Cebu City","Mandaue","Lapu-Lapu"] },
+        { "name": "Bohol", "cities": ["Tagbilaran"] },
+        { "name": "Negros Oriental", "cities": ["Dumaguete"] },
+        { "name": "Siquijor", "cities": ["Siquijor"] }
+      ]
+    },
+
+    {
+      "name": "Region VIII",
+      "provinces": [
+        { "name": "Leyte", "cities": ["Tacloban","Ormoc"] },
+        { "name": "Southern Leyte", "cities": ["Maasin"] },
+        { "name": "Samar", "cities": ["Catbalogan"] },
+        { "name": "Eastern Samar", "cities": ["Borongan"] },
+        { "name": "Northern Samar", "cities": ["Catarman"] },
+        { "name": "Biliran", "cities": ["Naval"] }
+      ]
+    },
+
+    {
+      "name": "Region IX",
+      "provinces": [
+        { "name": "Zamboanga del Sur", "cities": ["Zamboanga City"] },
+        { "name": "Zamboanga del Norte", "cities": ["Dipolog"] },
+        { "name": "Zamboanga Sibugay", "cities": ["Ipil"] }
+      ]
+    },
+
+    {
+      "name": "Region X",
+      "provinces": [
+        { "name": "Bukidnon", "cities": ["Malaybalay"] },
+        { "name": "Camiguin", "cities": ["Mambajao"] },
+        { "name": "Lanao del Norte", "cities": ["Iligan"] },
+        { "name": "Misamis Occidental", "cities": ["Oroquieta"] },
+        { "name": "Misamis Oriental", "cities": ["Cagayan de Oro"] }
+      ]
+    },
+
+    {
+      "name": "Region XI",
+      "provinces": [
+        { "name": "Davao del Sur", "cities": ["Davao City"] },
+        { "name": "Davao del Norte", "cities": ["Tagum"] },
+        { "name": "Davao Oriental", "cities": ["Mati"] },
+        { "name": "Davao de Oro", "cities": ["Nabunturan"] },
+        { "name": "Davao Occidental", "cities": ["Malita"] }
+      ]
+    },
+
+    {
+      "name": "Region XII",
+      "provinces": [
+        { "name": "South Cotabato", "cities": ["General Santos"] },
+        { "name": "Cotabato", "cities": ["Kidapawan"] },
+        { "name": "Sultan Kudarat", "cities": ["Isulan"] },
+        { "name": "Sarangani", "cities": ["Alabel"] }
+      ]
+    },
+
+    {
+      "name": "Region XIII",
+      "provinces": [
+        { "name": "Agusan del Norte", "cities": ["Butuan"] },
+        { "name": "Agusan del Sur", "cities": ["Bayugan"] },
+        { "name": "Surigao del Norte", "cities": ["Surigao City"] },
+        { "name": "Surigao del Sur", "cities": ["Tandag"] },
+        { "name": "Dinagat Islands", "cities": ["San Jose"] }
+      ]
+    },
+
+    {
+      "name": "BARMM",
+      "provinces": [
+        { "name": "Maguindanao", "cities": ["Cotabato City"] },
+        { "name": "Lanao del Sur", "cities": ["Marawi"] },
+        { "name": "Basilan", "cities": ["Isabela City"] },
+        { "name": "Sulu", "cities": ["Jolo"] },
+        { "name": "Tawi-Tawi", "cities": ["Bongao"] }
+      ]
+    }
+
+  ]
+}

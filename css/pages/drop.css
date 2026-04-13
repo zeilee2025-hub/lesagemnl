@@ -1,0 +1,60 @@
+/* =========================
+   DROP.CSS — CLEAN FINAL (SYSTEM ALIGNED)
+   ========================= */
+
+
+/* ================= DROP HERO ================= */
+
+.drop-hero {
+  width: 100%;
+  margin-bottom: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.drop-hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 🔥 subtle overlay for premium feel */
+.drop-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+
+/* ================= PRODUCTS SECTION ================= */
+
+.products {
+  padding: 0 var(--space-md) var(--space-xl);
+}
+
+
+/* ================= PRODUCT GRID WRAPPER ================= */
+
+.product-grid {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* ================= PRODUCT HOVER POLISH ================= */
+
+.product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+
+/* ================= EMPTY STATE ================= */
+
+.no-products {
+  text-align: center;
+  padding: var(--space-lg);
+  font-size: 14px;
+  color: var(--color-muted);
+}

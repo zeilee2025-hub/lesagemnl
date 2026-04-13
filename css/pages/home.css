@@ -1,0 +1,359 @@
+/* =========================
+   HOME — HERO (FINAL CLEAN)
+========================= */
+
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+/* 🎬 VIDEO */
+.hero__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient();
+}
+
+/* 🔥 CENTER CONTENT */
+.hero__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* =========================
+   HERO CTA — GLASS BUTTON
+========================= */
+
+.hero__explore {
+  position: relative;
+  display: inline-block;
+  padding: 10px 18px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.hero__explore:hover {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.9);
+}
+
+/* =========================
+   HOME DROP
+========================= */
+
+.home-drop {
+  padding: 80px 0 100px;
+  margin-top: 0;
+}
+
+.drop-banner img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* =========================
+   VIEW DROP (RESTORED)
+========================= */
+
+.view-drop {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.view-drop a {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--color-black);
+  position: relative;
+  display: inline-block;
+  transition: opacity 0.3s ease;
+}
+
+.view-drop a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1px;
+  background: var(--color-black);
+  opacity: 0.6;
+  transform: scaleX(0.8);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.view-drop a:hover::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* =========================
+   PRODUCTS
+========================= */
+
+.products {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 30px 40px 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section-title {
+  margin-bottom: 64px;
+}
+
+.product-grid {
+  width: 100%;
+  max-width: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+/* =========================
+   CART OVERLAY (RESTORED)
+========================= */
+
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-smooth);
+  z-index: 1000;
+}
+
+.cart-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* =========================
+   CART DRAWER (RESTORED)
+========================= */
+
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 360px;
+  height: 100%;
+  background: var(--color-white);
+  box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: right var(--transition-smooth);
+  z-index: 1001;
+}
+
+.cart-drawer.active {
+  right: 0;
+}
+
+/* =========================
+   CART ITEMS (RESTORED)
+========================= */
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.cart-qty {
+  display: flex;
+  gap: 8px;
+}
+
+.qty-btn {
+  border: 1px solid rgba(0,0,0,0.2);
+  padding: 2px 6px;
+}
+
+/* =========================
+   HERO — TYPOGRAPHY
+========================= */
+
+.hero__brand {
+  font-size: 44px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  transition: transform 0.4s ease;
+}
+
+.hero:hover .hero__brand {
+  transform: scale(1.02);
+}
+
+/* =========================
+   HERO — CTA
+========================= */
+
+.hero__cta {
+  margin-top: 20px;
+  padding: 12px 28px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  background: transparent;
+  color: white;
+  border: 1.5px solid rgba(255,255,255,0.9);
+  transition: all 0.3s ease;
+  opacity: 0.9;
+}
+
+.hero__cta:hover {
+  background: white;
+  color: black;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   🔥 PRODUCTS CTA
+========================= */
+
+.products-cta {
+  margin-top: 48px;
+  text-align: center;
+}
+
+.products-link {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-black);
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  transition: opacity 0.3s ease;
+  font-weight: 500;
+}
+
+.products-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1px;
+  background: var(--color-black);
+  opacity: 0.6;
+  transform: scaleX(0.8);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.products-link:hover::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* =========================
+   🔥 HOME VIDEO GRID (FIXED)
+========================= */
+
+.home-video-grid {
+  width: 100%;
+  background: #fff;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  line-height: 0;
+  font-size: 0;
+}
+
+.video-item {
+  width: 100%;
+  line-height: 0;
+}
+
+.video-item video {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: pointer;
+}
+
+/* =========================
+   🔥 EDITORIAL TAPE DIVIDER (FINAL FIXED)
+========================= */
+
+.tape-divider {
+  display: block;
+  width: 100%;
+  height: 60px;
+  min-height: 60px;
+
+  height: 64px;
+  position: relative;
+  z-index: 5;
+  margin-top: -1px;
+
+  background: repeating-linear-gradient(
+    45deg,
+    #d4af37 0px,
+    #d4af37 20px,
+    #000 20px,
+    #000 40px
+  );
+
+  border-top: 1px solid rgba(0,0,0,0.15);
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+}
+
+.tape-track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  align-items: center;
+  animation: tapeScroll 36s linear infinite;
+}
+
+.tape-content {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.tape-content span {
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin: 0 40px;
+  font-weight: 500;
+}
+
+@keyframes tapeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

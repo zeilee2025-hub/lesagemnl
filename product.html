@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product | LÉ SAGE MNL</title>
+
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="stylesheet" href="./css/pages/product.css" />
+
+  <!-- 🔥 ADDED (ICON SYSTEM) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="product-page">
+
+  <!-- ================= HEADER ================= -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-container">
+
+        <div class="nav-left">
+          <ul class="nav-links">
+            <li><a href="./index.html" class="nav-link">HOME</a></li>
+            <li><a href="./shop.html" class="nav-link">SHOP</a></li>
+            <li><a href="./lookbook.html" class="nav-link">LOOKBOOK</a></li>
+            <a href="./about.html" class="nav-link">ABOUT</a>
+          </ul>
+        </div>
+
+        <div class="nav-right">
+
+          <!-- SEARCH -->
+          <div class="search-wrapper">
+            <span class="nav-icon" id="search-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+              </svg>
+            </span>
+
+            <input 
+              type="text" 
+              id="search-input" 
+              class="search-input" 
+              placeholder="Search"
+            />
+          </div>
+
+          <!-- 🔥 CART (FIXED) -->
+          <span class="nav-icon cart-icon" id="cart-icon">
+            <i data-lucide="shopping-bag"></i>
+            <span id="cart-badge" class="cart-badge">0</span>
+          </span>
+
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <!-- ================= PRODUCT PAGE ================= -->
+  <main class="product-container">
+
+    <!-- IMAGE -->
+    <div class="product-image">
+      <div class="product-main-image">
+        <img id="product-image" src="" alt="Product Image" />
+      </div>
+
+      <div id="product-thumbnails" class="product-thumbnails"></div>
+    </div>
+
+    <!-- DETAILS -->
+    <div class="product-details">
+
+      <div class="product-header">
+        <h2 id="product-name">Loading...</h2>
+        <p class="product__style"></p>
+        <p id="product-price">₱0</p>
+      </div>
+
+      <div id="product-description" class="product-description"></div>
+<div id="product-features" class="product-features"></div>
+
+<!-- 🎨 COLOR (ADD THIS BLOCK) -->
+<div class="product__colors">
+  <p class="label">COLOR</p>
+  <div id="color-container" class="color-container"></div>
+</div>
+
+<!-- SIZE -->
+<div class="size-header">
+  <span>Size</span>
+  <button id="size-chart-btn" class="size-chart-btn">Size chart</button>
+</div>
+
+      <div id="size-container" class="sizes"></div>
+
+      <!-- FEEDBACK -->
+      <div class="selection-feedback">
+        <p id="selected-size-text" class="selected-size"></p>
+        <p id="stock-message" class="stock-message"></p>
+        <p id="size-error" class="error-message"></p>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-block">
+        <button id="add-to-cart-btn">ADD TO BAG</button>
+
+        <button id="buy-now-btn" class="buy-now-btn">
+          BUY NOW
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- SIZE CHART -->
+  <div id="size-chart-modal" class="size-chart-modal">
+    <div class="size-chart-overlay"></div>
+
+    <div class="size-chart-content">
+      <button id="size-chart-close" class="size-chart-close">×</button>
+      <div class="size-guide-modal__body"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast-root"></div>
+
+  <!-- JS -->
+  <script type="module" src="./js/components/navbar.js"></script>
+  <script type="module" src="./js/components/cartDrawer.js"></script> <!-- ✅ ADD -->
+  <script type="module" src="./js/pages/product.js"></script>
+
+  <!-- 🔥 CRITICAL (RENDER ICONS) -->
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <!-- ================= CART DRAWER ================= -->
+<div id="cart-overlay" class="cart-overlay"></div>
+
+<div id="cart-drawer" class="cart-drawer">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button id="close-cart" class="close-cart">×</button>
+  </div>
+
+  <div id="cart-items" class="cart-items"></div>
+
+  <div id="cart-total"></div>
+</div>
+
+</body>
+</html>

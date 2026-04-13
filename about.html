@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>About | LÉ SAGE MNL</title>
+
+  <!-- BASE SYSTEM -->
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="stylesheet" href="./css/footer.css" />
+
+  <!-- PAGE CSS -->
+  <link rel="stylesheet" href="./css/pages/about.css" />
+
+  <!-- ICONS -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="about-page">
+
+  <!-- ================= HEADER ================= -->
+  <header>
+
+    <!-- ANNOUNCEMENT BAR -->
+    <div class="announcement-bar">
+      <div class="announcement-track">
+        <span class="announcement-group">
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+        </span>
+
+        <span class="announcement-group">
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-container">
+
+        <!-- LEFT -->
+        <div class="nav-left">
+          <ul class="nav-links">
+            <li><a href="./index.html" class="nav-link">HOME</a></li>
+            <li><a href="./shop.html" class="nav-link">SHOP</a></li>
+            <li><a href="./lookbook.html" class="nav-link">LOOKBOOK</a></li>
+            <li><a href="./about.html" class="nav-link active">ABOUT</a></li>
+          </ul>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="nav-right">
+
+          <!-- SEARCH -->
+          <div class="search-wrapper">
+            <span class="nav-icon" id="search-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+              </svg>
+            </span>
+
+            <input type="text" id="search-input" class="search-input" placeholder="Search" />
+          </div>
+
+          <!-- CART -->
+          <span class="nav-icon cart-icon" id="cart-icon">
+            <i data-lucide="shopping-bag"></i>
+            <span id="cart-badge" class="cart-badge">0</span>
+          </span>
+
+        </div>
+
+      </div>
+    </nav>
+
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main>
+
+    <section class="about">
+
+      <!-- HERO -->
+      <div class="about__hero">
+        <img src="./assets/icons/aboutlogo.png" alt="LÉ SAGE MNL Logo" class="about__brand-logo" />
+        <p class="about__subtitle">Wisdom of the New Generation</p>
+      </div>
+
+      <!-- STATEMENT -->
+      <div class="about__statement">
+        <p>Presence over noise.</p>
+        <p>Clarity over chaos.</p>
+        <p>Wisdom over validation.</p>
+      </div>
+
+      <!-- STORY -->
+      <div class="about__section">
+        <p>
+          LÉ SAGE MNL is a culture inspired by those who move with purpose and think beyond the noise.
+          Built on the idea of wisdom in the new generation where presence speaks louder than attention.
+        </p>
+      </div>
+
+      <!-- SYMBOL -->
+      <div class="about__section about__section--center">
+        <p>
+          The crowned owl represents silent power.
+          A presence that does not need to prove itself.
+          Because real wisdom does not compete. It exists.
+        </p>
+      </div>
+
+      <!-- COMMUNITY -->
+      <div class="about__statement about__statement--soft">
+        <p>For the ones building quietly.</p>
+        <p>For the ones who don’t need validation.</p>
+        <p>For the ones who move different.</p>
+      </div>
+
+      <!-- CLOSING -->
+      <div class="about__closing">
+        <p>Built for the hustle.</p>
+        <p>Rooted in respect.</p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ================= CART DRAWER ================= -->
+<div id="cart-overlay" class="cart-overlay"></div>
+
+<div id="cart-drawer" class="cart-drawer">
+
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button id="close-cart" class="close-cart">×</button>
+  </div>
+
+  <div id="cart-items" class="cart-items"></div>
+
+  <div class="cart-footer">
+    <p id="cart-total">Total: ₱0</p>
+  </div>
+
+</div>
+
+  <!-- FOOTER -->
+  <div id="footer-container"></div>
+
+  <!-- JS -->
+  <script type="module" src="./js/components/navbar.js"></script>
+  <script type="module" src="./js/components/footerLoader.js"></script>
+
+  <script>
+    lucide.createIcons();
+  </script>
+
+</body>
+</html>

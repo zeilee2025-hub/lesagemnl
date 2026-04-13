@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>LÉ SAGE MNL | Lookbook</title>
+
+  <!-- GLOBAL -->
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="stylesheet" href="./css/footer.css" />
+
+  <!-- PAGE -->
+  <link rel="stylesheet" href="./css/pages/lookbook.css" />
+
+  <!-- ICONS -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="lookbook-page overlay-page">
+
+  <!-- ================= HEADER ================= -->
+  <header role="banner">
+
+    <!-- 🔥 ANNOUNCEMENT BAR -->
+    <div class="announcement-bar">
+      <div class="announcement-track">
+
+        <span class="announcement-group">
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+        </span>
+
+        <span class="announcement-group">
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+          <span class="item">Support available 9am–9pm, Mon–Sat</span>
+          <span class="item">Metro Manila orders arrive in 3–5 business days</span>
+          <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
+        </span>
+
+      </div>
+    </div>
+
+    <!-- 🔥 NAVBAR -->
+    <nav class="navbar" role="navigation">
+      <div class="nav-container">
+
+        <div class="nav-left">
+          <ul class="nav-links">
+            <li><a href="./index.html" class="nav-link">HOME</a></li>
+            <li><a href="./shop.html" class="nav-link">SHOP</a></li>
+            <li><a href="./lookbook.html" class="nav-link active">LOOKBOOK</a></li>
+            <li><a href="./about.html" class="nav-link">ABOUT</a></li>
+          </ul>
+        </div>
+
+        <div class="nav-right">
+
+          <!-- 🔍 SEARCH -->
+          <div class="search-wrapper">
+            <span class="nav-icon" id="search-icon" aria-label="Search">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+              </svg>
+            </span>
+
+            <input 
+              type="text" 
+              id="search-input" 
+              class="search-input" 
+              placeholder="Search"
+            />
+          </div>
+
+          <!-- 🛒 CART -->
+          <span class="nav-icon cart-icon" id="cart-icon" aria-label="Cart">
+            <i data-lucide="shopping-bag"></i>
+            <span id="cart-badge" class="cart-badge">0</span>
+          </span>
+
+        </div>
+
+      </div>
+    </nav>
+
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main class="lookbook-main">
+
+    <!-- 🎬 VIDEO HERO -->
+    <section class="lookbook-hero">
+      <video 
+        class="lookbook-video"
+        src="./assets/images/lookbook/lookbook-hero.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="./assets/images/lookbook/lb11.jpg"
+      ></video>
+
+      <div class="lookbook-overlay"></div>
+    </section>
+
+    <!-- ✨ MARQUEE -->
+    <section class="marquee marquee--lookbook">
+      <div class="marquee__track">
+
+        <span class="marquee__text">
+          <span class="marquee__item">LOOKBOOK SERIES</span>
+          <span class="marquee__item">LÉ SAGE MNL</span>
+        </span>
+
+        <span class="marquee__text">
+          <span class="marquee__item">LOOKBOOK SERIES</span>
+          <span class="marquee__item">LÉ SAGE MNL</span>
+        </span>
+
+        <span class="marquee__text">
+          <span class="marquee__item">LOOKBOOK SERIES</span>
+          <span class="marquee__item">LÉ SAGE MNL</span>
+        </span>
+
+      </div>
+    </section>
+
+    <!-- 🎞 CAROUSEL -->
+    <section class="lookbook-carousel-section">
+      <div id="lookbook-root"></div>
+    </section>
+
+  </main>
+
+  <!-- ================= CART ================= -->
+  <div class="cart-overlay" id="cart-overlay"></div>
+
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <button id="close-cart">✕</button>
+    </div>
+
+    <div id="cart-items"></div>
+    <div id="cart-total"></div>
+  </aside>
+
+  <!-- ================= FOOTER ================= -->
+  <div id="footer-container"></div>
+
+  <!-- ================= JS ================= -->
+
+  <!-- COMPONENTS -->
+  <script type="module" src="./js/components/navbar.js"></script>
+  <script type="module" src="./js/components/footerLoader.js"></script>
+
+  <!-- PAGE -->
+  <script type="module" src="./js/pages/lookbook.js"></script>
+
+  <!-- ICON INIT -->
+  <script>
+    lucide.createIcons();
+  </script>
+
+</body>
+</html>

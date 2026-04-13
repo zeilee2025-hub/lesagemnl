@@ -1,0 +1,206 @@
+/* =========================
+   BASE.CSS — FOUNDATION
+   ========================= */
+
+/* 🔥 GOOGLE FONT IMPORT */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
+/* 🔥 RESET */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 🔥 ROOT VARIABLES (DESIGN SYSTEM) */
+:root {
+  /* Spacing */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 32px;
+  --space-lg: 64px;
+  --space-xl: 100px;
+
+  /* Colors */
+  --color-bg: #ffffff;
+  --color-text: #111111;
+  --color-muted: #777777;
+  --color-accent: #000000;
+
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  /* 🔥 TYPOGRAPHY SYSTEM */
+  --font-main: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-brand: 'Montserrat', sans-serif;
+
+  /* TYPE SCALE */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 28px;
+  --text-hero: 40px;
+
+  /* LETTER SPACING */
+  --letter-tight: 0.02em;
+  --letter-normal: 0.05em;
+  --letter-wide: 0.08em;
+  --letter-logo: 0.04em;
+
+  /* Layout */
+  --container-width: 1200px;
+  --nav-height: 90px;
+  --height: var(--announcement-height);
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.3s ease;
+
+  --announcement-height: 40px;
+  --navbar-height: 60px;
+}
+
+/* 🔥 BODY BASE */
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* ✅ IMPORTANT: MAIN EXPANDS */
+main {
+  flex: 1;
+}
+
+/* 🔥 FORCE FONT CONSISTENCY */
+* {
+  font-family: inherit;
+}
+
+/* 🔥 TYPOGRAPHY */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: var(--letter-tight);
+}
+
+h1 {
+  font-size: var(--text-hero);
+  letter-spacing: var(--letter-logo);
+}
+
+h2 {
+  font-size: var(--text-xl);
+}
+
+h3 {
+  font-size: var(--text-lg);
+}
+
+p {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+/* 🔥 LINKS */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--transition-fast);
+}
+
+.navbar a:hover {
+  opacity: 1;
+}
+
+/* 🔥 IMAGES */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* 🔥 VIDEO (ADDED — IMPORTANT) */
+video {
+  max-width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* 🔥 BUTTON RESET */
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* 🔥 LIST RESET */
+ul, ol {
+  list-style: none;
+}
+
+/* 🔥 CONTAINER */
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+/* =========================
+   🔥 PAGE TRANSITION
+========================= */
+
+body {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+body.page-exit {
+  opacity: 0;
+}
+
+/* =========================
+   🎬 LOOKBOOK CINEMATIC ENTRY
+========================= */
+
+body.lookbook-page {
+  opacity: 0;
+  transform: scale(1.02);
+  filter: blur(6px);
+
+  animation: lookbookEnter 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes lookbookEnter {
+  0% {
+    opacity: 0;
+    transform: scale(1.02);
+    filter: blur(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+/* =========================
+   🔥 FULL-WIDTH SECTION SAFETY (ADDED)
+========================= */
+
+section {
+  width: 100%;
+}
