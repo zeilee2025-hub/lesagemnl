@@ -128,9 +128,14 @@ function updateUI() {
     return;
   }
 
-  renderProductGrid(grid, filtered, handleQuickAdd);
-}
+  // 🔥 DISABLE MODEL VIEW ONLY FOR SHOP PAGE
+  const shopProducts = filtered.map(product => ({
+    ...product,
+    hasModel: false
+  }));
 
+  renderProductGrid(grid, shopProducts, handleQuickAdd);
+}
 
 // ===============================
 // EVENTS

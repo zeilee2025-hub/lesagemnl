@@ -13,6 +13,12 @@ import {
 
 import { getZone } from "../services/shippingService.js";
 
+// ✅ NEW
+import {
+  getCheckoutFormData,
+  validateCheckoutForm
+} from "../core/checkoutForm.js";
+
 // ==========================
 // 📦 DOM REFERENCES
 // ==========================
@@ -90,6 +96,12 @@ async function init() {
       clearError(e.target);
     }
   });
+
+  document.addEventListener("click", (e) => {
+  if (e.target.id === "checkout-btn") {
+    handleCheckout();
+  }
+});
 
   await loadCheckout();
 }
@@ -204,7 +216,6 @@ async function loadCheckout() {
 
     updateCartBadge(cartData);
 
-    // ✅ SINGLE RENDER SOURCE
     renderCheckoutItems(itemsContainer, cartData);
 
     if (!cartData.length) {
@@ -213,7 +224,7 @@ async function loadCheckout() {
     }
 
     renderTotals();
-    attachCheckoutButton();
+    // attachCheckoutButton();
 
   } catch (error) {
     console.error("Error loading cart:", error);
@@ -309,15 +320,6 @@ function renderTotals() {
 }
 
 // ==========================
-// 🔘 BUTTON
-// ==========================
-function attachCheckoutButton() {
-  const btn = document.getElementById("checkout-btn");
-  if (!btn) return;
-  btn.addEventListener("click", handleCheckout);
-}
-
-// ==========================
 // ❌ VALIDATION UI
 // ==========================
 function clearError(input) {
@@ -329,8 +331,42 @@ function clearError(input) {
   if (error) error.remove();
 }
 
+function showFormErrors(errors) {
+  Object.entries(errors).forEach(([field, message]) => {
+    const input = getInputByField(field);
+    if (!input) return;
+
+    input.classList.add("input-error");
+
+    let errorEl = input.parentElement.querySelector(".input-error-text");
+
+    if (!errorEl) {
+      errorEl = document.createElement("div");
+      errorEl.className = "input-error-text";
+      input.parentElement.appendChild(errorEl);
+    }
+
+    errorEl.textContent = message;
+  });
+}
+
+function getInputByField(field) {
+  const map = {
+    email: "checkout-email",
+    phone: "checkout-phone",
+    firstName: "checkout-first-name",
+    lastName: "checkout-last-name",
+    address: "checkout-address",
+    province: "checkout-province-input",
+    city: "checkout-city",
+    postal: "checkout-postal"
+  };
+
+  return document.getElementById(map[field]);
+}
+
 // ==========================
-// 💳 CHECKOUT
+// 💳 CHECKOUT (FINAL)
 // ==========================
 async function handleCheckout() {
   const btn = document.getElementById("checkout-btn");
@@ -344,6 +380,18 @@ async function handleCheckout() {
     btn.disabled = true;
     btn.textContent = "Processing...";
 
+    // 🧠 FORM
+    const formData = getCheckoutFormData();
+
+    const formValidation = validateCheckoutForm(formData);
+
+    if (!formValidation.valid) {
+      showFormErrors(formValidation.errors);
+      resetButton(btn);
+      return;
+    }
+
+    // 🔄 STOCK
     const { updatedCart, changes } = await syncCartWithStock(cartData);
 
     if (!updatedCart.length) {
@@ -362,6 +410,7 @@ async function handleCheckout() {
       return;
     }
 
+    // 🛒 CART VALIDATION
     const validation = await validateCartBeforeCheckout(cartData);
 
     if (!validation.valid) {
@@ -370,11 +419,20 @@ async function handleCheckout() {
       return;
     }
 
+    // 💰 TOTALS
     const totals = calculateTotals(cartData, selectedRegion);
 
+    // 📦 CUSTOMER
+    const customer = {
+      ...formData,
+      region: selectedRegion
+    };
+
+    // 🚀 PAYMENT
     await createPaymentSession({
       items: cartData,
-      totals
+      totals,
+      customer
     });
 
   } catch (error) {

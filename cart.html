@@ -54,7 +54,7 @@
           <ul class="nav-links">
             <li><a href="./index.html" class="nav-link">HOME</a></li>
             <li><a href="./shop.html" class="nav-link">SHOP</a></li>
-            <li><a href="./lookbook.html" class="nav-link">LOOKBOOK</a></li> <!-- ✅ FIXED -->
+            <li><a href="./lookbook.html" class="nav-link">LOOKBOOK</a></li>
             <li><a href="./about.html" class="nav-link">ABOUT</a></li>
           </ul>
         </div>
@@ -94,33 +94,36 @@
   <!-- ================= MAIN ================= -->
   <main>
 
-    <div class="cart-page container">
+    <!-- ✅ CLEAN STRUCTURE (NO DUPLICATE cart-page) -->
+    <section class="cart-layout">
+      <div class="container">
 
-      <div class="cart-wrapper">
+        <div class="cart-wrapper">
 
-        <!-- HEADER BAR -->
-        <div class="cart-header-bar">
-          <h1 class="cart-title">Your Cart</h1>
-          <a href="./shop.html" class="continue-shopping">Continue shopping</a>
-        </div>
+          <!-- HEADER BAR -->
+          <div class="cart-header-bar">
+            <h1 class="cart-title">Your Cart</h1>
+            <a href="./shop.html" class="continue-shopping">Continue shopping</a>
+          </div>
 
-        <!-- CART ITEMS -->
-        <div id="cart-container"></div>
+          <!-- CART ITEMS -->
+          <div id="cart-container"></div>
 
-        <!-- CHECKOUT SECTION -->
-        <div class="cart-footer">
-          <button id="checkout-btn" class="cart-checkout-btn">
-            CHECKOUT ₱0
-          </button>
+          <!-- CHECKOUT SECTION -->
+          <div class="cart-footer">
+            <button id="checkout-btn" class="cart-checkout-btn">
+              CHECKOUT ₱0
+            </button>
 
-          <p class="cart-note">
-            Shipping calculated at checkout
-          </p>
+            <p class="cart-note">
+              Shipping calculated at checkout
+            </p>
+          </div>
+
         </div>
 
       </div>
-
-    </div>
+    </section>
 
   </main>
 

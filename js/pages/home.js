@@ -19,6 +19,7 @@ import { loadFooter } from "../components/footerLoader.js";
 
 // ✅ LOOKBOOK
 import { renderLookbookCarousel } from "../components/lookbookCarousel.js";
+import { initHero } from "../components/hero.js";
 
 
 // ==========================
@@ -58,6 +59,8 @@ let allProducts = [];
 // 🚀 INIT
 // ==========================
 document.addEventListener("DOMContentLoaded", () => {
+  initHero(); // ✅ ADD THIS LINE FIRST
+
   initAnnouncement();
   initMarqueeDrag();
 
@@ -66,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderLookbookCarousel(root);
   }
 });
-
 
 // ========================== 
 // 🔥 DATA LISTENER

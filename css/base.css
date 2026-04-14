@@ -1,6 +1,6 @@
 /* =========================
    BASE.CSS — FOUNDATION
-   ========================= */
+========================= */
 
 /* 🔥 GOOGLE FONT IMPORT */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
@@ -130,7 +130,7 @@ img {
   display: block;
 }
 
-/* 🔥 VIDEO (ADDED — IMPORTANT) */
+/* 🔥 VIDEO */
 video {
   max-width: 100%;
   display: block;
@@ -198,7 +198,7 @@ body.lookbook-page {
 }
 
 /* =========================
-   🔥 FULL-WIDTH SECTION SAFETY (ADDED)
+   🔥 FULL-WIDTH SECTION SAFETY
 ========================= */
 
 section {

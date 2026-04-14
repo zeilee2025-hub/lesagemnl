@@ -1,5 +1,5 @@
 // ===============================
-// 🖼 PRODUCT GALLERY COMPONENT (VARIANT FIXED)
+// 🖼 PRODUCT GALLERY COMPONENT (ULTRA PREMIUM)
 // ===============================
 
 export function initProductGallery(product, elements) {
@@ -21,18 +21,19 @@ export function initProductGallery(product, elements) {
   if (!productImages.length) return;
 
   imageEl.src = productImages[0];
+  imageEl.style.opacity = "1";
+  imageEl.style.transform = "scale(1.02) translate(0, 0)";
 
   renderThumbnails(productImages);
+  initAdvancedMovement(); // 🔥 ULTRA SMOOTH
 
   // ==========================
-  // 🧠 BUILD IMAGE ARRAY (FIXED)
+  // 🧠 BUILD IMAGE ARRAY
   // ==========================
   function buildImageArray(product) {
     const images = [];
-
     const order = ["front", "back", "model", "detail", "close"];
 
-    // 🔥 1. VARIANT LEVEL (CRITICAL FIX)
     if (product.selectedVariant?.images) {
       order.forEach(type => {
         if (product.selectedVariant.images[type]) {
@@ -43,7 +44,6 @@ export function initProductGallery(product, elements) {
       if (images.length) return images;
     }
 
-    // 🔥 2. PRODUCT LEVEL (FALLBACK)
     if (product.images) {
       order.forEach(type => {
         if (product.images[type]) {
@@ -71,12 +71,15 @@ export function initProductGallery(product, elements) {
       if (index === 0) thumb.classList.add("active");
 
       thumb.addEventListener("click", () => {
-        imageEl.classList.add("image-fade");
+        if (currentImageIndex === index) return;
+
+        imageEl.style.opacity = "0";
 
         setTimeout(() => {
           imageEl.src = img;
-          imageEl.classList.remove("image-fade");
-        }, 150);
+          imageEl.style.transform = "scale(1.02) translate(0, 0)";
+          imageEl.style.opacity = "1";
+        }, 180);
 
         currentImageIndex = index;
 
@@ -92,15 +95,62 @@ export function initProductGallery(product, elements) {
   }
 
   // ==========================
-  // 🖱 HOVER IMAGE
+  // 🎯 ULTRA-SMOOTH MOVEMENT
   // ==========================
-  imageEl.addEventListener("mouseenter", () => {
-    if (productImages.length > 1) {
-      imageEl.src = productImages[1];
-    }
-  });
+  function initAdvancedMovement() {
+    const container = imageEl.parentElement;
+    if (!container) return;
 
-  imageEl.addEventListener("mouseleave", () => {
-    imageEl.src = productImages[currentImageIndex];
-  });
+    let bounds = null;
+
+    let targetX = 0;
+    let targetY = 0;
+
+    let currentX = 0;
+    let currentY = 0;
+
+    let isHovering = false;
+
+    // 🔥 prevent stacking
+    container.onmouseenter = null;
+    container.onmousemove = null;
+    container.onmouseleave = null;
+
+    container.addEventListener("mouseenter", () => {
+      bounds = container.getBoundingClientRect();
+      isHovering = true;
+    });
+
+    container.addEventListener("mousemove", (e) => {
+      if (!bounds) return;
+
+      const x = e.clientX - bounds.left;
+      const y = e.clientY - bounds.top;
+
+      // 🔥 REDUCED strength (important)
+      targetX = (x / bounds.width - 0.5) * 3.5;
+      targetY = (y / bounds.height - 0.5) * 3.5;
+    });
+
+    container.addEventListener("mouseleave", () => {
+      isHovering = false;
+      targetX = 0;
+      targetY = 0;
+    });
+
+    // 🔥 SMOOTH LOOP (THIS FIXES SHAKE)
+    function animate() {
+      // easing
+      currentX += (targetX - currentX) * 0.06;
+      currentY += (targetY - currentY) * 0.06;
+
+      const scale = isHovering ? 1.04 : 1.02;
+
+      imageEl.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  }
 }

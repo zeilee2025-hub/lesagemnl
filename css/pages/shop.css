@@ -4,6 +4,7 @@
 
 .shop {
   padding: 2rem;
+  padding-top: calc(40px + 60px);
 }
 
 /* 🔝 TOP BAR */

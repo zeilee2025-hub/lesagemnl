@@ -79,6 +79,9 @@ export function renderLookbookCarousel(root) {
 
   const dots = dotsContainer.querySelectorAll(".dot");
 
+// 🔥 FORCE FIRST SLIDE TO SHOW IMMEDIATELY
+goToSlide(0);
+
   // ==========================
   // 🎞 GO TO SLIDE
   // ==========================

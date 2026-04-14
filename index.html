@@ -8,8 +8,12 @@
   <title>LÉ SAGE MNL | Modern Streetwear</title>
   <meta name="description" content="LÉ SAGE MNL — modern streetwear with a minimal identity. Shop the latest drop." />
 
+  <!-- 🔥 HERO PRELOAD -->
+  <link rel="preload" as="image" href="./assets/images/hero-1.jpg">
+  <link rel="preload" as="image" href="./assets/images/hero-2.jpg">
+
   <!-- FONTS -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:..." rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <!-- GLOBAL -->
   <link rel="stylesheet" href="./css/base.css" />
@@ -83,29 +87,50 @@
   <!-- ================= MAIN ================= -->
   <main>
 
+    <!-- HERO -->
     <section class="hero">
-      <img src="./assets/hero.jpg" class="hero__image" alt="Hero"/>
+      <div class="hero__media">
+        <img src="./assets/images/hero-1.jpg" class="hero__image hero__image--active" alt="Hero 1" />
+        <img src="./assets/images/hero-2.jpg" class="hero__image" alt="Hero 2" />
+      </div>
+
       <div class="hero__content">
-        <a href="#home-drop" class="hero__explore">SHOP THE DROP</a>
+        <a href="./shop.html" class="hero__cta">
+  <span>SHOP THE DROP</span>
+</a>
       </div>
     </section>
 
+    <!-- 🔥 FIXED MARQUEE -->
     <section class="marquee">
       <div class="marquee__track">
+
         <span class="marquee__text">
           <span class="marquee__item">QUIET PRESENCE</span>
           <span class="marquee__item">LOUD IMPACT</span>
           <span class="marquee__item">WISDOM IN MOTION</span>
         </span>
+
+        <span class="marquee__text">
+          <span class="marquee__item">QUIET PRESENCE</span>
+          <span class="marquee__item">LOUD IMPACT</span>
+          <span class="marquee__item">WISDOM IN MOTION</span>
+        </span>
+
       </div>
     </section>
 
+    <!-- DROP -->
     <section id="home-drop" class="home-drop">
       <div class="drop-banner">
-        <img src="./assets/drop01.jpg" alt="Drop">
+        <div class="drop-image">
+          <img src="./assets/images/drop-1.jpg" class="drop-image__main" loading="lazy" alt="Drop default" />
+          <img src="./assets/images/drop-2.jpg" class="drop-image__hover" loading="lazy" alt="Drop hover" />
+        </div>
       </div>
     </section>
 
+    <!-- PRODUCTS -->
     <section class="products" id="products">
       <div class="products-header">
         <h2 class="section-title">FEATURED</h2>
@@ -120,7 +145,7 @@
 
   </main>
 
-  <!-- 🔥 VIDEO GRID (RESTORED) -->
+  <!-- VIDEO GRID -->
   <section class="home-video-grid">
     <div class="video-item">
       <video src="./assets/about1.mp4" preload="metadata" muted playsinline loop></video>
@@ -130,22 +155,6 @@
     </div>
     <div class="video-item">
       <video src="./assets/about3.mp4" preload="metadata" muted playsinline loop></video>
-    </div>
-  </section>
-
-  <!-- 🔥 TAPE DIVIDER -->
-  <section class="tape-divider">
-    <div class="tape-track">
-      <div class="tape-content">
-        <span>LÉ SAGE MNL  DO NOT CROSS  LÉ SAGE MNL</span>
-        <span>LÉ SAGE MNL  DO NOT CROSS  LÉ SAGE MNL</span>
-        <span>LÉ SAGE MNL  DO NOT CROSS  LÉ SAGE MNL</span>
-      </div>
-      <div class="tape-content">
-        <span>LÉ SAGE MNL  DO NOT CROSS  LÉ SAGE MNL</span>
-        <span>LÉ SAGE MNL  DO NOT CROSS  LÉ SAGE MNL</span>
-        <span>LÉ SAGE MNL  DO NOT CROSS  LÉ SAGE MNL</span>
-      </div>
     </div>
   </section>
 
@@ -161,7 +170,7 @@
     <div id="cart-total"></div>
   </aside>
 
-  <!-- QUICK ADD MODAL -->
+  <!-- QUICK ADD -->
   <div id="quick-add-overlay" class="quick-add-overlay"></div>
 
   <div id="quick-add-modal" class="quick-add-modal">
@@ -190,7 +199,7 @@
   <script type="module" src="./js/components/navbar.js"></script>
   <script type="module" src="./js/pages/home.js"></script>
 
-  <!-- 🔥 VIDEO AUTOPLAY (RESTORED) -->
+  <!-- VIDEO AUTOPLAY -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const videos = document.querySelectorAll('.video-item video');

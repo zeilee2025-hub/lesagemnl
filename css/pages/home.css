@@ -29,7 +29,7 @@
 /* 🔥 CENTER CONTENT */
 .hero__content {
   position: absolute;
-  top: 50%;
+  top: 52%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
@@ -277,7 +277,7 @@
 }
 
 /* =========================
-   🔥 HOME VIDEO GRID (FIXED)
+   🔥 HOME VIDEO GRID (ORIGINAL + SAFE FIX)
 ========================= */
 
 .home-video-grid {
@@ -301,59 +301,7 @@
   height: auto;
   display: block;
   cursor: pointer;
-}
 
-/* =========================
-   🔥 EDITORIAL TAPE DIVIDER (FINAL FIXED)
-========================= */
-
-.tape-divider {
-  display: block;
-  width: 100%;
-  height: 60px;
-  min-height: 60px;
-
-  height: 64px;
-  position: relative;
-  z-index: 5;
-  margin-top: -1px;
-
-  background: repeating-linear-gradient(
-    45deg,
-    #d4af37 0px,
-    #d4af37 20px,
-    #000 20px,
-    #000 40px
-  );
-
-  border-top: 1px solid rgba(0,0,0,0.15);
-  border-bottom: 1px solid rgba(0,0,0,0.15);
-}
-
-.tape-track {
-  display: flex;
-  width: max-content;
-  height: 100%;
-  align-items: center;
-  animation: tapeScroll 36s linear infinite;
-}
-
-.tape-content {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.tape-content span {
-  font-size: 11px;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  margin: 0 40px;
-  font-weight: 500;
-}
-
-@keyframes tapeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  /* ✅ ONLY FIX ADDED */
+  vertical-align: top;
 }

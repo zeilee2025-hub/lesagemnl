@@ -11,7 +11,6 @@ import { showToast } from "../components/toast.js";
 import { renderCart } from "../components/cartDrawer.js";
 
 import { updateCartBadge } from "../services/cartService.js";
-
 import { renderSizeGuide } from "../components/sizeGuide.js";
 
 // ==========================
@@ -90,31 +89,33 @@ async function init() {
       type: product.type || mapCategoryToType(product.category)
     };
 
-    renderProduct(product);
+    // 🔥 SET DEFAULT VARIANT
+    currentProduct.selectedVariant = currentProduct.variants?.[0];
+
+    renderProduct(currentProduct);
 
     // ==========================
-    // 🎨 COLOR SELECTOR
+    // 🎨 COLOR SELECTOR (FIXED)
     // ==========================
     initColorSelector(product.variants, colorContainer, (index) => {
       selectedVariantIndex = index;
 
-      const selectedVariant = currentProduct.variants[selectedVariantIndex];
+      // 🔥 UPDATE REAL STATE
+      currentProduct.selectedVariant = currentProduct.variants[index];
+      const selectedVariant = currentProduct.selectedVariant;
 
-      // RESET SIZE
+      // 🔥 RESET SIZE
       selectedSize = null;
       selectedSizeText.textContent = "Select Size";
       stockMessage.textContent = "";
 
-      // UPDATE GALLERY
-      initProductGallery(
-        { ...currentProduct, selectedVariant },
-        {
-          imageEl,
-          thumbnailsContainer
-        }
-      );
+      // 🔥 UPDATE GALLERY
+      initProductGallery(currentProduct, {
+        imageEl,
+        thumbnailsContainer
+      });
 
-      // UPDATE SIZES
+      // 🔥 UPDATE SIZES
       initSizeSelector(
         selectedVariant.sizes || [],
         {
@@ -125,13 +126,11 @@ async function init() {
       );
     });
 
-    const selectedVariant = product.variants[selectedVariantIndex];
-
     // ==========================
     // 📏 INITIAL SIZE SELECTOR
     // ==========================
     initSizeSelector(
-      selectedVariant?.sizes || [],
+      currentProduct.selectedVariant?.sizes || [],
       {
         sizeContainer,
         addBtn
@@ -140,39 +139,40 @@ async function init() {
     );
 
     // ==========================
-    // 🛒 ADD TO CART
+    // 🛒 ADD TO CART (FIXED)
     // ==========================
     initAddToCart(
       { addBtn },
       () => ({
-        product: {
-          ...currentProduct,
-          selectedVariant: currentProduct.variants[selectedVariantIndex]
-        },
+        product: currentProduct,
         selectedSize
       }),
       (product, size) => {
-        if (!size && product.selectedVariant?.sizes?.length > 1) {
+        const variant = product.selectedVariant;
+
+        if (!size && variant?.sizes?.length > 1) {
           sizeError.textContent = "Please select a size";
           return;
         }
 
         sizeError.textContent = "";
 
-        addToCart(product, size, product.selectedVariant.color);
+        addToCart(product, size, variant.name); // ✅ FIXED
         updateCartBadge();
 
-        showToast(`Added ${product.name} (${product.selectedVariant.color} - ${size}) to cart`);
+        showToast(
+          `Added ${product.name} (${variant.name} - ${size}) to cart`
+        );
 
         openCart();
       }
     );
 
     // ==========================
-    // ⚡ BUY NOW
+    // ⚡ BUY NOW (FIXED)
     // ==========================
     buyNowBtn?.addEventListener("click", () => {
-      const variant = currentProduct.variants[selectedVariantIndex];
+      const variant = currentProduct.selectedVariant;
 
       if (!selectedSize && variant?.sizes?.length > 1) {
         sizeError.textContent = "Please select a size";
@@ -184,14 +184,7 @@ async function init() {
       buyNowBtn.textContent = "PROCESSING...";
       buyNowBtn.disabled = true;
 
-      addToCart(
-        {
-          ...currentProduct,
-          selectedVariant: variant
-        },
-        selectedSize,
-        variant.color
-      );
+      addToCart(currentProduct, selectedSize, variant.name); // ✅ FIXED
 
       updateCartBadge();
 
@@ -232,7 +225,7 @@ function handleSizeChange(size) {
 
   stockMessage.classList.remove("low");
 
-  const currentVariant = currentProduct?.variants?.[selectedVariantIndex];
+  const currentVariant = currentProduct?.selectedVariant;
   if (!currentVariant) return;
 
   const selectedItem = currentVariant.sizes?.find(
@@ -264,13 +257,10 @@ function handleSizeChange(size) {
 // 🎨 RENDER PRODUCT
 // ==========================
 function renderProduct(product) {
-  initProductGallery(
-  { ...product, selectedVariant: product.variants?.[0] },
-  {
+  initProductGallery(product, {
     imageEl,
     thumbnailsContainer
-  }
-);
+  });
 
   nameEl.textContent = product.name;
 
