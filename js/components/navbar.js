@@ -1,17 +1,12 @@
 import { renderCart } from "./cartDrawer.js";
 import { updateCartBadge } from "../services/cartService.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
 
   // ===============================
   // 🔥 PAGE ENTER ANIMATION
   // ===============================
   document.body.classList.add("page-enter");
-
-  // ===============================
-  // 🔥 FORCE SCROLL TO TOP
-  // ===============================
-  window.scrollTo(0, 0);
 
   // ===============================
   // 🔥 INITIAL + REAL-TIME BADGE SYNC
@@ -23,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // 🧠 NAVBAR SCROLL SYSTEM (OVERLAY UPGRADE)
+  // 🧠 NAVBAR SCROLL SYSTEM (FINAL CLEAN)
   // ===============================
 
   const navbar = document.querySelector(".navbar");
@@ -31,22 +26,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isCartOpen = false;
 
-  if (navbar && announcementBar) {
+  if (navbar) {
 
     const isOverlayPage = document.body.classList.contains("overlay-page");
-
-    const homeHero = document.querySelector(".hero");
-    const lookbookHero = document.querySelector(".lookbook-hero");
 
     let ticking = false;
 
     function getTriggerHeight() {
       if (isOverlayPage) {
-        if (homeHero) return homeHero.offsetHeight;
-        if (lookbookHero) return lookbookHero.offsetHeight;
+        return 120; // consistent trigger for lookbook
       }
-
-      return announcementBar.offsetHeight;
+      return announcementBar ? announcementBar.offsetHeight : 0;
     }
 
     function updateNavbar() {
@@ -56,10 +46,18 @@ document.addEventListener("DOMContentLoaded", () => {
       const isAtTop = scrollY <= triggerHeight;
       const isPastTrigger = scrollY > triggerHeight;
 
+      // ✅ BACKGROUND
       navbar.classList.toggle("scrolled", !isAtTop);
-      announcementBar.classList.toggle("hidden", isPastTrigger);
 
-      if (!document.body.classList.contains("lookbook-page")) {
+      // ✅ ANNOUNCEMENT BAR
+      if (announcementBar) {
+        announcementBar.classList.toggle("hidden", isPastTrigger);
+      }
+
+      // ✅ SHIFT CONTROL
+      if (document.body.classList.contains("lookbook-page")) {
+        navbar.classList.remove("shift-up"); // never hide in lookbook
+      } else {
         navbar.classList.toggle("shift-up", isPastTrigger);
       }
 
@@ -78,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // ✅ INITIAL RUN
     updateNavbar();
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -121,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ==========================
-  // 🛒 CART DRAWER (GLOBAL CONTROL)
+  // 🛒 CART DRAWER
   // ==========================
 
   const cartIcon = document.getElementById("cart-icon");
@@ -134,9 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   cartIcon?.addEventListener("click", () => {
 
-    // 🚫 DISABLE CART DRAWER ON CART PAGE
     if (document.body.classList.contains("cart-page")) return;
-
     if (!cartDrawer || !cartOverlay) return;
 
     isCartOpen = true;
@@ -157,19 +154,13 @@ document.addEventListener("DOMContentLoaded", () => {
   closeCartBtn?.addEventListener("click", closeCart);
   cartOverlay?.addEventListener("click", closeCart);
 
-  // 🔥 KEEP NAVBAR RESPONSIVE WHEN SCROLLING INSIDE CART
+  // keep navbar responsive while scrolling cart
   cartOverlay?.addEventListener("wheel", () => {
-    if (navbar) {
-      const event = new Event("scroll");
-      window.dispatchEvent(event);
-    }
+    if (navbar) window.dispatchEvent(new Event("scroll"));
   }, { passive: true });
 
   cartDrawer?.addEventListener("wheel", () => {
-    if (navbar) {
-      const event = new Event("scroll");
-      window.dispatchEvent(event);
-    }
+    if (navbar) window.dispatchEvent(new Event("scroll"));
   }, { passive: true });
 
   // ==========================

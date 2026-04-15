@@ -1,7 +1,8 @@
 // ===============================
-// PRODUCT CARD COMPONENT (FINAL — UNIFIED VARIANT SYSTEM)
+// PRODUCT CARD COMPONENT (FINAL — CLEAN + STATE DRIVEN)
 // ===============================
 
+import { loadImage } from "../core/imageLoader.js";
 import { getProductImage } from "../core/imageResolver.js";
 
 
@@ -9,7 +10,6 @@ import { getProductImage } from "../core/imageResolver.js";
 // 🧱 HTML TEMPLATE
 // ===============================
 export function createProductCard(product) {
-
   const variants =
     (Array.isArray(product.variants) && product.variants.length > 0)
       ? product.variants
@@ -20,32 +20,20 @@ export function createProductCard(product) {
   );
 
   const hasColors = colorList.length > 1;
-  const hasModel = product.hasModel === true;
 
   const frontImage = getProductImage(product, { type: "front" });
-  const backImage = getProductImage(product, { type: "back" });
-  const modelImage = hasModel
-    ? getProductImage(product, { type: "model" })
-    : null;
+  const backImage =
+    getProductImage(product, { type: "back" }) || frontImage;
 
   return `
     <div class="product-card" data-id="${product.id}">
       
       <div class="product-media">
-
         <img src="${frontImage}" class="img-front" alt="${product.name}" />
         <img src="${backImage}" class="img-back" alt="${product.name}" />
 
-        ${
-          hasModel
-            ? `<img src="${modelImage}" class="img-model" alt="${product.name}" />`
-            : ""
-        }
-
         <div class="product-overlay"></div>
-
-        <button class="quick-add-btn" aria-label="Add to cart">+</button>
-
+        <button class="quick-add-btn">+</button>
       </div>
 
       <div class="product-info">
@@ -78,7 +66,28 @@ export function createProductCard(product) {
 // 🎯 INTERACTION LOGIC
 // ===============================
 export function initProductCard(card, onQuickAdd, product) {
-  let hoverTimer;
+  let modelTimer;
+
+  let state = {
+    isHovering: false,
+    modelReady: false,
+    variantIndex: 0
+  };
+
+  function isValidSrc(src) {
+    return typeof src === "string" && src.trim() !== "";
+  }
+
+  function swapImageSafely(imgEl, newSrc) {
+    if (!imgEl || !isValidSrc(newSrc) || imgEl.src === newSrc) return;
+
+    const temp = new Image();
+    temp.src = newSrc;
+
+    temp.onload = () => {
+      imgEl.src = newSrc;
+    };
+  }
 
   const variants =
     (Array.isArray(product.variants) && product.variants.length > 0)
@@ -86,94 +95,143 @@ export function initProductCard(card, onQuickAdd, product) {
       : (product.colors || []);
 
   const hasColors = variants.length > 0;
-  const hasModel = product.hasModel === true;
+
+  const hasModel =
+    product.hasModel === true ||
+    String(product.hasModel) === "true";
 
   const frontImg = card.querySelector(".img-front");
-  const backImg = card.querySelector(".img-back");
-  const modelImg = card.querySelector(".img-model");
   const swatches = card.querySelectorAll(".swatch");
 
-  let selectedIndex = 0;
+  const imageCache = {
+    back: null,
+    model: null
+  };
 
   // ===============================
-  // 🔥 HOVER SYSTEM
+  // 🔥 RENDER SYSTEM
+  // ===============================
+  function renderImage() {
+    const variant = variants[state.variantIndex] || variants[0];
+
+    const front =
+      variant?.images?.front ||
+      variant?.front ||
+      getProductImage(product, { type: "front" });
+
+    const back =
+      variant?.images?.back ||
+      variant?.back ||
+      getProductImage(product, { type: "back" }) ||
+      front;
+
+    const model =
+      variant?.images?.model ||
+      variant?.model ||
+      getProductImage(product, { type: "model" });
+
+    let src;
+
+    if (!state.isHovering) {
+      src = front;
+    } else if (!state.modelReady) {
+      src = imageCache.back || back;
+    } else {
+      src = imageCache.model || model || back;
+    }
+
+    if (frontImg) {
+      swapImageSafely(frontImg, src);
+    }
+  }
+
+  // ===============================
+  // 🔥 PRELOAD
+  // ===============================
+  setTimeout(() => {
+    const variant = variants[0];
+
+    const back =
+      variant?.images?.back ||
+      variant?.back ||
+      getProductImage(product, { type: "back" });
+
+    const model =
+      variant?.images?.model ||
+      variant?.model ||
+      getProductImage(product, { type: "model" });
+
+    if (back) {
+      loadImage(back, "low").then(() => {
+        imageCache.back = back;
+      });
+    }
+
+    if (hasModel && model) {
+      loadImage(model, "low").then(() => {
+        imageCache.model = model;
+      });
+    }
+  }, 200);
+
+  // ===============================
+  // 🔥 HOVER
   // ===============================
   card.addEventListener("mouseenter", () => {
-    hoverTimer = setTimeout(() => {
-      card.classList.add("hover-deep");
-    }, 250);
-  });
+    state.isHovering = true;
+    state.modelReady = false;
 
-  card.addEventListener("mouseleave", () => {
-    clearTimeout(hoverTimer);
-    card.classList.remove("hover-deep");
+    renderImage();
 
-    if (hasColors) {
-      const variant = variants[selectedIndex];
+    clearTimeout(modelTimer);
 
-      const front =
-        variant?.images?.front ||
-        variant?.front ||
-        getProductImage(product, { type: "front" });
-
-      const back =
-        variant?.images?.back ||
-        variant?.back ||
-        getProductImage(product, { type: "back" });
-
-      if (frontImg && front) frontImg.src = front;
-      if (backImg && back) backImg.src = back;
-
-      if (hasModel && modelImg) {
-        const model =
-          variant?.images?.model ||
-          variant?.model ||
-          getProductImage(product, { type: "model" });
-
-        if (model) modelImg.src = model;
-      }
-
-    } else {
-      if (frontImg) frontImg.src = getProductImage(product, { type: "front" });
-      if (backImg) backImg.src = getProductImage(product, { type: "back" });
-
-      if (hasModel && modelImg) {
-        modelImg.src = getProductImage(product, { type: "model" });
-      }
-    }
+    modelTimer = setTimeout(() => {
+      state.modelReady = true;
+      renderImage();
+    }, 400);
   });
 
   // ===============================
-  // 🛒 QUICK ADD (CRITICAL FIX)
-// ===============================
-const quickAddBtn = card.querySelector(".quick-add-btn");
+  // 🔥 LEAVE
+  // ===============================
+  card.addEventListener("mouseleave", () => {
+    state.isHovering = false;
+    state.modelReady = false;
 
-if (quickAddBtn) {
-  quickAddBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-
-    let variant = null;
-
-    if (variants.length > 0) {
-      variant =
-        variants.find(v => v.sizes && v.sizes.length > 0) ||
-        variants[0];
-    }
-
-    if (!variant) {
-      console.error("❌ No variant found", product);
-      return;
-    }
-
-    onQuickAdd({
-      product: {
-        ...product,
-        selectedVariant: variant
-      }
-    });
+    clearTimeout(modelTimer);
+    renderImage();
   });
-}
 
+  // ===============================
+  // 🛒 QUICK ADD
+  // ===============================
+  const quickAddBtn = card.querySelector(".quick-add-btn");
+
+  if (quickAddBtn) {
+    quickAddBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      let variant = null;
+
+      if (variants.length > 0) {
+        variant =
+          variants.find(v => v.sizes && v.sizes.length > 0) ||
+          variants[0];
+      }
+
+      if (!variant) {
+        console.error("❌ No variant found", product);
+        return;
+      }
+
+      onQuickAdd({
+        product: {
+          ...product,
+          selectedVariant: variant
+        }
+      });
+    });
+  }
 
   // ===============================
   // 🎨 SWATCHES
@@ -183,31 +241,8 @@ if (quickAddBtn) {
       const index = Number(swatch.dataset.index);
 
       swatch.addEventListener("mouseenter", () => {
-        selectedIndex = index;
-
-        const variant = variants[index];
-
-        const front =
-          variant?.images?.front ||
-          variant?.front ||
-          getProductImage(product, { type: "front" });
-
-        const back =
-          variant?.images?.back ||
-          variant?.back ||
-          getProductImage(product, { type: "back" });
-
-        if (frontImg && front) frontImg.src = front;
-        if (backImg && back) backImg.src = back;
-
-        if (hasModel && modelImg) {
-          const model =
-            variant?.images?.model ||
-            variant?.model ||
-            getProductImage(product, { type: "model" });
-
-          if (model) modelImg.src = model;
-        }
+        state.variantIndex = index;
+        renderImage();
 
         swatches.forEach(s => s.classList.remove("active"));
         swatch.classList.add("active");
@@ -215,8 +250,6 @@ if (quickAddBtn) {
 
       swatch.addEventListener("click", (e) => {
         e.stopPropagation();
-
-        selectedIndex = index;
 
         swatches.forEach(s => s.classList.remove("active"));
         swatch.classList.add("active");
@@ -231,4 +264,9 @@ if (quickAddBtn) {
     const productId = card.dataset.id;
     window.location.href = `./product.html?id=${productId}`;
   });
+
+  // ===============================
+  // 🔥 INITIAL RENDER
+  // ===============================
+  renderImage();
 }

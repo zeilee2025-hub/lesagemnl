@@ -277,7 +277,7 @@
 }
 
 /* =========================
-   🔥 HOME VIDEO GRID (ORIGINAL + SAFE FIX)
+   🔥 HOME VIDEO GRID (FIXED)
 ========================= */
 
 .home-video-grid {
@@ -287,13 +287,10 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0;
-  line-height: 0;
-  font-size: 0;
 }
 
 .video-item {
   width: 100%;
-  line-height: 0;
 }
 
 .video-item video {
@@ -301,7 +298,67 @@
   height: auto;
   display: block;
   cursor: pointer;
+}
 
-  /* ✅ ONLY FIX ADDED */
-  vertical-align: top;
+/* =========================
+   🔥 EDITORIAL TAPE DIVIDER (FINAL FIXED)
+========================= */
+
+.tape-divider {
+  display: block;
+  width: 100%;
+  height: 60px;
+  min-height: 60px;
+
+  position: relative;
+  z-index: 5;
+
+  background: repeating-linear-gradient(
+    45deg,
+    #ffcc00 0px,
+    #ffcc00 20px,
+    #000 20px,
+    #000 40px
+  );
+
+  border-top: 1px solid rgba(0,0,0,0.15);
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+}
+
+.tape-divider::before {
+  left: 0;
+  background: linear-gradient(to right, #000, transparent);
+}
+
+.tape-divider::after {
+  right: 0;
+  background: linear-gradient(to left, #000, transparent);
+}
+
+.tape-track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  align-items: center;
+  animation: tapeScroll 28s linear infinite;
+}
+
+.tape-content {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.tape-content span {
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.9);
+  margin: 0 40px;
+  font-weight: 500;
+}
+
+@keyframes tapeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }

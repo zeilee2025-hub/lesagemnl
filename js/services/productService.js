@@ -27,7 +27,7 @@ function normalizeSizes(sizes) {
 
 
 // ===============================
-// 🧠 NORMALIZE PRODUCT (FINAL FIX)
+// 🧠 NORMALIZE PRODUCT (FINAL)
 // ===============================
 function normalizeProduct(product) {
   console.log("🧠 NORMALIZING:", product.id);
@@ -54,14 +54,43 @@ function normalizeProduct(product) {
         value: color.value || "#000000",
 
         images: {
-          front: color.images?.front || color.front || product.front || "",
-          back: color.images?.back || color.back || product.back || "",
-          model: color.images?.model || color.model || product.model || "",
-          detail: color.images?.detail || color.detail || "",
-          close: color.images?.close || color.close || ""
+          front:
+            color.images?.front ||
+            color.front ||
+            product.images?.front ||
+            product.front ||
+            "",
+
+          back:
+            color.images?.back ||
+            color.back ||
+            product.images?.back ||
+            product.back ||
+            "",
+
+          model:
+            color.images?.model ||
+            color.model ||
+            product.images?.model || // ✅ FIX
+            product.model ||
+            "",
+
+          detail:
+            color.images?.detail ||
+            color.detail ||
+            product.images?.detail ||
+            product.detail ||
+            "",
+
+          close:
+            color.images?.close ||
+            color.close ||
+            product.images?.close ||
+            product.close ||
+            ""
         },
 
-        sizes: sizes.length ? sizes : [] // keep empty but controlled
+        sizes: sizes.length ? sizes : []
       };
     });
 
@@ -78,11 +107,30 @@ function normalizeProduct(product) {
         value: "#000000",
 
         images: {
-          front: product.front || "",
-          back: product.back || "",
-          model: product.model || "",
-          detail: product.detail || "",
-          close: product.close || ""
+          front:
+            product.images?.front ||
+            product.front ||
+            "",
+
+          back:
+            product.images?.back ||
+            product.back ||
+            "",
+
+          model:
+            product.images?.model || // ✅ FIX
+            product.model ||
+            "",
+
+          detail:
+            product.images?.detail ||
+            product.detail ||
+            "",
+
+          close:
+            product.images?.close ||
+            product.close ||
+            ""
         },
 
         sizes: normalizeSizes(product.sizes)
@@ -111,14 +159,16 @@ function normalizeProduct(product) {
   }
 
   return {
-    ...product,
+  ...product,
 
-    // 🔥 KEEP ORIGINAL FOR COMPATIBILITY
-    colors: Array.isArray(product.colors) ? product.colors : [],
+  hasModel: product.hasModel === true, // ✅ ADD THIS LINE
 
-    // 🔥 MAIN SYSTEM
-    variants
-  };
+  // 🔥 KEEP ORIGINAL FOR COMPATIBILITY
+  colors: Array.isArray(product.colors) ? product.colors : [],
+
+  // 🔥 MAIN SYSTEM
+  variants
+   };
 }
 
 

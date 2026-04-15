@@ -5,18 +5,21 @@
 export function initHero() {
   const images = document.querySelectorAll('.hero__image');
 
-  if (!images.length) return;
+  // 🔒 CONFIG (you can toggle later)
+  const ENABLE_HERO_SLIDE = false;
+
+  // ❌ Do nothing if:
+  // - slider disabled
+  // - or only 1 image
+  if (!ENABLE_HERO_SLIDE || images.length <= 1) return;
 
   let current = 0;
 
   setInterval(() => {
-    // remove active from current
     images[current].classList.remove('hero__image--active');
 
-    // move to next
     current = (current + 1) % images.length;
 
-    // activate next
     images[current].classList.add('hero__image--active');
-  }, 4500); // 4.5 seconds
+  }, 4500);
 }

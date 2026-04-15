@@ -7,12 +7,6 @@
 }
 
 
-/* ❌ REMOVED position: relative (was creating stacking context) */
-/* .lookbook-main {
-  position: relative;
-} */
-
-
 /* =========================
     NAVBAR
 ========================= */
@@ -29,22 +23,29 @@
 
 
 /* =========================
-   🎬 VIDEO HERO
+   🎬 HERO (FIXED)
 ========================= */
 
 .lookbook-hero {
   width: 100%;
-  height: 100vh;
+  aspect-ratio: 16 / 9; /* 🔥 FIX */
   position: relative;
   overflow: hidden;
   z-index: 0;
+}
+
+.lookbook-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 .lookbook-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 0;
 }
 
 .lookbook-overlay {
@@ -61,16 +62,15 @@
 
 .lookbook-solo {
   width: 100%;
-  height: 100vh;
+  height: auto;
   overflow: hidden;
   position: relative;
 }
 
 .lookbook-solo img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
+  height: auto;
+  object-fit: contain;
   display: block;
 }
 
@@ -96,7 +96,7 @@
 
 
 /* =========================
-   🔥 CAROUSEL (FULL BLEED)
+   🔥 CAROUSEL
 ========================= */
 
 .lookbook-carousel {
@@ -110,8 +110,6 @@
   display: flex;
   height: 100%;
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-
-  /* ❌ REMOVED will-change (causing GPU layer conflict) */
 
   cursor: grab;
   touch-action: pan-y;
@@ -167,7 +165,7 @@
 
 
 /* =========================
-   🔘 LOOKBOOK DOTS (FILL STYLE)
+   🔘 DOTS
 ========================= */
 
 .lookbook-dots {
@@ -203,12 +201,8 @@
 }
 
 @keyframes dotFill {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 
@@ -219,11 +213,11 @@
 @media (max-width: 900px) {
 
   .lookbook-hero {
-    height: 85vh;
+    aspect-ratio: 16 / 9; /* 🔥 keep ratio */
   }
 
   .lookbook-solo {
-    height: 85vh;
+    height: auto;
   }
 
   .lookbook-carousel {
@@ -233,28 +227,22 @@
   .lookbook-dots {
     bottom: 25px;
   }
-
 }
 
 
 /* =========================
-   🔥 LOOKBOOK NAVBAR FIX
-========================= */
-
-.lookbook-hero,
-.lookbook-solo {
-  overflow: visible;
-}
-
-
-/* =========================
-   🔥 FIX: PREVENT CAROUSEL FROM OVERLAPPING NAVBAR
+   🔥 LAYER FIXES
 ========================= */
 
 .lookbook-carousel,
 .lookbook-track {
   z-index: 0;
 }
+
+
+/* =========================
+   🔥 ARROWS
+========================= */
 
 .lookbook-arrow {
   position: absolute;
