@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your Orders | LÉ SAGE MNL</title>
+  <title>My Orders | LÉ SAGE MNL</title>
 
-  <!-- Core Styles -->
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/pages/orders.css" />
@@ -13,26 +12,25 @@
 
 <body>
 
-  <!-- ==========================
-       🧾 ORDER HISTORY
-  ========================== -->
+  <!-- NAVBAR -->
+  <div id="navbar"></div>
+
+  <!-- ORDERS LIST -->
   <main class="orders-page">
+    <div class="orders-wrapper">
 
-    <div class="orders-header">
-      <h1>Your Orders</h1>
-      <p>Track your purchases</p>
+      <h1 class="orders-title">My Orders</h1>
+
+      <div id="orders-container" class="orders-container">
+        <p>Loading orders...</p>
+      </div>
+
     </div>
-
-    <!-- 📦 ORDERS LIST -->
-    <div id="orders-container" class="orders-container">
-      <p>Loading your orders...</p>
-    </div>
-
   </main>
 
-  <!-- ==========================
-       🚀 SCRIPT
-  ========================== -->
+  <!-- FOOTER -->
+  <div id="footer"></div>
+
   <script type="module" src="js/pages/orders.js"></script>
 
 </body>

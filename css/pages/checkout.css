@@ -3,6 +3,7 @@
 ========================= */
 
 body.checkout-page {
+  margin: 0;
   padding-top: 0 !important;
   background: #fbfbfb; 
 }
@@ -11,28 +12,26 @@ body.checkout-page {
   width: 100%;
   background: #fff;
   border-bottom: 1px solid #eee;
-  line-height: 1;
   display: flex;
   align-items: center;
-  min-height: 64px;
-  padding-top: 16px !important;
+
+  padding: 10px 0; /* 🔥 match confirmation */
 }
 
 .checkout-header .nav-container {
-  max-width: 1000px;
+  max-width: 1000px; /* match confirmation */
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 8px;
 }
 
 /* LOGO */
 .checkout-header__logo img {
-  height: 40px;
+  height: 45px; /* 🔥 slightly smaller = matches confirmation feel */
   width: auto;
   display: block;
-  transform: translateY(1px);
 }
 
 /* CART */

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Details | LÉ SAGE MNL</title>
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages/order.css" />
+
+  <!-- SEO / UX (small but real improvement) -->
+  <meta name="description" content="View your order details, status, and tracking." />
+</head>
+
+<body>
+
+  <!-- ==========================
+       🔝 NAVBAR
+  ========================== -->
+  <div id="navbar"></div>
+
+  <!-- ==========================
+       📦 ORDER DETAILS PAGE
+  ========================== -->
+  <main class="order-page">
+
+    <!-- 🔙 BACK BUTTON (NEW UX IMPROVEMENT) -->
+    <div class="order-back">
+      <a href="orders.html">← Back to Orders</a>
+    </div>
+
+    <!-- 📦 ORDER CONTENT -->
+    <div id="order-container" class="order-container">
+      <div class="order-loading">
+        <p>Loading order...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==========================
+       🔻 FOOTER
+  ========================== -->
+  <div id="footer"></div>
+
+  <!-- ==========================
+       🚀 SCRIPT
+  ========================== -->
+  <script type="module" src="js/pages/order.js"></script>
+
+</body>
+</html>

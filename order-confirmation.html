@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complete Payment</title>
+
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="stylesheet" href="./css/pages/order-confirmation.css" />
+</head>
+
+<body class="confirmation-page">
+
+<main class="confirmation">
+
+  <!-- HEADER -->
+  <div class="confirmation__header">
+    <div class="confirmation__header-inner">
+      <a href="/" class="confirmation__logo">
+        <img src="./assets/logo.png" alt="LÉ SAGE" />
+      </a>
+    </div>
+  </div>
+
+  <div class="confirmation__wrapper">
+    <div class="confirmation__layout">
+
+      <!-- LEFT SIDE -->
+      <div class="confirmation__left">
+
+        <!-- INTRO -->
+        <div class="confirmation__intro">
+
+          <h1 class="confirmation__title">
+            We've received your order
+          </h1>
+
+          <p class="confirmation__subtitle" id="confirmation-subtitle">
+            Complete your payment to confirm your order
+          </p>
+
+          <div class="confirmation__meta-inline">
+            <span 
+              class="confirmation__status" 
+              id="order-status-top" 
+              data-status="pending">
+              Waiting for Payment
+            </span>
+
+            <span class="confirmation__expiry">
+              Expires in <span id="order-expiry-top">24:00:00</span>
+            </span>
+          </div>
+
+          <p class="confirmation__order-id">
+            Order ID: <span id="order-id"></span>
+<button id="copy-order-btn" class="copy-btn">Copy</button>
+          </p>
+
+        </div>
+
+        <!-- PAYMENT -->
+        <div class="payment-details">
+
+          <h3 class="payment-details__title">Payment Details</h3>
+
+          <!-- METHODS -->
+          <div class="payment-method payment-method--primary">
+            <div class="payment-method__header">
+              <p class="payment-method__name">GCash</p>
+              <button type="button" class="copy-btn" data-copy="+63919320296">Copy</button>
+            </div>
+
+            <div class="payment-method__details">
+              <p class="payment-method__info">+63 919 320 296</p>
+              <p class="payment-method__sub">John Cyril Albaladejo</p>
+            </div>
+          </div>
+
+          <div class="payment-method">
+            <div class="payment-method__header">
+              <p class="payment-method__name">BPI</p>
+              <button type="button" class="copy-btn" data-copy="0606353416">Copy</button>
+            </div>
+
+            <div class="payment-method__details">
+              <p class="payment-method__label">Account number</p>
+              <p class="payment-method__info">0606 3534 16</p>
+              <p class="payment-method__sub">John Cyril Albaladejo</p>
+            </div>
+          </div>
+
+          <div class="payment-method">
+            <div class="payment-method__header">
+              <p class="payment-method__name">GoTyme Bank</p>
+              <button type="button" class="copy-btn" data-copy="014805150169">Copy</button>
+            </div>
+
+            <div class="payment-method__details">
+              <p class="payment-method__label">Account number</p>
+              <p class="payment-method__info">0148 0515 0169</p>
+              <p class="payment-method__sub">John Cyril Albaladejo</p>
+            </div>
+          </div>
+
+          <!-- CONFIRM PAYMENT -->
+          <div class="payment-upload">
+
+            <div class="payment-upload__form" id="payment-form">
+
+              <h4 class="payment-upload__title">Confirm your payment</h4>
+
+              <p class="payment-upload__desc">
+                Upload a screenshot of your payment to complete your order.
+              </p>
+
+              <input type="file" id="proof-input" accept="image/*" hidden />
+
+              <button type="button" class="upload-proof__btn" id="upload-btn">
+                Select screenshot
+              </button>
+
+              <p class="upload-proof__filename" id="file-name"></p>
+
+              <button type="button" class="upload-proof__submit" id="submit-proof">
+                Confirm payment
+              </button>
+
+              <p class="upload-proof__note">
+                We’ll review your payment and send your order details by email once it’s confirmed.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- SUPPORT -->
+        <div class="confirmation__support">
+
+          <p class="confirmation__support-text">
+            Need help?
+            <a 
+              href="https://www.facebook.com/lesage.mnl"
+              class="support-link"
+              target="_blank"
+              rel="noopener noreferrer">
+              Contact us
+            </a>
+          </p>
+
+          <a href="/" class="confirmation__btn">
+            Continue shopping
+          </a>
+
+        </div>
+
+        <!-- LEGAL -->
+        <div class="confirmation__legal">
+          <div class="confirmation__legal-links">
+            <button type="button" class="legal-link" data-policy="refund">Refund policy</button>
+            <button type="button" class="legal-link" data-policy="privacy">Privacy policy</button>
+            <button type="button" class="legal-link" data-policy="terms">Terms of service</button>
+            <button type="button" class="legal-link" data-policy="cancellations">Cancellations</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="confirmation__right">
+        <div class="order-summary" id="order-summary"></div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal" id="policy-modal">
+  <div class="modal__overlay" id="modal-overlay"></div>
+
+  <div class="modal__content">
+    <button type="button" class="modal__close" id="modal-close">×</button>
+    <h3 class="modal__title" id="modal-title"></h3>
+    <div class="modal__body" id="modal-body"></div>
+  </div>
+</div>
+
+<script type="module" src="./js/pages/orderConfirmation.js"></script>
+
+</body>
+</html>

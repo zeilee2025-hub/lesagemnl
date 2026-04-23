@@ -4,6 +4,7 @@ import { calculateTotals } from "../core/checkoutLogic.js";
 import { validateCartBeforeCheckout } from "../core/checkoutValidation.js";
 import { syncCartWithStock } from "../core/stock.js";
 import { createPaymentSession } from "../services/paymentService.js";
+import { saveOrder } from "../services/orderService.js";
 
 import {
   getRegions,
@@ -29,6 +30,9 @@ let provinceInput;
 let provinceDropdown;
 let citySelect;
 let postalInput;
+let cityManualInput;
+let cityFallbackTrigger;
+let isManualCity = false;
 
 // ==========================
 // 🧠 STATE
@@ -37,6 +41,7 @@ let cartData = [];
 let selectedRegion = "";
 let selectedProvince = "";
 let allProvinces = [];
+let paymentMethod = "PAYMONGO";
 
 // ==========================
 // 🛒 CART BADGE
@@ -72,6 +77,8 @@ async function init() {
   provinceDropdown = document.getElementById("province-dropdown");
   citySelect = document.getElementById("checkout-city");
   postalInput = document.getElementById("checkout-postal");
+  cityManualInput = document.getElementById("checkout-city-manual");
+  cityFallbackTrigger = document.getElementById("city-fallback-trigger");
 
   await initProvinces();
   setupProvinceSearch();
@@ -98,12 +105,38 @@ async function init() {
   });
 
   document.addEventListener("click", (e) => {
-  if (e.target.id === "checkout-btn") {
+  const btn = e.target.closest("#checkout-btn");
+  if (btn) {
     handleCheckout();
   }
 });
 
+// ==========================
+// 🧠 CITY FALLBACK LOGIC
+// ==========================
+if (cityFallbackTrigger && cityManualInput && citySelect) {
+  cityFallbackTrigger.addEventListener("click", () => {
+    cityManualInput.value = "";
+    isManualCity = true;
+
+    citySelect.style.display = "none";
+    cityFallbackTrigger.style.display = "none";
+    cityManualInput.style.display = "block";
+
+    cityManualInput.focus();
+
+    renderTotals();
+  });
+}
+
+if (cityManualInput) {
+  cityManualInput.addEventListener("input", renderTotals);
+}
+
   await loadCheckout();
+
+setupPaymentSelection();
+updateCheckoutButton();
 }
 
 init();
@@ -192,18 +225,52 @@ async function handleProvinceSelection(province) {
   }
 
   const cities = await getCities(resolvedRegion, province);
+  // ALWAYS reset fallback trigger first
+if (cityFallbackTrigger) {
+  cityFallbackTrigger.style.display = "none";
+}
 
+// reset mode
+isManualCity = false;
+
+if (cityManualInput) {
+  cityManualInput.style.display = "none";
+  cityManualInput.value = "";
+}
+
+if (citySelect) {
+  citySelect.style.display = "block";
   citySelect.innerHTML = `<option value="">Select City</option>`;
+}
 
-  cities.forEach(c => {
-    citySelect.innerHTML += `<option value="${c}">${c}</option>`;
-  });
+// 🚨 NO CITIES → FORCE MANUAL
+if (!cities.length) {
+  if (citySelect) citySelect.style.display = "none";
+  if (cityFallbackTrigger) cityFallbackTrigger.style.display = "none";
+  if (cityManualInput) cityManualInput.style.display = "block";
 
-  if (cities.length === 1) {
-    citySelect.value = cities[0];
-  }
+  isManualCity = true;
 
   renderTotals();
+  return;
+}
+
+// ✅ NORMAL FLOW
+cities.forEach(c => {
+  citySelect.innerHTML += `<option value="${c}">${c}</option>`;
+});
+
+// show fallback option
+if (cityFallbackTrigger && cities.length > 1) {
+  cityFallbackTrigger.style.display = "block";
+}
+
+// auto-select if single
+if (cities.length === 1) {
+  citySelect.value = cities[0];
+}
+
+renderTotals();
 }
 
 // ==========================
@@ -234,6 +301,44 @@ async function loadCheckout() {
   }
 }
 
+
+// ==========================
+// 💳 PAYMENT SELECTION
+// ==========================
+function setupPaymentSelection() {
+  const cards = document.querySelectorAll(".payment-card");
+
+  cards.forEach(card => {
+    card.addEventListener("click", () => {
+
+      // remove active
+      cards.forEach(c => c.classList.remove("active"));
+
+      // add active
+      card.classList.add("active");
+
+      // update state
+      paymentMethod = card.dataset.method;
+
+      updateCheckoutButton();
+    });
+  });
+}
+
+// ==========================
+// 🔄 UPDATE BUTTON TEXT
+// ==========================
+function updateCheckoutButton() {
+  const btn = document.getElementById("checkout-btn");
+  if (!btn) return;
+
+  if (paymentMethod === "PAYMONGO") {
+    btn.textContent = "Proceed to Payment";
+  } else {
+    btn.textContent = "Place Order";
+  }
+}
+
 // ==========================
 // 🧹 CLEAR
 // ==========================
@@ -256,10 +361,16 @@ function getDeliveryEstimate(zone) {
 function renderTotals() {
   const totals = calculateTotals(cartData, selectedRegion);
 
-  const hasLocation =
-    selectedRegion &&
-    selectedProvince &&
-    citySelect?.value;
+  const cityValueRaw = isManualCity
+  ? cityManualInput?.value
+  : citySelect?.value;
+
+const cityValue = cityValueRaw?.trim();
+
+const hasLocation =
+  selectedRegion &&
+  selectedProvince &&
+  cityValue;
 
   const zone = hasLocation ? getZone(selectedRegion) : null;
   const deliveryEstimate = hasLocation
@@ -310,13 +421,14 @@ function renderTotals() {
           <span>₱${totals.total.toLocaleString()}</span>
         </div>
 
-        <button class="summary__btn" id="checkout-btn">
-          Proceed to Payment
-        </button>
+        <button class="summary__btn" id="checkout-btn"></button>
 
       </div>
     `;
   }
+
+  // ✅ ALWAYS update button AFTER rendering
+  updateCheckoutButton();
 }
 
 // ==========================
@@ -358,7 +470,7 @@ function getInputByField(field) {
     lastName: "checkout-last-name",
     address: "checkout-address",
     province: "checkout-province-input",
-    city: "checkout-city",
+    city: isManualCity ? "checkout-city-manual" : "checkout-city",
     postal: "checkout-postal"
   };
 
@@ -382,6 +494,7 @@ async function handleCheckout() {
 
     // 🧠 FORM
     const formData = getCheckoutFormData();
+    console.log("🧪 FORM DATA:", formData);
 
     const formValidation = validateCheckoutForm(formData);
 
@@ -428,12 +541,70 @@ async function handleCheckout() {
       region: selectedRegion
     };
 
-    // 🚀 PAYMENT
-    await createPaymentSession({
+    // ==========================
+    // 💳 CREATE ORDER
+    // ==========================
+    const orderId = await saveOrder({
+      email: customer.email,
+      
+
+      // 🔥 SHIPPING INFO
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      phone: customer.phone,
+
+      address: customer.address,
+      city: customer.city,
+      province: customer.province,
+
       items: cartData,
-      totals,
-      customer
+
+      // 💰 PRICING
+      subtotal: totals.subtotal,
+      shippingFee: totals.shipping,
+      total: totals.total,
+
+      // 📦 STATUS
+      status: "pending",
+      paymentMethod: paymentMethod,
+      paymentStatus: "PENDING"
     });
+
+// ==========================
+// 💰 PAYMENT FLOW
+// ==========================
+if (paymentMethod === "PAYMONGO") {
+
+  await createPaymentSession({
+    items: cartData,
+    totals,
+    customer,
+    orderId
+  });
+
+} else {
+
+  window.location.href = `/order-confirmation.html?id=${orderId}`;
+
+}
+
+    // ==========================
+    // 💰 PAYMENT FLOW
+    // ==========================
+    if (paymentMethod === "PAYMONGO") {
+
+      await createPaymentSession({
+        items: cartData,
+        totals,
+        customer,
+        orderId
+      });
+
+    } else {
+
+      window.location.href = `/order-confirmation.html?id=${orderId}`;
+
+    }
 
   } catch (error) {
     console.error("Checkout error:", error);
@@ -443,10 +614,16 @@ async function handleCheckout() {
 }
 
 // ==========================
-// 🔄 RESET
+// 🔄 RESET (OUTSIDE FUNCTION)
 // ==========================
 function resetButton(btn) {
   if (!btn) return;
+
   btn.disabled = false;
-  btn.textContent = "Proceed to Payment";
+
+  if (paymentMethod === "PAYMONGO") {
+    btn.textContent = "Proceed to Payment";
+  } else {
+    btn.textContent = "Place Order";
+  }
 }

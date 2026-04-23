@@ -2,17 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin — Orders</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — LÉ SAGE MNL</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/pages/admin.css" />
 </head>
+
 <body>
 
   <div class="admin-container">
-    <h1>Orders</h1>
 
+    <!-- ==========================
+         🧭 HEADER
+    ========================== -->
+    <div class="admin-header">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Manage orders and monitor store activity</p>
+      </div>
+    </div>
+
+    <!-- ==========================
+         📊 STATS
+    ========================== -->
+    <div class="admin-stats">
+
+      <div class="stat-card">
+        <p>Total Revenue</p>
+        <h2 id="stat-revenue">₱0</h2>
+      </div>
+
+      <div class="stat-card">
+        <p>Total Orders</p>
+        <h2 id="stat-total">0</h2>
+      </div>
+
+      <div class="stat-card">
+        <p>Pending</p>
+        <h2 id="stat-pending">0</h2>
+      </div>
+
+      <div class="stat-card">
+        <p>Paid Orders</p>
+        <h2 id="stat-paid">0</h2>
+      </div>
+
+    </div>
+
+    <div class="admin-filters">
+
+  <button class="filter-btn active" data-filter="ALL">All</button>
+  <button class="filter-btn" data-filter="PENDING_PAYMENT">Pending</button>
+  <button class="filter-btn" data-filter="PAID">Paid</button>
+  <button class="filter-btn" data-filter="SHIPPED">Shipped</button>
+  <button class="filter-btn" data-filter="COMPLETED">Completed</button>
+
+</div>
+
+    <!-- ==========================
+         🔍 SEARCH
+    ========================== -->
+    <div class="admin-search">
+      <input 
+        type="text" 
+        id="order-search" 
+        placeholder="Search order (LSM-XXXX)"
+      />
+    </div>
+
+    <!-- ==========================
+         📦 ORDERS LIST
+    ========================== -->
     <div id="admin-orders" class="admin-orders"></div>
+
   </div>
 
+  <!-- JS -->
   <script type="module" src="js/pages/admin.js"></script>
+
 </body>
 </html>

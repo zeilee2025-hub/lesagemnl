@@ -1,16 +1,12 @@
 // ==========================
-// 📦 ORDER SERVICE (CLEAN - GUEST)
-// ==========================
-
-// ==========================
-// 🔌 FIREBASE
+// 🔌 FIREBASE (READ ONLY NOW)
 // ==========================
 import { db } from "../core/firebase.js";
 
 import {
   collection,
-  addDoc,
   getDocs,
+  getDoc,
   doc,
   updateDoc,
   query,
@@ -19,30 +15,76 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // ==========================
-// ✅ SAVE ORDER (GUEST)
+// 🆔 ORDER ID GENERATOR (NEW)
+// ==========================
+function generateOrderId() {
+  const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return `LSM-${random}`;
+}
+
+// ==========================
+// ✅ SAVE ORDER (NOW VIA BACKEND)
 // ==========================
 export async function saveOrder(order) {
   try {
-    // ✅ Only require items (email is optional now)
     if (!order || !order.items?.length) {
       throw new Error("Invalid order data");
     }
 
     const orderData = {
-      email: order.email || null, // ✅ optional
+      email: order.email || null,
       items: order.items,
+
+      // 💰 PRICING
+      subtotal: order.subtotal || 0,
+      shippingFee: order.shippingFee || 0,
       total: order.total || 0,
-      status: order.status || "pending",
-      createdAt: new Date().toISOString()
+
+      // 📦 STATUS
+      status: "pending",
+      paymentStatus: "PENDING",
+      orderState: "PENDING_PAYMENT",
+      paymentMethod: order.paymentMethod || "UNKNOWN",
+
+      // 👤 CUSTOMER
+      firstName: order.firstName || "",
+      lastName: order.lastName || "",
+      phone: order.phone || "",
+
+      // 📍 ADDRESS
+      address: order.address || "",
+      city: order.city || "",
+      province: order.province || ""
     };
 
-    console.log("🔥 Saving order:", orderData);
+    console.log("🔥 Sending order to backend:", orderData);
 
-    const docRef = await addDoc(collection(db, "orders"), orderData);
+    // ✅ GENERATE CLEAN ORDER ID
+    const orderId = generateOrderId();
 
-    console.log("✅ Order saved:", docRef.id);
+    // ==========================
+    // 🚀 SEND TO BACKEND
+    // ==========================
+    const res = await fetch("http://localhost:3000/create-manual-order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        order: {
+          id: orderId,
+          ...orderData
+        }
+      })
+    });
 
-    return docRef.id;
+    if (!res.ok) {
+      throw new Error("Failed to create order in backend");
+    }
+
+    console.log("✅ Order successfully created via backend:", orderId);
+
+    return orderId;
 
   } catch (error) {
     console.error("❌ SAVE ORDER ERROR:", error);
@@ -74,7 +116,7 @@ export async function getOrders() {
 }
 
 // ==========================
-// 📧 GET ORDERS BY EMAIL (OPTIONAL FEATURE)
+// 📧 GET ORDERS BY EMAIL
 // ==========================
 export async function getOrdersByEmail(email) {
   try {
@@ -100,22 +142,48 @@ export async function getOrdersByEmail(email) {
 }
 
 // ==========================
-// 🔄 UPDATE ORDER STATUS (ADMIN)
+// 🔍 GET SINGLE ORDER
 // ==========================
-export async function updateOrderStatus(orderId, newStatus) {
+export async function getOrderById(orderId) {
   try {
     if (!orderId) throw new Error("Missing orderId");
 
     const orderRef = doc(db, "orders", orderId);
+    const snapshot = await getDoc(orderRef);
 
-    await updateDoc(orderRef, {
-      status: newStatus
-    });
+    if (!snapshot.exists()) {
+      throw new Error("Order not found");
+    }
 
-    console.log(`✅ Order ${orderId} updated → ${newStatus}`);
+    return {
+      id: snapshot.id,
+      ...snapshot.data()
+    };
 
   } catch (error) {
-    console.error("❌ UPDATE STATUS ERROR:", error);
+    console.error("❌ GET ORDER ERROR:", error);
+    throw error;
+  }
+}
+
+// ==========================
+// 🔄 UPDATE ORDER (FLEXIBLE)
+// ==========================
+export async function updateOrderStatus(orderId, updates) {
+  try {
+    if (!orderId) throw new Error("Missing orderId");
+    if (!updates || typeof updates !== "object") {
+      throw new Error("Updates must be an object");
+    }
+
+    const orderRef = doc(db, "orders", orderId);
+
+    await updateDoc(orderRef, updates);
+
+    console.log(`✅ Order ${orderId} updated →`, updates);
+
+  } catch (error) {
+    console.error("❌ UPDATE ORDER ERROR:", error);
     throw error;
   }
 }

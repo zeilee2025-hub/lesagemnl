@@ -2,6 +2,9 @@
 // 🧠 GET FORM DATA
 // ===============================
 export function getCheckoutFormData() {
+  const citySelect = document.getElementById("checkout-city");
+  const cityManual = document.getElementById("checkout-city-manual");
+
   return {
     email: document.getElementById("checkout-email")?.value.trim(),
     phone: document.getElementById("checkout-phone")?.value.trim(),
@@ -10,7 +13,10 @@ export function getCheckoutFormData() {
     address: document.getElementById("checkout-address")?.value.trim(),
     apartment: document.getElementById("checkout-apartment")?.value.trim(),
     province: document.getElementById("checkout-province-input")?.value.trim(),
-    city: document.getElementById("checkout-city")?.value,
+
+    // 👇 THIS IS THE FIX
+    city: (cityManual?.value || citySelect?.value || "").trim(),
+
     postal: document.getElementById("checkout-postal")?.value.trim(),
   };
 }
@@ -42,7 +48,9 @@ export function validateCheckoutForm(data) {
 
   // LOCATION
   if (!data.province) errors.province = "Select a province";
-  if (!data.city) errors.city = "Select a city";
+  if (!data.city || !data.city.trim()) {
+  errors.city = "Enter your city";
+}
 
   // POSTAL
   if (!data.postal) {

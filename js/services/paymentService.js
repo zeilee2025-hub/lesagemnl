@@ -2,7 +2,7 @@
 // 💳 PAYMENT SERVICE (PAYMONGO - UPDATED)
 // ==========================
 
-export async function createPaymentSession({ items, customer, totals }) {
+export async function createPaymentSession({ items, customer, totals, orderId }) {
   try {
     if (!items || !Array.isArray(items) || items.length === 0) {
       throw new Error("Invalid cart items");
@@ -12,9 +12,10 @@ export async function createPaymentSession({ items, customer, totals }) {
       throw new Error("Invalid totals");
     }
 
-    // ==========================
-    // 🔥 CALL YOUR BACKEND
-    // ==========================
+    if (!orderId) {
+      throw new Error("Missing orderId");
+    }
+
     const res = await fetch("http://localhost:3000/create-checkout-session", {
       method: "POST",
       headers: {
@@ -23,7 +24,6 @@ export async function createPaymentSession({ items, customer, totals }) {
       body: JSON.stringify({
         items,
 
-        // ✅ FULL CUSTOMER DATA
         customer: {
           email: customer?.email || null,
           name: customer?.name || "",
@@ -33,12 +33,13 @@ export async function createPaymentSession({ items, customer, totals }) {
           region: customer?.region || ""
         },
 
-        // ✅ NEW — SEND TOTALS
         totals: {
           subtotal: totals.subtotal,
           shipping: totals.shipping,
           total: totals.total
-        }
+        },
+
+        orderId   // 🔥 CRITICAL LINK
       })
     });
 
@@ -52,9 +53,6 @@ export async function createPaymentSession({ items, customer, totals }) {
       throw new Error("No checkout URL returned");
     }
 
-    // ==========================
-    // 🚀 REDIRECT TO PAYMONGO
-    // ==========================
     window.location.href = data.checkoutUrl;
 
   } catch (error) {

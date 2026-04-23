@@ -2085,3 +2085,64 @@ body.lookbook-page .navbar.shift-up {
   }
 }
 
+/* =========================
+   LOCAL PAYMENTS
+========================= */
+
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.payment-card {
+  background: #fff;
+  border: 1px solid #f0f0f0; /* lighter */
+
+  border-radius: 14px;
+  padding: 18px;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.payment-card:hover {
+  border-color: #ddd;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  transform: translateY(-1px);
+}
+
+.payment-card.active {
+  border-color: #000;
+  box-shadow: 0 0 0 1px #000 inset; /* 🔥 premium trick */
+}
+
+.payment-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-card__title {
+  font-size: 13.5px; /* slightly smaller */
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.payment-card__badge {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.payment-card__desc {
+  font-size: 13px;
+  color: #777; /* lighter */
+}
+

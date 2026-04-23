@@ -38,10 +38,10 @@ async function init() {
     // ==========================
     // ⏳ WAIT UNTIL PAID
     // ==========================
-    if (data.status !== "paid") {
-      showError("Payment not confirmed yet.");
-      return;
-    }
+    if (data.paymentStatus !== "PAID") {
+  showError("Payment not confirmed yet.");
+  return;
+}
 
     // ==========================
     // ✅ DISPLAY SUCCESS
