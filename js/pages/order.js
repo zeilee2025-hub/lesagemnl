@@ -13,7 +13,9 @@ async function init() {
 
   try {
     const params = new URLSearchParams(window.location.search);
-    const orderId = params.get("orderId");
+    const orderId = params.get("orderId") || params.get("id");
+    console.log("🔍 URL:", window.location.href);
+console.log("📦 ORDER ID:", orderId);
 
     if (!orderId) {
       container.innerHTML = "<p>Invalid order.</p>";
