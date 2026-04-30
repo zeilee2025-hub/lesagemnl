@@ -1,49 +1,45 @@
 // ==========================
-// 🧾 ORDER CARD COMPONENT (IMPROVED - FIXED)
+// 🧾 ORDER CARD (CONNECTED SYSTEM)
 // ==========================
+
+import { deriveOrderUI } from "../core/orderUI.js";
+
 export function renderOrderCard(order) {
   if (!order) {
     console.error("❌ renderOrderCard: missing order");
     return "";
   }
 
-  // 🔥 Ensure ID exists (CRITICAL FIX)
   const orderId = order.id || order.orderId || "";
 
   if (!orderId) {
-    console.error("❌ Missing order.id in orderCard:", order);
+    console.error("❌ Missing order.id:", order);
   }
 
-  const itemsHTML = (order.items || []).map(item => `
-    <div class="order-item">
-      <img 
-        src="${item.image}" 
-        alt="${item.name}" 
-        class="order-item-image"
-      />
-      <div class="order-item-info">
-        <p class="name">${item.name}</p>
-        <p class="meta">Size: ${item.size} • Qty: ${item.quantity}</p>
-        <p class="price">₱${Number(item.price).toLocaleString()}</p>
-      </div>
-    </div>
-  `).join("");
+  const ui = deriveOrderUI(order);
 
   // ==========================
-  // 🔥 STATE SYSTEM
+  // 📦 ITEMS SUMMARY
   // ==========================
-  const state = order.orderState || "PENDING_PAYMENT";
+  const items = order.items || [];
 
-  const statusClass = getStatusClass(state);
-  const statusLabel = formatState(state);
+  const firstItem = items[0] || {};
+  const extraCount = items.length - 1;
+
+  const itemName = firstItem.name || "Product";
+  const itemImage = firstItem.image || "/images/placeholder.png";
+
+  const itemSummary =
+    extraCount > 0
+      ? `${itemName} +${extraCount} more`
+      : itemName;
 
   // ==========================
   // 💰 TOTAL
   // ==========================
-  const total = (order.items || []).reduce(
-    (sum, i) => sum + (i.price * i.quantity),
-    0
-  );
+  const total =
+    order.total ||
+    items.reduce((sum, i) => sum + (i.price * i.quantity), 0);
 
   // ==========================
   // 📅 DATE
@@ -53,59 +49,61 @@ export function renderOrderCard(order) {
   return `
     <div class="order-card" data-id="${orderId}">
 
-      <!-- HEADER -->
-      <div class="order-header">
-        <span class="order-id">
-  #${order.orderNumber || order.id}
-</span>
-        <span class="order-status ${statusClass}">
-          ${statusLabel}
-        </span>
+      <!-- LEFT: IMAGE -->
+      <div class="order-card__image">
+        <img src="${itemImage}" alt="${itemName}" />
       </div>
 
-      <!-- ITEMS -->
-      <div class="order-items">
-        ${itemsHTML || `<p class="no-items">No items</p>`}
+      <!-- CENTER: INFO -->
+      <div class="order-card__info">
+
+        <div class="order-card__top">
+          <span class="order-card__id">
+            #${order.orderNumber || order.id}
+          </span>
+
+          <span class="order-card__status status-${ui.type}">
+            ${ui.label}
+          </span>
+        </div>
+
+        <div class="order-card__meta">
+          <span class="order-card__item">
+            ${itemSummary}
+          </span>
+
+          <span class="order-card__date">
+            ${date}
+          </span>
+        </div>
+
       </div>
 
-      <!-- FOOTER -->
-      <div class="order-footer">
-        <span class="order-date">${date}</span>
-        <span class="order-total">₱${total.toLocaleString()}</span>
+      <!-- RIGHT: TOTAL + ACTION -->
+      <div class="order-card__side">
+
+        <div class="order-card__total">
+          ₱${Number(total).toLocaleString()}
+        </div>
+
+        ${
+          ui.action
+            ? `
+          <button class="order-card__action" data-action="${ui.action}">
+            ${ui.actionLabel}
+          </button>
+        `
+            : `
+          <div class="order-card__action disabled">
+            ${ui.label}
+          </div>
+        `
+        }
+
       </div>
 
     </div>
   `;
-}
-
-// ==========================
-// 🎨 STATUS CLASS
-// ==========================
-function getStatusClass(state) {
-  switch (state) {
-    case "PAID":
-      return "paid";
-    case "SHIPPED":
-      return "shipped";
-    case "COMPLETED":
-      return "completed";
-    case "PENDING_PAYMENT":
-      return "pending";
-    case "PROOF_UPLOADED":
-      return "review";
-    default:
-      return "pending";
-  }
-}
-
-// ==========================
-// ✨ FORMAT STATE TEXT
-// ==========================
-function formatState(state) {
-  return state
-    .replaceAll("_", " ")
-    .toLowerCase()
-    .replace(/\b\w/g, c => c.toUpperCase());
 }
 
 // ==========================
@@ -115,15 +113,15 @@ function formatDate(date) {
   if (!date) return "—";
 
   if (typeof date === "string") {
-    return new Date(date).toLocaleString();
+    return new Date(date).toLocaleDateString();
   }
 
   if (typeof date === "number") {
-    return new Date(date).toLocaleString();
+    return new Date(date).toLocaleDateString();
   }
 
   if (date?.toMillis) {
-    return new Date(date.toMillis()).toLocaleString();
+    return new Date(date.toMillis()).toLocaleDateString();
   }
 
   return "—";

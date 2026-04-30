@@ -2,30 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>LÉ SAGE MNL | Lookbook</title>
+  <title>Lookbook — LÉ SAGE MNL</title>
 
-  <!-- GLOBAL -->
+  <!-- GLOBAL CSS -->
   <link rel="stylesheet" href="./css/base.css" />
   <link rel="stylesheet" href="./css/components.css" />
   <link rel="stylesheet" href="./css/footer.css" />
 
-  <!-- PAGE -->
+  <!-- PAGE CSS -->
   <link rel="stylesheet" href="./css/pages/lookbook.css" />
 
-  <!-- 🔥 IMPORT TAPE STYLES -->
+  <!-- 🔥 IMPORTANT: brings in SAME navbar behavior as index -->
   <link rel="stylesheet" href="./css/pages/home.css" />
+
+  <!-- 🔥 FIX: PRELOAD FIRST LOOKBOOK IMAGES -->
+  <link rel="preload" as="image" href="/assets/images/lookbook/lb1.jpg">
+  <link rel="preload" as="image" href="/assets/images/lookbook/lb1a.jpg">
+  <link rel="preload" as="image" href="/assets/images/lookbook/lb1b.jpg">
 
   <!-- ICONS -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="lookbook-page overlay-page">
+<body class="lookbook-page home-page overlay-page">
 
   <!-- ================= HEADER ================= -->
-  <header role="banner">
+  <header>
 
     <div class="announcement-bar">
       <div class="announcement-track">
@@ -51,7 +55,7 @@
       </div>
     </div>
 
-    <nav class="navbar" role="navigation">
+    <nav class="navbar">
       <div class="nav-container">
 
         <div class="nav-left">
@@ -73,7 +77,12 @@
               </svg>
             </span>
 
-            <input type="text" id="search-input" class="search-input" placeholder="Search"/>
+            <input 
+              type="text" 
+              id="search-input" 
+              class="search-input" 
+              placeholder="Search"
+            />
           </div>
 
           <span class="nav-icon cart-icon" id="cart-icon">
@@ -90,27 +99,55 @@
   <!-- ================= MAIN ================= -->
   <main class="lookbook-main">
 
-    <!-- HERO -->
+    <!-- 🎬 HERO VIDEO -->
     <section class="lookbook-hero">
-  <img 
-    src="./assets/images/lookbook/lb11.jpg" 
-    class="lookbook-hero__image"
-    alt="Lookbook Hero"
-  />
-</section>
 
-    <!-- 🔥 STRIPE DIVIDER (REPLACED MARQUEE) -->
-    <section class="tape-divider">
-      <div class="tape-track">
-        <div class="tape-content">
-          <span>LÉ SAGE MNL | LOOKBOOK SERIES</span>
-          <span>LÉ SAGE MNL | LOOKBOOK SERIES</span>
-          <span>LÉ SAGE MNL | LOOKBOOK SERIES</span>
-        </div>
-        <div class="tape-content">
-          <span>LÉ SAGE MNL | LOOKBOOK SERIES</span>
-          <span>LÉ SAGE MNL | LOOKBOOK SERIES</span>
-          <span>LÉ SAGE MNL | LOOKBOOK SERIES</span>
+      <video 
+        class="lookbook-hero__video"
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        preload="metadata"
+        poster="./assets/images/lookbook/poster.jpg"
+      >
+        <source src="./assets/images/lookbook/lookbook-hero.mp4" type="video/mp4">
+      </video>
+
+      <div class="lookbook-hero__overlay"></div>
+
+    </section>
+
+    <!-- 🔥 MARQUEE -->
+    <section class="lookbook-marquee-section">
+      <div class="lookbook-marquee">
+        <div class="lookbook-marquee__track">
+
+          <span class="lookbook-marquee__text">
+            <span class="lookbook-marquee__item">LÉ SAGE MNL</span>
+            <span class="lookbook-marquee__item">LOOKBOOK SERIES</span>
+          </span>
+
+          <span class="lookbook-marquee__text">
+            <span class="lookbook-marquee__item">LÉ SAGE MNL</span>
+            <span class="lookbook-marquee__item">LOOKBOOK SERIES</span>
+          </span>
+
+          <span class="lookbook-marquee__text">
+            <span class="lookbook-marquee__item">LÉ SAGE MNL</span>
+            <span class="lookbook-marquee__item">LOOKBOOK SERIES</span>
+          </span>
+
+          <span class="lookbook-marquee__text">
+            <span class="lookbook-marquee__item">LÉ SAGE MNL</span>
+            <span class="lookbook-marquee__item">LOOKBOOK SERIES</span>
+          </span>
+
+          <span class="lookbook-marquee__text">
+            <span class="lookbook-marquee__item">LÉ SAGE MNL</span>
+            <span class="lookbook-marquee__item">LOOKBOOK SERIES</span>
+          </span>
+
         </div>
       </div>
     </section>
@@ -123,29 +160,46 @@
   </main>
 
   <!-- ================= CART ================= -->
-  <div class="cart-overlay" id="cart-overlay"></div>
 
-  <aside class="cart-drawer" id="cart-drawer">
+  <div id="cart-overlay" class="cart-overlay"></div>
+
+  <div id="cart-drawer" class="cart-drawer">
+
     <div class="cart-header">
-      <h2>Your Cart</h2>
-      <button id="close-cart">✕</button>
+      <h3>Your Cart</h3>
+      <button id="close-cart" class="close-cart">×</button>
     </div>
 
-    <div id="cart-items"></div>
-    <div id="cart-total"></div>
-  </aside>
+    <div id="cart-items" class="cart-items"></div>
+
+    <div class="cart-footer">
+      <p id="cart-total">Total: ₱0</p>
+    </div>
+
+  </div>
 
   <!-- ================= FOOTER ================= -->
   <div id="footer-container"></div>
 
   <!-- ================= JS ================= -->
 
-  <script type="module" src="./js/components/navbar.js"></script>
-  <script type="module" src="./js/components/footerLoader.js"></script>
   <script type="module" src="./js/pages/lookbook.js"></script>
+  <script type="module" src="./js/components/navbar.js"></script>
+
+  <script type="module">
+    import { loadFooter } from "./js/components/footerLoader.js";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadFooter();
+    });
+  </script>
 
   <script>
-    lucide.createIcons();
+    window.addEventListener("DOMContentLoaded", () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
   </script>
 
 </body>

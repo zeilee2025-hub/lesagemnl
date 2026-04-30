@@ -1,15 +1,20 @@
 // ==========================
-// 🔥 LOOKBOOK CAROUSEL (FINAL - NO DELAY SYSTEM)
+// 🔥 LOOKBOOK CAROUSEL (FINAL FIXED)
 // ==========================
 
 export function renderLookbookCarousel(root) {
+  if (!root) return;
 
+  // ==========================
+  // 📸 DATA
+  // ==========================
   const slides = [
     ["/assets/images/lookbook/lb1.jpg"],
+
     ["/assets/images/lookbook/lb1a.jpg", "/assets/images/lookbook/lb1b.jpg"],
     ["/assets/images/lookbook/lb2a.jpg", "/assets/images/lookbook/lb2b.jpg"],
     ["/assets/images/lookbook/lb3a.jpg", "/assets/images/lookbook/lb3b.jpg"],
-    ["/assets/images/lookbook/lb4a.jpg", "/assets/images/lookbook/lb4b.jpg"]
+    ["/assets/images/lookbook/lb4a.jpg", "/assets/images/lookbook/lb4b.jpg"],
   ];
 
   // ==========================
@@ -18,30 +23,31 @@ export function renderLookbookCarousel(root) {
   root.innerHTML = `
     <div class="lookbook-carousel">
 
-      <!-- 🔘 ARROWS -->
       <button class="lookbook-arrow left">‹</button>
       <button class="lookbook-arrow right">›</button>
 
       <div class="lookbook-track">
-        ${slides.map(pair => {
+        ${slides.map((pair, i) => {
 
+          // 🔥 SOLO
           if (pair.length === 1) {
             return `
               <div class="lookbook-slide solo">
                 <div class="lookbook-image">
-                  <img src="${pair[0]}" />
+                  <img src="${pair[0]}" alt="lookbook" loading="${i === 0 ? "eager" : "lazy"}" />
                 </div>
               </div>
             `;
           }
 
+          // 🔥 DOUBLE
           return `
             <div class="lookbook-slide">
               <div class="lookbook-image">
-                <img src="${pair[0]}" />
+                <img src="${pair[0]}" alt="lookbook" loading="${i === 0 ? "eager" : "lazy"}" />
               </div>
               <div class="lookbook-image">
-                <img src="${pair[1]}" />
+                <img src="${pair[1]}" alt="lookbook" loading="${i === 0 ? "eager" : "lazy"}" />
               </div>
             </div>
           `;
@@ -49,6 +55,7 @@ export function renderLookbookCarousel(root) {
       </div>
 
       <div class="lookbook-dots"></div>
+
     </div>
   `;
 
@@ -58,17 +65,15 @@ export function renderLookbookCarousel(root) {
   const track = root.querySelector(".lookbook-track");
   const slidesEl = root.querySelectorAll(".lookbook-slide");
   const dotsContainer = root.querySelector(".lookbook-dots");
-  const section = root.closest(".lookbook-carousel-section");
-
   const prevBtn = root.querySelector(".lookbook-arrow.left");
   const nextBtn = root.querySelector(".lookbook-arrow.right");
 
   let currentIndex = 0;
-  let autoSlideTimeout = null;
-  let hasStarted = false;
+  let autoTimer = null;
+  let isDragging = false;
+  let startX = 0;
 
-  const NORMAL_DURATION = 2800;
-  const FIRST_DURATION = 1200;
+  const AUTO_DELAY = 5000;
 
   // ==========================
   // 🔘 DOTS
@@ -79,66 +84,39 @@ export function renderLookbookCarousel(root) {
 
   const dots = dotsContainer.querySelectorAll(".dot");
 
-// 🔥 FORCE FIRST SLIDE TO SHOW IMMEDIATELY
-goToSlide(0);
-
   // ==========================
-  // 🎞 GO TO SLIDE
+  // 🎞 SLIDE CONTROL
   // ==========================
   function goToSlide(index) {
+    currentIndex = index;
     track.style.transform = `translateX(-${index * 100}%)`;
 
-    dots.forEach(dot => {
-      dot.classList.remove("active");
-      dot.style.animation = "none";
-      dot.offsetHeight;
-      dot.style.animation = null;
-    });
-
+    dots.forEach(dot => dot.classList.remove("active"));
     dots[index].classList.add("active");
   }
 
   // ==========================
-  // 🔁 AUTO SLIDE (SMART TIMING)
+  // 🔁 AUTO SLIDE
   // ==========================
-  function scheduleNextSlide(duration) {
-    clearTimeout(autoSlideTimeout);
-
-    autoSlideTimeout = setTimeout(() => {
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(() => {
       currentIndex = (currentIndex + 1) % slidesEl.length;
       goToSlide(currentIndex);
-
-      // after first move → use normal speed
-      scheduleNextSlide(NORMAL_DURATION);
-    }, duration);
+    }, AUTO_DELAY);
   }
 
-  // ==========================
-  // 👀 INTERSECTION
-  // ==========================
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !hasStarted) {
-        hasStarted = true;
-
-        goToSlide(0);
-
-        // 🔥 START IMMEDIATELY (NO PAUSE)
-        scheduleNextSlide(FIRST_DURATION);
-      }
-    });
-  }, { threshold: 0.3 });
-
-  if (section) observer.observe(section);
+  function stopAuto() {
+    if (autoTimer) clearInterval(autoTimer);
+  }
 
   // ==========================
   // 🔘 DOT CLICK
   // ==========================
   dots.forEach(dot => {
     dot.addEventListener("click", () => {
-      currentIndex = Number(dot.dataset.index);
-      goToSlide(currentIndex);
-      scheduleNextSlide(NORMAL_DURATION);
+      goToSlide(Number(dot.dataset.index));
+      startAuto();
     });
   });
 
@@ -148,69 +126,94 @@ goToSlide(0);
   prevBtn.addEventListener("click", () => {
     currentIndex = Math.max(0, currentIndex - 1);
     goToSlide(currentIndex);
-    scheduleNextSlide(NORMAL_DURATION);
+    startAuto();
   });
 
   nextBtn.addEventListener("click", () => {
     currentIndex = Math.min(slidesEl.length - 1, currentIndex + 1);
     goToSlide(currentIndex);
-    scheduleNextSlide(NORMAL_DURATION);
+    startAuto();
   });
 
   // ==========================
-  // 🖱 DRAG
+  // 🖱 DRAG (DESKTOP)
   // ==========================
-  let startX = 0;
-  let isDragging = false;
-
-  track.addEventListener("mousedown", (e) => {
-    isDragging = true;
-    startX = e.clientX;
-    clearTimeout(autoSlideTimeout);
-  });
-
   window.addEventListener("mouseup", (e) => {
     if (!isDragging) return;
 
     const diff = e.clientX - startX;
+    const threshold = 30;
 
-    if (diff > 50) currentIndex = Math.max(0, currentIndex - 1);
-    else if (diff < -50) currentIndex = Math.min(slidesEl.length - 1, currentIndex + 1);
+    if (diff > threshold) {
+      currentIndex = Math.max(0, currentIndex - 1);
+    } else if (diff < -threshold) {
+      currentIndex = Math.min(slidesEl.length - 1, currentIndex + 1);
+    }
+
+    track.style.transition = "transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)";
 
     goToSlide(currentIndex);
-    scheduleNextSlide(NORMAL_DURATION);
+    startAuto();
     isDragging = false;
   });
 
   // ==========================
-  // 📱 TOUCH
+  // 📱 TOUCH (MOBILE)
   // ==========================
   let touchStartX = 0;
 
   track.addEventListener("touchstart", (e) => {
     touchStartX = e.touches[0].clientX;
-    clearTimeout(autoSlideTimeout);
+    track.style.transition = "none";
+    stopAuto();
   });
 
   track.addEventListener("touchend", (e) => {
     const diff = e.changedTouches[0].clientX - touchStartX;
+    const threshold = 30;
 
-    if (diff > 50) currentIndex = Math.max(0, currentIndex - 1);
-    else if (diff < -50) currentIndex = Math.min(slidesEl.length - 1, currentIndex + 1);
+    if (diff > threshold) {
+      currentIndex = Math.max(0, currentIndex - 1);
+    } else if (diff < -threshold) {
+      currentIndex = Math.min(slidesEl.length - 1, currentIndex + 1);
+    }
+
+    track.style.transition = "transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)";
 
     goToSlide(currentIndex);
-    scheduleNextSlide(NORMAL_DURATION);
+    startAuto();
   });
 
   // ==========================
   // 🖱 HOVER PAUSE
   // ==========================
-  root.addEventListener("mouseenter", () => {
-    clearTimeout(autoSlideTimeout);
+  root.addEventListener("mouseenter", stopAuto);
+  root.addEventListener("mouseleave", startAuto);
+
+  // ==========================
+  // 🚀 INIT (FIXED)
+  // ==========================
+  goToSlide(0);
+
+  // 🔥 WAIT FOR IMAGES BEFORE AUTOPLAY
+  const images = root.querySelectorAll("img");
+
+  let loaded = 0;
+
+  images.forEach(img => {
+    if (img.complete) {
+      loaded++;
+    } else {
+      img.addEventListener("load", () => {
+        loaded++;
+        if (loaded === images.length) {
+          startAuto();
+        }
+      });
+    }
   });
 
-  root.addEventListener("mouseleave", () => {
-    scheduleNextSlide(NORMAL_DURATION);
-  });
-
+  if (loaded === images.length) {
+    startAuto();
+  }
 }

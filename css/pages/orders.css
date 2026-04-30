@@ -1,175 +1,214 @@
-/* ==========================
-   🧾 ORDERS PAGE
-========================== */
+/* =========================
+   PAGE
+========================= */
 .orders-page {
-  max-width: 1000px;
-  margin: 60px auto;
-  padding: 0 20px;
+  max-width: 1180px;
+  margin: 48px auto;
+  padding: 0 24px;
 }
 
-/* ==========================
-   HEADER
-========================== */
-.orders-header {
-  margin-bottom: 30px;
-}
-
-.orders-header h1 {
-  font-size: 32px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.orders-header p {
-  color: #666;
-  font-size: 14px;
-}
-
-/* ==========================
-   GRID
-========================== */
+/* =========================
+   LIST
+========================= */
 .orders-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-/* ==========================
-   ORDER CARD
-========================== */
+/* =========================
+   CARD
+========================= */
 .order-card {
-  border: 1px solid #e5e5e5;
-  border-radius: 16px;
-  padding: 16px;
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 20px;
+
+  padding: 18px 20px;
+  border: 1px solid #eee;
+  border-radius: 14px;
   background: #fff;
-  cursor: pointer;
 
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  cursor: pointer;
 }
 
 .order-card:hover {
-  transform: translateY(-4px);
   border-color: #ddd;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
 }
 
-/* ==========================
-   HEADER (TOP)
-========================== */
-.order-header {
+/* =========================
+   IMAGE
+========================= */
+.order-card__image {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f7f7f7;
+}
+
+.order-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =========================
+   INFO
+========================= */
+.order-card__info {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* TOP */
+.order-card__top {
+  display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  justify-content: space-between;
 }
 
-.order-id {
+.order-card__id {
+  font-size: 13px;
+  color: #777;
+  letter-spacing: 0.4px;
+}
+
+/* STATUS (reuses your system) */
+.order-card__status {
   font-size: 12px;
-  color: #999;
+  padding: 4px 10px;
+  border-radius: 999px;
 }
 
-/* ==========================
-   STATUS
-========================== */
-.order-status {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
+/* META */
+.order-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.order-status.paid {
-  color: #16a34a;
-}
-
-.order-status.pending {
-  color: #d97706;
-}
-
-.order-status.shipped {
-  color: #2563eb;
-}
-
-.order-status.completed {
+.order-card__item {
+  font-size: 14px;
+  font-weight: 500;
   color: #111;
 }
 
-/* ==========================
-   ITEMS
-========================== */
-.order-items {
+.order-card__date {
+  font-size: 12px;
+  color: #888;
+}
+
+/* =========================
+   SIDE (RIGHT PANEL)
+========================= */
+.order-card__side {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 14px;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 10px;
 }
 
-.order-item {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.order-item-image {
-  width: 70px;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 10px;
-  flex-shrink: 0;
-}
-
-/* ==========================
-   ITEM INFO
-========================== */
-.order-item-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.order-item-info .name {
+/* TOTAL */
+.order-card__total {
   font-size: 15px;
   font-weight: 600;
   color: #111;
 }
 
-.order-item-info .meta {
+/* =========================
+   ACTION BUTTON
+========================= */
+.order-card__action {
   font-size: 12px;
-  color: #888;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: none;
+
+  background: #111;
+  color: #fff;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.order-item-info .price {
-  font-size: 14px;
-  font-weight: 600;
+.order-card__action:hover {
+  background: #000;
 }
 
-/* ==========================
-   FOOTER
-========================== */
-.order-footer {
+/* DISABLED STATE */
+.order-card__action.disabled {
+  background: #f1f1f1;
+  color: #999;
+  cursor: default;
+}
+
+/* =========================
+   STATUS COLORS (OPTIONAL TUNE)
+========================= */
+
+.status-pending {
+  background: #f5f5f5;
+  color: #555;
+}
+
+.status-review {
+  background: #fff6e5;
+  color: #b7791f;
+}
+
+.status-paid {
+  background: #e6f7ec;
+  color: #1f7a4d;
+}
+
+.status-shipped {
+  background: #e8f1ff;
+  color: #2a5bd7;
+}
+
+.status-completed {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.status-cancelled {
+  background: #ffeaea;
+  color: #c53030;
+}
+
+/* =========================
+   HEADER
+========================= */
+.orders-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid #f3f3f3;
-  padding-top: 10px;
-  margin-top: 10px;
+  align-items: flex-end;
+  margin-bottom: 32px;
 }
 
-.order-date {
-  font-size: 11px;
-  color: #999;
-}
-
-.order-total {
-  font-size: 14px;
+.orders-title {
+  font-size: 24px;
   font-weight: 600;
+  margin-bottom: 6px;
 }
 
-/* ==========================
-   EMPTY STATE
-========================== */
-.no-items {
-  font-size: 12px;
-  color: #999;
+.orders-subtitle {
+  font-size: 13px;
+  color: #777;
+}
+
+.orders-back {
+  font-size: 13px;
+  color: #555;
+  text-decoration: none;
+}
+
+.orders-back:hover {
+  text-decoration: underline;
 }

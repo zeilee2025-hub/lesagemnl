@@ -98,24 +98,46 @@ body.confirmation-page {
 
 .confirmation__subtitle {
   font-size: 13px;
-  color: #222;   /* darker */
+  color: #222;
   max-width: 320px;
+  margin-bottom: 2px; 
 }
 
 .confirmation__meta-inline {
   line-height: 1.4;
   display: flex;
   align-items: center;
-  gap: 14px;
-  font-size: 11px;
-  opacity: 0.5;
+  gap: 8px;
+  font-size: 12px;
+  margin-top: 3px;
 }
 
 .confirmation__order-id {
   font-size: 11px;
-  opacity: 0.4;
+  opacity: 0.65;
   letter-spacing: 0.5px;
   margin-top: 2px;
+}
+
+/* =========================
+   SUCCESS INFO (NEW)
+========================= */
+
+.confirmation__success-info {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #444;
+}
+
+.confirmation__success-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  padding-left: 0;
 }
 
 /* =========================
@@ -123,11 +145,11 @@ body.confirmation-page {
 ========================= */
 
 .confirmation__status {
-  font-size: 10px;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  text-transform: none;
   color: #111;
-  opacity: 0.5;
+  opacity: 0.7;
   font-weight: 500;
 }
 
@@ -344,18 +366,18 @@ body.confirmation-page {
 
 .confirmation__support {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 18px;
-  padding-top: 14px;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 32px;
+  padding-top: 18px;
   border-top: 1px solid #f2f2f2;
+  gap: 10px;
 }
 
 .confirmation__support-text {
   font-size: 13px;
   color: #666;
-  display: flex;
-  align-items: center;
+  margin-top: 4px;
 }
 
 .confirmation__btn {
@@ -411,6 +433,68 @@ body.confirmation-page {
 
 .support-link:hover {
   opacity: 0.7;
+}
+
+/* =========================
+   SUPPORT ROW (NEW)
+========================= */
+
+.confirmation__support-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* =========================
+   ACTION BUTTONS (NEW)
+========================= */
+
+.confirmation__actions {
+  display: flex;
+  gap: 10px;
+  margin-left: auto; /* 🔥 pushes to right */
+}
+
+.btn-primary {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #111;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.btn-secondary:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+  transform: translateY(-1px);
 }
 
 /* =========================
@@ -586,7 +670,7 @@ body.confirmation-page {
 
 .confirmation__legal {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 24px;
 }
 
 /* container */

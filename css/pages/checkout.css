@@ -478,7 +478,6 @@ body.checkout-page {
 /* =========================
    VALIDATION
 ========================= */
-
 .input-error {
   border-color: #e53935 !important;
   box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.1);

@@ -1,5 +1,5 @@
 // ===============================
-// PRODUCT CARD COMPONENT (FINAL — CLEAN + STATE DRIVEN)
+// PRODUCT CARD COMPONENT (FINAL — STABLE VARIANT SYSTEM)
 // ===============================
 
 import { loadImage } from "../core/imageLoader.js";
@@ -9,17 +9,17 @@ import { getProductImage } from "../core/imageResolver.js";
 // ===============================
 // 🧱 HTML TEMPLATE
 // ===============================
-export function createProductCard(product) {
-  const variants =
+export function createProductCard(product, options = {}) {
+  const rawVariants =
     (Array.isArray(product.variants) && product.variants.length > 0)
       ? product.variants
       : (product.colors || []);
 
-  const colorList = variants.map(v =>
-    v.value || v.color?.value || "#000"
-  );
+  const variants = rawVariants.map((v, index) => ({
+    value: v.value || v.color?.value || "#000"
+  }));
 
-  const hasColors = colorList.length > 1;
+  const hasColors = variants.length > 1;
 
   const frontImage = getProductImage(product, { type: "front" });
   const backImage =
@@ -44,11 +44,11 @@ export function createProductCard(product) {
           hasColors
             ? `
             <div class="product-swatches">
-              ${colorList.map((colorHex, index) => `
+              ${variants.map((v, index) => `
                 <span 
                   class="swatch ${index === 0 ? "active" : ""}"
                   data-index="${index}"
-                  style="background:${colorHex}"
+                  style="background:${v.value}"
                 ></span>
               `).join("")}
             </div>
@@ -65,14 +65,26 @@ export function createProductCard(product) {
 // ===============================
 // 🎯 INTERACTION LOGIC
 // ===============================
-export function initProductCard(card, onQuickAdd, product) {
+export function initProductCard(card, onQuickAdd, product, options = {}) {
   let modelTimer;
+
+  const config = {
+    allowModel: options.allowModel ?? true,
+    hoverMode: options.hoverMode ?? "model"
+  };
 
   let state = {
     isHovering: false,
     modelReady: false,
-    variantIndex: 0
+    activeVariantIndex: 0,
+    hoverVariantIndex: null
   };
+
+  function getCurrentVariantIndex() {
+    return state.hoverVariantIndex !== null
+      ? state.hoverVariantIndex
+      : state.activeVariantIndex;
+  }
 
   function isValidSrc(src) {
     return typeof src === "string" && src.trim() !== "";
@@ -89,118 +101,172 @@ export function initProductCard(card, onQuickAdd, product) {
     };
   }
 
-  const variants =
+  // ===============================
+  // 🔥 NORMALIZED VARIANTS (CRITICAL)
+  // ===============================
+  const rawVariants =
     (Array.isArray(product.variants) && product.variants.length > 0)
       ? product.variants
       : (product.colors || []);
 
-  const hasColors = variants.length > 0;
+  const variants = rawVariants.map((v, index) => ({
+    name: v.name || `variant-${index}`,
+    front: v.front || v?.images?.front || null,
+    back: v.back || v?.images?.back || null,
+    model: v.model || v?.images?.model || null,
+    value: v.value || v.color?.value || "#000",
+    sizes: v.sizes || []
+  }));
+
+  const hasColors = variants.length > 1;
 
   const hasModel =
-    product.hasModel === true ||
-    String(product.hasModel) === "true";
+    config.allowModel &&
+    (product.hasModel === true ||
+     String(product.hasModel) === "true");
 
   const frontImg = card.querySelector(".img-front");
   const swatches = card.querySelectorAll(".swatch");
 
-  const imageCache = {
-    back: null,
-    model: null
-  };
+  const imageCache = {};
 
   // ===============================
-  // 🔥 RENDER SYSTEM
-  // ===============================
-  function renderImage() {
-    const variant = variants[state.variantIndex] || variants[0];
+// 🔥 RENDER
+// ===============================
+function renderImage() {
+  const index = getCurrentVariantIndex();
 
-    const front =
-      variant?.images?.front ||
-      variant?.front ||
-      getProductImage(product, { type: "front" });
+  // 🔍 DEBUG — STATE
+  console.log("ACTIVE INDEX:", state.activeVariantIndex);
+  console.log("HOVER INDEX:", state.hoverVariantIndex);
+  console.log("USING INDEX:", index);
 
-    const back =
-      variant?.images?.back ||
-      variant?.back ||
-      getProductImage(product, { type: "back" }) ||
-      front;
+  const variant = variants[index] || variants[0];
 
-    const model =
-      variant?.images?.model ||
-      variant?.model ||
-      getProductImage(product, { type: "model" });
+  // 🔍 DEBUG — VARIANT
+  console.log("VARIANT USED:", variant);
 
-    let src;
+  const variantKey = variant.name || index;
 
-    if (!state.isHovering) {
-      src = front;
-    } else if (!state.modelReady) {
-      src = imageCache.back || back;
-    } else {
-      src = imageCache.model || model || back;
-    }
-
-    if (frontImg) {
-      swapImageSafely(frontImg, src);
-    }
+  if (!imageCache[variantKey]) {
+    imageCache[variantKey] = { back: null, model: null };
   }
 
+  const front = variant.front || getProductImage(product, { type: "front" });
+  const back = variant.back || null;
+  const model = variant.model || null;
+
+  // 🔍 DEBUG — IMAGES
+  console.log("FRONT:", front);
+  console.log("BACK:", back);
+  console.log("MODEL:", model);
+
+  let src;
+
+  const isHovered = card.matches(":hover");
+
+if (!isHovered) {
+  src = front;
+
+} else if (config.hoverMode === "back") {
+  src = back || front;
+
+} else {
+  if (!state.modelReady) {
+    src = back || front;
+  } else {
+    src = model || back || front;
+  }
+}
+
+  // 🔍 DEBUG — FINAL IMAGE USED
+  console.log("FINAL SRC:", src);
+
+  swapImageSafely(frontImg, src);
+}
+
   // ===============================
-  // 🔥 PRELOAD
+  // 🔥 PRELOAD (SAFE)
   // ===============================
   setTimeout(() => {
-    const variant = variants[0];
+    variants.forEach((variant, index) => {
+      const key = variant.name || index;
 
-    const back =
-      variant?.images?.back ||
-      variant?.back ||
-      getProductImage(product, { type: "back" });
+      if (!imageCache[key]) {
+        imageCache[key] = { back: null, model: null };
+      }
 
-    const model =
-      variant?.images?.model ||
-      variant?.model ||
-      getProductImage(product, { type: "model" });
+      const cache = imageCache[key];
 
-    if (back) {
-      loadImage(back, "low").then(() => {
-        imageCache.back = back;
-      });
-    }
+      if (variant.back) {
+        loadImage(variant.back, "low").then(() => {
+          cache.back = variant.back;
+        });
+      }
 
-    if (hasModel && model) {
-      loadImage(model, "low").then(() => {
-        imageCache.model = model;
-      });
-    }
+      if (hasModel && variant.model) {
+        loadImage(variant.model, "low").then(() => {
+          cache.model = variant.model;
+        });
+      }
+    });
   }, 200);
 
   // ===============================
-  // 🔥 HOVER
-  // ===============================
-  card.addEventListener("mouseenter", () => {
-    state.isHovering = true;
-    state.modelReady = false;
+// 🔥 HOVER (FIXED)
+// ===============================
+card.addEventListener("mouseenter", () => {
+  state.isHovering = true;
+  state.modelReady = false;
 
-    renderImage();
+  console.log("HOVER START"); // debug
 
-    clearTimeout(modelTimer);
+  renderImage();
 
+  clearTimeout(modelTimer);
+
+  if (config.hoverMode === "model" && hasModel) {
     modelTimer = setTimeout(() => {
       state.modelReady = true;
       renderImage();
     }, 400);
-  });
+  }
+});
+
+card.addEventListener("mouseleave", () => {
+  state.isHovering = false;
+  state.modelReady = false;
+
+  console.log("HOVER END"); // debug
+
+  clearTimeout(modelTimer);
+  renderImage();
+});
 
   // ===============================
-  // 🔥 LEAVE
+  // 🎨 SWATCHES (FIXED)
   // ===============================
-  card.addEventListener("mouseleave", () => {
-    state.isHovering = false;
-    state.modelReady = false;
+  if (swatches.length && hasColors) {
+    swatches.forEach((swatch) => {
+      const index = Number(swatch.dataset.index);
 
-    clearTimeout(modelTimer);
-    renderImage();
-  });
+      swatch.addEventListener("mouseenter", () => {
+        state.hoverVariantIndex = index;
+        renderImage();
+      });
+
+      swatch.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        state.activeVariantIndex = index;
+
+        swatches.forEach(s => s.classList.remove("active"));
+        swatch.classList.add("active");
+
+        renderImage();
+      });
+    });
+  }
 
   // ===============================
   // 🛒 QUICK ADD
@@ -211,48 +277,14 @@ export function initProductCard(card, onQuickAdd, product) {
     quickAddBtn.addEventListener("click", (e) => {
       e.stopPropagation();
 
-      let variant = null;
-
-      if (variants.length > 0) {
-        variant =
-          variants.find(v => v.sizes && v.sizes.length > 0) ||
-          variants[0];
-      }
-
-      if (!variant) {
-        console.error("❌ No variant found", product);
-        return;
-      }
+      const variant =
+        variants[state.activeVariantIndex] || variants[0];
 
       onQuickAdd({
         product: {
           ...product,
           selectedVariant: variant
         }
-      });
-    });
-  }
-
-  // ===============================
-  // 🎨 SWATCHES
-  // ===============================
-  if (swatches.length && hasColors) {
-    swatches.forEach((swatch) => {
-      const index = Number(swatch.dataset.index);
-
-      swatch.addEventListener("mouseenter", () => {
-        state.variantIndex = index;
-        renderImage();
-
-        swatches.forEach(s => s.classList.remove("active"));
-        swatch.classList.add("active");
-      });
-
-      swatch.addEventListener("click", (e) => {
-        e.stopPropagation();
-
-        swatches.forEach(s => s.classList.remove("active"));
-        swatch.classList.add("active");
       });
     });
   }

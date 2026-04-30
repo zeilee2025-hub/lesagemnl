@@ -45,3 +45,4 @@ export async function uploadProof(file, orderId) {
     throw error;
   }
 }
+

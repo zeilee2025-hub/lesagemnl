@@ -3,35 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Orders | LÉ SAGE MNL</title>
 
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/pages/orders.css" />
+  <title>My Orders — LÉ SAGE MNL</title>
+
+  <!-- BASE -->
+  <link rel="stylesheet" href="../css/base.css" />
+
+  <!-- COMPONENTS -->
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <!-- PAGE -->
+  <link rel="stylesheet" href="../css/pages/orders.css" />
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
-  <div id="navbar"></div>
-
-  <!-- ORDERS LIST -->
+  <!-- =========================
+       PAGE
+  ========================== -->
   <main class="orders-page">
-    <div class="orders-wrapper">
 
-      <h1 class="orders-title">My Orders</h1>
-
-      <div id="orders-container" class="orders-container">
-        <p>Loading orders...</p>
+    <!-- =========================
+         HEADER
+    ========================== -->
+    <div class="orders-header">
+      <div>
+        <h1 class="orders-title">My Orders</h1>
+        <p class="orders-subtitle">
+          Track, manage, and review your purchases
+        </p>
       </div>
 
+      <a href="../index.html" class="orders-back">
+        ← Continue Shopping
+      </a>
     </div>
+
+    <!-- =========================
+         LIST
+    ========================== -->
+    <div id="orders-container" class="orders-container">
+      <!-- Orders will render here -->
+    </div>
+
   </main>
 
-  <!-- FOOTER -->
-  <div id="footer"></div>
+  <!-- =========================
+       EMPTY STATE TEMPLATE (AUTO HANDLED BY JS)
+  ========================== -->
+  <template id="empty-orders-template">
+    <div class="orders-empty">
+      <p>No orders yet.</p>
+      <a href="../shop.html" class="orders-empty-btn">
+        Start Shopping
+      </a>
+    </div>
+  </template>
 
-  <script type="module" src="js/pages/orders.js"></script>
+  <!-- =========================
+       SCRIPTS
+  ========================== -->
+  <script type="module" src="../js/pages/orders.js"></script>
 
 </body>
 </html>

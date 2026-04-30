@@ -187,3 +187,22 @@ export async function updateOrderStatus(orderId, updates) {
     throw error;
   }
 }
+
+export async function updateOrderProof(orderId, proofUrl) {
+  try {
+    const ref = doc(db, "orders", orderId);
+
+    await updateDoc(ref, {
+      proofUrl,
+      paymentStatus: "PENDING",
+      status: "pending",
+      orderState: "PROOF_UPLOADED"
+    });
+
+    console.log("✅ Proof uploaded & saved");
+
+  } catch (error) {
+    console.error("❌ Failed to save proof:", error);
+    throw error;
+  }
+}

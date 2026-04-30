@@ -93,14 +93,12 @@ function setupSearch() {
 
     let filtered = [...allOrders];
 
-    // Apply filter first
     if (currentFilter !== "ALL") {
       filtered = filtered.filter(order =>
         order.orderState === currentFilter
       );
     }
 
-    // Then search
     if (value) {
       filtered = filtered.filter(order => {
         const orderNumber = (order.orderNumber || order.id).toLowerCase();
@@ -136,7 +134,7 @@ async function refreshOrders() {
 }
 
 // ==========================
-// 🎯 HANDLE INTERACTIONS
+// 🎯 HANDLE INTERACTIONS (FIXED)
 // ==========================
 function setupInteractions() {
   if (!container) return;
@@ -148,6 +146,25 @@ function setupInteractions() {
     const action = e.target.dataset.action;
 
     // ==========================
+    // 🚫 PREVENT TOGGLE WHEN INTERACTING INSIDE CONTENT
+    // ==========================
+    const clickedInsideContent =
+      e.target.closest("input") ||
+      e.target.closest("button") ||
+      e.target.closest(".admin-order-items");
+
+    // ==========================
+    // 🔓 TOGGLE ONLY WHEN CLICKING HEADER AREA
+    // ==========================
+    if (!clickedInsideContent) {
+      const items = card.querySelector(".admin-order-items");
+      if (items) {
+        items.classList.toggle("hidden");
+      }
+      return;
+    }
+
+    // ==========================
     // 🔥 HANDLE ACTIONS
     // ==========================
     if (action) {
@@ -156,9 +173,7 @@ function setupInteractions() {
       try {
         let updates = null;
 
-        // ==========================
-        // ✅ APPROVE (BACKEND HANDLED)
-        // ==========================
+        // ✅ APPROVE
         if (action === "approve") {
           await fetch("http://localhost:3000/approve-order", {
             method: "POST",
@@ -169,29 +184,40 @@ function setupInteractions() {
           });
         }
 
-        // ==========================
         // ❌ REJECT
-        // ==========================
         else if (action === "reject") {
-          updates = {
-            status: "rejected",
-            orderState: "REJECTED"
-          };
+          await fetch("http://localhost:3000/reject-order", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ orderId })
+          });
         }
 
-        // ==========================
-        // 🚚 SHIP
-        // ==========================
+        // 🚚 SHIP (WITH TRACKING)
         else if (action === "ship") {
-          updates = {
-            status: "shipped",
-            orderState: "SHIPPED"
-          };
+          const input = card.querySelector("[data-tracking-input]");
+          const trackingNumber = input?.value?.trim();
+
+          if (!trackingNumber) {
+            alert("Tracking number is required.");
+            return;
+          }
+
+          await fetch("http://localhost:3000/ship-order", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              orderId,
+              trackingNumber
+            })
+          });
         }
 
-        // ==========================
         // 📦 COMPLETE
-        // ==========================
         else if (action === "complete") {
           updates = {
             status: "completed",
@@ -199,32 +225,16 @@ function setupInteractions() {
           };
         }
 
-        // ==========================
-        // 🔄 APPLY NON-APPROVE UPDATES
-        // ==========================
         if (updates) {
           await updateOrderStatus(orderId, updates);
         }
 
-        // ==========================
-        // 🔄 REFRESH UI
-        // ==========================
         await refreshOrders();
 
       } catch (error) {
         console.error("❌ ACTION ERROR:", error);
       }
-
-      return;
     }
-
-    // ==========================
-    // 🔓 TOGGLE DETAILS
-    // ==========================
-    const items = card.querySelector(".admin-order-items");
-    if (!items) return;
-
-    items.classList.toggle("hidden");
   });
 }
 

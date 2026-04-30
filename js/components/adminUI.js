@@ -19,9 +19,13 @@ export function renderOrders(container, orders) {
 
         <div class="admin-order-items hidden">
           
+          ${renderCustomer(order)}
+
           ${renderProof(order)}
 
           ${renderItems(order.items || [])}
+
+          ${renderTracking(order)}
 
           <div class="admin-actions">
             ${renderActions(order)}
@@ -35,34 +39,66 @@ export function renderOrders(container, orders) {
 }
 
 // ==========================
+// 🧑 CUSTOMER INFO (NEW)
+// ==========================
+function renderCustomer(order) {
+  return `
+    <div class="admin-customer">
+      <p><strong>Customer</strong></p>
+      <p>${order.firstName || ""} ${order.lastName || ""}</p>
+      <p>${order.phone || "—"}</p>
+      <p>
+        ${order.address || "—"}<br/>
+        ${order.city || ""}, ${order.province || ""}
+      </p>
+    </div>
+  `;
+}
+
+// ==========================
+// 🚚 TRACKING INPUT (NEW)
+// ==========================
+function renderTracking(order) {
+  if (!(order.status === "processing" && order.paymentStatus === "PAID")) {
+    return "";
+  }
+
+  return `
+    <div class="admin-tracking">
+      <p><strong>Shipping</strong></p>
+
+      <input 
+        type="text" 
+        placeholder="Enter J&T Tracking Number"
+        class="tracking-input"
+        data-tracking-input
+      />
+
+      <p class="tracking-note">
+        Courier: J&T Express
+      </p>
+    </div>
+  `;
+}
+
+// ==========================
 // 🔹 HELPERS
 // ==========================
-
 function calculateTotal(items = []) {
   return items.reduce((t, i) => t + i.price * i.quantity, 0);
 }
 
-// ✅ FIXED DATE
 function formatDate(order) {
   const date = order.paidAt || order.createdAt;
   if (!date) return "—";
 
-  if (date?.toMillis) {
-    return new Date(date.toMillis()).toLocaleString();
-  }
-
-  if (typeof date === "string") {
-    return new Date(date).toLocaleString();
-  }
-
-  if (typeof date === "number") {
-    return new Date(date).toLocaleString();
-  }
+  if (date?.toMillis) return new Date(date.toMillis()).toLocaleString();
+  if (typeof date === "string") return new Date(date).toLocaleString();
+  if (typeof date === "number") return new Date(date).toLocaleString();
 
   return "—";
 }
 
-// ✅ NEW STATUS LABEL
 function formatStatus(order) {
   const { status, paymentStatus, proofUrl } = order;
 
@@ -77,9 +113,7 @@ function formatStatus(order) {
 }
 
 function renderItems(items = []) {
-  if (!items.length) {
-    return `<div class="admin-item">No items</div>`;
-  }
+  if (!items.length) return `<div class="admin-item">No items</div>`;
 
   return items.map(item => `
     <div class="admin-item">
@@ -91,29 +125,25 @@ function renderItems(items = []) {
   `).join("");
 }
 
-// ==========================
-// 📸 PROOF
-// ==========================
 function renderProof(order) {
   if (!order.proofUrl) return "";
 
   return `
     <div class="admin-proof">
       <p>Payment Proof:</p>
-      <img src="${order.proofUrl}" alt="Payment Proof" />
+      <img src="${order.proofUrl}" />
     </div>
   `;
 }
 
 // ==========================
-// 🔥 NEW ACTION LOGIC
+// 🔥 ACTIONS (UPDATED)
 // ==========================
 function renderActions(order) {
   const { status, paymentStatus, proofUrl } = order;
 
   let buttons = "";
 
-  // ✅ APPROVE / REJECT
   if (status === "pending" && proofUrl && paymentStatus === "PENDING") {
     buttons = `
       <button data-action="approve">Approve</button>
@@ -121,12 +151,10 @@ function renderActions(order) {
     `;
   }
 
-  // ✅ AFTER APPROVAL
   else if (status === "processing" && paymentStatus === "PAID") {
-    buttons = `<button data-action="ship">Mark as Shipped</button>`;
+    buttons = `<button data-action="ship">Ship Order</button>`;
   }
 
-  // ✅ AFTER SHIPPING
   else if (status === "shipped") {
     buttons = `<button data-action="complete">Mark as Completed</button>`;
   }

@@ -1557,7 +1557,7 @@ body.shop-page .nav-link {
 
 .marquee {
   width: 100%;
-  height: 88px;
+  height: 50px;
   margin: 24px 0 6px;
 
   overflow: hidden;
@@ -1628,28 +1628,6 @@ body.shop-page .nav-link {
   to {
     transform: translateX(-50%);
   }
-}
-
-/* =========================
-   🔥 LOOKBOOK MARQUEE VARIANT
-========================= */
-
-.marquee--lookbook {
-  background: #000;
-  margin: 40px 0; /* 🔥 more breathing room than default */
-}
-
-.marquee--lookbook .marquee__text {
-  color: #fff;
-}
-
-/* optional: slightly tighter feel for premium look */
-.marquee--lookbook .marquee__item {
-  margin-right: 36px;
-}
-
-.marquee--lookbook .marquee__track {
-  animation: marqueeScroll 32s linear infinite;
 }
 
 /* =========================
@@ -1820,48 +1798,6 @@ body.home-page .navbar.scrolled .nav-link.active {
   color: #000;
 }
 
-/* =========================
-   🔥 LOOKBOOK NAVBAR VISIBILITY FIX
-========================= */
-/* isolate transition effect away from layout */
-body.lookbook-page.page-enter {
-  opacity: 1 !important;
-}
-
-body.lookbook-page.page-exit {
-  opacity: 0;
-}
-
-/* =========================
-   🔥 LOOKBOOK NAVBAR HARD FIX
-========================= */
-
-/* REMOVE STACKING CONTEXT */
-body.lookbook-page {
-  opacity: 1 !important;
-}
-
-
-/* =========================
-   🔥 LOOKBOOK NAVBAR REAL FIX
-========================= */
-
-
-/* ENSURE NAVBAR TAKES TOP CLEANLY */
-body.lookbook-page .navbar.shift-up {
-  top: 0;
-}
-
-/* =========================
-   🔥 LOOKBOOK NAVBAR FIX (FINAL REAL FIX)
-========================= */
-
-.lookbook-hero,
-.lookbook-solo {
-  overflow: visible;
-}
-
-
 /* ==========================
    QUICK ADD COLORS CONTAINER
 ========================== */
@@ -1990,25 +1926,6 @@ body.lookbook-page .navbar.shift-up {
   width: 100%;
   display: block;
 }
-
-/* hover image */
-.drop-image__hover {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-/* hover effect */
-.drop-image:hover .drop-image__hover {
-  opacity: 1;
-}
-
 /* =========================
    HERO CTA — SWEEP EFFECT (FINAL)
 ========================= */

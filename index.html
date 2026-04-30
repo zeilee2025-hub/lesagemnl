@@ -8,7 +8,7 @@
   <title>LÉ SAGE MNL | Modern Streetwear</title>
   <meta name="description" content="LÉ SAGE MNL — modern streetwear with a minimal identity. Shop the latest drop." />
 
-  <!-- 🔥 HERO PRELOAD -->
+  <!-- HERO PRELOAD -->
   <link rel="preload" as="image" href="./assets/images/hero-1.jpg">
   <link rel="preload" as="image" href="./assets/images/hero-2.jpg">
 
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="./css/pages/home.css" />
 
   <!-- ICONS -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lucide@latest" defer></script>
 </head>
 
 <body class="home-page">
@@ -33,6 +33,7 @@
   <header>
     <div class="announcement-bar">
       <div class="announcement-track">
+
         <span class="announcement-group">
           <span class="item">Support available 9am–9pm, Mon–Sat</span>
           <span class="item">Metro Manila orders arrive in 3–5 business days</span>
@@ -50,11 +51,13 @@
           <span class="item">Metro Manila orders arrive in 3–5 business days</span>
           <span class="item">Outside Metro Manila orders arrive in 7–10 business days</span>
         </span>
+
       </div>
     </div>
 
     <nav class="navbar">
       <div class="nav-container">
+
         <div class="nav-left">
           <ul class="nav-links">
             <li><a href="./index.html" class="nav-link">HOME</a></li>
@@ -80,6 +83,7 @@
             <span id="cart-badge" class="cart-badge">0</span>
           </span>
         </div>
+
       </div>
     </nav>
   </header>
@@ -155,21 +159,6 @@
     </div>
   </section>
 
-  <!-- 🔥 EDITORIAL TAPE DIVIDER -->
-  <section class="tape-divider">
-    <div class="tape-track">
-      <div class="tape-content">
-        <span>LÉ SAGE MNL — DO NOT CROSS — BEHIND THE SCENES</span>
-        <span>LÉ SAGE MNL — DO NOT CROSS — BEHIND THE SCENES</span>
-        <span>LÉ SAGE MNL — DO NOT CROSS — BEHIND THE SCENES</span>
-      </div>
-      <div class="tape-content">
-        <span>LÉ SAGE MNL — DO NOT CROSS — BEHIND THE SCENES</span>
-        <span>LÉ SAGE MNL — DO NOT CROSS — BEHIND THE SCENES</span>
-        <span>LÉ SAGE MNL — DO NOT CROSS — BEHIND THE SCENES</span>
-      </div>
-    </div>
-  </section>
 
   <!-- CART -->
   <div class="cart-overlay" id="cart-overlay"></div>
@@ -231,7 +220,11 @@
 
   <!-- ICON INIT -->
   <script>
-    lucide.createIcons();
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
   </script>
 
 </body>

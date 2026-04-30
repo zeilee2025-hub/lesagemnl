@@ -33,11 +33,20 @@ window.addEventListener("load", () => {
     let ticking = false;
 
     function getTriggerHeight() {
-      if (isOverlayPage) {
-        return 120; // consistent trigger for lookbook
-      }
-      return announcementBar ? announcementBar.offsetHeight : 0;
+  if (isOverlayPage) {
+    const hero =
+      document.querySelector(".hero") ||
+      document.querySelector(".lookbook-hero");
+
+    if (hero) {
+      return hero.offsetHeight - 100; // 🔥 key fix
     }
+
+    return 120; // fallback
+  }
+
+  return announcementBar ? announcementBar.offsetHeight : 0;
+}
 
     function updateNavbar() {
       const scrollY = window.scrollY;

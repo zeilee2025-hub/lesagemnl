@@ -2,9 +2,8 @@
 // 📦 IMPORTS
 // ==========================
 import { uploadProof } from "../services/uploadService.js";
-import { updateOrderStatus } from "../services/orderService.js";
+import { updateOrderProof } from "../services/orderService.js";
 import { initPolicyModal } from "../components/modal.js";
-
 import { db } from "../core/firebase.js";
 import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -32,15 +31,15 @@ function getStatusLabel(order) {
   const { status, paymentStatus, proofUrl } = order;
 
   if (status === "pending" && !proofUrl) {
-    return "Waiting for Payment";
+    return "Waiting for payment";
   }
 
   if (status === "pending" && proofUrl && paymentStatus === "PENDING") {
-    return "Under Review";
+    return "Under review";
   }
 
   if (status === "processing" && paymentStatus === "PAID") {
-    return "Payment Verified";
+    return "Payment verified";
   }
 
   if (status === "shipped") {
@@ -52,7 +51,7 @@ function getStatusLabel(order) {
   }
 
   if (status === "rejected") {
-    return "Payment Rejected";
+    return "Payment rejected";
   }
 
   return "—";
@@ -67,43 +66,108 @@ function updateHeaderUI(order) {
 
   if (!title || !subtitle) return;
 
-  const { status, paymentStatus } = order;
+  // ✅ CLEAR SUCCESS INFO FIRST (VERY IMPORTANT)
+  const successBox = document.getElementById("confirmation-success-info");
+  if (successBox) successBox.innerHTML = "";
 
-  // 📦 COMPLETED (HIGHEST PRIORITY)
-  if (status === "completed") {
-    title.textContent = "Order delivered!";
-    subtitle.textContent = "Thank you for shopping with us";
-    stopTimer();
-    return;
+  const { status, paymentStatus, proofUrl } = order;
+
+  // ==========================
+// 📦 COMPLETED
+// ==========================
+if (status === "completed") {
+  title.textContent = "Order Delivered";
+  subtitle.textContent = "We hope you enjoy your piece";
+
+  stopTimer();
+
+  const statusInline = document.getElementById("order-status-inline");
+  if (statusInline) statusInline.textContent = "";
+
+  const successBox = document.getElementById("confirmation-success-info");
+  if (successBox) {
+    successBox.innerHTML = `
+      <div class="confirmation__success-item">More drops coming soon!</div>
+      <div class="confirmation__success-item">If there’s any issue, feel free to contact us.</div>
+    `;
   }
 
+  return;
+}
+
+  // ==========================
   // 🚚 SHIPPED
+  // ==========================
   if (status === "shipped") {
-    title.textContent = "Your order is on the way!";
-    subtitle.textContent = "Track your shipment for updates";
-    stopTimer();
-    return;
+  title.textContent = "Your order has been shipped";
+  subtitle.textContent = "Track your shipment for updates";
+
+  stopTimer();
+
+  const statusInline = document.getElementById("order-status-inline");
+  if (statusInline) statusInline.textContent = "";
+
+  const successBox = document.getElementById("confirmation-success-info");
+  if (successBox) {
+    successBox.innerHTML = `
+      <div class="confirmation__success-item">Metro Manila: 3–5 business days</div>
+      <div class="confirmation__success-item">Provincial: 7–10 business days</div>
+      <div class="confirmation__success-item">Delivery times may vary depending on location and courier operations.</div>
+    `;
   }
 
+  return;
+}
+
+  // ==========================
   // 🟢 PAID
+  // ==========================
   if (paymentStatus === "PAID") {
     title.textContent = "Payment confirmed!";
     subtitle.textContent = "Your order is now being prepared";
+
     stopTimer();
+
+    const statusInline = document.getElementById("order-status-inline");
+    if (statusInline) {
+      statusInline.textContent = "";
+    }
+
+    // ✅ SUCCESS INFO (THIS WAS MISSING)
+    if (successBox) {
+      successBox.innerHTML = `
+        <div class="confirmation__success-item">We’ve received your payment</div>
+        <div class="confirmation__success-item">We’ll keep you updated via email</div>
+        <div class="confirmation__success-item">Orders typically ship within 24–48 hours</div>
+      `;
+    }
+
     return;
   }
 
-  // 🟡 NOT PAID
-  if (paymentStatus === "PENDING") {
-    title.textContent = "We’ve received your order!";
-    subtitle.textContent = "Complete your payment to confirm your order";
+  // ==========================
+  // 🟡 UNDER REVIEW
+  // ==========================
+  if (status === "pending" && proofUrl) {
+    title.textContent = "Order Received";
+    subtitle.textContent = "Your payment is under review";
+
+    stopTimer();
+
+    return;
   }
+
+  // ==========================
+  // 🟡 DEFAULT (WAITING)
+  // ==========================
+  title.textContent = "Order Received";
+  subtitle.textContent = "Complete your payment to confirm your order";
 }
 
+// ==========================
+// ⏹ STOP TIMER
+// ==========================
 function stopTimer() {
-  const expiry = document.getElementById("order-expiry-top");
-  if (expiry) expiry.textContent = "—";
-
   if (countdownInterval) {
     clearInterval(countdownInterval);
     countdownInterval = null;
@@ -133,31 +197,16 @@ let countdownStarted = false;
 let countdownInterval = null;
 
 function startOrderCountdown(expiryTimestamp) {
-  const el = document.getElementById("order-expiry");
-  const elTop = document.getElementById("order-expiry-top");
-
-  if (!el && !elTop) return;
+  const statusInline = document.getElementById("order-status-inline");
+  if (!statusInline) return;
 
   function update() {
     const now = Date.now();
     const diff = expiryTimestamp - now;
 
     if (diff <= 0) {
-      const statusTop = document.getElementById("order-status-top");
-      const statusDetails = document.getElementById("order-status");
-
-      if (statusTop) {
-        statusTop.textContent = "Expired";
-        statusTop.setAttribute("data-status", "expired");
-      }
-
-      if (statusDetails) {
-        statusDetails.textContent = "Expired";
-        statusDetails.setAttribute("data-status", "expired");
-      }
-
-      if (el) el.textContent = "Expired";
-      if (elTop) elTop.textContent = "Expired";
+      statusInline.textContent = "Expired";
+      statusInline.setAttribute("data-status", "expired");
 
       if (countdownInterval) {
         clearInterval(countdownInterval);
@@ -176,8 +225,7 @@ function startOrderCountdown(expiryTimestamp) {
       String(minutes).padStart(2, "0") + ":" +
       String(seconds).padStart(2, "0");
 
-    if (el) el.textContent = timeText;
-    if (elTop) elTop.textContent = timeText;
+    statusInline.textContent = `Waiting for payment · ${timeText} left`;
   }
 
   update();
@@ -202,63 +250,59 @@ function subscribeToOrder(orderId) {
       ...snapshot.data()
     };
 
-    // ==========================
-    // 🧾 SHOW ORDER NUMBER (FIX)
-    // ==========================
+    // 🧾 ORDER ID
     const orderIdEl = document.getElementById("order-id");
     if (orderIdEl && order) {
-      orderIdEl.textContent =
-        order.orderNumber || order.id;
+      orderIdEl.textContent = order.orderNumber || order.id;
     }
 
-    // ==========================
-    // 🏷 STATUS LABEL
-    // ==========================
-    const statusTop = document.getElementById("order-status-top");
+    // 🏷 STATUS
+    const statusInline = document.getElementById("order-status-inline");
     const label = getStatusLabel(order);
 
-    if (statusTop) {
-      statusTop.textContent = label;
-      statusTop.setAttribute("data-status", label);
+    if (statusInline) {
+      statusInline.setAttribute("data-status", label);
     }
 
-    // ==========================
-    // 🔄 UI UPDATES
-    // ==========================
+    //  UI
     handleUploadState(order);
     renderOrderSummary(order);
     updateHeaderUI(order);
     togglePaymentUI(order);
+    renderActions(order);
 
-    // ==========================
-    // ⏱ COUNTDOWN LOGIC
-    // ==========================
+    // ⏱ TIMER CONDITION (FIXED)
     if (
-      !countdownStarted &&
       order.createdAt &&
       order.paymentStatus !== "PAID" &&
-      order.status !== "completed" &&
-      order.status !== "shipped"
+      order.status === "pending" &&
+      !order.proofUrl
     ) {
-      let created;
+      if (!countdownStarted) {
+        let created;
 
-      if (order.createdAt?.toMillis) {
-        created = order.createdAt.toMillis();
-      } else if (typeof order.createdAt === "number") {
-        created = order.createdAt;
-      } else if (typeof order.createdAt === "string") {
-        created = new Date(order.createdAt).getTime();
-      } else {
-        console.warn("Invalid createdAt format", order.createdAt);
-        return;
+        if (order.createdAt?.toMillis) {
+          created = order.createdAt.toMillis();
+        } else if (typeof order.createdAt === "number") {
+          created = order.createdAt;
+        } else if (typeof order.createdAt === "string") {
+          created = new Date(order.createdAt).getTime();
+        } else {
+          console.warn("Invalid createdAt format", order.createdAt);
+          return;
+        }
+
+        const expiryTime = created + (24 * 60 * 60 * 1000);
+
+        startOrderCountdown(expiryTime);
+        countdownStarted = true;
       }
-
-      const expiryTime = created + (24 * 60 * 60 * 1000);
-
-      startOrderCountdown(expiryTime);
-      countdownStarted = true;
+    } else {
+      stopTimer();
+      countdownStarted = false;
     }
-  });
+
+  }); 
 }
 
 // ==========================
@@ -280,21 +324,39 @@ function handleUploadState(order) {
     return;
   }
 
+  // 🔴 REJECTED → allow re-upload
+  if (status === "rejected") {
+    submitBtn.disabled = false;
+    uploadBtn.disabled = false;
+    submitBtn.textContent = "Upload New Proof";
+
+    const fileInput = document.getElementById("proof-input");
+    const fileName = document.getElementById("file-name");
+
+    if (fileInput) fileInput.value = "";
+    if (fileName) fileName.textContent = "No file selected";
+
+    window.__selectedFile = null;
+
+    return;
+  }
+
   // 🟡 uploaded → waiting admin
   if (status === "pending" && proofUrl && paymentStatus === "PENDING") {
     submitBtn.disabled = true;
     uploadBtn.disabled = true;
-    submitBtn.textContent = "Under Review";
+    submitBtn.textContent = "Under review";
+    stopTimer();
     return;
   }
 
   // 🟢 PAID
-if (paymentStatus === "PAID") {
-  submitBtn.disabled = true;
-  uploadBtn.disabled = true;
-  submitBtn.textContent = "Payment Verified";
-  return;
-}
+  if (paymentStatus === "PAID") {
+    submitBtn.disabled = true;
+    uploadBtn.disabled = true;
+    submitBtn.textContent = "Payment verified";
+    return;
+  }
 
   // 🚚 shipped
   if (status === "shipped") {
@@ -311,6 +373,37 @@ if (paymentStatus === "PAID") {
     submitBtn.textContent = "Completed";
     return;
   }
+}
+
+// ==========================
+// 🎯 CTA BUTTONS (NEW)
+// ==========================
+function renderActions(order) {
+  const container = document.getElementById("confirmation-actions");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const viewBtn = document.createElement("a");
+  viewBtn.href = `order.html?id=${order.id}`;
+  viewBtn.textContent = "View Order";
+  viewBtn.className = "btn-primary";
+
+  const shopBtn = document.createElement("a");
+  shopBtn.href = "/";
+  shopBtn.textContent = "Continue shopping";
+  shopBtn.className = "btn-secondary";
+
+  // show View Order ONLY after payment or beyond
+  if (
+    order.paymentStatus === "PAID" ||
+    order.status === "shipped" ||
+    order.status === "completed"
+  ) {
+    container.appendChild(viewBtn);
+  }
+
+  container.appendChild(shopBtn);
 }
 
 // ==========================
@@ -354,11 +447,11 @@ function renderOrderSummary(order) {
   }).join("");
 
   const subtotal = order.subtotal ?? items.reduce((total, item) => {
-  return total + (item.price || 0) * (item.quantity || 0);
-}, 0);
+    return total + (item.price || 0) * (item.quantity || 0);
+  }, 0);
 
-const shipping = order.shippingFee || 0;
-const total = order.total ?? (subtotal + shipping);
+  const shipping = order.shippingFee || 0;
+  const total = order.total ?? (subtotal + shipping);
 
   html += `
     <div class="order-summary__breakdown">
@@ -379,9 +472,6 @@ const total = order.total ?? (subtotal + shipping);
 // 📋 COPY BUTTON
 // ==========================
 function initCopyButtons() {
-  // ==========================
-  // 🏦 EXISTING COPY BUTTONS
-  // ==========================
   const buttons = document.querySelectorAll(".copy-btn");
 
   buttons.forEach(btn => {
@@ -404,9 +494,6 @@ function initCopyButtons() {
     });
   });
 
-  // ==========================
-  // 🆔 ORDER ID COPY BUTTON
-  // ==========================
   const orderCopyBtn = document.getElementById("copy-order-btn");
   const orderIdEl = document.getElementById("order-id");
 
@@ -444,13 +531,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const uploadBtn = document.getElementById("upload-btn");
   const fileName = document.getElementById("file-name");
   const submitBtn = document.getElementById("submit-proof");
-  const successEl = document.getElementById("upload-success");
 
-  let selectedFile = null;
-
-  if (successEl) {
-    successEl.style.display = "none";
-  }
+  window.__selectedFile = null;
 
   if (uploadBtn && fileInput) {
     uploadBtn.addEventListener("click", () => fileInput.click());
@@ -458,10 +540,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (fileInput) {
     fileInput.addEventListener("change", (e) => {
-      selectedFile = e.target.files[0];
+      window.__selectedFile = e.target.files[0];
 
-      if (selectedFile) {
-        fileName.textContent = selectedFile.name;
+      if (window.__selectedFile) {
+        fileName.textContent = window.__selectedFile.name;
         if (submitBtn) submitBtn.disabled = false;
       }
     });
@@ -470,7 +552,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (submitBtn) {
     submitBtn.addEventListener("click", async () => {
       try {
-        if (!selectedFile) return;
+        if (!window.__selectedFile) {
+          alert("Please select a new file");
+          return;
+        }
 
         if (!orderId) {
           alert("Missing order ID");
@@ -480,20 +565,13 @@ document.addEventListener("DOMContentLoaded", () => {
         submitBtn.textContent = "Uploading...";
         submitBtn.disabled = true;
 
-        const url = await uploadProof(selectedFile, orderId);
+        const url = await uploadProof(window.__selectedFile, orderId);
 
-        await updateOrderStatus(orderId, {
-  proofUrl: url,
-  orderState: "PROOF_UPLOADED"
-});
+        await updateOrderProof(orderId, url);
 
-        submitBtn.textContent = "Under Review";
+        submitBtn.textContent = "Under review";
         fileName.textContent = "Payment proof uploaded";
         submitBtn.disabled = true;
-
-        if (successEl) {
-          successEl.style.display = "block";
-        }
 
       } catch (error) {
         console.error(error);

@@ -33,29 +33,31 @@
         <div class="confirmation__intro">
 
           <h1 class="confirmation__title">
-            We've received your order
+            Order Received
           </h1>
 
           <p class="confirmation__subtitle" id="confirmation-subtitle">
             Complete your payment to confirm your order
           </p>
 
+          <!-- ✅ SUCCESS INFO -->
+          <div class="confirmation__success-info" id="confirmation-success-info">
+            <!-- JS will inject content -->
+          </div>
+
+          <!-- STATUS -->
           <div class="confirmation__meta-inline">
             <span 
               class="confirmation__status" 
-              id="order-status-top" 
+              id="order-status-inline" 
               data-status="pending">
-              Waiting for Payment
-            </span>
-
-            <span class="confirmation__expiry">
-              Expires in <span id="order-expiry-top">24:00:00</span>
+              Waiting for payment · 24:00:00 left
             </span>
           </div>
 
           <p class="confirmation__order-id">
             Order ID: <span id="order-id"></span>
-<button id="copy-order-btn" class="copy-btn">Copy</button>
+            <button id="copy-order-btn" class="copy-btn">Copy</button>
           </p>
 
         </div>
@@ -65,7 +67,6 @@
 
           <h3 class="payment-details__title">Payment Details</h3>
 
-          <!-- METHODS -->
           <div class="payment-method payment-method--primary">
             <div class="payment-method__header">
               <p class="payment-method__name">GCash</p>
@@ -104,9 +105,7 @@
             </div>
           </div>
 
-          <!-- CONFIRM PAYMENT -->
           <div class="payment-upload">
-
             <div class="payment-upload__form" id="payment-form">
 
               <h4 class="payment-upload__title">Confirm your payment</h4>
@@ -132,28 +131,28 @@
               </p>
 
             </div>
-
           </div>
 
         </div>
 
-        <!-- SUPPORT -->
+        <!-- SUPPORT + ACTIONS -->
         <div class="confirmation__support">
 
-          <p class="confirmation__support-text">
-            Need help?
-            <a 
-              href="https://www.facebook.com/lesage.mnl"
-              class="support-link"
-              target="_blank"
-              rel="noopener noreferrer">
-              Contact us
-            </a>
-          </p>
+          <!-- 🔥 BUTTON ROW (RIGHT ALIGNED) -->
+          <div class="confirmation__support-row">
+            <p class="confirmation__support-text">
+              Need help?
+              <a 
+                href="https://www.facebook.com/lesage.mnl"
+                class="support-link"
+                target="_blank"
+                rel="noopener noreferrer">
+                Contact us
+              </a>
+            </p>
 
-          <a href="/" class="confirmation__btn">
-            Continue shopping
-          </a>
+            <div class="confirmation__actions" id="confirmation-actions"></div>
+          </div>
 
         </div>
 
@@ -179,7 +178,6 @@
 
 </main>
 
-<!-- MODAL -->
 <div class="modal" id="policy-modal">
   <div class="modal__overlay" id="modal-overlay"></div>
 

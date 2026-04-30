@@ -1,63 +1,55 @@
 /* =========================
-   LOOKBOOK PAGE
+LOOKBOOK PAGE
 ========================= */
 
 .lookbook-page {
   background: #000;
 }
 
-
 /* =========================
-    NAVBAR
-========================= */
-
-.lookbook-page .navbar {
-  background: transparent;
-  border-bottom: none;
-}
-
-.lookbook-page .navbar.scrolled {
-  background: #fff;
-  border-bottom: 1px solid #eee;
-}
-
-
-/* =========================
-   🎬 HERO (FIXED)
+🎬 HERO — VIDEO SYSTEM
 ========================= */
 
 .lookbook-hero {
   width: 100%;
-  aspect-ratio: 16 / 9; /* 🔥 FIX */
+  height: 100vh;
   position: relative;
   overflow: hidden;
-  z-index: 0;
 }
 
-.lookbook-hero__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
-
-.lookbook-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.lookbook-overlay {
+/* VIDEO */
+.lookbook-hero__video {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  display: block;
+
+  z-index: 0;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
+.lookbook-hero__overlay {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.45),
+    rgba(0,0,0,0.65)
+  );
+
+  z-index: 1;
+  pointer-events: none;
+  will-change: opacity;
+}
 
 /* =========================
-   🖼 SOLO IMAGE
+🖼 SOLO IMAGE
 ========================= */
 
 .lookbook-solo {
@@ -74,18 +66,8 @@
   display: block;
 }
 
-
 /* =========================
-   ✨ MARQUEE
-========================= */
-
-.marquee--lookbook {
-  position: relative;
-}
-
-
-/* =========================
-   🎞 CAROUSEL SECTION
+🎞 CAROUSEL SECTION
 ========================= */
 
 .lookbook-carousel-section {
@@ -94,9 +76,8 @@
   padding: 0;
 }
 
-
 /* =========================
-   🔥 CAROUSEL
+🔥 CAROUSEL
 ========================= */
 
 .lookbook-carousel {
@@ -104,14 +85,17 @@
   position: relative;
   width: 100%;
   height: 100vh;
+
+  will-change: transform;
 }
 
+/* TRACK */
 .lookbook-track {
   display: flex;
   height: 100%;
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 
-  cursor: grab;
+  cursor: default;
   touch-action: pan-y;
 }
 
@@ -126,9 +110,8 @@
   gap: 0;
 }
 
-
 /* =========================
-   🖼 IMAGE SYSTEM
+🖼 IMAGE SYSTEM
 ========================= */
 
 .lookbook-image {
@@ -145,9 +128,8 @@
   display: block;
 }
 
-
 /* =========================
-   🔥 SOLO SLIDE
+🔥 SOLO SLIDE
 ========================= */
 
 .lookbook-slide.solo {
@@ -163,9 +145,8 @@
   aspect-ratio: 1 / 1;
 }
 
-
 /* =========================
-   🔘 DOTS
+🔘 DOTS
 ========================= */
 
 .lookbook-dots {
@@ -197,7 +178,7 @@
 }
 
 .lookbook-dots .dot.active::after {
-  animation: dotFill 3.5s linear forwards;
+  animation: dotFill 5s linear forwards;
 }
 
 @keyframes dotFill {
@@ -205,19 +186,15 @@
   to { transform: scaleX(1); }
 }
 
-
 /* =========================
-   📱 RESPONSIVE
+📱 RESPONSIVE
 ========================= */
 
 @media (max-width: 900px) {
 
+  /* ✅ KEEP FULLSCREEN (removed aspect-ratio bug) */
   .lookbook-hero {
-    aspect-ratio: 16 / 9; /* 🔥 keep ratio */
-  }
-
-  .lookbook-solo {
-    height: auto;
+    height: 100vh;
   }
 
   .lookbook-carousel {
@@ -229,9 +206,17 @@
   }
 }
 
+/* =========================
+🔥 TAPE FIX
+========================= */
+
+.tape-divider {
+  margin-top: -2px;
+  display: block;
+}
 
 /* =========================
-   🔥 LAYER FIXES
+🔥 LAYER FIXES
 ========================= */
 
 .lookbook-carousel,
@@ -239,9 +224,8 @@
   z-index: 0;
 }
 
-
 /* =========================
-   🔥 ARROWS
+🔥 ARROWS
 ========================= */
 
 .lookbook-arrow {
@@ -269,4 +253,48 @@
 
 .lookbook-arrow.right {
   right: 20px;
+}
+
+/* =========================
+🔥 LOOKBOOK MARQUEE (CLEAN)
+========================= */
+
+.lookbook-marquee-section {
+  width: 100%;
+  height: 80px;
+  background: #000;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+}
+
+.lookbook-marquee {
+  width: 100%;
+  overflow: hidden;
+}
+
+.lookbook-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marqueeMove 40s linear infinite;
+}
+
+.lookbook-marquee__text {
+  display: flex;
+  gap: 60px;
+  padding-right: 60px;
+}
+
+.lookbook-marquee__item {
+  font-size: 18px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.8);
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+@keyframes marqueeMove {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }

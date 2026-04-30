@@ -1,30 +1,27 @@
 // ==========================
-// 📦 IMPORTS
+// 📄 LOOKBOOK PAGE CONTROLLER
 // ==========================
-import { initAnnouncement } from "../components/announcement.js";
-import { loadFooter } from "../components/footerLoader.js";
+
 import { renderLookbookCarousel } from "../components/lookbookCarousel.js";
 
-
 // ==========================
-// 🚀 INIT
+// 🚀 INIT PAGE
 // ==========================
-document.addEventListener("DOMContentLoaded", () => {
-
-  // ==========================
-  // 🔝 GLOBAL INIT
-  // ==========================
-  initAnnouncement();
-  loadFooter();
-
-
-  // ==========================
-  // 🔁 LOOKBOOK CAROUSEL
-  // ==========================
+function initLookbookPage() {
   const root = document.getElementById("lookbook-root");
 
-  if (root) {
-    renderLookbookCarousel(root);
+  if (!root) {
+    console.error("❌ Lookbook root container not found (#lookbook-root)");
+    return;
   }
 
+  // 🔥 Mount carousel
+  renderLookbookCarousel(root);
+}
+
+// ==========================
+// 🌐 DOM READY
+// ==========================
+window.addEventListener("DOMContentLoaded", () => {
+  initLookbookPage();
 });
