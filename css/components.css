@@ -1552,16 +1552,17 @@ body.shop-page .nav-link {
 }
 
 /* =========================
-   🔥 MARQUEE — CLEAN FINAL
+   🔥 MARQUEE — CLEAN FINAL (FIXED)
 ========================= */
 
 .marquee {
   width: 100%;
-  height: 50px;
+  height: 72px; /* 🔥 FIX: match text scale */
+
   margin: 24px 0 6px;
 
   overflow: hidden;
-  background: #fff; /* ✅ WHITE BAR */
+  background: #fff;
 
   display: flex;
   align-items: center;
@@ -1579,6 +1580,7 @@ body.shop-page .nav-link {
   width: max-content;
 
   animation: marqueeScroll 48s linear infinite;
+  will-change: transform;
 }
 
 .marquee:hover .marquee__track {
@@ -1588,21 +1590,23 @@ body.shop-page .nav-link {
 /* =========================
    🔤 TEXT
 ========================= */
+
 .marquee__text {
   display: flex;
   align-items: center;
 
-  font-size: 72px;
+  font-size: 70px;
   font-weight: 700;
   text-transform: uppercase;
 
   white-space: nowrap;
-  color: #000; /* ✅ BLACK TEXT */
+  color: #000;
 
   letter-spacing: -0.01em;
 
-  line-height: 1; 
+  line-height: 1; /* 🔥 FIX: prevent clipping */
   padding: 0 20px;
+
   text-rendering: optimizeLegibility;
 }
 
