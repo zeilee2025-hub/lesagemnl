@@ -253,7 +253,7 @@ card.addEventListener("mouseenter", () => {
     modelTimer = setTimeout(() => {
       state.modelReady = true;
       renderImage();
-    }, 400);
+    }, 800);
   }
 });
 
