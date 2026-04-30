@@ -128,13 +128,36 @@ function updateUI() {
     return;
   }
 
-  // 🔥 DISABLE MODEL VIEW ONLY FOR SHOP PAGE
-  const shopProducts = filtered.map(product => ({
-    ...product,
-    hasModel: false
-  }));
+  // 🔥 APPLY PATTERN: [2nd, 3rd, 1st] PER ROW
+  const curatedProducts = filtered.map((product, index) => {
+    const row = Math.floor(index / 3); // row index
+    const position = index % 3;        // 0,1,2
 
-  renderProductGrid(grid, shopProducts, handleQuickAdd);
+    let allowModel = false;
+
+    if (
+      (row % 3 === 0 && position === 1) || // row 1 → 2nd
+      (row % 3 === 1 && position === 2) || // row 2 → 3rd
+      (row % 3 === 2 && position === 0)    // row 3 → 1st
+    ) {
+      allowModel = true;
+    }
+
+    return {
+      ...product,
+      __allowModel: allowModel
+    };
+  });
+
+  renderProductGrid(
+    grid,
+    curatedProducts,
+    handleQuickAdd,
+    {
+      allowModel: true,
+      hoverMode: "model"
+    }
+  );
 }
 
 // ===============================

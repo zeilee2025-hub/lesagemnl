@@ -94,11 +94,31 @@ listenToProducts((products) => {
 function renderProducts(products) {
   if (!container) return;
 
-  container.innerHTML = products.map(createProductCard).join("");
+  // 🔥 FORCE SINGLE GRID
+  container.classList.add("product-grid");
+  container.innerHTML = "";
 
-  container.querySelectorAll(".product-card").forEach((card, index) => {
+  products.forEach((product, index) => {
+    const allowModel = index === 1 || index === 2;
+
+    const cardHTML = createProductCard(product, {
+      allowModel,
+      hoverMode: allowModel ? "model" : "back"
+    });
+
+    container.insertAdjacentHTML("beforeend", cardHTML);
+  });
+
+  const cards = container.querySelectorAll(".product-card");
+
+  cards.forEach((card, index) => {
     const product = products[index];
-    initProductCard(card, handleQuickAdd, product);
+    const allowModel = index === 1 || index === 2;
+
+    initProductCard(card, handleQuickAdd, product, {
+      allowModel,
+      hoverMode: allowModel ? "model" : "back"
+    });
   });
 
   qaAddBtn.disabled = true;

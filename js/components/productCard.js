@@ -102,33 +102,59 @@ export function initProductCard(card, onQuickAdd, product, options = {}) {
   }
 
   // ===============================
-  // 🔥 NORMALIZED VARIANTS (CRITICAL)
-  // ===============================
-  const rawVariants =
-    (Array.isArray(product.variants) && product.variants.length > 0)
-      ? product.variants
-      : (product.colors || []);
+// 🔥 NORMALIZED VARIANTS (CRITICAL)
+// ===============================
+const rawVariants =
+  (Array.isArray(product.variants) && product.variants.length > 0)
+    ? product.variants
+    : (product.colors || []);
 
-  const variants = rawVariants.map((v, index) => ({
+const variants = rawVariants.map((v, index) => {
+  const modelSrc = v.model || v?.images?.model || null;
+
+  return {
     name: v.name || `variant-${index}`,
     front: v.front || v?.images?.front || null,
     back: v.back || v?.images?.back || null,
-    model: v.model || v?.images?.model || null,
+
+    // 🔥 CLEAN MODEL (normalized)
+    model: typeof modelSrc === "string" ? modelSrc.trim() : null,
+
     value: v.value || v.color?.value || "#000",
     sizes: v.sizes || []
-  }));
+  };
+});
 
-  const hasColors = variants.length > 1;
+const hasColors = variants.length > 1;
 
-  const hasModel =
-    config.allowModel &&
-    (product.hasModel === true ||
-     String(product.hasModel) === "true");
 
-  const frontImg = card.querySelector(".img-front");
-  const swatches = card.querySelectorAll(".swatch");
+// ===============================
+// 🔥 STRICT MODEL DETECTION (FIXED)
+// ===============================
+const hasModel =
+  config.allowModel &&
+  (product.__allowModel === undefined || product.__allowModel === true) &&
+  variants.some(v => {
+    if (!v.model) return false;
 
-  const imageCache = {};
+    const url = v.model;
+
+    return (
+      url !== "" &&
+      url !== "null" &&
+      url !== "undefined" &&
+      url.startsWith("http")
+    );
+  });
+
+
+// ===============================
+// 🎯 ELEMENTS
+// ===============================
+const frontImg = card.querySelector(".img-front");
+const swatches = card.querySelectorAll(".swatch");
+
+const imageCache = {};
 
   // ===============================
 // 🔥 RENDER
@@ -136,16 +162,7 @@ export function initProductCard(card, onQuickAdd, product, options = {}) {
 function renderImage() {
   const index = getCurrentVariantIndex();
 
-  // 🔍 DEBUG — STATE
-  console.log("ACTIVE INDEX:", state.activeVariantIndex);
-  console.log("HOVER INDEX:", state.hoverVariantIndex);
-  console.log("USING INDEX:", index);
-
   const variant = variants[index] || variants[0];
-
-  // 🔍 DEBUG — VARIANT
-  console.log("VARIANT USED:", variant);
-
   const variantKey = variant.name || index;
 
   if (!imageCache[variantKey]) {
@@ -156,32 +173,39 @@ function renderImage() {
   const back = variant.back || null;
   const model = variant.model || null;
 
-  // 🔍 DEBUG — IMAGES
-  console.log("FRONT:", front);
-  console.log("BACK:", back);
-  console.log("MODEL:", model);
-
   let src;
 
   const isHovered = card.matches(":hover");
 
-if (!isHovered) {
-  src = front;
+  // ===============================
+  // 🧠 IMAGE LOGIC
+  // ===============================
+  if (!isHovered) {
+    src = front;
 
-} else if (config.hoverMode === "back") {
-  src = back || front;
-
-} else {
-  if (!state.modelReady) {
+  } else if (config.hoverMode === "back") {
     src = back || front;
+
   } else {
-    src = model || back || front;
+    if (!state.modelReady) {
+      src = back || front;
+    } else {
+      src = model || back || front;
+    }
   }
-}
 
-  // 🔍 DEBUG — FINAL IMAGE USED
-  console.log("FINAL SRC:", src);
+  // ===============================
+  // 🔥 MODEL STATE (EDGE-TO-EDGE CONTROL)
+  // ===============================
+  card.classList.remove("is-model");
 
+  if (isHovered && state.modelReady && model) {
+    card.classList.add("is-model");
+  }
+
+  // ===============================
+  // 🎯 APPLY IMAGE
+  // ===============================
   swapImageSafely(frontImg, src);
 }
 
