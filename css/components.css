@@ -1910,20 +1910,21 @@ body.home-page .navbar.scrolled .nav-link.active {
 }
 
 /* =========================
-   DROP — IMAGE HOVER SWAP
+   DROP — CLEAN (NO HOVER)
 ========================= */
 
-.drop-image {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-
-  line-height: 0; /* 🔥 CRITICAL: removes inline image gap */
+.home-drop {
+  padding: 80px 0;
 }
 
-/* base image */
-.drop-image__main {
+.drop-banner {
   width: 100%;
+  overflow: hidden;
+}
+
+.drop-banner__image {
+  width: 100%;
+  height: auto;
   display: block;
 }
 /* =========================
