@@ -111,6 +111,9 @@ async function validateCartOnLoad() {
 // ===============================
 // UPDATE UI
 // ===============================
+// ===============================
+// UPDATE UI
+// ===============================
 function updateUI() {
   const filtered = filterProducts(allProducts, {
     category: currentCategory,
@@ -128,17 +131,21 @@ function updateUI() {
     return;
   }
 
-  // 🔥 APPLY PATTERN: [2nd, 3rd, 1st] PER ROW
+  // 🔥 NEW PATTERN:
+  // Row 1 → 2nd
+  // Row 2 → none
+  // Row 3 → 1st & 3rd
+
   const curatedProducts = filtered.map((product, index) => {
-    const row = Math.floor(index / 3); // row index
-    const position = index % 3;        // 0,1,2
+    const row = Math.floor(index / 3);
+    const position = index % 3; // 0,1,2
 
     let allowModel = false;
 
     if (
-      (row % 3 === 0 && position === 1) || // row 1 → 2nd
-      (row % 3 === 1 && position === 2) || // row 2 → 3rd
-      (row % 3 === 2 && position === 0)    // row 3 → 1st
+      (row % 3 === 0 && position === 1) ||              // Row 1 → 2nd
+      (row % 3 === 2 && (position === 0 || position === 2)) // Row 3 → 1st & 3rd
+      // Row 2 intentionally has NO condition
     ) {
       allowModel = true;
     }
