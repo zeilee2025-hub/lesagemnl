@@ -64,6 +64,14 @@ let currentProduct = null;
 let selectedVariantIndex = 0;
 
 // ==========================
+// 🧠 HELPERS
+// ==========================
+function formatSize(size) {
+  if (!size) return "";
+  return size === "ONE_SIZE" ? "One Size" : size;
+}
+
+// ==========================
 // 🚀 INIT
 // ==========================
 init();
@@ -95,19 +103,22 @@ async function init() {
     renderProduct(currentProduct);
 
     // ==========================
-    // 🎨 COLOR SELECTOR (FIXED)
+    // 🎨 COLOR SELECTOR
     // ==========================
     initColorSelector(product.variants, colorContainer, (index) => {
       selectedVariantIndex = index;
 
-      // 🔥 UPDATE REAL STATE
       currentProduct.selectedVariant = currentProduct.variants[index];
       const selectedVariant = currentProduct.selectedVariant;
 
       // 🔥 RESET SIZE
       selectedSize = null;
-      selectedSizeText.textContent = "Select Size";
       stockMessage.textContent = "";
+
+      selectedSizeText.textContent =
+        selectedVariant?.sizes?.length === 1
+          ? "Selected: One Size"
+          : "Select Size";
 
       // 🔥 UPDATE GALLERY
       initProductGallery(currentProduct, {
@@ -124,6 +135,24 @@ async function init() {
         },
         handleSizeChange
       );
+
+      // 🔥 FIX: ONE SIZE AUTO SELECT (MISSING BEFORE)
+      const sizes = selectedVariant.sizes || [];
+
+      if (sizes.length === 1) {
+        const item = sizes[0];
+const onlySize = typeof item === "string" ? item : item.size;
+
+        selectedSize = onlySize;
+
+        if (selectedSizeText) {
+          selectedSizeText.textContent = `Selected: ${formatSize(onlySize)}`;
+        }
+
+        handleSizeChange(onlySize);
+
+        if (addBtn) addBtn.disabled = false;
+      }
     });
 
     // ==========================
@@ -138,8 +167,26 @@ async function init() {
       handleSizeChange
     );
 
+    // 🔥 FIX: ONE SIZE AUTO SELECT (INITIAL LOAD)
+    const sizes = currentProduct.selectedVariant?.sizes || [];
+
+    if (sizes.length === 1) {
+      const item = sizes[0];
+const onlySize = typeof item === "string" ? item : item.size;
+
+      selectedSize = onlySize;
+
+      if (selectedSizeText) {
+        selectedSizeText.textContent = `Selected: ${formatSize(onlySize)}`;
+      }
+
+      handleSizeChange(onlySize);
+
+      if (addBtn) addBtn.disabled = false;
+    }
+
     // ==========================
-    // 🛒 ADD TO CART (FIXED)
+    // 🛒 ADD TO CART
     // ==========================
     initAddToCart(
       { addBtn },
@@ -157,11 +204,13 @@ async function init() {
 
         sizeError.textContent = "";
 
-        addToCart(product, size, variant.name); // ✅ FIXED
+        addToCart(product, size, variant.name);
         updateCartBadge();
 
+        const displaySize = formatSize(size);
+
         showToast(
-          `Added ${product.name} (${variant.name} - ${size}) to cart`
+          `Added ${product.name} (${variant.name} - ${displaySize}) to cart`
         );
 
         openCart();
@@ -169,7 +218,7 @@ async function init() {
     );
 
     // ==========================
-    // ⚡ BUY NOW (FIXED)
+    // ⚡ BUY NOW
     // ==========================
     buyNowBtn?.addEventListener("click", () => {
       const variant = currentProduct.selectedVariant;
@@ -184,8 +233,7 @@ async function init() {
       buyNowBtn.textContent = "PROCESSING...";
       buyNowBtn.disabled = true;
 
-      addToCart(currentProduct, selectedSize, variant.name); // ✅ FIXED
-
+      addToCart(currentProduct, selectedSize, variant.name);
       updateCartBadge();
 
       setTimeout(() => {
@@ -194,7 +242,7 @@ async function init() {
     });
 
     // ==========================
-    // 📏 SIZE CHART
+    // 📏 SIZE CHART (MOVED INSIDE INIT)
     // ==========================
     sizeChartBtn?.addEventListener("click", () => {
       const modalContent = document.querySelector(".size-guide-modal__body");
@@ -228,26 +276,33 @@ function handleSizeChange(size) {
   const currentVariant = currentProduct?.selectedVariant;
   if (!currentVariant) return;
 
-  const selectedItem = currentVariant.sizes?.find(
-    s => s.size === size
-  );
+  const sizes = currentVariant.sizes || [];
 
-  if (selectedItem) {
-    const stock = selectedItem.stock;
+  const selectedItem = sizes.find(s => {
+    const sSize = typeof s === "string" ? s : s.size;
+    return String(sSize).toUpperCase() === String(size).toUpperCase();
+  });
 
-    selectedSizeText.textContent = `Selected: ${size}`;
+  selectedSizeText.textContent = `Selected: ${formatSize(size)}`;
 
-    if (stock <= 0) {
-      stockMessage.textContent = "Out of stock";
-    } else if (stock <= 3) {
-      stockMessage.textContent = `Only ${stock} left`;
-      stockMessage.classList.add("low");
-    } else if (stock <= 5) {
-      stockMessage.textContent = "Low stock";
-      stockMessage.classList.add("low");
-    } else {
-      stockMessage.textContent = "";
-    }
+  if (!selectedItem) {
+    stockMessage.textContent = "";
+    sizeError.textContent = "";
+    return;
+  }
+
+  const stock = typeof selectedItem === "string" ? 0 : selectedItem.stock;
+
+  if (stock <= 0) {
+    stockMessage.textContent = "Out of stock";
+  } else if (stock <= 3) {
+    stockMessage.textContent = `Only ${stock} left`;
+    stockMessage.classList.add("low");
+  } else if (stock <= 5) {
+    stockMessage.textContent = "Low stock";
+    stockMessage.classList.add("low");
+  } else {
+    stockMessage.textContent = "";
   }
 
   sizeError.textContent = "";

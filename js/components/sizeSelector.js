@@ -1,5 +1,5 @@
 // ===============================
-// 📏 SIZE SELECTOR COMPONENT (FINAL CLEAN)
+// 📏 SIZE SELECTOR COMPONENT (FINAL — CONSISTENT SYSTEM)
 // ===============================
 
 // ✅ Optional global access (future-proof)
@@ -10,7 +10,8 @@ export function initSizeSelector(sizes, elements, onSelect) {
 
   let selectedSize = null;
 
-  // 🧹 Clear container
+  // 🧹 Reset state
+  globalSelectedSize = null;
   sizeContainer.innerHTML = "";
   sizeContainer.classList.add("qa-sizes");
 
@@ -20,6 +21,50 @@ export function initSizeSelector(sizes, elements, onSelect) {
   // 🔒 Disable add-to-cart initially
   if (addBtn) addBtn.disabled = true;
 
+  // ===============================
+  // 🔥 ONE SIZE MODE (USE SAME BUTTON STYLE)
+  // ===============================
+  const isOneSize = sizes.length === 1;
+
+  if (isOneSize) {
+    const item = sizes[0];
+
+    const sizeRaw = typeof item === "string" ? item : item.size;
+    const stock = typeof item === "string" ? 0 : item.stock;
+
+    const size = String(sizeRaw).trim().toUpperCase();
+
+    const btn = document.createElement("button");
+    btn.classList.add("qa-size", "active");
+
+    btn.textContent = "ONE SIZE";
+    btn.setAttribute("data-size", size);
+
+    const isOutOfStock = stock <= 0;
+
+    if (isOutOfStock) {
+      btn.classList.add("qa-size--disabled");
+      btn.setAttribute("aria-disabled", "true");
+
+      if (addBtn) addBtn.disabled = true;
+    } else {
+      // ✅ Auto-select
+      selectedSize = size;
+      globalSelectedSize = size;
+
+      if (addBtn) addBtn.disabled = false;
+
+      // 📤 Trigger parent logic
+      if (onSelect) onSelect(size);
+    }
+
+    sizeContainer.appendChild(btn);
+    return;
+  }
+
+  // ===============================
+  // 🔥 MULTI SIZE MODE (NORMAL)
+  // ===============================
   sizes.forEach(item => {
     const btn = document.createElement("button");
     btn.classList.add("qa-size");
@@ -39,9 +84,6 @@ export function initSizeSelector(sizes, elements, onSelect) {
     if (isOutOfStock) {
       btn.classList.add("qa-size--disabled");
       btn.setAttribute("aria-disabled", "true");
-
-      // ❌ REMOVE HARD DISABLE (this was hiding them visually)
-      // btn.disabled = true;
     }
 
     // 🎯 Click handler
