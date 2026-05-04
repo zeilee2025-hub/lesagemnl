@@ -1,5 +1,5 @@
 // ===============================
-// 🛒 CART SERVICE (FINAL — HARDENED + FIXED 🔥)
+// 🛒 CART SERVICE (FINAL — STOCK SAFE + VARIANT-AWARE 🔥)
 // ===============================
 
 import { getProductImage } from "../core/imageResolver.js";
@@ -12,6 +12,12 @@ const STORAGE_KEY = "cart";
 // ==========================
 function emitCartUpdate(detail = {}) {
   window.dispatchEvent(new CustomEvent("cartUpdated", { detail }));
+}
+
+function emitCartError(message) {
+  window.dispatchEvent(
+    new CustomEvent("cartError", { detail: { message } })
+  );
 }
 
 
@@ -44,7 +50,7 @@ function createKey(id, size, color) {
 
 
 // ==========================
-// 🖼️ IMAGE RESOLUTION (FIXED 🔥)
+// 🖼️ IMAGE RESOLUTION
 // ==========================
 function resolveCartImage(product, colorName) {
   if (!product?.variants) return "";
@@ -69,12 +75,10 @@ function resolveCartImage(product, colorName) {
 function normalizeColor(product, color) {
   if (!color) return "Default";
 
-  // already correct
   if (product?.variants?.some(v => v.name === color)) {
     return color;
   }
 
-  // hex → name
   if (color.startsWith("#") && product?.variants) {
     const match = product.variants.find(v => v.value === color);
     if (match) return match.name;
@@ -85,16 +89,59 @@ function normalizeColor(product, color) {
 
 
 // ==========================
-// ➕ ADD TO CART (FINAL FIX)
+// 🧠 GET VARIANT + STOCK
+// ==========================
+function getVariant(product, color) {
+  return (
+    product.selectedVariant ||
+    product.variants?.find(v => v.name === color) ||
+    product.variants?.[0]
+  );
+}
+
+function getSizeStock(variant, size) {
+  if (!variant?.sizes) return 0;
+
+  const sizeData = variant.sizes.find(
+    s =>
+      String(s.size).trim().toUpperCase() ===
+      String(size).trim().toUpperCase()
+  );
+
+  return sizeData?.stock ?? 0;
+}
+
+
+// ==========================
+// ➕ ADD TO CART (STOCK SAFE)
 // ==========================
 export function addToCart(product, size, color = "Default") {
   const cart = getCart();
 
   const normalizedColor = normalizeColor(product, color);
 
+  const variant = getVariant(product, normalizedColor);
+  if (!variant) return;
+
+  const stock = getSizeStock(variant, size);
+
+  // ❌ OUT OF STOCK
+  if (stock <= 0) {
+    emitCartError("This size is out of stock");
+    return;
+  }
+
   const key = createKey(product.id, size, normalizedColor);
 
   const existing = cart.find(item => item.key === key);
+
+  const currentQty = existing ? existing.quantity : 0;
+
+  // ❌ EXCEEDS STOCK
+  if (currentQty + 1 > stock) {
+    emitCartError(`Only ${stock} available`);
+    return;
+  }
 
   if (existing) {
     existing.quantity += 1;
@@ -105,9 +152,9 @@ export function addToCart(product, size, color = "Default") {
       name: product.name,
       price: product.price,
       size,
-      color: normalizedColor, // ✅ ONLY NAME
+      color: normalizedColor,
       quantity: 1,
-      image: resolveCartImage(product, normalizedColor) // ✅ FIXED
+      image: resolveCartImage(product, normalizedColor)
     });
   }
 
@@ -129,7 +176,7 @@ export function removeFromCart(key) {
 
 
 // ==========================
-// 🔄 UPDATE QUANTITY
+// 🔄 UPDATE QUANTITY (SAFE)
 // ==========================
 export async function updateQuantity(key, newQty) {
   const cart = getCart();
@@ -150,16 +197,10 @@ export async function updateQuantity(key, newQty) {
 
   if (!variant) return;
 
-  const sizeData = variant.sizes?.find(
-    s =>
-      String(s.size).trim().toUpperCase() ===
-      String(item.size).trim().toUpperCase()
-  );
-
-  const stock = sizeData?.stock || 0;
+  const stock = getSizeStock(variant, item.size);
 
   if (newQty > stock) {
-    alert(`Only ${stock} available for ${item.name} (${item.size})`);
+    emitCartError(`Only ${stock} available for ${item.name} (${item.size})`);
     item.quantity = stock;
   } else {
     item.quantity = newQty;
