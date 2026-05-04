@@ -293,25 +293,28 @@ card.addEventListener("mouseleave", () => {
   }
 
   // ===============================
-  // 🛒 QUICK ADD
-  // ===============================
-  const quickAddBtn = card.querySelector(".quick-add-btn");
+// 🛒 QUICK ADD (FIXED — ROUTE TO PDP )
+// ===============================
+const quickAddBtn = card.querySelector(".quick-add-btn");
 
-  if (quickAddBtn) {
-    quickAddBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
+if (quickAddBtn) {
+  quickAddBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
 
-      const variant =
-        variants[state.activeVariantIndex] || variants[0];
+    // ==========================
+    // 🔒 SAFETY: Ensure product exists
+    // ==========================
+    if (!product || !product.id) return;
 
-      onQuickAdd({
-        product: {
-          ...product,
-          selectedVariant: variant
-        }
-      });
-    });
-  }
+    const productId = product.id;
+
+    // ==========================
+    // 🚀 REDIRECT TO PDP
+    // (PDP handles size + stock properly)
+    // ==========================
+    window.location.href = `./product.html?id=${productId}`;
+  });
+}
 
   // ===============================
   // 🧭 NAVIGATION
