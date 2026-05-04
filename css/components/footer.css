@@ -7,14 +7,9 @@
   color: #eaeaea;
   padding: 80px 40px 40px;
   font-family: inherit;
-
-   overflow: hidden;
+  overflow: hidden;
 }
 
-.footer::before,
-.footer::after {
-  display: none !important;
-}
 
 /* =========================
    TOP LAYOUT
@@ -25,9 +20,10 @@
   grid-template-columns: 1fr 1fr;
   gap: 70px;
 
-  padding: 0 40px; /* ✅ match navbar */
+  padding: 0 40px;
   margin-bottom: 60px;
 }
+
 
 /* =========================
    LEFT (LINKS)
@@ -57,6 +53,7 @@
   opacity: 0.6;
 }
 
+
 /* =========================
    RIGHT (NEWSLETTER)
 ========================= */
@@ -73,6 +70,7 @@
   margin-bottom: 20px;
   max-width: 320px;
 }
+
 
 /* =========================
    FORM
@@ -101,6 +99,7 @@
   border-color: #888;
 }
 
+
 /* BUTTON */
 
 .footer__form button {
@@ -117,6 +116,7 @@
 .footer__form button:hover {
   opacity: 0.8;
 }
+
 
 /* =========================
    MESSAGE
@@ -135,21 +135,24 @@
   color: #ff4d4d;
 }
 
+
 /* =========================
    BOTTOM
 ========================= */
 
 .footer__bottom {
   border-top: 1px solid #222;
-
-  padding: 20px 40px 0; /* ✅ match navbar */
+  padding: 20px 40px 0;
 
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
 
-/* SOCIAL */
+
+/* =========================
+   SOCIAL
+========================= */
 
 .footer__socials {
   display: flex;
@@ -158,16 +161,19 @@
 
 .footer__socials img {
   width: 18px;
+  height: 18px;
   opacity: 0.7;
   transition: opacity 0.2s ease;
+  filter: invert(1);
 }
 
 .footer__socials img:hover {
   opacity: 1;
 }
 
+
 /* =========================
-   COPYRIGHT BLOCK (UPDATED)
+   COPYRIGHT
 ========================= */
 
 .footer__copy {
@@ -182,7 +188,10 @@
   margin-top: 4px;
 }
 
-/* CREDIT LINK */
+
+/* =========================
+   CREDIT LINK
+========================= */
 
 .footer__credit {
   text-decoration: none;
@@ -194,6 +203,7 @@
 .footer__credit:hover {
   opacity: 1;
 }
+
 
 /* =========================
    MOBILE
@@ -221,12 +231,6 @@
     flex-direction: column;
     gap: 16px;
     text-align: center;
-    align-items: center; /* ✅ added */
+    align-items: center;
   }
-}
-
-.footer__socials img {
-  width: 18px;
-  height: 18px;
-  filter: invert(1);
 }

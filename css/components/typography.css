@@ -1,0 +1,10 @@
+/* =========================
+   🔥 SECTION TITLE
+========================= */
+
+.section-title {
+  font-size: var(--text-xl);
+  margin-bottom: 48px;
+  text-align: center;
+  letter-spacing: var(--letter-wide);
+}

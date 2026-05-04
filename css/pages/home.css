@@ -276,17 +276,20 @@
   opacity: 1;
 }
 
+
 /* =========================
-   🔥 HOME VIDEO GRID (FIXED)
+    HOME VIDEO GRID (FIXED SPACING)
 ========================= */
 
 .home-video-grid {
   width: 100%;
   background: #fff;
   padding: 0;
+
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0;
+
 }
 
 .video-item {
@@ -298,4 +301,33 @@
   height: auto;
   display: block;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+
+  .hero__content {
+    top: auto;
+    bottom: 60px;
+
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    text-align: center;
+    width: 100%;
+    padding: 0 20px;
+  }
+
+}
+
+/* =========================
+   🏠 HOME NAVBAR
+========================= */
+body.home-page .navbar {
+  background: transparent;
+}
+
+body.home-page .nav-link,
+body.home-page .nav-logo,
+body.home-page .nav-icon {
+  color: white;
 }

@@ -1,0 +1,24 @@
+/* =========================
+   📄 OTHER PAGES ANNOUNCEMENT (BLACK)
+========================= */
+
+body:not(.home-page) .announcement-bar {
+  background: #000;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  box-shadow: none;
+}
+
+/* =========================
+   📄 OTHER PAGES NAVBAR
+========================= */
+body:not(.overlay-page) .navbar {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+body:not(.home-page) .nav-link,
+body:not(.home-page) .nav-logo,
+body:not(.home-page) .nav-icon {
+  color: #000;
+}

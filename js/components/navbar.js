@@ -33,20 +33,20 @@ window.addEventListener("load", () => {
     let ticking = false;
 
     function getTriggerHeight() {
-  if (isOverlayPage) {
-    const hero =
-      document.querySelector(".hero") ||
-      document.querySelector(".lookbook-hero");
+      if (isOverlayPage) {
+        const hero =
+          document.querySelector(".hero") ||
+          document.querySelector(".lookbook-hero");
 
-    if (hero) {
-      return hero.offsetHeight - 100; // 🔥 key fix
+        if (hero) {
+          return hero.offsetHeight - 100;
+        }
+
+        return 120;
+      }
+
+      return announcementBar ? announcementBar.offsetHeight : 0;
     }
-
-    return 120; // fallback
-  }
-
-  return announcementBar ? announcementBar.offsetHeight : 0;
-}
 
     function updateNavbar() {
       const scrollY = window.scrollY;
@@ -55,17 +55,14 @@ window.addEventListener("load", () => {
       const isAtTop = scrollY <= triggerHeight;
       const isPastTrigger = scrollY > triggerHeight;
 
-      // ✅ BACKGROUND
       navbar.classList.toggle("scrolled", !isAtTop);
 
-      // ✅ ANNOUNCEMENT BAR
       if (announcementBar) {
         announcementBar.classList.toggle("hidden", isPastTrigger);
       }
 
-      // ✅ SHIFT CONTROL
       if (document.body.classList.contains("lookbook-page")) {
-        navbar.classList.remove("shift-up"); // never hide in lookbook
+        navbar.classList.remove("shift-up");
       } else {
         navbar.classList.toggle("shift-up", isPastTrigger);
       }
@@ -85,7 +82,6 @@ window.addEventListener("load", () => {
       }
     }
 
-    // ✅ INITIAL RUN
     updateNavbar();
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -128,6 +124,50 @@ window.addEventListener("load", () => {
     }
   });
 
+  // ===============================
+  // 📱 MOBILE NAV SYSTEM
+  // ===============================
+
+  const navToggle = document.getElementById("navToggle");
+  const mobileMenu = document.getElementById("mobileMenu");
+
+  function openMenu() {
+    if (!mobileMenu) return;
+    mobileMenu.classList.add("active");
+    document.body.classList.add("no-scroll");
+  }
+
+  function closeMenu() {
+    if (!mobileMenu) return;
+    mobileMenu.classList.remove("active");
+    document.body.classList.remove("no-scroll");
+  }
+
+  navToggle?.addEventListener("click", () => {
+    if (!mobileMenu) return;
+
+    const isOpen = mobileMenu.classList.contains("active");
+    isOpen ? closeMenu() : openMenu();
+  });
+
+  mobileMenu?.addEventListener("click", (e) => {
+    if (e.target === mobileMenu) {
+      closeMenu();
+    }
+  });
+
+  document.querySelectorAll(".mobile-menu a").forEach(link => {
+    link.addEventListener("click", () => {
+      closeMenu();
+    });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeMenu();
+    }
+  });
+
   // ==========================
   // 🛒 CART DRAWER
   // ==========================
@@ -163,7 +203,6 @@ window.addEventListener("load", () => {
   closeCartBtn?.addEventListener("click", closeCart);
   cartOverlay?.addEventListener("click", closeCart);
 
-  // keep navbar responsive while scrolling cart
   cartOverlay?.addEventListener("wheel", () => {
     if (navbar) window.dispatchEvent(new Event("scroll"));
   }, { passive: true });
@@ -189,5 +228,12 @@ window.addEventListener("load", () => {
       }, 320);
     });
   });
+
+  // ===============================
+  // 🎨 FIX ICONS (CRITICAL)
+  // ===============================
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
 
 });

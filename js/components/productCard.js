@@ -7,7 +7,7 @@ import { getProductImage } from "../core/imageResolver.js";
 
 
 // ===============================
-// 🧱 HTML TEMPLATE
+//  HTML TEMPLATE
 // ===============================
 export function createProductCard(product, options = {}) {
   const rawVariants =
@@ -28,25 +28,25 @@ export function createProductCard(product, options = {}) {
   return `
     <div class="product-card" data-id="${product.id}">
       
-      <div class="product-media">
-        <img src="${frontImage}" class="img-front" alt="${product.name}" />
-        <img src="${backImage}" class="img-back" alt="${product.name}" />
+      <div class="product-card__media">
+        <img src="${frontImage}" class="product-card__image product-card__image--front" alt="${product.name}" />
+        <img src="${backImage}" class="product-card__image product-card__image--back" alt="${product.name}" />
 
-        <div class="product-overlay"></div>
-        <button class="quick-add-btn">+</button>
+        <div class="product-card__overlay"></div>
+        <button class="product-card__quick-add">+</button>
       </div>
 
-      <div class="product-info">
-        <p class="product-title">${product.name}</p>
-        <p class="product-price">₱${product.price}</p>
+      <div class="product-card__info">
+        <p class="product-card__title">${product.name}</p>
+        <p class="product-card__price">₱${product.price}</p>
 
         ${
           hasColors
             ? `
-            <div class="product-swatches">
+            <div class="product-card__swatches">
               ${variants.map((v, index) => `
                 <span 
-                  class="swatch ${index === 0 ? "active" : ""}"
+                  class="product-card__swatch ${index === 0 ? "active" : ""}"
                   data-index="${index}"
                   style="background:${v.value}"
                 ></span>
@@ -63,7 +63,7 @@ export function createProductCard(product, options = {}) {
 
 
 // ===============================
-// 🎯 INTERACTION LOGIC
+//  INTERACTION LOGIC
 // ===============================
 export function initProductCard(card, onQuickAdd, product, options = {}) {
   let modelTimer;
@@ -102,115 +102,89 @@ export function initProductCard(card, onQuickAdd, product, options = {}) {
   }
 
   // ===============================
-// 🔥 NORMALIZED VARIANTS (CRITICAL)
-// ===============================
-const rawVariants =
-  (Array.isArray(product.variants) && product.variants.length > 0)
-    ? product.variants
-    : (product.colors || []);
+  //  NORMALIZED VARIANTS
+  // ===============================
+  const rawVariants =
+    (Array.isArray(product.variants) && product.variants.length > 0)
+      ? product.variants
+      : (product.colors || []);
 
-const variants = rawVariants.map((v, index) => {
-  const modelSrc = v.model || v?.images?.model || null;
+  const variants = rawVariants.map((v, index) => {
+    const modelSrc = v.model || v?.images?.model || null;
 
-  return {
-    name: v.name || `variant-${index}`,
-    front: v.front || v?.images?.front || null,
-    back: v.back || v?.images?.back || null,
-
-    // 🔥 CLEAN MODEL (normalized)
-    model: typeof modelSrc === "string" ? modelSrc.trim() : null,
-
-    value: v.value || v.color?.value || "#000",
-    sizes: v.sizes || []
-  };
-});
-
-const hasColors = variants.length > 1;
-
-
-// ===============================
-// 🔥 STRICT MODEL DETECTION (FIXED)
-// ===============================
-const hasModel =
-  config.allowModel &&
-  (product.__allowModel === undefined || product.__allowModel === true) &&
-  variants.some(v => {
-    if (!v.model) return false;
-
-    const url = v.model;
-
-    return (
-      url !== "" &&
-      url !== "null" &&
-      url !== "undefined" &&
-      url.startsWith("http")
-    );
+    return {
+      name: v.name || `variant-${index}`,
+      front: v.front || v?.images?.front || null,
+      back: v.back || v?.images?.back || null,
+      model: typeof modelSrc === "string" ? modelSrc.trim() : null,
+      value: v.value || v.color?.value || "#000",
+      sizes: v.sizes || []
+    };
   });
 
-
-// ===============================
-// 🎯 ELEMENTS
-// ===============================
-const frontImg = card.querySelector(".img-front");
-const swatches = card.querySelectorAll(".swatch");
-
-const imageCache = {};
+  const hasColors = variants.length > 1;
 
   // ===============================
-// 🔥 RENDER
-// ===============================
-function renderImage() {
-  const index = getCurrentVariantIndex();
+  //  MODEL DETECTION
+  // ===============================
+  const hasModel =
+    config.allowModel &&
+    (product.__allowModel === undefined || product.__allowModel === true) &&
+    variants.some(v => {
+      if (!v.model) return false;
 
-  const variant = variants[index] || variants[0];
-  const variantKey = variant.name || index;
+      const url = v.model;
 
-  if (!imageCache[variantKey]) {
-    imageCache[variantKey] = { back: null, model: null };
-  }
-
-  const front = variant.front || getProductImage(product, { type: "front" });
-  const back = variant.back || null;
-  const model = variant.model || null;
-
-  let src;
-
-  const isHovered = card.matches(":hover");
+      return (
+        url !== "" &&
+        url !== "null" &&
+        url !== "undefined" &&
+        url.startsWith("http")
+      );
+    });
 
   // ===============================
-  // 🧠 IMAGE LOGIC
+  //  ELEMENTS
   // ===============================
-  if (!isHovered) {
-    src = front;
+  const frontImg = card.querySelector(".product-card__image--front");
+  const swatches = card.querySelectorAll(".product-card__swatch");
+  const quickAddBtn = card.querySelector(".product-card__quick-add");
 
-  } else if (config.hoverMode === "back") {
-    src = back || front;
+  const imageCache = {};
 
-  } else {
-    if (!state.modelReady) {
-      src = back || front;
-    } else {
-      src = model || back || front;
+  // ===============================
+  //  RENDER
+  // ===============================
+  function renderImage() {
+    const index = getCurrentVariantIndex();
+    const variant = variants[index] || variants[0];
+    const variantKey = variant.name || index;
+
+    if (!imageCache[variantKey]) {
+      imageCache[variantKey] = { back: null, model: null };
     }
+
+    const front = variant.front || getProductImage(product, { type: "front" });
+    const back = variant.back || null;
+    const model = variant.model || null;
+
+    let src;
+
+    const isHovered = card.matches(":hover");
+
+    if (hasModel && config.hoverMode === "model" && state.modelReady && isHovered) {
+      src = model || front;
+    } else if (isHovered && back) {
+      src = back;
+    } else {
+      src = front;
+    }
+
+    swapImageSafely(frontImg, src);
   }
 
   // ===============================
-  // 🔥 MODEL STATE (EDGE-TO-EDGE CONTROL)
-  // ===============================
-  card.classList.remove("is-model");
-
-  if (isHovered && state.modelReady && model) {
-    card.classList.add("is-model");
-  }
-
-  // ===============================
-  // 🎯 APPLY IMAGE
-  // ===============================
-  swapImageSafely(frontImg, src);
-}
-
-  // ===============================
-  // 🔥 PRELOAD (SAFE)
+  //  PRELOAD (SAFE)
   // ===============================
   setTimeout(() => {
     variants.forEach((variant, index) => {
@@ -237,84 +211,76 @@ function renderImage() {
   }, 200);
 
   // ===============================
-// 🔥 HOVER (FIXED)
-// ===============================
-card.addEventListener("mouseenter", () => {
-  state.isHovering = true;
-  state.modelReady = false;
+  //  HOVER (FIXED)
+  // ===============================
+  card.addEventListener("mouseenter", () => {
+    state.isHovering = true;
+    state.modelReady = false;
 
-  console.log("HOVER START"); // debug
+    renderImage();
 
-  renderImage();
+    clearTimeout(modelTimer);
 
-  clearTimeout(modelTimer);
+    if (config.hoverMode === "model" && hasModel) {
+      modelTimer = setTimeout(() => {
+        state.modelReady = true;
+        renderImage();
+      }, 800);
+    }
+  });
 
-  if (config.hoverMode === "model" && hasModel) {
-    modelTimer = setTimeout(() => {
-      state.modelReady = true;
-      renderImage();
-    }, 800);
-  }
-});
-
-card.addEventListener("mouseleave", () => {
+  card.addEventListener("mouseleave", () => {
   state.isHovering = false;
   state.modelReady = false;
-
-  console.log("HOVER END"); // debug
+  state.hoverVariantIndex = null;
 
   clearTimeout(modelTimer);
   renderImage();
 });
 
   // ===============================
-  // 🎨 SWATCHES (FIXED)
+  //  SWATCHES
   // ===============================
   if (swatches.length && hasColors) {
-    swatches.forEach((swatch) => {
-      const index = Number(swatch.dataset.index);
+  swatches.forEach((swatch) => {
+    const index = Number(swatch.dataset.index);
 
-      swatch.addEventListener("mouseenter", () => {
-        state.hoverVariantIndex = index;
-        renderImage();
-      });
-
-      swatch.addEventListener("click", (e) => {
-        e.stopPropagation();
-
-        state.activeVariantIndex = index;
-
-        swatches.forEach(s => s.classList.remove("active"));
-        swatch.classList.add("active");
-
-        renderImage();
-      });
+    swatch.addEventListener("mouseenter", () => {
+      state.hoverVariantIndex = index;
+      renderImage();
     });
-  }
 
-  // ===============================
-// 🛒 QUICK ADD (FIXED — ROUTE TO PDP )
-// ===============================
-const quickAddBtn = card.querySelector(".quick-add-btn");
+    swatch.addEventListener("mouseleave", () => {
+      state.hoverVariantIndex = null;
+      renderImage();
+    });
 
-if (quickAddBtn) {
-  quickAddBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
+    swatch.addEventListener("click", (e) => {
+      e.stopPropagation();
 
-    // ==========================
-    // 🔒 SAFETY: Ensure product exists
-    // ==========================
-    if (!product || !product.id) return;
+      state.activeVariantIndex = index;
 
-    const productId = product.id;
+      swatches.forEach(s => s.classList.remove("active"));
+      swatch.classList.add("active");
 
-    // ==========================
-    // 🚀 REDIRECT TO PDP
-    // (PDP handles size + stock properly)
-    // ==========================
-    window.location.href = `./product.html?id=${productId}`;
+      renderImage();
+    });
   });
 }
+
+  // ===============================
+  // 🛒 QUICK ADD (ROUTE TO PDP)
+  // ===============================
+  if (quickAddBtn) {
+    quickAddBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      if (!product || !product.id) return;
+
+      const productId = product.id;
+      window.location.href = `./product.html?id=${productId}`;
+    });
+  }
 
   // ===============================
   // 🧭 NAVIGATION

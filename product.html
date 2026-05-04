@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./css/components.css" />
   <link rel="stylesheet" href="./css/pages/product.css" />
 
-  <!-- 🔥 ADDED (ICON SYSTEM) -->
+  <!-- ICONS -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
@@ -29,7 +29,7 @@
             <li><a href="./index.html" class="nav-link">HOME</a></li>
             <li><a href="./shop.html" class="nav-link">SHOP</a></li>
             <li><a href="./lookbook.html" class="nav-link">LOOKBOOK</a></li>
-            <a href="./about.html" class="nav-link">ABOUT</a>
+            <li><a href="./about.html" class="nav-link">ABOUT</a></li>
           </ul>
         </div>
 
@@ -52,7 +52,7 @@
             />
           </div>
 
-          <!-- 🔥 CART (FIXED) -->
+          <!-- CART -->
           <span class="nav-icon cart-icon" id="cart-icon">
             <i data-lucide="shopping-bag"></i>
             <span id="cart-badge" class="cart-badge">0</span>
@@ -86,19 +86,19 @@
       </div>
 
       <div id="product-description" class="product-description"></div>
-<div id="product-features" class="product-features"></div>
+      <div id="product-features" class="product-features"></div>
 
-<!-- 🎨 COLOR (ADD THIS BLOCK) -->
-<div class="product__colors">
-  <p class="label">COLOR</p>
-  <div id="color-container" class="color-container"></div>
-</div>
+      <!-- COLOR -->
+      <div class="product__colors">
+        <p class="label">COLOR</p>
+        <div id="color-container" class="color-container"></div>
+      </div>
 
-<!-- SIZE -->
-<div class="size-header">
-  <span>Size</span>
-  <button id="size-chart-btn" class="size-chart-btn">Size chart</button>
-</div>
+      <!-- SIZE -->
+      <div class="size-header">
+        <span>Size</span>
+        <button id="size-chart-btn" class="size-chart-btn">Size chart</button>
+      </div>
 
       <div id="size-container" class="sizes"></div>
 
@@ -134,29 +134,36 @@
   <!-- TOAST -->
   <div id="toast-root"></div>
 
-  <!-- JS -->
-  <script type="module" src="./js/components/navbar.js"></script>
-  <script type="module" src="./js/components/cartDrawer.js"></script> <!-- ✅ ADD -->
-  <script type="module" src="./js/pages/product.js"></script>
-
-  <!-- 🔥 CRITICAL (RENDER ICONS) -->
-  <script>
-    lucide.createIcons();
-  </script>
+  <!-- FOOTER -->
+  <div id="footer-container"></div>
 
   <!-- ================= CART DRAWER ================= -->
-<div id="cart-overlay" class="cart-overlay"></div>
+  <div id="cart-overlay" class="cart-overlay"></div>
 
-<div id="cart-drawer" class="cart-drawer">
-  <div class="cart-header">
-    <h3>Your Cart</h3>
-    <button id="close-cart" class="close-cart">×</button>
+  <div id="cart-drawer" class="cart-drawer">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button id="close-cart" class="close-cart">×</button>
+    </div>
+
+    <div id="cart-items" class="cart-items"></div>
+    <div id="cart-total"></div>
   </div>
 
-  <div id="cart-items" class="cart-items"></div>
+  <!-- JS -->
+  <script type="module" src="./js/components/navbar.js"></script>
+  <script type="module" src="./js/components/cartDrawer.js"></script>
+  <script type="module" src="./js/components/footerLoader.js"></script>
+  <script type="module" src="./js/pages/product.js"></script>
 
-  <div id="cart-total"></div>
-</div>
+  <!-- ICON INIT -->
+  <script>
+    window.addEventListener("load", () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+  </script>
 
 </body>
 </html>

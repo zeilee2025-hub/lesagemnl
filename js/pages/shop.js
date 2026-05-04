@@ -111,9 +111,6 @@ async function validateCartOnLoad() {
 // ===============================
 // UPDATE UI
 // ===============================
-// ===============================
-// UPDATE UI
-// ===============================
 function updateUI() {
   const filtered = filterProducts(allProducts, {
     category: currentCategory,
@@ -131,30 +128,25 @@ function updateUI() {
     return;
   }
 
-  // 🔥 NEW PATTERN:
-  // Row 1 → 2nd
-  // Row 2 → none
-  // Row 3 → 1st & 3rd
-
   const curatedProducts = filtered.map((product, index) => {
-    const row = Math.floor(index / 3);
-    const position = index % 3; // 0,1,2
+  const row = Math.floor(index / 3);
+  const position = index % 3; // 0,1,2
 
-    let allowModel = false;
+  let allowModel = false;
 
-    if (
-      (row % 3 === 0 && position === 1) ||              // Row 1 → 2nd
-      (row % 3 === 2 && (position === 0 || position === 2)) // Row 3 → 1st & 3rd
-      // Row 2 intentionally has NO condition
-    ) {
-      allowModel = true;
-    }
+  if (
+    (row % 3 === 0 && position === 1) || 
+    (row % 3 === 1 && position === 0) || 
+    (row % 3 === 2 && position === 1)   
+  ) {
+    allowModel = true;
+  }
 
-    return {
-      ...product,
-      __allowModel: allowModel
-    };
-  });
+  return {
+    ...product,
+    __allowModel: allowModel
+  };
+});
 
   renderProductGrid(
     grid,

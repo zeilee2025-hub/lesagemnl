@@ -1,0 +1,266 @@
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+  position: fixed;
+  top: var(--announcement-height);
+  width: 100%;
+  z-index: 1000; /* 🔥 FIX */
+
+  background: transparent;
+  border-bottom: none;
+
+  transition: 
+    top 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s ease,
+    border 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.navbar.scrolled {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.navbar.scrolled .nav-link {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.navbar.scrolled .nav-link:hover,
+.navbar.scrolled .nav-link.active {
+  color: #000;
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1600px;     /* match your container */
+  margin: 0 auto;        /* center it */
+  padding: 0 70px;
+
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px; /* 🔥 THIS IS THE FIX */
+}
+
+.nav-link {
+  font-size: 13px;
+  letter-spacing: 0.12em; 
+  text-transform: uppercase;
+  font-weight: 600;
+
+  color: rgba(255,255,255,0.55); /* ✅ BACK */
+
+  transition: color 0.3s ease;
+
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #fff;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+   gap: 20px; /* 🔥 match left side */
+}
+
+/*  NAVBAR SHIFT WHEN ANNOUNCEMENT HIDES */
+.navbar.shift-up {
+  top: 0;
+}
+
+
+/* =========================
+   🔥 NAV ICONS
+========================= */
+
+.nav-icon {
+  position: relative;
+  display: flex;              /* 🔥 ADD */
+  align-items: center;        /* 🔥 ADD */
+  justify-content: center;    /* 🔥 ADD */
+
+  cursor: pointer;
+  transition: opacity 0.2s ease; /* 🔥 ADD */
+}
+
+.nav-icon:hover {
+  opacity: 0.6;
+}
+
+.nav-icon svg {
+  width: 18px;
+  height: 18px;
+
+  stroke: currentColor;
+  display: block;
+}
+
+/* 👜 CART BADGE — MINIMAL RED NUMBER */
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+
+  min-width: 16px;
+  height: 16px;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #000;
+  color: #fff;
+
+  border-radius: 999px;
+
+  z-index: 999; /* 🔥 FIX: ensure visibility */
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 🔍 SEARCH INPUT */
+.search-input {
+  position: absolute;
+  right: 100%; /* 🔥 KEY: expand to the LEFT */
+
+  width: 0;
+  opacity: 0;
+
+  border: none;
+  border-bottom: 1px solid currentColor;
+  outline: none;
+
+  background: transparent;
+  color: inherit;
+
+  font-size: 13px;
+  text-align: left;
+
+  margin-right: 10px; /* spacing from icon */
+
+  transition: all 0.3s ease;
+}
+
+/* ACTIVE STATE */
+.search-input.active {
+  width: 140px;
+  opacity: 1;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+
+/* =========================
+   🔥 LOGO SYSTEM
+========================= */
+
+.nav-logo {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-logo img {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  height: 100%;
+  width: auto;
+}
+
+.logo-white,
+.logo-black {
+  position: absolute;
+  inset: 0;
+}
+
+
+/* =========================
+   🔥 NAVBAR COLORS
+========================= */
+
+.navbar .nav-logo,
+.navbar .nav-link,
+.navbar .nav-icon {
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.navbar.scrolled .nav-logo,
+.navbar.scrolled .nav-link,
+.navbar.scrolled .nav-icon {
+  color: var(--color-black);
+}
+
+
+/* =========================
+   🔥 LOGO SWITCH SYSTEM
+========================= */
+
+.logo-white { display: block; }
+.logo-black { display: none; }
+
+.navbar.scrolled .logo-white { display: none; }
+.navbar.scrolled .logo-black { display: block; }
+
+/* =========================
+   🔥 PRODUCT PAGE NAV FIX
+========================= */
+
+body.product-page .navbar {
+  top: 0 !important;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+body.product-page .navbar.shift-up {
+  top: 0 !important;
+}
+
+body.product-page .nav-link {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+body.product-page .nav-link:hover,
+body.product-page .nav-link.active {
+  color: #000;
+}
+
+body.product-page .nav-logo,
+body.product-page .nav-icon {
+  color: #000;
+}
+
+/* 🔥 force correct logo */
+body.product-page .logo-white { display: none; }
+body.product-page .logo-black { display: block; }

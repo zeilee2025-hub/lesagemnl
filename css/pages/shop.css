@@ -71,3 +71,66 @@
   opacity: 0.5;
   margin-top: 8px;
 }
+
+/* =========================
+   SHOP GRID OVERRIDE
+========================= */
+
+.shop .product-grid {
+  grid-template-columns: repeat(3, 1fr);
+
+}
+
+.products {
+  background: #ffffff; /* 🔥 force clean white */
+}
+
+/* =========================
+   SHOP SPACING FIX
+========================= */
+
+.shop {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+
+  padding: 40px 0 80px; /* 🔥 REMOVE SIDE PADDING */
+}
+
+.shop-filters {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px; /* ✅ FIXED */
+}
+
+/* ===============================
+   SHOP CONTROLS (FILTER + SORT)
+=============================== */
+
+.shop-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.shop-sort {
+  margin: 0;
+}
+
+/* refine sort */
+.shop-sort select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background: white;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+
+/* =========================
+   🔥 SHOP PAGE NAV FIX
+========================= */
+
+body.shop-page .nav-link {
+  color: rgba(0, 0, 0, 0.6);
+}

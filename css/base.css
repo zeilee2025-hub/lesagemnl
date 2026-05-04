@@ -204,3 +204,8 @@ body.lookbook-page {
 section {
   width: 100%;
 }
+
+
+:root {
+  --announcement-height: 40px;
+}

@@ -1,6 +1,6 @@
 {
   "routes": [
-    { "src": "/order.html", "dest": "/order.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "/maintenance.html", "dest": "/maintenance.html" },
+    { "src": "/(.*)", "dest": "/maintenance.html" }
   ]
 }

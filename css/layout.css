@@ -1,0 +1,28 @@
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+
+/* =========================
+   🔥 PRODUCT GRID
+========================= */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 48px;
+
+  max-width: 1600px;
+  margin: 0 auto;
+
+  padding: 0; /* ✅ IMPORTANT */
+}
+
+
+@media (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+}
