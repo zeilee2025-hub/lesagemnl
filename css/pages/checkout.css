@@ -191,3 +191,34 @@ body.checkout-page {
 
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
+
+/* =========================
+   CITY HELPER
+========================= */
+
+.checkout__helper {
+  background: none;
+  border: none;
+
+  margin-top: 6px;
+  padding-left: 2px;
+
+  font-size: 11px;
+  line-height: 1.4;
+
+  color: #777;
+
+  opacity: 0.75;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  align-self: flex-start;
+
+  transition: opacity 0.2s ease;
+}
+
+.checkout__helper:hover {
+  opacity: 1;
+}

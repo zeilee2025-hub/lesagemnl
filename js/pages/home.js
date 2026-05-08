@@ -349,6 +349,56 @@ if (sizes.length === 1) {
 }
 
 // ==========================
+// 🛒 ADD TO CART
+// ==========================
+qaAddBtn?.addEventListener("click", async () => {
+
+  if (
+    !currentProduct ||
+    !selectedSize
+  ) {
+    return;
+  }
+
+  const freshProduct =
+    await getProductById(
+      currentProduct.id
+    );
+
+  if (!freshProduct) return;
+
+  const variant =
+    freshProduct.variants?.find(
+      (v) =>
+        (v.name || "")
+          .toLowerCase()
+          .trim() ===
+        (selectedColor || "")
+          .toLowerCase()
+          .trim()
+    ) ||
+    freshProduct.variants?.[0];
+
+  if (!variant) return;
+
+  const finalColor =
+    variant.name;
+
+  addToCart(
+    freshProduct,
+    selectedSize,
+    finalColor
+  );
+
+  updateCartBadge();
+
+  closeModal();
+
+  openCart();
+
+});
+
+// ==========================
 // ❌ CLOSE MODAL
 // ==========================
 function closeModal() {
@@ -377,6 +427,38 @@ document.addEventListener("keydown", (e) => {
 
 });
 
+
+// ==========================
+// 🛒 CART SYSTEM
+// ==========================
+function openCart() {
+
+  cartDrawer.classList.add(
+    "cart-drawer--active"
+  );
+
+  cartOverlay.classList.add(
+    "cart-overlay--active"
+  );
+
+  renderCart(
+    cartItemsContainer,
+    cartTotalContainer
+  );
+
+}
+
+function closeCart() {
+
+  cartDrawer.classList.remove(
+    "cart-drawer--active"
+  );
+
+  cartOverlay.classList.remove(
+    "cart-overlay--active"
+  );
+
+}
 
 // ==========================
 // 🔥 DRAWER EVENTS
