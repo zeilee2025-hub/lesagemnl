@@ -1,105 +1,186 @@
 /* =========================
-   NAVBAR
+   NAVBAR BASE
 ========================= */
 
 .navbar {
   position: fixed;
   top: var(--announcement-height);
   width: 100%;
-  z-index: 1000; /* 🔥 FIX */
+  z-index: 4000;
 
-  background: transparent;
-  border-bottom: none;
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
 
-  transition: 
-    top 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+  transition:
+    top 0.3s ease,
     background 0.3s ease,
     border 0.3s ease,
     box-shadow 0.3s ease;
 }
 
+body.header-collapsed .navbar {
+  top: 0;
+}
+/* =========================
+   OVERLAY MODE 
+========================= */
+
+body.home-page .navbar,
+body.lookbook-page .navbar {
+  background: transparent;
+  border: none;
+}
+
+body.home-page .navbar.scrolled,
+body.lookbook-page .navbar.scrolled {
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+/* =========================
+    SCROLLED STATE
+========================= */
+
 .navbar.scrolled {
   background: #fff;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
   box-shadow: 0 4px 20px rgba(0,0,0,0.06);
 }
 
-.navbar.scrolled .nav-link {
-  color: rgba(0, 0, 0, 0.6);
-}
 
-.navbar.scrolled .nav-link:hover,
-.navbar.scrolled .nav-link.active {
-  color: #000;
-}
+/* =========================
+    LAYOUT
+========================= */
 
 .nav-container {
   width: 100%;
-  max-width: 1600px;     /* match your container */
-  margin: 0 auto;        /* center it */
-  padding: 0 70px;
+  max-width: 1600px;
+  margin: 0 auto;
 
-  height: 60px;
+  padding: 0 70px;
+  height: var(--navbar-height);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.nav-links {
-  display: flex;
-  gap: 20px; /* 🔥 THIS IS THE FIX */
-}
-
-.nav-link {
-  font-size: 13px;
-  letter-spacing: 0.12em; 
-  text-transform: uppercase;
-  font-weight: 600;
-
-  color: rgba(255,255,255,0.55); /* ✅ BACK */
-
-  transition: color 0.3s ease;
-
-  display: flex;
-  align-items: center;
-  height: 60px;
-}
-
-.nav-link:hover,
-.nav-link.active {
-  color: #fff;
-}
-
+.nav-left,
 .nav-right {
   display: flex;
   align-items: center;
-   gap: 20px; /* 🔥 match left side */
 }
 
-/*  NAVBAR SHIFT WHEN ANNOUNCEMENT HIDES */
-.navbar.shift-up {
-  top: 0;
+.nav-left {
+  gap: 24px;
+}
+
+.nav-right {
+  gap: 20px;
 }
 
 
 /* =========================
-   🔥 NAV ICONS
+    NAV LINKS
+========================= */
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: var(--navbar-height);
+
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: currentColor;
+}
+
+
+/* =========================
+    COLOR SYSTEM
+========================= */
+
+/* DEFAULT (white navbar) */
+.navbar .nav-logo,
+.navbar .nav-link,
+.navbar .nav-icon {
+  color: #000;
+}
+
+/* OVERLAY (ONLY WHEN NOT SCROLLED) */
+body.home-page .navbar:not(.scrolled) .nav-logo,
+body.home-page .navbar:not(.scrolled) .nav-link,
+body.home-page .navbar:not(.scrolled) .nav-icon,
+body.lookbook-page .navbar:not(.scrolled) .nav-logo,
+body.lookbook-page .navbar:not(.scrolled) .nav-link,
+body.lookbook-page .navbar:not(.scrolled) .nav-icon {
+  color: #fff;
+}
+
+/* SCROLLED ALWAYS DARK (FORCE OVERRIDE) */
+.navbar.scrolled .nav-logo,
+.navbar.scrolled .nav-link,
+.navbar.scrolled .nav-icon {
+  color: #000 
+}
+
+
+/* =========================
+    LOGO SWITCH
+========================= */
+
+.logo-white { display: none; }
+.logo-black { display: block; }
+
+/* overlay uses white logo */
+body.home-page .logo-white,
+body.lookbook-page .logo-white {
+  display: block;
+}
+
+body.home-page .logo-black,
+body.lookbook-page .logo-black {
+  display: none;
+}
+
+/* scrolled uses black logo */
+.navbar.scrolled .logo-white {
+  display: none;
+}
+
+.navbar.scrolled .logo-black {
+  display: block;
+}
+
+
+/* =========================
+    NAV ICONS
 ========================= */
 
 .nav-icon {
   position: relative;
-  display: flex;              /* 🔥 ADD */
-  align-items: center;        /* 🔥 ADD */
-  justify-content: center;    /* 🔥 ADD */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   cursor: pointer;
-  transition: opacity 0.2s ease; /* 🔥 ADD */
+  transition: opacity 0.2s ease;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav-icon:hover {
@@ -111,10 +192,18 @@
   height: 18px;
 
   stroke: currentColor;
+  stroke-width: 1.8;
+
+  fill: none;
+
   display: block;
 }
 
-/* 👜 CART BADGE — MINIMAL RED NUMBER */
+
+/* =========================
+    CART BADGE
+========================= */
+
 .cart-badge {
   position: absolute;
   top: -6px;
@@ -134,16 +223,23 @@
   color: #fff;
 
   border-radius: 999px;
-
-  z-index: 999; /* 🔥 FIX: ensure visibility */
-  opacity: 1;
-  visibility: visible;
+  z-index: 1;
 }
 
-/* 🔍 SEARCH INPUT */
+
+/* ========================
+    SEARCH
+========================= */
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .search-input {
   position: absolute;
-  right: 100%; /* 🔥 KEY: expand to the LEFT */
+  right: 100%;
 
   width: 0;
   opacity: 0;
@@ -156,111 +252,105 @@
   color: inherit;
 
   font-size: 13px;
-  text-align: left;
 
-  margin-right: 10px; /* spacing from icon */
+  margin-right: 10px;
 
-  transition: all 0.3s ease;
+  transition: width 0.3s ease, opacity 0.3s ease;
+  pointer-events: none;
 }
 
-/* ACTIVE STATE */
 .search-input.active {
   width: 140px;
   opacity: 1;
-}
-
-.search-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
+  pointer-events: auto;
 }
 
 
 /* =========================
-   🔥 LOGO SYSTEM
+    MOBILE NAVBAR
 ========================= */
 
-.nav-logo {
-  position: relative;
-  width: 48px;
-  height: 48px;
-  margin-right: 16px;
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .nav-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.96);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+
+  z-index: 5000;
 }
 
-.nav-logo img {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  height: 100%;
-  width: auto;
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
-.logo-white,
-.logo-black {
-  position: absolute;
-  inset: 0;
+.mobile-menu__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
 }
 
+.mobile-menu__panel a {
+  color: #fff;
 
-/* =========================
-   🔥 NAVBAR COLORS
-========================= */
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 
-.navbar .nav-logo,
-.navbar .nav-link,
-.navbar .nav-icon {
-  color: white;
-  transition: color 0.3s ease;
+  text-decoration: none;
+
+  transition: opacity 0.3s ease;
 }
 
-.navbar.scrolled .nav-logo,
-.navbar.scrolled .nav-link,
-.navbar.scrolled .nav-icon {
-  color: var(--color-black);
+.mobile-menu__panel a:hover {
+  opacity: 0.6;
 }
-
-
-/* =========================
-   🔥 LOGO SWITCH SYSTEM
-========================= */
-
-.logo-white { display: block; }
-.logo-black { display: none; }
-
-.navbar.scrolled .logo-white { display: none; }
-.navbar.scrolled .logo-black { display: block; }
-
-/* =========================
-   🔥 PRODUCT PAGE NAV FIX
-========================= */
-
-body.product-page .navbar {
-  top: 0 !important;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-}
-
-body.product-page .navbar.shift-up {
-  top: 0 !important;
-}
-
-body.product-page .nav-link {
-  color: rgba(0, 0, 0, 0.6);
-}
-
-body.product-page .nav-link:hover,
-body.product-page .nav-link.active {
-  color: #000;
-}
-
-body.product-page .nav-logo,
-body.product-page .nav-icon {
-  color: #000;
-}
-
-/* 🔥 force correct logo */
-body.product-page .logo-white { display: none; }
-body.product-page .logo-black { display: block; }

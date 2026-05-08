@@ -1,136 +1,183 @@
-/* =============================== */
-/* SHOP PAGE */
-/* =============================== */
+/* ===============================
+   SHOP PAGE
+=============================== */
 
 .shop {
-  padding: 2rem;
-  padding-top: calc(40px + 60px);
+  width: 100%;
+  margin: 0;
+  padding: 24px 0 80px;
 }
 
-/* 🔝 TOP BAR */
-.shop-topbar {
+
+/* ===============================
+   SHOP CONTROLS
+=============================== */
+
+.shop__controls {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  align-items: flex-start;
+
+  margin-bottom: 40px;
 }
 
-#search-input {
-  flex: 1;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-}
 
-#sort-select {
-  padding: 0.75rem;
-}
+/* ===============================
+   SHOP FILTERS
+=============================== */
 
-/* 🧩 FILTERS */
-.shop-filters {
+.shop__filters {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-top: 16px;
 }
 
-.filter-btn {
-  padding: 0.5rem 1rem;
+.shop__filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 42px;
+
+  padding: 0 18px;
+
   border: 1px solid #ddd;
-  background: none;
+
+  background: transparent;
+
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.filter-btn.active {
-  background: black;
-  color: white;
+.shop__filter-btn--active {
+  background: #000;
+  color: #fff;
+
+  border-color: #000;
 }
 
-/* 🧱 GRID */
+
+/* ===============================
+   SHOP SORT
+=============================== */
+
+.shop__sort select {
+  min-height: 42px;
+
+  padding: 0 14px;
+
+  border: 1px solid #ddd;
+
+  background: #fff;
+
+  font-size: 12px;
+  letter-spacing: 0.05em;
+
+  cursor: pointer;
+
+  outline: none;
+
+  transition: border-color 0.2s ease;
+}
+
+.shop__sort select:focus {
+  border-color: #000;
+}
+
+
+/* ===============================
+   PRODUCT GRID
+=============================== */
+
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 32px;
 }
 
-/* =========================
-   🔍 NO RESULTS
-========================= */
+
+/* ===============================
+   NO RESULTS
+=============================== */
 
 .no-results {
-  text-align: center;
   padding: 80px 20px;
+
+  text-align: center;
 }
 
-.no-results-title {
+.no-results__title {
   font-size: 14px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.no-results-sub {
-  font-size: 12px;
-  opacity: 0.5;
+.no-results__subtitle {
   margin-top: 8px;
+
+  font-size: 12px;
+
+  opacity: 0.5;
 }
 
-/* =========================
-   SHOP GRID OVERRIDE
-========================= */
-
-.shop .product-grid {
-  grid-template-columns: repeat(3, 1fr);
-
-}
-
-.products {
-  background: #ffffff; /* 🔥 force clean white */
-}
-
-/* =========================
-   SHOP SPACING FIX
-========================= */
-
-.shop {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-
-  padding: 40px 0 80px; /* 🔥 REMOVE SIDE PADDING */
-}
-
-.shop-filters {
-  display: flex;
-  gap: 12px;
-  margin-top: 16px; /* ✅ FIXED */
-}
 
 /* ===============================
-   SHOP CONTROLS (FILTER + SORT)
+   PAGE TWEAKS
 =============================== */
-
-.shop-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.shop-sort {
-  margin: 0;
-}
-
-/* refine sort */
-.shop-sort select {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  background: white;
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-}
-
-/* =========================
-   🔥 SHOP PAGE NAV FIX
-========================= */
 
 body.shop-page .nav-link {
   color: rgba(0, 0, 0, 0.6);
+}
+
+
+/* ===============================
+   RESPONSIVE
+=============================== */
+
+@media (max-width: 1200px) {
+
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 28px;
+  }
+
+}
+
+@media (max-width: 640px) {
+
+  .shop {
+    padding: 20px 0 64px;
+  }
+
+  .shop__controls {
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 20px;
+
+    margin-bottom: 32px;
+  }
+
+  .shop__filters {
+    margin-top: 0;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+  }
+
 }

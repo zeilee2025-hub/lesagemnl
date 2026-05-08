@@ -29,8 +29,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* hidden state */
-.announcement.is-hidden {
+.announcement.hidden {
   transform: translateY(-100%);
 }
 
@@ -44,7 +43,7 @@
   align-items: center;
   width: max-content;
 
-  animation: announcement-scroll 60s linear infinite;
+  animation: announcement-scroll 45s linear infinite;
 
   will-change: transform;
   backface-visibility: hidden;

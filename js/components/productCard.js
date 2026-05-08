@@ -33,7 +33,17 @@ export function createProductCard(product, options = {}) {
         <img src="${backImage}" class="product-card__image product-card__image--back" alt="${product.name}" />
 
         <div class="product-card__overlay"></div>
-        <button class="product-card__quick-add">+</button>
+
+        <!--  NEW SYSTEM -->
+        <button 
+          class="product-card__quick-add"
+          data-action="quick-view"
+          data-id="${product.id}"
+        >
+          +
+
+        </button>
+
       </div>
 
       <div class="product-card__info">
@@ -148,43 +158,64 @@ export function initProductCard(card, onQuickAdd, product, options = {}) {
   // ===============================
   const frontImg = card.querySelector(".product-card__image--front");
   const swatches = card.querySelectorAll(".product-card__swatch");
-  const quickAddBtn = card.querySelector(".product-card__quick-add");
 
   const imageCache = {};
 
   // ===============================
-  //  RENDER
-  // ===============================
-  function renderImage() {
-    const index = getCurrentVariantIndex();
-    const variant = variants[index] || variants[0];
-    const variantKey = variant.name || index;
+//  RENDER
+// ===============================
+function renderImage() {
+  const index = getCurrentVariantIndex();
+  const variant = variants[index] || variants[0];
+  const variantKey = variant.name || index;
 
-    if (!imageCache[variantKey]) {
-      imageCache[variantKey] = { back: null, model: null };
-    }
-
-    const front = variant.front || getProductImage(product, { type: "front" });
-    const back = variant.back || null;
-    const model = variant.model || null;
-
-    let src;
-
-    const isHovered = card.matches(":hover");
-
-    if (hasModel && config.hoverMode === "model" && state.modelReady && isHovered) {
-      src = model || front;
-    } else if (isHovered && back) {
-      src = back;
-    } else {
-      src = front;
-    }
-
-    swapImageSafely(frontImg, src);
+  if (!imageCache[variantKey]) {
+    imageCache[variantKey] = { back: null, model: null };
   }
 
+  const front = variant.front || getProductImage(product, { type: "front" });
+  const back = variant.back || null;
+  const model = variant.model || null;
+
+  let src;
+
+  const isHovered = card.matches(":hover");
+
   // ===============================
-  //  PRELOAD (SAFE)
+  // 🔥 MODEL MODE
+  // ===============================
+  if (
+  hasModel &&
+  config.hoverMode === "model" &&
+  state.modelReady &&
+  isHovered
+) {
+
+  // MODEL MODE
+  src = model || front;
+
+  card.classList.add("product-card--model");
+
+} else if (isHovered && back) {
+
+  // BACK IMAGE MODE
+  src = back;
+
+  card.classList.remove("product-card--model");
+
+} else {
+
+  // DEFAULT FRONT IMAGE
+  src = front;
+
+  card.classList.remove("product-card--model");
+}
+
+  swapImageSafely(frontImg, src);
+}
+
+  // ===============================
+  //  PRELOAD
   // ===============================
   setTimeout(() => {
     variants.forEach((variant, index) => {
@@ -211,7 +242,7 @@ export function initProductCard(card, onQuickAdd, product, options = {}) {
   }, 200);
 
   // ===============================
-  //  HOVER (FIXED)
+  //  HOVER
   // ===============================
   card.addEventListener("mouseenter", () => {
     state.isHovering = true;
@@ -230,60 +261,66 @@ export function initProductCard(card, onQuickAdd, product, options = {}) {
   });
 
   card.addEventListener("mouseleave", () => {
-  state.isHovering = false;
-  state.modelReady = false;
-  state.hoverVariantIndex = null;
+    state.isHovering = false;
+    state.modelReady = false;
+    state.hoverVariantIndex = null;
 
-  clearTimeout(modelTimer);
-  renderImage();
-});
+    clearTimeout(modelTimer);
+    renderImage();
+  });
 
   // ===============================
   //  SWATCHES
   // ===============================
   if (swatches.length && hasColors) {
-  swatches.forEach((swatch) => {
-    const index = Number(swatch.dataset.index);
+    swatches.forEach((swatch) => {
+      const index = Number(swatch.dataset.index);
 
-    swatch.addEventListener("mouseenter", () => {
-      state.hoverVariantIndex = index;
-      renderImage();
-    });
+      swatch.addEventListener("mouseenter", () => {
+        state.hoverVariantIndex = index;
+        renderImage();
+      });
 
-    swatch.addEventListener("mouseleave", () => {
-      state.hoverVariantIndex = null;
-      renderImage();
-    });
+      swatch.addEventListener("mouseleave", () => {
+        state.hoverVariantIndex = null;
+        renderImage();
+      });
 
-    swatch.addEventListener("click", (e) => {
-      e.stopPropagation();
+      swatch.addEventListener("click", (e) => {
+        e.stopPropagation();
 
-      state.activeVariantIndex = index;
+        state.activeVariantIndex = index;
 
-      swatches.forEach(s => s.classList.remove("active"));
-      swatch.classList.add("active");
+        swatches.forEach(s => s.classList.remove("active"));
+        swatch.classList.add("active");
 
-      renderImage();
-    });
-  });
-}
-
-  // ===============================
-  // 🛒 QUICK ADD (ROUTE TO PDP)
-  // ===============================
-  if (quickAddBtn) {
-    quickAddBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-
-      if (!product || !product.id) return;
-
-      const productId = product.id;
-      window.location.href = `./product.html?id=${productId}`;
+        renderImage();
+      });
     });
   }
 
   // ===============================
-  // 🧭 NAVIGATION
+//  QUICK ADD
+// ===============================
+const quickAddBtn = card.querySelector(".product-card__quick-add");
+
+if (quickAddBtn) {
+  quickAddBtn.addEventListener("click", (e) => {
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (typeof onQuickAdd === "function") {
+      onQuickAdd({
+        product,
+        colorIndex: getCurrentVariantIndex()
+      });
+    }
+  });
+}
+
+  // ===============================
+  // 🧭 NAVIGATION (CARD CLICK)
   // ===============================
   card.addEventListener("click", () => {
     const productId = card.dataset.id;

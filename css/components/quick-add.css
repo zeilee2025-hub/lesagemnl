@@ -1,0 +1,239 @@
+/* =========================
+    QUICK ADD (BLOCK)
+========================= */
+
+.quick-add {
+  z-index: var(--z-modal, 2000);
+
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+}
+
+
+/* =========================
+    CONTENT
+========================= */
+
+.quick-add__content {
+  position: relative;
+
+  background: #fff;
+
+  width: 340px;
+  max-width: 90%;
+
+  padding: 32px 28px;
+
+  text-align: center;
+
+  border-radius: 16px;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+
+  transform: scale(0.96);
+  opacity: 0;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+
+  will-change: transform, opacity;
+}
+
+
+/* =========================
+    MODAL ACTIVE
+========================= */
+
+.modal.active .quick-add__content {
+  transform: scale(1);
+  opacity: 1;
+}
+
+
+/* =========================
+    BODY
+========================= */
+
+.quick-add__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+/* =========================
+    TITLE
+========================= */
+
+.quick-add__title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+
+  margin: 0;
+}
+
+
+/* =========================
+    PRICE
+========================= */
+
+.quick-add__price {
+  margin-top: -2px;
+  margin-bottom: 18px;
+
+  font-size: 14px;
+
+  opacity: 0.55;
+}
+
+
+/* =========================
+    IMAGE
+========================= */
+
+.quick-add__image {
+  max-width: 220px;
+  width: 100%;
+  height: auto;
+
+  display: block;
+}
+
+
+/* =========================
+    COLORS
+========================= */
+
+.quick-add__colors {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 8px;
+}
+
+
+/* =========================
+    COLOR SWATCH
+========================= */
+
+.quick-add__color-swatch {
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.15);
+
+  cursor: pointer;
+
+  opacity: 0.55;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.quick-add__color-swatch:hover {
+  opacity: 1;
+  transform: scale(1.12);
+}
+
+.quick-add__color-swatch.active {
+  opacity: 1;
+
+  border-color: #000;
+
+  transform: scale(1.12);
+}
+
+
+/* =========================
+    SIZES
+========================= */
+
+.quick-add__sizes {
+  margin-bottom: 10px;
+}
+
+/* =========================
+   NO SIZES
+========================= */
+
+.quick-add__no-sizes {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+
+/* =========================
+    CLOSE BUTTON
+========================= */
+
+.quick-add__close {
+  position: absolute;
+
+  top: 16px;
+  right: 16px;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  opacity: 0.35;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.quick-add__close:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+
+/* =========================
+    ADD BUTTON
+========================= */
+
+.quick-add__button {
+  width: 100%;
+
+  padding: 16px;
+
+  background: #111;
+  color: #fff;
+
+  border: none;
+
+  cursor: pointer;
+
+  margin-top: 8px;
+
+  font-size: 12px;
+  letter-spacing: 0.15em;
+
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.quick-add__button:hover {
+  background: #000;
+}
+
+.quick-add__button:disabled {
+  background: #aaa;
+
+  opacity: 0.4;
+
+  pointer-events: none;
+}

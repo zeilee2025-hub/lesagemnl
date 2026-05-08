@@ -1,159 +1,113 @@
-/* =========================
-   FOOTER BASE
-========================= */
-
-.footer {
-  background: #0e0e0e;
-  color: #eaeaea;
-  padding: 80px 40px 40px;
-  font-family: inherit;
-  overflow: hidden;
-}
-
-
-/* =========================
-   TOP LAYOUT
-========================= */
-
 .footer__top {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 70px;
+  gap: 40px;
 
-  padding: 0 40px;
-  margin-bottom: 60px;
+  max-width: 1600px; 
+  margin: 0 auto;
+  padding: 0 70px; 
 }
 
-
-/* =========================
-   LEFT (LINKS)
-========================= */
-
-.footer__title {
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  margin-bottom: 20px;
-  color: #888;
-}
-
-.footer__links {
+/* LEFT */
+.footer__left {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+}
+
+.footer__title {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  opacity: 0.6;
 }
 
 .footer__links a {
+  display: block;
   font-size: 14px;
-  color: #eaeaea;
-  text-decoration: none;
+  margin-bottom: 10px;
+  color: #fff;
+  opacity: 0.7;
   transition: opacity 0.2s ease;
 }
 
 .footer__links a:hover {
-  opacity: 0.6;
+  opacity: 1;
 }
 
-
-/* =========================
-   RIGHT (NEWSLETTER)
-========================= */
+/* RIGHT */
+.footer__right {
+  display: flex;
+  flex-direction: column;
+}
 
 .footer__headline {
   font-size: 18px;
-  letter-spacing: 1px;
+  letter-spacing: 0.06em;
   margin-bottom: 12px;
 }
 
 .footer__subtext {
-  font-size: 14px;
-  color: #aaa;
-  margin-bottom: 20px;
-  max-width: 320px;
+  font-size: 13px;
+  opacity: 0.6;
+  margin-bottom: 16px;
 }
 
-
-/* =========================
-   FORM
-========================= */
-
+/* FORM */
 .footer__form {
   display: flex;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .footer__form input {
   flex: 1;
-  padding: 12px;
-  background: transparent;
-  border: 1px solid #333;
+  padding: 10px;
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.2);
   color: #fff;
-  font-size: 14px;
+  font-size: 12px;
 }
-
-.footer__form input::placeholder {
-  color: #666;
-}
-
-.footer__form input:focus {
-  outline: none;
-  border-color: #888;
-}
-
-
-/* BUTTON */
 
 .footer__form button {
-  padding: 12px 20px;
+  padding: 10px 16px;
   background: #fff;
   color: #000;
-  border: none;
-  font-size: 12px;
-  letter-spacing: 1px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
   cursor: pointer;
-  transition: opacity 0.2s ease;
 }
-
-.footer__form button:hover {
-  opacity: 0.8;
-}
-
-
-/* =========================
-   MESSAGE
-========================= */
 
 .footer__message {
-  margin-top: 10px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
-.footer__message.success {
-  color: #4caf50;
-}
-
-.footer__message.error {
-  color: #ff4d4d;
-}
-
-
-/* =========================
-   BOTTOM
-========================= */
-
+/* BOTTOM */
 .footer__bottom {
-  border-top: 1px solid #222;
-  padding: 20px 40px 0;
+  margin-top: 40px;
 
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 20px 70px 0;
 }
 
+.footer__copy {
+  font-size: 12px;
+  opacity: 0.5;
 
-/* =========================
-   SOCIAL
-========================= */
+  line-height: 1.7;
+  text-align: right;
+  padding-top: 2px;
+}
 
+/* SOCIALS */
 .footer__socials {
   display: flex;
   gap: 16px;
@@ -162,46 +116,97 @@
 .footer__socials img {
   width: 18px;
   height: 18px;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
   filter: invert(1);
+  opacity: 0.7;
 }
 
-.footer__socials img:hover {
+.footer__socials a:hover img {
   opacity: 1;
 }
 
-
-/* =========================
-   COPYRIGHT
-========================= */
-
+/* TEXT */
 .footer__copy {
   font-size: 12px;
-  color: #777;
-  margin: 0;
+  opacity: 0.5;
 }
 
 .footer__built {
-  font-size: 11px;
-  color: #555;
-  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.footer__credit {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* =========================
+   ROOT FOOTER
+========================= */
+
+.footer {
+  background: #0a0a0a;
+  color: #fff;
+
+  padding: 60px 0 30px;
+
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  position: relative;
+  z-index: 2;
 }
 
 
 /* =========================
-   CREDIT LINK
+   LINKS CONTAINER
+========================= */
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =========================
+   FORM INPUT STATES
+========================= */
+
+.footer__form input::placeholder {
+  color: rgba(255,255,255,0.35);
+}
+
+.footer__form input:focus {
+  outline: none;
+  border-color: rgba(255,255,255,0.45);
+}
+
+
+/* =========================
+   BUTTON HOVER
+========================= */
+
+.footer__form button {
+  border: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.footer__form button:hover {
+  opacity: 0.9;
+}
+
+
+/* =========================
+   CREDIT HOVER
 ========================= */
 
 .footer__credit {
-  text-decoration: none;
-  color: #aaa;
-  margin-left: 4px;
   transition: opacity 0.2s ease;
 }
 
 .footer__credit:hover {
-  opacity: 1;
+  opacity: 0.7;
 }
 
 
@@ -210,13 +215,16 @@
 ========================= */
 
 @media (max-width: 768px) {
+
   .footer {
-    padding: 60px 20px 30px;
+    padding: 50px 0 24px;
   }
 
   .footer__top {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 48px;
+
+    padding: 0 24px;
   }
 
   .footer__form {
@@ -229,8 +237,15 @@
 
   .footer__bottom {
     flex-direction: column;
-    gap: 16px;
-    text-align: center;
     align-items: center;
+    text-align: center;
+    gap: 18px;
+
+    padding: 20px 24px 0;
   }
+
+  .footer__copy {
+    text-align: center;
+  }
+
 }

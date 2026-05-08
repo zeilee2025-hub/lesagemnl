@@ -129,9 +129,11 @@ function renderProducts(products) {
 // 🔥 QUICK ADD MODAL (UPDATED)
 // ==========================
 function handleQuickAdd({ product, colorIndex }) {
+
   if (!product) return;
 
   currentProduct = product;
+
   selectedSize = null;
 
   const variant =
@@ -139,69 +141,148 @@ function handleQuickAdd({ product, colorIndex }) {
     product.variants?.[colorIndex] ||
     product.variants?.[0];
 
-  selectedColor = variant?.name || "Default";
+  selectedColor =
+    variant?.name || "Default";
 
   qaAddBtn.disabled = true;
 
-  qaTitle.textContent = product.name;
-  qaPrice.textContent = `₱${product.price}`;
+  qaTitle.textContent =
+    product.name;
 
+  qaPrice.textContent =
+    `₱${product.price}`;
+
+  // ==========================
+  // RESET COLORS
+  // ==========================
   qaColors.innerHTML = "";
 
-  const variants = product.variants || [];
+  const variants =
+    product.variants || [];
 
-  if (variants.length > 1) {
-    variants.forEach((variant, index) => {
-      const swatch = document.createElement("span");
-      swatch.className = "qa-color-swatch";
-      swatch.style.background = variant.value || "#000";
+  // ==========================
+  // RENDER COLOR SWATCHES
+  // ==========================
+  variants.forEach((variant, index) => {
 
-      if (index === 0) swatch.classList.add("active");
+    const swatch =
+      document.createElement("span");
 
-      swatch.addEventListener("click", () => {
-        selectedColor = variant.name;
-        currentProduct.selectedVariant = variant;
+    swatch.className =
+      "quick-add__color-swatch";
 
-        selectedSize = null;
-        qaAddBtn.disabled = true;
+    swatch.style.background =
+      variant.value || "#000";
 
-        renderSizes(variant);
+    // DEFAULT ACTIVE
+    if (index === 0) {
+      swatch.classList.add("active");
+    }
 
-        // ✅ AUTO SELECT ON COLOR CHANGE
-        const sizes = variant?.sizes || [];
-        if (sizes.length === 1) {
-          selectedSize = sizes[0].size;
-          qaAddBtn.disabled = false;
+    // ==========================
+    // COLOR CLICK
+    // ==========================
+    swatch.addEventListener("click", () => {
 
-          setTimeout(() => {
-            const btn = qaSizes.querySelector("button");
-            if (btn) btn.classList.add("active");
-          }, 0);
-        }
+      selectedColor =
+        variant.name;
 
-        qaColors.querySelectorAll("span").forEach(s => s.classList.remove("active"));
-        swatch.classList.add("active");
-      });
+      currentProduct.selectedVariant =
+        variant;
 
-      qaColors.appendChild(swatch);
+      selectedSize = null;
+
+      qaAddBtn.disabled = true;
+
+      renderSizes(variant);
+
+      // ==========================
+// AUTO SELECT ONE SIZE
+// ==========================
+const sizes =
+  variant?.sizes || [];
+
+if (sizes.length === 1) {
+
+  selectedSize =
+    sizes[0].size;
+
+  qaAddBtn.disabled = false;
+
+  setTimeout(() => {
+
+    const btn =
+      qaSizes.querySelector(
+        ".product-size__option"
+      );
+
+    if (btn) {
+
+      btn.classList.add(
+        "product-size__option--active"
+      );
+
+    }
+
+  }, 0);
+
+}
+
+      // ==========================
+      // ACTIVE SWATCH
+      // ==========================
+      qaColors
+        .querySelectorAll(
+          ".quick-add__color-swatch"
+        )
+        .forEach((s) => {
+          s.classList.remove("active");
+        });
+
+      swatch.classList.add("active");
+
     });
-  }
 
+    qaColors.appendChild(swatch);
+
+  });
+
+  // ==========================
+  // RENDER SIZES
+  // ==========================
   function renderSizes(variantData) {
-    const sizes = variantData?.sizes || [];
+
+    const sizes =
+      variantData?.sizes || [];
 
     qaSizes.innerHTML = "";
 
+    // ==========================
+    // OUT OF STOCK
+    // ==========================
     if (!sizes.length) {
-      qaSizes.innerHTML = `<p class="no-sizes">Out of stock</p>`;
+
+      qaSizes.innerHTML = `
+        <p class="quick-add__no-sizes">
+          Out of stock
+        </p>
+      `;
+
       return;
+
     }
 
-    // ✅ SHOW "ONE SIZE"
-    const displaySizes = sizes.map(s => ({
-      ...s,
-      size: s.size === "OS" ? "ONE SIZE" : s.size
-    }));
+    // ==========================
+    // SHOW ONE SIZE LABEL
+    // ==========================
+    const displaySizes =
+      sizes.map((s) => ({
+        ...s,
+        size:
+          s.size === "OS"
+            ? "ONE SIZE"
+            : s.size
+      }));
 
     initSizeSelector(
       displaySizes,
@@ -210,88 +291,91 @@ function handleQuickAdd({ product, colorIndex }) {
         addBtn: qaAddBtn
       },
       (size) => {
-        selectedSize = size === "ONE SIZE" ? "OS" : size;
+
+        selectedSize =
+          size === "ONE SIZE"
+            ? "OS"
+            : size;
+
       }
     );
+
   }
 
+  // ==========================
+  // INITIAL SIZE RENDER
+  // ==========================
   renderSizes(variant);
 
-  // ✅ AUTO SELECT IF SINGLE SIZE
-  const sizes = variant?.sizes || [];
-  if (sizes.length === 1) {
-    selectedSize = sizes[0].size;
-    qaAddBtn.disabled = false;
+  // ==========================
+// AUTO SELECT SINGLE SIZE
+// ==========================
+const sizes =
+  variant?.sizes || [];
 
-    setTimeout(() => {
-      const btn = qaSizes.querySelector("button");
-      if (btn) btn.classList.add("active");
-    }, 0);
-  }
+if (sizes.length === 1) {
 
-  modal.classList.add("active");
-  modalOverlay.classList.add("active");
+  selectedSize =
+    sizes[0].size;
+
+  qaAddBtn.disabled = false;
+
+  setTimeout(() => {
+
+    const btn =
+      qaSizes.querySelector(
+        ".product-size__option"
+      );
+
+    if (btn) {
+
+      btn.classList.add(
+        "product-size__option--active"
+      );
+
+    }
+
+  }, 0);
+
 }
 
+  // ==========================
+  // OPEN MODAL
+  // ==========================
+  modal.classList.add("active");
 
-// ==========================
-// 🛒 ADD TO CART
-// ==========================
-qaAddBtn?.addEventListener("click", async () => {
-  if (!currentProduct || !selectedSize) return;
+  modalOverlay.classList.add("active");
 
-  const freshProduct = await getProductById(currentProduct.id);
-  if (!freshProduct) return;
-
-  const variant =
-    freshProduct.variants?.find(v =>
-      (v.name || "").toLowerCase().trim() ===
-      (selectedColor || "").toLowerCase().trim()
-    ) ||
-    freshProduct.variants?.[0];
-
-  if (!variant) return;
-
-  const finalColor = variant.name;
-
-  addToCart(freshProduct, selectedSize, finalColor);
-
-  updateCartBadge();
-  closeModal();
-  openCart();
-});
-
+}
 
 // ==========================
 // ❌ CLOSE MODAL
 // ==========================
 function closeModal() {
+
   modal.classList.remove("active");
+
   modalOverlay.classList.remove("active");
+
 }
 
-modalOverlay?.addEventListener("click", closeModal);
-modalClose?.addEventListener("click", closeModal);
+modalOverlay?.addEventListener(
+  "click",
+  closeModal
+);
+
+modalClose?.addEventListener(
+  "click",
+  closeModal
+);
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeModal();
+
+  if (e.key === "Escape") {
+    closeModal();
+  }
+
 });
-
-
-// ==========================
-// 🛒 CART SYSTEM
-// ==========================
-function openCart() {
-  cartDrawer.classList.add("active");
-  cartOverlay.classList.add("active");
-
-  renderCart(cartItemsContainer, cartTotalContainer);
-}
-
-function closeCart() {
-  cartDrawer.classList.remove("active");
-  cartOverlay.classList.remove("active");
-}
 
 
 // ==========================

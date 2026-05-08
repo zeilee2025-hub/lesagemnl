@@ -1,0 +1,126 @@
+/* =========================
+   🎯 PAGE CONTEXT SYSTEM
+   (Controls page-based behavior only)
+========================= */
+
+
+/* =========================
+   📄 OTHER PAGES ANNOUNCEMENT
+========================= */
+
+.page-shop .announcement,
+.page-product .announcement,
+.page-cart .announcement,
+.page-checkout .announcement {
+  background: #000;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  box-shadow: none;
+}
+
+
+/* =========================
+   📄 OTHER PAGES NAVBAR
+========================= */
+
+.page-shop .navbar,
+.page-product .navbar,
+.page-cart .navbar,
+.page-checkout .navbar {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+
+/* =========================
+   🔗 NAV TEXT + ICONS (OTHER PAGES)
+========================= */
+
+.page-shop .nav-link,
+.page-shop .nav-logo,
+.page-shop .nav-icon,
+
+.page-product .nav-link,
+.page-product .nav-logo,
+.page-product .nav-icon,
+
+.page-cart .nav-link,
+.page-cart .nav-logo,
+.page-cart .nav-icon,
+
+.page-checkout .nav-link,
+.page-checkout .nav-logo,
+.page-checkout .nav-icon {
+  color: #000;
+}
+
+
+/* =========================
+   🏠 HOME PAGE (DEFAULT STATE)
+========================= */
+
+/* Transparent navbar on hero */
+.page-home .navbar {
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+/* White text on hero */
+.page-home .nav-link,
+.page-home .nav-logo,
+.page-home .nav-icon {
+  color: rgba(255,255,255,0.85);
+}
+
+/* Hover on hero */
+.page-home .nav-link:hover,
+.page-home .nav-link.active {
+  color: #fff;
+}
+
+
+/* =========================
+   🔄 HOME SCROLLED STATE
+========================= */
+
+.page-home .navbar.scrolled {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.page-home .navbar.scrolled .nav-link,
+.page-home .navbar.scrolled .nav-logo,
+.page-home .navbar.scrolled .nav-icon {
+  color: #000;
+}
+
+
+/* =========================
+   🎭 OVERLAY PAGES (OPTIONAL)
+========================= */
+
+/* When scrolled */
+.overlay-page .navbar.scrolled {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.overlay-page .navbar.scrolled .nav-link,
+.overlay-page .navbar.scrolled .nav-logo,
+.overlay-page .navbar.scrolled .nav-icon {
+  color: #000;
+}
+
+/* Default overlay (hero style) */
+.overlay-page .navbar:not(.scrolled) .nav-link,
+.overlay-page .navbar:not(.scrolled) .nav-logo,
+.overlay-page .navbar:not(.scrolled) .nav-icon {
+  color: rgba(255,255,255,0.9);
+}
+
+.overlay-page .navbar:not(.scrolled) .nav-link:hover,
+.overlay-page .navbar:not(.scrolled) .nav-link.active {
+  color: #fff;
+}

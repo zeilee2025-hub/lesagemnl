@@ -146,16 +146,20 @@ export function addToCart(product, size, color = "Default") {
   if (existing) {
     existing.quantity += 1;
   } else {
-    cart.push({
-      key,
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      size,
-      color: normalizedColor,
-      quantity: 1,
-      image: resolveCartImage(product, normalizedColor)
-    });
+  cart.push({
+  key,
+  id: product.id,
+  name: product.name,
+  price: product.price,
+  size,
+  color: normalizedColor,
+  quantity: 1,
+
+  // 🔥 CACHE STOCK
+  stock: stock ?? 999,
+
+  image: resolveCartImage(product, normalizedColor)
+});
   }
 
   saveCart(cart);
@@ -176,38 +180,49 @@ export function removeFromCart(key) {
 
 
 // ==========================
-// 🔄 UPDATE QUANTITY (SAFE)
+// 🔄 UPDATE QUANTITY (FAST)
 // ==========================
-export async function updateQuantity(key, newQty) {
+export async function updateQuantity(
+  key,
+  newQty
+) {
+
   const cart = getCart();
-  const item = cart.find(i => i.key === key);
+
+  const item =
+    cart.find(i => i.key === key);
 
   if (!item) return;
+
   if (newQty < 1) return;
 
-  const { getProductById } = await import("../services/productService.js");
-
-  const product = await getProductById(item.id);
-
-  if (!product || !product.variants) return;
-
-  const variant =
-    product.variants.find(v => v.name === item.color) ||
-    product.variants[0];
-
-  if (!variant) return;
-
-  const stock = getSizeStock(variant, item.size);
+  // 🔥 USE CACHED STOCK
+  const stock =
+  typeof item.stock === "number"
+    ? item.stock
+    : 999;
 
   if (newQty > stock) {
-    emitCartError(`Only ${stock} available for ${item.name} (${item.size})`);
+
+    emitCartError(
+      `Only ${stock} available for ${item.name} (${item.size})`
+    );
+
     item.quantity = stock;
+
   } else {
+
     item.quantity = newQty;
+
   }
 
   saveCart(cart);
-  emitCartUpdate({ type: "update", key });
+
+  emitCartUpdate({
+    type: "update",
+    key
+  });
+
 }
 
 

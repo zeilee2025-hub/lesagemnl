@@ -1,239 +1,75 @@
-import { renderCart } from "./cartDrawer.js";
-import { updateCartBadge } from "../services/cartService.js";
+// ===============================
+// 🧠 NAVBAR SCROLL SYSTEM (FINAL CLEAN + FIXED)
+// ===============================
 
-window.addEventListener("load", () => {
+const navbar = document.querySelector(".navbar");
+const announcementBar = document.querySelector(".announcement");
 
-  // ===============================
-  // 🔥 PAGE ENTER ANIMATION
-  // ===============================
-  document.body.classList.add("page-enter");
+let isCartOpen = false;
 
-  // ===============================
-  // 🔥 INITIAL + REAL-TIME BADGE SYNC
-  // ===============================
-  updateCartBadge();
-
-  window.addEventListener("cartUpdated", () => {
-    updateCartBadge();
-  });
+if (navbar) {
 
   // ===============================
-  // 🧠 NAVBAR SCROLL SYSTEM (FINAL CLEAN)
+  // 🧠 PAGE MODE
   // ===============================
+  const body = document.body;
 
-  const navbar = document.querySelector(".navbar");
-  const announcementBar = document.querySelector(".announcement-bar");
+  const isOverlayPage =
+    body.classList.contains("home-page") ||
+    body.classList.contains("lookbook-page");
 
-  let isCartOpen = false;
+  let ticking = false;
 
-  if (navbar) {
+  // ===============================
+  // 🔄 UPDATE NAVBAR
+  // ===============================
+  function updateNavbar() {
+    const scrollY = window.scrollY;
 
-    const isOverlayPage = document.body.classList.contains("overlay-page");
-
-    let ticking = false;
-
-    function getTriggerHeight() {
-      if (isOverlayPage) {
-        const hero =
-          document.querySelector(".hero") ||
-          document.querySelector(".lookbook-hero");
-
-        if (hero) {
-          return hero.offsetHeight - 100;
-        }
-
-        return 120;
-      }
-
-      return announcementBar ? announcementBar.offsetHeight : 0;
+    // ===============================
+    // 🎨 COLOR STATE
+    // ===============================
+    if (isOverlayPage) {
+      navbar.classList.toggle("scrolled", scrollY > 80);
+    } else {
+      navbar.classList.add("scrolled"); // always white on non-overlay pages
     }
 
-    function updateNavbar() {
-      const scrollY = window.scrollY;
-      const triggerHeight = getTriggerHeight();
+    // ===============================
+    // 📦 HEADER COLLAPSE SYSTEM (FIXED)
+    // ===============================
+    const shouldCollapse = scrollY > 40;
 
-      const isAtTop = scrollY <= triggerHeight;
-      const isPastTrigger = scrollY > triggerHeight;
-
-      navbar.classList.toggle("scrolled", !isAtTop);
-
-      if (announcementBar) {
-        announcementBar.classList.toggle("hidden", isPastTrigger);
-      }
-
-      if (document.body.classList.contains("lookbook-page")) {
-        navbar.classList.remove("shift-up");
-      } else {
-        navbar.classList.toggle("shift-up", isPastTrigger);
-      }
-
-      ticking = false;
+    // 🔥 control announcement (visual)
+    if (announcementBar) {
+      announcementBar.classList.toggle("hidden", shouldCollapse);
     }
 
-    function onScroll() {
-      if (isCartOpen) {
-        updateNavbar();
-        return;
-      }
+    // 🔥 control layout (this fixes gap / white bar)
+    body.classList.toggle("header-collapsed", shouldCollapse);
 
-      if (!ticking) {
-        window.requestAnimationFrame(updateNavbar);
-        ticking = true;
-      }
-    }
-
-    updateNavbar();
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", updateNavbar);
+    ticking = false;
   }
 
-  // ==========================
-  // 🔍 SEARCH FUNCTIONALITY
-  // ==========================
-
-  const searchIcon = document.getElementById("search-icon");
-  const searchInput = document.getElementById("search-input");
-
-  searchIcon?.addEventListener("click", () => {
-    searchInput.classList.toggle("active");
-    searchInput.focus();
-  });
-
-  searchInput?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      const query = searchInput.value.trim();
-      if (!query) return;
-
-      window.location.href = `/shop.html?search=${encodeURIComponent(query)}`;
-    }
-  });
-
-  // ==========================
-  // 🔗 ACTIVE NAV LINK
-  // ==========================
-
-  const navLinks = document.querySelectorAll(".nav-link");
-  const currentPath = window.location.pathname;
-
-  navLinks.forEach(link => {
-    const linkPath = new URL(link.href).pathname;
-
-    if (linkPath === currentPath) {
-      link.classList.add("active");
-    }
-  });
-
   // ===============================
-  // 📱 MOBILE NAV SYSTEM
+  // ⚡ SCROLL HANDLER
   // ===============================
+  function onScroll() {
+    if (isCartOpen) {
+      updateNavbar();
+      return;
+    }
 
-  const navToggle = document.getElementById("navToggle");
-  const mobileMenu = document.getElementById("mobileMenu");
-
-  function openMenu() {
-    if (!mobileMenu) return;
-    mobileMenu.classList.add("active");
-    document.body.classList.add("no-scroll");
+    if (!ticking) {
+      window.requestAnimationFrame(updateNavbar);
+      ticking = true;
+    }
   }
 
-  function closeMenu() {
-    if (!mobileMenu) return;
-    mobileMenu.classList.remove("active");
-    document.body.classList.remove("no-scroll");
-  }
-
-  navToggle?.addEventListener("click", () => {
-    if (!mobileMenu) return;
-
-    const isOpen = mobileMenu.classList.contains("active");
-    isOpen ? closeMenu() : openMenu();
-  });
-
-  mobileMenu?.addEventListener("click", (e) => {
-    if (e.target === mobileMenu) {
-      closeMenu();
-    }
-  });
-
-  document.querySelectorAll(".mobile-menu a").forEach(link => {
-    link.addEventListener("click", () => {
-      closeMenu();
-    });
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      closeMenu();
-    }
-  });
-
-  // ==========================
-  // 🛒 CART DRAWER
-  // ==========================
-
-  const cartIcon = document.getElementById("cart-icon");
-  const cartDrawer = document.getElementById("cart-drawer");
-  const cartOverlay = document.getElementById("cart-overlay");
-  const closeCartBtn = document.getElementById("close-cart");
-
-  const cartItems = document.getElementById("cart-items");
-  const cartTotal = document.getElementById("cart-total");
-
-  cartIcon?.addEventListener("click", () => {
-
-    if (document.body.classList.contains("cart-page")) return;
-    if (!cartDrawer || !cartOverlay) return;
-
-    isCartOpen = true;
-
-    cartDrawer.classList.add("active");
-    cartOverlay.classList.add("active");
-
-    renderCart(cartItems, cartTotal);
-  });
-
-  function closeCart() {
-    isCartOpen = false;
-
-    cartDrawer?.classList.remove("active");
-    cartOverlay?.classList.remove("active");
-  }
-
-  closeCartBtn?.addEventListener("click", closeCart);
-  cartOverlay?.addEventListener("click", closeCart);
-
-  cartOverlay?.addEventListener("wheel", () => {
-    if (navbar) window.dispatchEvent(new Event("scroll"));
-  }, { passive: true });
-
-  cartDrawer?.addEventListener("wheel", () => {
-    if (navbar) window.dispatchEvent(new Event("scroll"));
-  }, { passive: true });
-
-  // ==========================
-  // 🔥 LOOKBOOK TRANSITION
-  // ==========================
-
-  const lookbookLinks = document.querySelectorAll('a[href$="lookbook.html"]');
-
-  lookbookLinks.forEach(link => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      document.body.classList.add("page-exit");
-
-      setTimeout(() => {
-        window.location.href = link.href;
-      }, 320);
-    });
-  });
-
   // ===============================
-  // 🎨 FIX ICONS (CRITICAL)
+  // 🚀 INIT
   // ===============================
-  if (window.lucide) {
-    window.lucide.createIcons();
-  }
-
-});
+  window.addEventListener("load", updateNavbar);
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", updateNavbar);
+}

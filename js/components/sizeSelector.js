@@ -1,8 +1,7 @@
 // ===============================
-// 📏 SIZE SELECTOR COMPONENT (FINAL — CONSISTENT SYSTEM)
+//  PRODUCT SIZE SELECTOR (BEM SYSTEM)
 // ===============================
 
-// ✅ Optional global access (future-proof)
 let globalSelectedSize = null;
 
 export function initSizeSelector(sizes, elements, onSelect) {
@@ -10,19 +9,19 @@ export function initSizeSelector(sizes, elements, onSelect) {
 
   let selectedSize = null;
 
-  // 🧹 Reset state
+  //  Reset
   globalSelectedSize = null;
   sizeContainer.innerHTML = "";
-  sizeContainer.classList.add("qa-sizes");
 
-  // 🚫 Guard
+  //  Ensure correct container class
+  sizeContainer.classList.add("product-size__options");
+
   if (!sizes || !sizes.length) return;
 
-  // 🔒 Disable add-to-cart initially
   if (addBtn) addBtn.disabled = true;
 
   // ===============================
-  // 🔥 ONE SIZE MODE (USE SAME BUTTON STYLE)
+  //  ONE SIZE MODE
   // ===============================
   const isOneSize = sizes.length === 1;
 
@@ -35,7 +34,7 @@ export function initSizeSelector(sizes, elements, onSelect) {
     const size = String(sizeRaw).trim().toUpperCase();
 
     const btn = document.createElement("button");
-    btn.classList.add("qa-size", "active");
+    btn.classList.add("product-size__option", "active");
 
     btn.textContent = "ONE SIZE";
     btn.setAttribute("data-size", size);
@@ -43,18 +42,16 @@ export function initSizeSelector(sizes, elements, onSelect) {
     const isOutOfStock = stock <= 0;
 
     if (isOutOfStock) {
-      btn.classList.add("qa-size--disabled");
+      btn.classList.add("product-size__option--disabled");
       btn.setAttribute("aria-disabled", "true");
 
       if (addBtn) addBtn.disabled = true;
     } else {
-      // ✅ Auto-select
       selectedSize = size;
       globalSelectedSize = size;
 
       if (addBtn) addBtn.disabled = false;
 
-      // 📤 Trigger parent logic
       if (onSelect) onSelect(size);
     }
 
@@ -63,13 +60,12 @@ export function initSizeSelector(sizes, elements, onSelect) {
   }
 
   // ===============================
-  // 🔥 MULTI SIZE MODE (NORMAL)
+  //  MULTI SIZE MODE
   // ===============================
   sizes.forEach(item => {
     const btn = document.createElement("button");
-    btn.classList.add("qa-size");
+    btn.classList.add("product-size__option");
 
-    // 🧠 Normalize data
     const sizeRaw = typeof item === "string" ? item : item.size;
     const stock = typeof item === "string" ? 0 : item.stock;
 
@@ -80,31 +76,27 @@ export function initSizeSelector(sizes, elements, onSelect) {
 
     const isOutOfStock = stock <= 0;
 
-    // 🚫 Out-of-stock state (VISIBLE but not selectable)
     if (isOutOfStock) {
-      btn.classList.add("qa-size--disabled");
+      btn.classList.add("product-size__option--disabled");
       btn.setAttribute("aria-disabled", "true");
     }
 
-    // 🎯 Click handler
     btn.addEventListener("click", () => {
       if (isOutOfStock) return;
 
-      // ❌ Remove active from all
-      sizeContainer.querySelectorAll(".qa-size").forEach(b => {
-        b.classList.remove("active");
-      });
+      //  remove active
+      sizeContainer.querySelectorAll(".product-size__option").forEach(b => {
+  b.classList.remove("product-size__option--active");
+});
 
-      // ✅ Set active
-      btn.classList.add("active");
+      //  set active
+      btn.classList.add("product-size__option--active");
 
       selectedSize = size;
       globalSelectedSize = size;
 
-      // 🔓 Enable add-to-cart
       if (addBtn) addBtn.disabled = false;
 
-      // 📤 Send to parent
       if (onSelect) onSelect(selectedSize);
     });
 
@@ -112,8 +104,9 @@ export function initSizeSelector(sizes, elements, onSelect) {
   });
 }
 
+
 // ===============================
-// 🌐 OPTIONAL GLOBAL ACCESS
+// GLOBAL ACCESS
 // ===============================
 export function getSelectedSize() {
   return globalSelectedSize;

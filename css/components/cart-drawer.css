@@ -1,0 +1,148 @@
+/* =========================
+    CART DRAWER
+========================= */
+
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 380px;
+  height: 100vh;
+
+  padding: 24px 20px;
+
+  background: #fff;
+
+  border-left:
+    1px solid rgba(0, 0, 0, 0.06);
+
+  box-shadow:
+  -12px 0 32px rgba(0, 0, 0, 0.06);
+
+  z-index: 9999;
+
+  transform: translateX(100%);
+  opacity: 0;
+
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+
+/* =========================
+    DRAWER ACTIVE
+========================= */
+
+.cart-drawer--active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+
+/* =========================
+    CART DRAWER HEADER
+========================= */
+
+.cart-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.cart-drawer__title {
+  font-weight: 600;
+
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cart-drawer__close {
+  border: none;
+  background: none;
+
+  padding: 4px;
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+    margin-top: -2px;
+}
+
+.cart-drawer__close:hover {
+  opacity: 0.6;
+}
+
+.cart-drawer__close:active {
+  transform: scale(0.92);
+}
+
+
+/* =========================
+   CART OVERLAY
+========================= */
+
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity 0.25s ease;
+
+  z-index: 999;
+}
+
+.cart-overlay--active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+
+/* =========================
+    CART DRAWER ITEMS
+========================= */
+
+.cart-drawer__items {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding-right: 6px;
+}
+
+
+/* =========================
+    CART DRAWER FOOTER
+========================= */
+
+.cart-drawer__footer {
+  margin-top: auto;
+
+  padding-top: 18px;
+
+  background: #fff;
+  gap: 10px;
+  border-top:
+    1px solid rgba(0, 0, 0, 0.04);
+}

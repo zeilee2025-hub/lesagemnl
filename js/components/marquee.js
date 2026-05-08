@@ -1,39 +1,53 @@
 export function initMarqueeDrag() {
-  const marquee = document.querySelector('.marquee');
-  const track = document.querySelector('.marquee__track');
+  const marquee = document.querySelector(".marquee");
+  if (!marquee) return;
 
-  if (!marquee || !track) return;
+  const track = marquee.querySelector(".marquee__track");
+  if (!track) return;
 
   let isDown = false;
-  let startX;
-  let scrollLeft = 0;
+  let startX = 0;
 
-  marquee.addEventListener('mousedown', (e) => {
+  marquee.addEventListener("mousedown", (e) => {
     isDown = true;
-    marquee.classList.add('dragging');
-
     startX = e.pageX;
-    scrollLeft = track.getBoundingClientRect().left;
+
+    track.style.animationPlayState = "paused";
   });
 
-  marquee.addEventListener('mouseleave', () => {
+  marquee.addEventListener("mouseleave", () => {
     isDown = false;
-    marquee.classList.remove('dragging');
+
+    track.style.transform = "";
   });
 
-  marquee.addEventListener('mouseup', () => {
+  marquee.addEventListener("mouseup", () => {
     isDown = false;
-    marquee.classList.remove('dragging');
+
+    track.style.transform = "";
+
+    if (!marquee.matches(":hover")) {
+      track.style.animationPlayState = "running";
+    }
   });
 
-  marquee.addEventListener('mousemove', (e) => {
+  marquee.addEventListener("mousemove", (e) => {
     if (!isDown) return;
 
     e.preventDefault();
 
-    const x = e.pageX;
-    const walk = (x - startX) * 1.5;
+    const walk = (e.pageX - startX) * 1.5;
 
     track.style.transform = `translateX(${walk}px)`;
+  });
+
+  marquee.addEventListener("mouseenter", () => {
+    track.style.animationPlayState = "paused";
+  });
+
+  marquee.addEventListener("mouseleave", () => {
+    if (!isDown) {
+      track.style.animationPlayState = "running";
+    }
   });
 }

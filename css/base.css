@@ -1,11 +1,12 @@
 /* =========================
-   BASE.CSS — FOUNDATION
+   FONT IMPORT
 ========================= */
-
-/* 🔥 GOOGLE FONT IMPORT */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
 
-/* 🔥 RESET */
+
+/* =========================
+   RESET
+========================= */
 *,
 *::before,
 *::after {
@@ -14,16 +15,20 @@
   padding: 0;
 }
 
-/* 🔥 ROOT VARIABLES (DESIGN SYSTEM) */
+
+/* =========================
+   DESIGN SYSTEM (ROOT)
+========================= */
 :root {
-  /* Spacing */
+
+  /* ================= SPACING ================= */
   --space-xs: 8px;
   --space-sm: 16px;
   --space-md: 32px;
   --space-lg: 64px;
   --space-xl: 100px;
 
-  /* Colors */
+  /* ================= COLORS ================= */
   --color-bg: #ffffff;
   --color-text: #111111;
   --color-muted: #777777;
@@ -32,11 +37,10 @@
   --color-black: #000000;
   --color-white: #ffffff;
 
-  /* 🔥 TYPOGRAPHY SYSTEM */
+  /* ================= TYPOGRAPHY ================= */
   --font-main: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-brand: 'Montserrat', sans-serif;
 
-  /* TYPE SCALE */
   --text-xs: 12px;
   --text-sm: 14px;
   --text-md: 16px;
@@ -44,26 +48,34 @@
   --text-xl: 28px;
   --text-hero: 40px;
 
-  /* LETTER SPACING */
   --letter-tight: 0.02em;
   --letter-normal: 0.05em;
   --letter-wide: 0.08em;
   --letter-logo: 0.04em;
 
-  /* Layout */
+  /* ================= LAYOUT ================= */
   --container-width: 1200px;
   --nav-height: 90px;
-  --height: var(--announcement-height);
-
-  /* Transitions */
-  --transition-fast: 0.2s ease;
-  --transition-smooth: 0.3s ease;
-
   --announcement-height: 40px;
   --navbar-height: 60px;
+
+  /* ================= Z-INDEX SYSTEM ================= */
+  --z-base: 1;
+  --z-navbar: 1000;
+  --z-drawer: 1500;
+  --z-modal: 2000;
+  --z-toast: 3000;
+
+  /* ================= TRANSITIONS ================= */
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.3s ease;
 }
 
-/* 🔥 BODY BASE */
+
+/* =========================
+   GLOBAL BASE
+========================= */
+
 html, body {
   height: 100%;
 }
@@ -73,23 +85,48 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
 
   display: flex;
   flex-direction: column;
+
+  /* rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* safety */
+  overflow-x: hidden;
+
+  /* page transition */
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
 
-/* ✅ IMPORTANT: MAIN EXPANDS */
+/* page exit */
+body.page-exit {
+  opacity: 0;
+}
+
+
+/* =========================
+   LAYOUT BEHAVIOR
+========================= */
+
 main {
   flex: 1;
+
+  margin: 0;
+  padding: 0;
 }
 
-/* 🔥 FORCE FONT CONSISTENCY */
-* {
-  font-family: inherit;
+section {
+  width: 100%;
 }
 
-/* 🔥 TYPOGRAPHY */
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   letter-spacing: var(--letter-tight);
@@ -113,31 +150,42 @@ p {
   color: var(--color-muted);
 }
 
-/* 🔥 LINKS */
+
+/* =========================
+   LINKS
+========================= */
+
 a {
   text-decoration: none;
   color: inherit;
   transition: opacity var(--transition-fast);
 }
 
-.navbar a:hover {
-  opacity: 1;
+a:hover {
+  opacity: 0.7;
 }
 
-/* 🔥 IMAGES */
+
+/* =========================
+   MEDIA
+========================= */
+
 img {
   max-width: 100%;
   display: block;
 }
 
-/* 🔥 VIDEO */
 video {
   max-width: 100%;
   display: block;
   object-fit: cover;
 }
 
-/* 🔥 BUTTON RESET */
+
+/* =========================
+   FORM ELEMENTS
+========================= */
+
 button {
   font-family: inherit;
   border: none;
@@ -145,34 +193,18 @@ button {
   cursor: pointer;
 }
 
-/* 🔥 LIST RESET */
+
+/* =========================
+   LIST RESET
+========================= */
+
 ul, ol {
   list-style: none;
 }
 
-/* 🔥 CONTAINER */
-.container {
-  width: 100%;
-  max-width: var(--container-width);
-  margin: 0 auto;
-  padding: 0 var(--space-md);
-}
 
 /* =========================
-   🔥 PAGE TRANSITION
-========================= */
-
-body {
-  opacity: 1;
-  transition: opacity 0.4s ease;
-}
-
-body.page-exit {
-  opacity: 0;
-}
-
-/* =========================
-   🎬 LOOKBOOK CINEMATIC ENTRY
+   LOOKBOOK ENTRY
 ========================= */
 
 body.lookbook-page {
@@ -198,14 +230,42 @@ body.lookbook-page {
 }
 
 /* =========================
-   🔥 FULL-WIDTH SECTION SAFETY
+   🔥 LUXURY PAGE TRANSITIONS (FIXED)
 ========================= */
 
-section {
-  width: 100%;
+body {
+  opacity: 1;
+  transition: opacity 0.35s ease;
 }
 
+/* 👇 Apply transform ONLY when animating */
+body.page-enter {
+  opacity: 1;
+}
 
-:root {
-  --announcement-height: 40px;
+body.page-exit {
+  opacity: 0;
+}
+
+/* =========================
+🔥 ICON SYSTEM — FINAL FIX
+========================= */
+
+/* GLOBAL SVG FIX (Safari + consistency) */
+svg {
+  display: block;
+
+  shape-rendering: geometricPrecision;
+  text-rendering: geometricPrecision;
+
+  backface-visibility: hidden;
+}
+
+/* =========================
+   HEADER — OVERLAY SYSTEM (FINAL)
+========================= */
+
+header {
+  position: relative;
+  width: 100%;
 }

@@ -1,0 +1,111 @@
+/* =========================
+   🔥 MARQUEE — FINAL CLEAN SYSTEM
+========================= */
+
+.marquee {
+  position: relative;
+
+  width: 100%;
+  overflow: hidden;
+
+  background: #fff;
+
+  margin: 17px 0 -40px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+}
+
+
+/* =========================
+   TRACK (ANIMATION LAYER)
+========================= */
+
+.marquee__track {
+  display: flex;
+  align-items: center;
+
+  width: max-content;
+
+  animation: marqueeScroll 35s linear infinite;
+
+  will-change: transform;
+}
+
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+
+/* =========================
+   TEXT ROW
+========================= */
+
+.marquee__text {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+
+  white-space: nowrap;
+
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+
+  font-size: clamp(40px, 4.5vw, 72px);
+  padding: 1px 0;
+
+}
+
+
+/* =========================
+   ITEMS
+========================= */
+
+.marquee__item {
+  display: inline-flex;
+  align-items: center;
+
+  margin-right: 72px;
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes marqueeScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+  .marquee {
+    margin: 10px 0 6px;
+  }
+
+  .marquee__text {
+    font-size: clamp(18px, 5vw, 28px);
+
+    letter-spacing: -0.03em;
+
+    padding: 2px 0;
+  }
+
+  .marquee__item {
+    margin-right: 36px;
+  }
+}

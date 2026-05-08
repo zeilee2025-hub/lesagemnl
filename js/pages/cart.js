@@ -1,216 +1,348 @@
 // ===============================
-// 🛒 CART PAGE (EVENT-DRIVEN 🔥)
+//  CART PAGE
 // ===============================
 
 import {
   getCart,
   removeFromCart,
   updateQuantity,
-  saveCart
+  saveCart,
+  getCartTotal
 } from "../services/cartService.js";
 
 import { syncCartWithStock } from "../core/stock.js";
+import { createCartItem } from "../components/cartItem.js";
 
-// ✅ IMPORTS
-import { getProductById } from "../services/productService.js";
-import { validateQuantityUpdate } from "../core/cartValidation.js";
+// ===============================
+//  ELEMENTS
+// ===============================
 
 const container = document.getElementById("cart-container");
-const checkoutBtn = document.getElementById("checkout-btn");
 
-// 🆕 MOBILE SELECTORS
-const mobileTotal = document.querySelector(".mobile-total");
-const mobileCheckoutBtn = document.getElementById("mobile-checkout-btn");
+const checkoutBtn =
+  document.getElementById("checkout-btn");
+
+const mobileTotal =
+  document.querySelector(".mobile-total");
+
+const mobileCheckoutBtn =
+  document.getElementById("mobile-checkout-btn");
+
+// ===============================
+//  INIT
+// ===============================
 
 loadCart();
 
-// ==========================
-// 🛒 LOAD CART (WITH SYNC 🔥)
-// ==========================
+// ===============================
+//  LOAD CART
+// ===============================
+
 async function loadCart() {
+
   const cart = getCart();
 
-  const { updatedCart, changes } = await syncCartWithStock(cart);
+  // STOCK SYNC ONLY ON PAGE LOAD
+  const {
+    updatedCart,
+    changes
+  } = await syncCartWithStock(cart);
 
   saveCart(updatedCart);
-
-  if (updatedCart.length === 0) {
-    container.innerHTML = `
-      <div class="cart-empty">
-        <p class="empty-title">Your cart is empty</p>
-        <p class="empty-sub">Start adding pieces to your rotation.</p>
-      </div>
-    `;
-
-    if (checkoutBtn) {
-      checkoutBtn.textContent = "CHECKOUT ₱0"; // ✅ FIXED (removed dot)
-    }
-
-    if (mobileTotal) {
-      mobileTotal.textContent = "₱0"; // 🆕 MOBILE SYNC
-    }
-
-    return;
-  }
 
   renderCart(updatedCart);
 
   if (changes.length > 0) {
-    console.log("Cart updated:", changes);
+    console.log(
+      "Cart updated:",
+      changes
+    );
   }
 }
 
-// ==========================
-// 🎨 RENDER CART
-// ==========================
+// ===============================
+//  RENDER CART
+// ===============================
+
 function renderCart(cart) {
-  container.innerHTML = "";
 
-  let total = 0;
+  // EMPTY STATE
+  if (!cart.length) {
 
-  cart.forEach(item => {
-    const subtotal = item.price * item.quantity;
-    total += subtotal;
+    container.innerHTML = `
+      <div class="cart-empty">
 
-    const lowStockWarning =
-      item.stock && item.stock <= 3
-        ? `<p class="cart-stock-warning">Only ${item.stock} left</p>`
-        : "";
+        <p class="cart-empty__title">
+          Your cart is empty
+        </p>
 
-    const itemEl = document.createElement("div");
+        <p class="cart-empty__subtext">
+          Start adding pieces to your rotation.
+        </p>
 
-    itemEl.innerHTML = `
-      <div class="cart-item">
-
-        <img src="${item.image}" alt="${item.name}" />
-
-        <div class="cart-info">
-
-          <h3 class="cart-item-name">${item.name}</h3>
-
-          <p class="cart-item-meta">Size: ${item.size}</p>
-
-          ${lowStockWarning}
-
-          <div class="cart-bottom">
-
-            <div class="cart-controls">
-              <button class="minus" data-key="${item.key}">−</button>
-              <span>${item.quantity}</span>
-              <button class="plus" data-key="${item.key}">+</button>
-            </div>
-
-            <div class="cart-actions">
-              <p class="cart-item-price">₱${item.price.toLocaleString()}</p>
-
-              <button class="remove" data-key="${item.key}">
-                Remove
-              </button>
-            </div>
-
-          </div>
-
-        </div>
       </div>
     `;
 
-    container.appendChild(itemEl);
+    updateTotals(0);
+
+    return;
+  }
+
+  // BUILD HTML
+  const fragment =
+    document.createDocumentFragment();
+
+  cart.forEach(item => {
+
+    const itemEl =
+      createCartItem(item);
+
+    fragment.appendChild(itemEl);
+
   });
 
-  // ✅ DESKTOP BUTTON UPDATE
-  if (checkoutBtn) {
-    checkoutBtn.textContent = `CHECKOUT ₱${total.toLocaleString()}`;
-  }
+  // SINGLE DOM UPDATE
+  container.innerHTML = "";
+  container.appendChild(fragment);
 
-  // 🆕 MOBILE BAR UPDATE
-  if (mobileTotal) {
-    mobileTotal.textContent = `₱${total.toLocaleString()}`;
-  }
+  // TOTALS
+  const total = getCartTotal();
+
+  updateTotals(total);
+
 }
 
-// ==========================
-// 🔥 EVENT DELEGATION (ITEM ACTIONS)
-// ==========================
-container.addEventListener("click", async (e) => {
-  const btn = e.target;
+// ===============================
+//  UPDATE TOTALS
+// ===============================
 
-  // ➕ PLUS
-  if (btn.classList.contains("plus")) {
-    const key = btn.dataset.key;
+function updateTotals(total) {
+
+  const formatted =
+    `₱${total.toLocaleString()}`;
+
+  // DESKTOP
+  if (checkoutBtn) {
+
+    checkoutBtn.textContent =
+      `CHECKOUT ${formatted}`;
+
+  }
+
+  // MOBILE
+  if (mobileTotal) {
+
+    mobileTotal.textContent =
+      formatted;
+
+  }
+
+}
+
+// ===============================
+//  CART INTERACTIONS
+// ===============================
+
+container.addEventListener(
+  "click",
+  async (e) => {
+
+    const btn =
+      e.target.closest("button");
+
+    if (!btn) return;
+
+    const key =
+      btn.dataset.key;
+
+    if (!key) return;
 
     const cart = getCart();
-    const item = cart.find(i => i.key === key);
+
+    const item =
+      cart.find(i => i.key === key);
+
     if (!item) return;
 
-    const newQty = item.quantity + 1;
+   // ===========================
+//  INCREASE
+// ===========================
 
-    const product = await getProductById(item.id);
-    const result = validateQuantityUpdate(product, item.size, newQty);
+if (
+  btn.classList.contains("increase")
+) {
 
-    if (!result.valid) {
-      alert(result.message);
+  // PREVENT SPAM CLICKING
+  if (btn.disabled) return;
+
+  btn.disabled = true;
+
+  try {
+
+    const newQty =
+      item.quantity + 1;
+
+    // 🔥 FAST STOCK CHECK
+    if (
+      item.stock &&
+      newQty > item.stock
+    ) {
+
+      alert(
+        `Only ${item.stock} available`
+      );
+
       return;
+
     }
 
-    await updateQuantity(key, newQty);
+    await updateQuantity(
+      key,
+      newQty
+    );
+
+  } finally {
+
+    btn.disabled = false;
+
   }
 
-  // ➖ MINUS
-  if (btn.classList.contains("minus")) {
-    const key = btn.dataset.key;
+}
 
-    const cart = getCart();
-    const item = cart.find(i => i.key === key);
-    if (!item || item.quantity <= 1) return;
+    // ===========================
+    //  DECREASE
+    // ===========================
 
-    const newQty = item.quantity - 1;
+    if (
+      btn.classList.contains("decrease")
+    ) {
 
-    await updateQuantity(key, newQty);
-  }
+      if (item.quantity <= 1) {
+        return;
+      }
 
-  // ❌ REMOVE
-  if (btn.classList.contains("remove")) {
-    const key = btn.dataset.key;
+      if (btn.disabled) return;
 
-    removeFromCart(key);
-  }
-});
+      btn.disabled = true;
 
-// ==========================
-// 🔔 GLOBAL CART SYNC
-// ==========================
-window.addEventListener("cartUpdated", () => {
-  loadCart();
-});
+      try {
 
+        const newQty =
+          item.quantity - 1;
 
-// ==========================
-// 🧾 CHECKOUT BUTTON (FIXED 🔥)
-// ==========================
-document.addEventListener("click", async (e) => {
+        await updateQuantity(
+          key,
+          newQty
+        );
 
-  // DESKTOP CHECKOUT
-  if (e.target.id === "checkout-btn") {
-    const cart = getCart();
+      } finally {
 
-    if (!cart.length) {
-      alert("Your cart is empty");
-      return;
+        btn.disabled = false;
+
+      }
+
     }
 
-    window.location.href = "/checkout.html";
-  }
+    // ===========================
+    //  REMOVE
+    // ===========================
 
-  // 🆕 MOBILE CHECKOUT
-  if (e.target.id === "mobile-checkout-btn") {
-    const cart = getCart();
+    if (
+      btn.classList.contains(
+        "cart-item__remove"
+      )
+    ) {
 
-    if (!cart.length) {
-      alert("Your cart is empty");
-      return;
+      const itemEl =
+        btn.closest(".cart-item");
+
+      // REMOVE ANIMATION
+      if (itemEl) {
+
+        itemEl.classList.add(
+          "cart-item--removing"
+        );
+
+        setTimeout(() => {
+
+          removeFromCart(key);
+
+        }, 180);
+
+      } else {
+
+        removeFromCart(key);
+
+      }
+
     }
 
-    window.location.href = "/checkout.html";
   }
+);
 
-});
+// ===============================
+//  GLOBAL CART UPDATE
+// ===============================
+
+window.addEventListener(
+  "cartUpdated",
+  () => {
+
+    const cart = getCart();
+
+    renderCart(cart);
+
+  }
+);
+
+// ===============================
+//  CHECKOUT
+// ===============================
+
+document.addEventListener(
+  "click",
+  async (e) => {
+
+    // DESKTOP
+    if (
+      e.target.id === "checkout-btn"
+    ) {
+
+      const cart = getCart();
+
+      if (!cart.length) {
+
+        alert("Your cart is empty");
+
+        return;
+
+      }
+
+      window.location.href =
+        "/checkout.html";
+
+    }
+
+    // MOBILE
+    if (
+      e.target.id ===
+      "mobile-checkout-btn"
+    ) {
+
+      const cart = getCart();
+
+      if (!cart.length) {
+
+        alert("Your cart is empty");
+
+        return;
+
+      }
+
+      window.location.href =
+        "/checkout.html";
+
+    }
+
+  }
+);

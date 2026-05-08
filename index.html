@@ -10,27 +10,47 @@
 
   <!-- HERO PRELOAD -->
   <link rel="preload" as="image" href="./assets/images/hero-1.jpg">
-  <link rel="preload" as="image" href="./assets/images/hero-2.jpg">
 
   <!-- FONTS -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <!-- GLOBAL -->
+  <!-- =========================
+       🧱 BASE + LAYOUT
+  ========================== -->
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/utilities.css">
 
-  <!-- COMPONENTS -->
-  <link rel="stylesheet" href="css/components/announcement.css">
-  <link rel="stylesheet" href="css/components/navbar.css">
-  <link rel="stylesheet" href="css/components/product-card.css">
-  <link rel="stylesheet" href="css/components/footer.css">
-  <link rel="stylesheet" href="css/components/cart.css">
-  <link rel="stylesheet" href="css/components/modal.css">
-  <link rel="stylesheet" href="css/components/toast.css">
+  <!-- =========================
+     🧩 COMPONENTS
+========================== -->
+<link rel="stylesheet" href="css/components/navbar.css">
+<link rel="stylesheet" href="css/components/hero.css">
+<link rel="stylesheet" href="css/components/marquee.css">
+<link rel="stylesheet" href="css/components/footer.css">
+<link rel="stylesheet" href="css/components/cart.css">
+<link rel="stylesheet" href="css/components/cart-drawer.css">
+<link rel="stylesheet" href="css/components/payment.css">
 
-  <!-- PAGE -->
+<link rel="stylesheet" href="./css/components/modal.css">
+<link rel="stylesheet" href="./css/components/quick-add.css">
+<link rel="stylesheet" href="./css/components/toast.css">
+<link rel="stylesheet" href="./css/components/product-card.css">
+<link rel="stylesheet" href="./css/components/product-size.css">
+<link rel="stylesheet" href="./css/components/announcement.css">
+
+
+
+
+
+  <!-- =========================
+       📄 PAGE
+  ========================== -->
   <link rel="stylesheet" href="css/pages/home.css">
+
+  <!-- =========================
+       🎯 PAGE CONTEXT
+  ========================== -->
+  <link rel="stylesheet" href="css/pages/page-context.css">
 
   <!-- ICONS -->
   <script src="https://unpkg.com/lucide@latest" defer></script>
@@ -43,22 +63,40 @@
 
     <!-- ANNOUNCEMENT -->
     <div class="announcement">
-      <div class="announcement__track">
 
-        <div class="announcement__group">
-          <span class="announcement__item">Support available 9am–9pm, Mon–Sat</span>
-          <span class="announcement__item">Metro Manila orders arrive in 3–5 business days</span>
-          <span class="announcement__item">Outside Metro Manila orders arrive in 7–10 business days</span>
-        </div>
+  <div class="announcement__track">
 
-        <div class="announcement__group">
-          <span class="announcement__item">Support available 9am–9pm, Mon–Sat</span>
-          <span class="announcement__item">Metro Manila orders arrive in 3–5 business days</span>
-          <span class="announcement__item">Outside Metro Manila orders arrive in 7–10 business days</span>
-        </div>
+    <div class="announcement__group">
+      <span class="announcement__item">
+        Support available 9am–9pm, Mon–Sat
+      </span>
 
-      </div>
+      <span class="announcement__item">
+        Metro Manila orders arrive in 3–5 business days
+      </span>
+
+      <span class="announcement__item">
+        Outside Metro Manila orders arrive in 7–10 business days
+      </span>
     </div>
+
+    <div class="announcement__group">
+      <span class="announcement__item">
+        Support available 9am–9pm, Mon–Sat
+      </span>
+
+      <span class="announcement__item">
+        Metro Manila orders arrive in 3–5 business days
+      </span>
+
+      <span class="announcement__item">
+        Outside Metro Manila orders arrive in 7–10 business days
+      </span>
+    </div>
+
+  </div>
+
+</div>
 
     <!-- NAVBAR -->
     <nav class="navbar">
@@ -102,17 +140,21 @@
   <main>
 
     <section class="hero">
-      <div class="hero__media">
-        <img src="./assets/images/hero-1.jpg" class="hero__image hero__image--active" alt="Hero 1" />
-        <img src="./assets/images/hero-2.jpg" class="hero__image" alt="Hero 2" />
-      </div>
+  <div class="hero__media">
+    <img
+  src="./assets/images/hero-1.jpg"
+  class="hero__image hero__image--active"
+  alt="LÉ SAGE MNL Hero"
+  fetchpriority="high"
+/>
+  </div>
 
-      <div class="hero__content">
-        <a href="./shop.html" class="hero__cta">
-          <span>SHOP THE DROP</span>
-        </a>
-      </div>
-    </section>
+  <div class="hero__content">
+    <a href="./shop.html" class="hero__cta">
+      <span>SHOP THE DROP</span>
+    </a>
+  </div>
+</section>
 
     <section class="marquee">
       <div class="marquee__track">
@@ -131,60 +173,154 @@
 
     <section id="home-drop" class="home-drop">
       <div class="drop-banner">
-        <img src="./assets/images/drop-1.jpg" class="drop-banner__image" loading="lazy" />
+        <img
+  src="./assets/images/drop-1.jpg"
+  class="drop-banner__image"
+  alt="LÉ SAGE MNL Drop Banner"
+  loading="lazy"
+/>
       </div>
     </section>
 
     <section class="products" id="products">
-      <div class="products-header">
-        <h2 class="section-title">FEATURED</h2>
-      </div>
+  <div class="container">
 
-      <div id="product-list" class="product-grid"></div>
+    <div class="products-header">
+      <h2 class="section-title">FEATURED</h2>
+    </div>
 
-      <div class="products-cta">
-        <a href="./shop.html" class="products-link">View All Products</a>
-      </div>
-    </section>
+    <div id="product-list" class="product-grid"></div>
+
+    <div class="products-cta">
+      <a href="./shop.html" class="products-link">View All Products</a>
+    </div>
+
+  </div>
+</section>
 
     <!-- VIDEO GRID -->
-    <section class="home-video-grid">
-      <div class="video-item">
-        <video src="./assets/about1.mp4" preload="metadata" muted playsinline loop></video>
-      </div>
-      <div class="video-item">
-        <video src="./assets/about2.mp4" preload="metadata" muted playsinline loop></video>
-      </div>
-      <div class="video-item">
-        <video src="./assets/about3.mp4" preload="metadata" muted playsinline loop></video>
-      </div>
-    </section>
+<section class="home-video-grid">
+
+  <div class="video-item">
+    <video
+      src="./assets/about1.mp4"
+      preload="metadata"
+      autoplay
+      muted
+      playsinline
+      loop
+    ></video>
+  </div>
+
+  <div class="video-item">
+    <video
+      src="./assets/about2.mp4"
+      preload="metadata"
+      autoplay
+      muted
+      playsinline
+      loop
+    ></video>
+  </div>
+
+  <div class="video-item">
+    <video
+      src="./assets/about3.mp4"
+      preload="metadata"
+      autoplay
+      muted
+      playsinline
+      loop
+    ></video>
+  </div>
+
+</section>
 
   </main>
 
-  <!-- CART -->
-  <div class="cart-overlay" id="cart-overlay"></div>
+  <!-- ================= CART DRAWER ================= -->
 
-  <aside class="cart-drawer" id="cart-drawer">
-    <div class="cart-header">
-      <h2>Your Cart</h2>
-      <button id="close-cart">✕</button>
-    </div>
-    <div id="cart-items"></div>
-    <div id="cart-total"></div>
-  </aside>
+<div
+  class="cart-overlay"
+  id="cart-overlay"
+></div>
 
-  <!-- QUICK ADD -->
-  <div id="quick-add-overlay" class="quick-add-overlay"></div>
+<aside
+  class="cart-drawer"
+  id="cart-drawer"
+>
 
-  <div id="quick-add-modal" class="quick-add-modal">
-    <div class="quick-add-content">
-      <button id="quick-add-close">×</button>
-      <h3 id="qa-title"></h3>
-      <p id="qa-price"></p>
-      <div id="qa-colors"></div>
-      <div id="qa-sizes"></div>
-      <button id="qa-add-btn" disabled>ADD TO CART</button>
+  <!-- HEADER -->
+  <div class="cart-drawer__header">
+
+    <h2 class="cart-drawer__title">
+      Your Cart
+    </h2>
+
+    <button
+      id="close-cart"
+      class="cart-drawer__close"
+      aria-label="Close Cart"
+    >
+      ✕
+    </button>
+
+  </div>
+
+  <!-- ITEMS -->
+  <div
+    id="cart-items"
+    class="cart-drawer__items"
+  ></div>
+
+  <!-- FOOTER -->
+  <div
+    id="cart-total"
+    class="cart-drawer__footer"
+  ></div>
+
+</aside>
+
+  <!-- ================= QUICK ADD (FIXED) ================= -->
+  <div
+  id="quick-add-overlay"
+  class="modal"
+></div>
+
+<div
+  id="quick-add-modal"
+  class="modal quick-add"
+>
+    <div class="quick-add__content">
+
+      <button id="quick-add-close" class="quick-add__close">×</button>
+
+      <div class="quick-add__body">
+        <h3 
+  id="qa-title"
+  class="quick-add__title"
+></h3>
+
+<p 
+  id="qa-price"
+  class="quick-add__price"
+></p>
+
+        <div 
+  id="qa-colors"
+  class="quick-add__colors"
+></div>
+
+        <div 
+  id="qa-sizes"
+  class="quick-add__sizes"
+></div>
+
+        <button id="qa-add-btn" class="quick-add__button" disabled>
+          ADD TO CART
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -206,6 +342,7 @@
 
   <!-- JS -->
   <script type="module" src="./js/components/navbar.js"></script>
+  <script type="module" src="./js/components/main.js"></script>
   <script type="module" src="./js/components/footerLoader.js"></script>
   <script type="module" src="./js/pages/home.js"></script>
 

@@ -1,0 +1,100 @@
+/* =========================
+   MODAL BASE
+========================= */
+
+.modal {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity 0.25s ease;
+}
+
+.modal__body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+
+/* =========================
+   MODAL OVERLAY
+========================= */
+
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.4);
+}
+
+
+/* =========================
+   MODAL CONTENT
+========================= */
+
+.modal__content {
+  position: relative;
+  z-index: 2;
+
+  width: 90%;
+  max-width: 700px;
+
+  padding: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fff;
+
+  opacity: 0;
+  transform: translateY(10px);
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.modal.active .modal__content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* =========================
+   MODAL CLOSE BUTTON
+========================= */
+
+.modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background: none;
+  border: none;
+
+  cursor: pointer;
+
+  font-size: 20px;
+}
+
+
+/* =========================
+   SIZE CHART MODAL
+========================= */
+
+.size-chart-modal {
+  z-index: var(--z-modal, 1000);
+}

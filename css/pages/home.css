@@ -1,63 +1,7 @@
 /* =========================
-   HOME — HERO (FINAL CLEAN)
+   HOME — PAGE LAYOUT ONLY
+   (NO COMPONENT / NO SYSTEM OVERRIDES)
 ========================= */
-
-.hero {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  overflow: hidden;
-  padding-bottom: 0;
-}
-
-/* 🎬 VIDEO */
-.hero__video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hero__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient();
-}
-
-/* 🔥 CENTER CONTENT */
-.hero__content {
-  position: absolute;
-  top: 52%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-}
-
-/* =========================
-   HERO CTA — GLASS BUTTON
-========================= */
-
-.hero__explore {
-  position: relative;
-  display: inline-block;
-  padding: 10px 18px;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #fff;
-  text-decoration: none;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(6px);
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.hero__explore:hover {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.9);
-}
 
 /* =========================
    HOME DROP
@@ -65,7 +9,6 @@
 
 .home-drop {
   padding: 80px 0 100px;
-  margin-top: 0;
 }
 
 .drop-banner img {
@@ -75,7 +18,7 @@
 }
 
 /* =========================
-   VIEW DROP (RESTORED)
+   VIEW DROP
 ========================= */
 
 .view-drop {
@@ -111,134 +54,25 @@
 }
 
 /* =========================
-   PRODUCTS
+   PRODUCTS (SPACING ONLY)
 ========================= */
 
 .products {
   width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 30px 40px 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 60px 0 100px;
 }
 
-.section-title {
+.products-header {
+  text-align: center;
   margin-bottom: 64px;
 }
 
-.product-grid {
-  width: 100%;
-  max-width: none;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
-}
-
-/* =========================
-   CART OVERLAY (RESTORED)
-========================= */
-
-.cart-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  opacity: 0;
-  visibility: hidden;
-  transition: var(--transition-smooth);
-  z-index: 1000;
-}
-
-.cart-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* =========================
-   CART DRAWER (RESTORED)
-========================= */
-
-.cart-drawer {
-  position: fixed;
-  top: 0;
-  right: -400px;
-  width: 360px;
-  height: 100%;
-  background: var(--color-white);
-  box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  transition: right var(--transition-smooth);
-  z-index: 1001;
-}
-
-.cart-drawer.active {
-  right: 0;
-}
-
-/* =========================
-   CART ITEMS (RESTORED)
-========================= */
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--space-sm);
-}
-
-.cart-qty {
-  display: flex;
-  gap: 8px;
-}
-
-.qty-btn {
-  border: 1px solid rgba(0,0,0,0.2);
-  padding: 2px 6px;
-}
-
-/* =========================
-   HERO — TYPOGRAPHY
-========================= */
-
-.hero__brand {
-  font-size: 44px;
-  letter-spacing: 0.05em;
-  font-weight: 600;
-  color: #ffffff;
+.section-title {
   margin: 0;
-  text-shadow: 0 4px 30px rgba(0,0,0,0.5);
-  transition: transform 0.4s ease;
-}
-
-.hero:hover .hero__brand {
-  transform: scale(1.02);
 }
 
 /* =========================
-   HERO — CTA
-========================= */
-
-.hero__cta {
-  margin-top: 20px;
-  padding: 12px 28px;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  background: transparent;
-  color: white;
-  border: 1.5px solid rgba(255,255,255,0.9);
-  transition: all 0.3s ease;
-  opacity: 0.9;
-}
-
-.hero__cta:hover {
-  background: white;
-  color: black;
-  transform: translateY(-2px);
-}
-
-/* =========================
-   🔥 PRODUCTS CTA
+   PRODUCTS CTA
 ========================= */
 
 .products-cta {
@@ -276,32 +110,39 @@
   opacity: 1;
 }
 
-
 /* =========================
-    HOME VIDEO GRID (FIXED SPACING)
+   HOME VIDEO GRID
 ========================= */
 
 .home-video-grid {
   width: 100%;
   background: #fff;
-  padding: 0;
 
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-
 }
 
 .video-item {
   width: 100%;
+  overflow: hidden;
 }
 
 .video-item video {
-  width: 100%;
-  height: auto;
   display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
   cursor: pointer;
+
+  transform: scale(1.01);
 }
+
+/* =========================
+   RESPONSIVE
+========================= */
 
 @media (max-width: 768px) {
 
@@ -320,8 +161,9 @@
 }
 
 /* =========================
-   🏠 HOME NAVBAR
+   NAVBAR CONTEXT (HOME ONLY)
 ========================= */
+
 body.home-page .navbar {
   background: transparent;
 }

@@ -1,0 +1,206 @@
+/* =========================
+   PAYMENT METHODS
+========================= */
+
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-top: 12px;
+}
+
+
+/* =========================
+   PAYMENT CARD
+========================= */
+
+.payment-card {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  padding: 18px;
+
+  border: 1px solid #f0f0f0;
+  border-radius: 14px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.payment-card:hover {
+  border-color: #ddd;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+.payment-card.active {
+  border-color: #000;
+
+  box-shadow: inset 0 0 0 1px #000;
+}
+
+
+/* =========================
+   PAYMENT CARD HEADER
+========================= */
+
+.payment-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 6px;
+}
+
+.payment-card__title {
+  font-size: 13.5px;
+  font-weight: 600;
+
+  letter-spacing: 0.1em;
+}
+
+.payment-card__badge {
+  font-size: 11px;
+
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  opacity: 0.5;
+}
+
+
+/* =========================
+   PAYMENT CARD BODY
+========================= */
+
+.payment-card__desc {
+  font-size: 13px;
+
+  color: #777;
+  text-align: left;
+}
+
+
+/* =========================
+   PAYMENT SUBTEXT
+========================= */
+
+.checkout__payment-sub {
+  font-size: 13px;
+
+  color: #666;
+}
+
+
+/* =========================
+   PAYMENT UNIFIED
+========================= */
+
+.payment-unified {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-top: 20px;
+  padding-top: 18px;
+
+  border-top: 1px solid #ececec;
+}
+
+
+/* =========================
+   PAYMENT UNIFIED TOP
+========================= */
+
+.payment-unified__top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  margin-bottom: 12px;
+}
+
+.payment-unified__label {
+  font-size: 12px;
+  font-weight: 500;
+
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  color: #666;
+}
+
+.payment-unified__logos {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+
+/* =========================
+   PAYMENT BADGE
+========================= */
+
+.pay-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 54px;
+  height: 34px;
+
+  border: 1px solid #f1f1f1;
+  border-radius: 10px;
+
+  background: #fff;
+}
+
+
+.pay-badge img {
+  max-width: 68%;
+  max-height: 16px;
+
+  object-fit: contain;
+}
+
+
+/* =========================
+   PAYMENT UNIFIED BOTTOM
+========================= */
+
+.payment-unified__bottom {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  text-align: center;
+}
+
+.payment-unified__text {
+  font-size: 12px;
+  line-height: 1.5;
+
+  color: #666;
+}
+
+.payment-unified__text--muted {
+  color: #8a8a8a;
+}

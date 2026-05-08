@@ -1,0 +1,266 @@
+/* =========================
+    SIZE CHART TABLE
+========================= */
+
+.size-chart-table {
+  margin-top: 20px;
+}
+
+.size-chart-table__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+.size-chart-table__header {
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+}
+
+.size-chart-image__img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* =========================
+    SIZE GUIDE (BEM — KEEP)
+========================= */
+
+.size-guide__content {
+  padding: 24px;
+}
+
+.size-guide__title {
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.size-guide__unit {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 16px;
+}
+
+.size-guide__table {
+  width: auto;
+  min-width: 520px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.size-guide__table th,
+.size-guide__table td {
+  padding: 12px;
+  text-align: center;
+}
+
+.size-guide__table thead {
+  border-bottom: 1px solid #ddd;
+}
+
+.size-guide__table tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s ease;
+}
+
+.size-guide__table tbody tr:hover {
+  background: #f5f5f5;
+}
+
+.size-guide__table tr.active {
+  background: #111;
+  color: #fff;
+}
+
+.size-guide__table tr.active td {
+  font-weight: 500;
+}
+
+.size-guide__empty {
+  padding: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+}
+
+
+/* =========================
+    SIZE SELECTOR (UPGRADED)
+========================= */
+
+/* container */
+.product-size__options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* item */
+.product-size__option {
+  position: relative;
+
+  padding: 6px 10px;
+  margin: 12px 6px;
+
+  font-size: 12px;
+  cursor: pointer;
+
+  border: 1px solid transparent;
+  opacity: 0.6;
+
+  transition: opacity 0.2s ease, border 0.2s ease, transform 0.15s ease;
+}
+
+.product-size__option:hover:not(.product-size__option--disabled) {
+  opacity: 1;
+
+  border-color: #111;
+}
+
+.product-size__option:hover {
+  opacity: 1;
+}
+
+.product-size__option--active {
+  background: #fff;
+
+  color: #111;
+
+  border: 1px solid #111;
+
+  opacity: 1;
+
+  font-weight: 500;
+
+  transform: none;
+}
+
+
+/* =========================
+    DISABLED STATE
+========================= */
+
+.product-size__option--disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.product-size__option--disabled::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 12%;
+  width: 76%;
+  height: 1px;
+
+  background: currentColor;
+  transform: rotate(-12deg);
+  opacity: 0.8;
+}
+
+.product-size__option--disabled:hover {
+  opacity: 0.35;
+  transform: none;
+}
+
+
+/* =========================
+    TOOLTIP
+========================= */
+
+.product-size__option--disabled::before {
+  content: "Out of stock";
+
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity 0.2s ease;
+}
+
+.product-size__option--disabled:hover::before {
+  opacity: 1;
+}
+
+/* ===============================
+   SIZES
+=============================== */
+
+.product-detail__sizes {
+  width: 100%;
+  max-width: 320px;
+}
+
+/* ===============================
+   SIZE HEADER
+=============================== */
+
+.product-detail__sizes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  width: 100%;
+
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+/* ===============================
+   SIZE LABEL
+=============================== */
+
+.product-detail__sizes-label {
+  display: block;
+
+  font-size: 12px;
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+
+  color: #555;
+}
+
+
+/* ===============================
+   SIZE CHART BUTTON
+=============================== */
+
+.product-detail__size-chart-btn {
+  background: none;
+  border: none;
+
+  cursor: pointer;
+
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+
+  text-decoration: underline;
+
+  color: #555;
+  opacity: 0.7;
+
+  transition: opacity 0.2s ease;
+}
+
+.product-detail__size-chart-btn:hover {
+  opacity: 1;
+}

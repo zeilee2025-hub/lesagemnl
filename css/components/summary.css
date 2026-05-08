@@ -1,0 +1,231 @@
+/* =========================
+   SUMMARY ITEMS
+========================= */
+
+.summary__items {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+
+  border-bottom: 1px solid #eee;
+}
+
+
+/* =========================
+   CHECKOUT ITEM
+========================= */
+
+.checkout-item {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding-bottom: 12px;
+
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.checkout-item:last-child {
+  border-bottom: none;
+}
+
+
+/* =========================
+   ITEM MEDIA
+========================= */
+
+.checkout-item__media {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+
+  overflow: hidden;
+
+  border-radius: 8px;
+
+  background: #fafafa;
+}
+
+.checkout-item__media img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+
+/* =========================
+   ITEM INFO
+========================= */
+
+.checkout-item__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.checkout-item__name {
+  margin-bottom: 2px;
+
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.checkout-item__meta,
+.checkout-item__qty {
+  font-size: 11px;
+  line-height: 1.2;
+
+  color: #777;
+
+  opacity: 0.8;
+}
+
+
+/* =========================
+   ITEM PRICE
+========================= */
+
+.checkout-item__price {
+  margin-left: auto;
+
+  align-self: center;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+
+/* =========================
+   SUMMARY ROWS
+========================= */
+
+.summary__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 6px;
+
+  font-size: 13px;
+
+  color: #555;
+}
+
+
+/* =========================
+   FREE SHIPPING
+========================= */
+
+.summary__free {
+  margin-top: 8px;
+  margin-bottom: 6px;
+
+  font-size: 13px;
+  line-height: 1.4;
+
+  color: #555;
+}
+
+.summary__free-amount {
+  font-weight: 500;
+
+  color: #111;
+}
+
+.summary__free.success {
+  font-weight: 500;
+
+  color: #111;
+}
+
+
+/* =========================
+   DIVIDER
+========================= */
+
+.summary__divider {
+  height: 1px;
+
+  margin: 14px 0;
+
+  background: #eee;
+}
+
+
+/* =========================
+   SUMMARY TOTAL
+========================= */
+
+.summary__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #111;
+}
+
+.summary__total span:last-child {
+  font-size: 18px;
+  font-weight: 600;
+
+  letter-spacing: -0.2px;
+}
+
+
+/* =========================
+   SUMMARY BUTTON
+========================= */
+
+.summary__btn {
+  width: 100%;
+  height: 48px;
+
+  margin-top: 14px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #000;
+  color: #fff;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+
+  transition: opacity 0.2s ease;
+}
+
+.summary__btn:hover {
+  opacity: 0.9;
+}
+
+
+/* =========================
+   SUMMARY TRUST
+========================= */
+
+.summary__trust {
+  margin-top: 10px;
+
+  font-size: 12px;
+  text-align: center;
+
+  color: #888;
+}

@@ -1,487 +1,403 @@
-import { getCart, saveCart } from "../services/cartService.js";
+import {
+  getCart,
+  saveCart
+} from "../services/cartService.js";
+
 import { renderCheckoutItems } from "../components/checkoutUI.js";
-import { calculateTotals } from "../core/checkoutLogic.js";
-import { validateCartBeforeCheckout } from "../core/checkoutValidation.js";
-import { syncCartWithStock } from "../core/stock.js";
-import { createPaymentSession } from "../services/paymentService.js";
-import { saveOrder } from "../services/orderService.js";
 
 import {
-  getRegions,
-  getCities,
-  findRegionByProvince
-} from "../services/locationService.js";
+  renderTotals,
+  clearSummary
+} from "../components/checkoutSummary.js";
 
-import { getZone } from "../services/shippingService.js";
+import {
+  initProvinces,
+  setupProvinceSearch,
+  selectedProvince,
+  selectedRegion
+} from "../components/locationUI.js";
 
-// ✅ NEW
 import {
   getCheckoutFormData,
   validateCheckoutForm
 } from "../core/checkoutForm.js";
 
-// ==========================
-// 📦 DOM REFERENCES
-// ==========================
+import {
+  clearError,
+  showFormErrors
+} from "../components/checkoutValidationUI.js";
+
+import { calculateTotals } from "../core/checkoutLogic.js";
+import { validateCartBeforeCheckout } from "../core/checkoutValidation.js";
+import { syncCartWithStock } from "../core/stock.js";
+
+import { createPaymentSession } from "../services/paymentService.js";
+import { saveOrder } from "../services/orderService.js";
+
+
+/* =========================
+   DOM REFERENCES
+========================= */
+
 let itemsContainer;
 let summaryContainer;
 
 let provinceInput;
 let provinceDropdown;
+
 let citySelect;
-let postalInput;
 let cityManualInput;
 let cityFallbackTrigger;
+
+let postalInput;
+
 let isManualCity = false;
 
-// ==========================
-// 🧠 STATE
-// ==========================
+
+/* =========================
+   STATE
+========================= */
+
 let cartData = [];
-let selectedRegion = "";
-let selectedProvince = "";
-let allProvinces = [];
 let paymentMethod = "PAYMONGO";
 
-// ==========================
-// 🛒 CART BADGE
-// ==========================
+/* =========================
+   SUMMARY UPDATE
+========================= */
+
+function updateSummary() {
+  renderTotals({
+    cartData,
+    summaryContainer,
+    citySelect,
+    cityManualInput,
+    isManualCity,
+    selectedProvince,
+    selectedRegion,
+    paymentMethod
+  });
+}
+
+
+/* =========================
+   CART BADGE
+========================= */
+
 function updateCartBadge(cart) {
   const badge = document.getElementById("cart-badge");
+
   if (!badge) return;
 
-  const count = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+  const count = cart.reduce(
+    (total, item) => total + (item.quantity || 1),
+    0
+  );
+
   badge.textContent = count;
 }
 
-// ==========================
-// 💾 LOCAL STORAGE
-// ==========================
+
+/* =========================
+   LOCAL STORAGE
+========================= */
+
 function saveCheckoutData(data) {
-  localStorage.setItem("checkoutData", JSON.stringify(data));
+  localStorage.setItem(
+    "checkoutData",
+    JSON.stringify(data)
+  );
 }
 
 function loadCheckoutData() {
   const data = localStorage.getItem("checkoutData");
-  return data ? JSON.parse(data) : null;
+
+  return data
+    ? JSON.parse(data)
+    : null;
 }
 
-// ==========================
-// 🚀 INIT
-// ==========================
+
+/* =========================
+   INIT
+========================= */
+
 async function init() {
+
+  cacheDom();
+
+  await initProvinces();
+
+  setupProvinceSearch({
+    provinceInput,
+    provinceDropdown,
+
+    citySelect,
+    cityManualInput,
+    cityFallbackTrigger,
+
+    updateSummary,
+
+    setManualCityMode: (
+      value
+    ) => {
+      isManualCity = value;
+    }
+  });
+
+  setupLocationEvents();
+
+  hydrateCheckoutData();
+
+  setupInputPersistence();
+
+  setupCheckoutButton();
+
+  await loadCheckout();
+
+  setupPaymentSelection();
+
+  updateCheckoutButton();
+
+}
+
+init();
+
+
+/* =========================
+   CACHE DOM
+========================= */
+
+function cacheDom() {
   itemsContainer = document.getElementById("checkout-items");
   summaryContainer = document.getElementById("checkout-summary");
 
   provinceInput = document.getElementById("checkout-province-input");
   provinceDropdown = document.getElementById("province-dropdown");
+
   citySelect = document.getElementById("checkout-city");
+
   postalInput = document.getElementById("checkout-postal");
+
   cityManualInput = document.getElementById("checkout-city-manual");
-  cityFallbackTrigger = document.getElementById("city-fallback-trigger");
 
-  await initProvinces();
-  setupProvinceSearch();
+  cityFallbackTrigger = document.getElementById(
+    "city-fallback-trigger"
+  );
+}
 
-  if (citySelect) {
-    citySelect.addEventListener("change", renderTotals);
-  }
 
+/* =========================
+   HYDRATE STORAGE
+========================= */
+
+function hydrateCheckoutData() {
   const saved = loadCheckoutData();
-  if (saved) {
-    document.getElementById("checkout-email").value = saved.email || "";
-    document.getElementById("checkout-phone").value = saved.phone || "";
+
+  if (!saved) return;
+
+  const emailInput = document.getElementById("checkout-email");
+  const phoneInput = document.getElementById("checkout-phone");
+
+  if (emailInput) {
+    emailInput.value = saved.email || "";
   }
 
-  document.addEventListener("input", (e) => {
+  if (phoneInput) {
+    phoneInput.value = saved.phone || "";
+  }
+}
+
+
+/* =========================
+   INPUT PERSISTENCE
+========================= */
+
+function setupInputPersistence() {
+  document.addEventListener("input", (event) => {
+
     saveCheckoutData({
       email: document.getElementById("checkout-email")?.value,
       phone: document.getElementById("checkout-phone")?.value
     });
 
-    if (e.target.classList.contains("checkout__input")) {
-      clearError(e.target);
+    if (
+      event.target.classList.contains("checkout__input")
+    ) {
+      clearError(event.target);
     }
   });
+}
 
-  document.addEventListener("click", (e) => {
-  const btn = e.target.closest("#checkout-btn");
-  if (btn) {
+
+/* =========================
+   CHECKOUT BUTTON
+========================= */
+
+function setupCheckoutButton() {
+  document.addEventListener("click", (event) => {
+
+    const button = event.target.closest("#checkout-btn");
+
+    if (!button) return;
+
     handleCheckout();
-  }
-});
-
-// ==========================
-// 🧠 CITY FALLBACK LOGIC
-// ==========================
-if (cityFallbackTrigger && cityManualInput && citySelect) {
-  cityFallbackTrigger.addEventListener("click", () => {
-    cityManualInput.value = "";
-    isManualCity = true;
-
-    citySelect.style.display = "none";
-    cityFallbackTrigger.style.display = "none";
-    cityManualInput.style.display = "block";
-
-    cityManualInput.focus();
-
-    renderTotals();
   });
 }
 
-if (cityManualInput) {
-  cityManualInput.addEventListener("input", renderTotals);
-}
 
-  await loadCheckout();
+/* =========================
+   LOCATION EVENTS
+========================= */
 
-setupPaymentSelection();
-updateCheckoutButton();
-}
+function setupLocationEvents() {
 
-init();
-
-// ==========================
-// 🌍 PROVINCES
-// ==========================
-async function initProvinces() {
-  const regions = await getRegions();
-
-  allProvinces = [];
-
-  regions.forEach(region => {
-    region.provinces.forEach(p => {
-      allProvinces.push(p.name);
+  if (citySelect) {
+    citySelect.addEventListener("change", () => {
+      updateSummary();
     });
-  });
-
-  allProvinces.sort((a, b) => a.localeCompare(b));
-}
-
-// ==========================
-// 🔍 SEARCH
-// ==========================
-function setupProvinceSearch() {
-  if (!provinceInput || !provinceDropdown) return;
-
-  provinceInput.addEventListener("input", () => {
-    const query = provinceInput.value.toLowerCase();
-
-    const filtered = allProvinces.filter(p =>
-      p.toLowerCase().includes(query)
-    );
-
-    renderProvinceDropdown(filtered);
-  });
-
-  provinceInput.addEventListener("focus", () => {
-    renderProvinceDropdown(allProvinces);
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!provinceDropdown.contains(e.target) && e.target !== provinceInput) {
-      provinceDropdown.style.display = "none";
-    }
-  });
-}
-
-// ==========================
-// 📋 DROPDOWN
-// ==========================
-function renderProvinceDropdown(list) {
-  provinceDropdown.innerHTML = "";
-
-  if (!list.length) {
-    provinceDropdown.style.display = "none";
-    return;
   }
 
-  list.forEach(name => {
-    const item = document.createElement("div");
-    item.className = "dropdown-item";
-    item.textContent = name;
+  if (
+    cityFallbackTrigger &&
+    cityManualInput &&
+    citySelect
+  ) {
 
-    item.addEventListener("click", async () => {
-      provinceInput.value = name;
-      provinceDropdown.style.display = "none";
-      selectedProvince = name;
-      await handleProvinceSelection(name);
+    cityFallbackTrigger.addEventListener("click", () => {
+
+      cityManualInput.value = "";
+
+      isManualCity = true;
+
+      citySelect.style.display = "none";
+
+      cityFallbackTrigger.style.display = "none";
+
+      cityManualInput.style.display = "block";
+
+      cityManualInput.focus();
+
+      updateSummary();
     });
-
-    provinceDropdown.appendChild(item);
-  });
-
-  provinceDropdown.style.display = "block";
-}
-
-// ==========================
-// 🧠 HANDLE LOCATION
-// ==========================
-async function handleProvinceSelection(province) {
-  const resolvedRegion = await findRegionByProvince(province);
-
-  if (resolvedRegion) {
-    selectedRegion = resolvedRegion;
   }
 
-  const cities = await getCities(resolvedRegion, province);
-  // ALWAYS reset fallback trigger first
-if (cityFallbackTrigger) {
-  cityFallbackTrigger.style.display = "none";
+  if (cityManualInput) {
+    cityManualInput.addEventListener("input", () => {
+
+      updateSummary();
+
+    });
+  }
 }
 
-// reset mode
-isManualCity = false;
 
-if (cityManualInput) {
-  cityManualInput.style.display = "none";
-  cityManualInput.value = "";
-}
+/* =========================
+   LOAD CHECKOUT
+========================= */
 
-if (citySelect) {
-  citySelect.style.display = "block";
-  citySelect.innerHTML = `<option value="">Select City</option>`;
-}
-
-// 🚨 NO CITIES → FORCE MANUAL
-if (!cities.length) {
-  if (citySelect) citySelect.style.display = "none";
-  if (cityFallbackTrigger) cityFallbackTrigger.style.display = "none";
-  if (cityManualInput) cityManualInput.style.display = "block";
-
-  isManualCity = true;
-
-  renderTotals();
-  return;
-}
-
-// ✅ NORMAL FLOW
-cities.forEach(c => {
-  citySelect.innerHTML += `<option value="${c}">${c}</option>`;
-});
-
-// show fallback option
-if (cityFallbackTrigger && cities.length > 1) {
-  cityFallbackTrigger.style.display = "block";
-}
-
-// auto-select if single
-if (cities.length === 1) {
-  citySelect.value = cities[0];
-}
-
-renderTotals();
-}
-
-// ==========================
-// 🛒 LOAD CART
-// ==========================
 async function loadCheckout() {
+
   try {
+
     const cart = getCart();
-    cartData = Array.isArray(cart) ? cart : [];
+
+    cartData = Array.isArray(cart)
+      ? cart
+      : [];
 
     updateCartBadge(cartData);
 
-    renderCheckoutItems(itemsContainer, cartData);
+    renderCheckoutItems(
+      itemsContainer,
+      cartData
+    );
 
     if (!cartData.length) {
-      clearSummary();
+      clearSummary(summaryContainer);
       return;
     }
 
-    renderTotals();
-    // attachCheckoutButton();
+    updateSummary();
 
   } catch (error) {
-    console.error("Error loading cart:", error);
+
+    console.error(
+      "Error loading cart:",
+      error
+    );
+
     if (itemsContainer) {
-      itemsContainer.innerHTML = "<p>Failed to load cart.</p>";
+      itemsContainer.innerHTML =
+        "<p>Failed to load cart.</p>";
     }
   }
 }
 
 
-// ==========================
-// 💳 PAYMENT SELECTION
-// ==========================
-function setupPaymentSelection() {
-  const cards = document.querySelectorAll(".payment-card");
+/* =========================
+   PAYMENT SELECTION
+========================= */
 
-  cards.forEach(card => {
+function setupPaymentSelection() {
+
+  const cards = document.querySelectorAll(
+    ".payment-card"
+  );
+
+  cards.forEach((card) => {
+
     card.addEventListener("click", () => {
 
-      // remove active
-      cards.forEach(c => c.classList.remove("active"));
+      cards.forEach((currentCard) => {
+        currentCard.classList.remove("active");
+      });
 
-      // add active
       card.classList.add("active");
 
-      // update state
       paymentMethod = card.dataset.method;
 
       updateCheckoutButton();
+
+      updateSummary();
+
     });
+
   });
+
 }
 
-// ==========================
-// 🔄 UPDATE BUTTON TEXT
-// ==========================
+
+/* =========================
+   UPDATE BUTTON
+========================= */
+
 function updateCheckoutButton() {
-  const btn = document.getElementById("checkout-btn");
-  if (!btn) return;
+
+  const button =
+    document.getElementById("checkout-btn");
+
+  if (!button) return;
 
   if (paymentMethod === "PAYMONGO") {
-    btn.textContent = "Proceed to Payment";
+    button.textContent =
+      "Proceed to Payment";
   } else {
-    btn.textContent = "Place Order";
+    button.textContent =
+      "Place Order";
   }
 }
 
-// ==========================
-// 🧹 CLEAR
-// ==========================
-function clearSummary() {
-  if (summaryContainer) summaryContainer.innerHTML = "";
-}
 
-// ==========================
-// 🚚 DELIVERY
-// ==========================
-function getDeliveryEstimate(zone) {
-  return zone === "NCR"
-    ? "3–5 business days"
-    : "7–10 business days";
-}
+/* =========================
+   HANDLE CHECKOUT
+========================= */
 
-// ==========================
-// 💰 TOTALS
-// ==========================
-function renderTotals() {
-  const totals = calculateTotals(cartData, selectedRegion);
-
-  const cityValueRaw = isManualCity
-  ? cityManualInput?.value
-  : citySelect?.value;
-
-const cityValue = cityValueRaw?.trim();
-
-const hasLocation =
-  selectedRegion &&
-  selectedProvince &&
-  cityValue;
-
-  const zone = hasLocation ? getZone(selectedRegion) : null;
-  const deliveryEstimate = hasLocation
-    ? getDeliveryEstimate(zone)
-    : null;
-
-  if (summaryContainer) {
-    summaryContainer.innerHTML = `
-      <div class="summary">
-
-        <div class="summary__row">
-          <span>Subtotal</span>
-          <span>₱${totals.subtotal.toLocaleString()}</span>
-        </div>
-
-        <div class="summary__row">
-          <span>Shipping ${zone ? `(${zone})` : ""}</span>
-          <span>
-            ${
-              hasLocation
-                ? (totals.isFreeShipping ? "Free" : `₱${totals.shipping}`)
-                : "—"
-            }
-          </span>
-        </div>
-
-        <div class="summary__row">
-          <span>Estimated delivery</span>
-          <span>${hasLocation ? deliveryEstimate : "—"}</span>
-        </div>
-
-        ${
-          hasLocation && !totals.isFreeShipping
-            ? `<p class="summary__free">
-                 <span class="summary__free-amount">₱${totals.remainingForFree}</span> more to reach free shipping
-               </p>`
-            : hasLocation && totals.isFreeShipping
-            ? `<p class="summary__free success">
-                 You’ve unlocked free shipping!
-               </p>`
-            : ""
-        }
-
-        <div class="summary__divider"></div>
-
-        <div class="summary__total">
-          <span>Total</span>
-          <span>₱${totals.total.toLocaleString()}</span>
-        </div>
-
-        <button class="summary__btn" id="checkout-btn"></button>
-
-      </div>
-    `;
-  }
-
-  // ✅ ALWAYS update button AFTER rendering
-  updateCheckoutButton();
-}
-
-// ==========================
-// ❌ VALIDATION UI
-// ==========================
-function clearError(input) {
-  if (!input) return;
-
-  input.classList.remove("input-error");
-
-  const error = input.parentElement.querySelector(".input-error-text");
-  if (error) error.remove();
-}
-
-function showFormErrors(errors) {
-  Object.entries(errors).forEach(([field, message]) => {
-    const input = getInputByField(field);
-    if (!input) return;
-
-    input.classList.add("input-error");
-
-    let errorEl = input.parentElement.querySelector(".input-error-text");
-
-    if (!errorEl) {
-      errorEl = document.createElement("div");
-      errorEl.className = "input-error-text";
-      input.parentElement.appendChild(errorEl);
-    }
-
-    errorEl.textContent = message;
-  });
-}
-
-function getInputByField(field) {
-  const map = {
-    email: "checkout-email",
-    phone: "checkout-phone",
-    firstName: "checkout-first-name",
-    lastName: "checkout-last-name",
-    address: "checkout-address",
-    province: "checkout-province-input",
-    city: isManualCity ? "checkout-city-manual" : "checkout-city",
-    postal: "checkout-postal"
-  };
-
-  return document.getElementById(map[field]);
-}
-
-// ==========================
-// 💳 CHECKOUT (FINAL)
-// ==========================
 async function handleCheckout() {
-  const btn = document.getElementById("checkout-btn");
+
+  const button =
+    document.getElementById(
+      "checkout-btn"
+    );
 
   if (!cartData.length) {
     alert("Your cart is empty.");
@@ -489,108 +405,165 @@ async function handleCheckout() {
   }
 
   try {
-    btn.disabled = true;
-    btn.textContent = "Processing...";
 
-    // 🧠 FORM
-    const formData = getCheckoutFormData();
-    console.log("🧪 FORM DATA:", formData);
+    button.disabled = true;
+    button.textContent = "Processing...";
 
-    const formValidation = validateCheckoutForm(formData);
+    const formData =
+      getCheckoutFormData();
+
+    const formValidation =
+      validateCheckoutForm(formData);
 
     if (!formValidation.valid) {
-      showFormErrors(formValidation.errors);
-      resetButton(btn);
+
+      showFormErrors({
+  errors:
+    formValidation.errors,
+
+  isManualCity
+});
+
+      resetButton(button);
+
       return;
     }
 
-    // 🔄 STOCK
-    const { updatedCart, changes } = await syncCartWithStock(cartData);
+
+    /* =========================
+       STOCK SYNC
+    ========================= */
+
+    const {
+      updatedCart,
+      changes
+    } = await syncCartWithStock(
+      cartData
+    );
 
     if (!updatedCart.length) {
-      alert("All items are out of stock.");
-      resetButton(btn);
+
+      alert(
+        "All items are out of stock."
+      );
+
+      resetButton(button);
+
       return;
     }
 
     saveCart(updatedCart);
+
     cartData = updatedCart;
 
     if (changes.length > 0) {
-      alert("Cart updated:\n\n" + changes.join("\n"));
-      renderTotals();
-      resetButton(btn);
+
+      alert(
+        "Cart updated:\n\n" +
+        changes.join("\n")
+      );
+
+      updateSummary();
+
+      resetButton(button);
+
       return;
     }
 
-    // 🛒 CART VALIDATION
-    const validation = await validateCartBeforeCheckout(cartData);
 
-    if (!validation.valid) {
-      alert(validation.errors.join("\n"));
-      resetButton(btn);
+    /* =========================
+       CART VALIDATION
+    ========================= */
+
+    const cartValidation =
+      await validateCartBeforeCheckout(
+        cartData
+      );
+
+    if (!cartValidation.valid) {
+
+      alert(
+        cartValidation.errors.join("\n")
+      );
+
+      resetButton(button);
+
       return;
     }
 
-    // 💰 TOTALS
-    const totals = calculateTotals(cartData, selectedRegion);
 
-    // 📦 CUSTOMER
+    /* =========================
+       TOTALS
+    ========================= */
+
+    const totals =
+      calculateTotals(
+        cartData,
+        selectedRegion
+      );
+
+
+    /* =========================
+       CUSTOMER
+    ========================= */
+
     const customer = {
       ...formData,
       region: selectedRegion
     };
 
-    // ==========================
-    // 💳 CREATE ORDER
-    // ==========================
-    const orderId = await saveOrder({
-      email: customer.email,
-      
 
-      // 🔥 SHIPPING INFO
-      firstName: customer.firstName,
-      lastName: customer.lastName,
-      phone: customer.phone,
+    /* =========================
+       CREATE ORDER
+    ========================= */
 
-      address: customer.address,
-      city: customer.city,
-      province: customer.province,
+    const orderId =
+      await saveOrder({
 
-      items: cartData,
+        email: customer.email,
 
-      // 💰 PRICING
-      subtotal: totals.subtotal,
-      shippingFee: totals.shipping,
-      total: totals.total,
+        firstName:
+          customer.firstName,
 
-      // 📦 STATUS
-      status: "pending",
-      paymentMethod: paymentMethod,
-      paymentStatus: "PENDING"
-    });
+        lastName:
+          customer.lastName,
 
-// ==========================
-// 💰 PAYMENT FLOW
-// ==========================
-if (paymentMethod === "PAYMONGO") {
+        phone:
+          customer.phone,
 
-  await createPaymentSession({
-    items: cartData,
-    totals,
-    customer,
-    orderId
-  });
+        address:
+          customer.address,
 
-} else {
+        city:
+          customer.city,
 
-  window.location.href = `/order-confirmation.html?id=${orderId}`;
+        province:
+          customer.province,
 
-}
+        items: cartData,
 
-    // ==========================
-    // 💰 PAYMENT FLOW
-    // ==========================
+        subtotal:
+          totals.subtotal,
+
+        shippingFee:
+          totals.shipping,
+
+        total:
+          totals.total,
+
+        status: "pending",
+
+        paymentMethod,
+
+        paymentStatus: "PENDING"
+
+      });
+
+
+    /* =========================
+       PAYMENT FLOW
+    ========================= */
+
     if (paymentMethod === "PAYMONGO") {
 
       await createPaymentSession({
@@ -602,28 +575,37 @@ if (paymentMethod === "PAYMONGO") {
 
     } else {
 
-      window.location.href = `/order-confirmation.html?id=${orderId}`;
+      window.location.href =
+        `/order-confirmation.html?id=${orderId}`;
 
     }
 
   } catch (error) {
-    console.error("Checkout error:", error);
+
+    console.error(
+      "Checkout error:",
+      error
+    );
+
     alert("Checkout failed.");
-    resetButton(btn);
+
+    resetButton(button);
+
   }
+
 }
 
-// ==========================
-// 🔄 RESET (OUTSIDE FUNCTION)
-// ==========================
-function resetButton(btn) {
-  if (!btn) return;
 
-  btn.disabled = false;
+/* =========================
+   RESET BUTTON
+========================= */
 
-  if (paymentMethod === "PAYMONGO") {
-    btn.textContent = "Proceed to Payment";
-  } else {
-    btn.textContent = "Place Order";
-  }
+function resetButton(button) {
+
+  if (!button) return;
+
+  button.disabled = false;
+
+  updateCheckoutButton();
+
 }

@@ -6,12 +6,37 @@
   <title>Product | LÉ SAGE MNL</title>
 
   <!-- FONTS -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="./css/base.css" />
-  <link rel="stylesheet" href="./css/components.css" />
-  <link rel="stylesheet" href="./css/pages/product.css" />
+  <!-- =========================
+        BASE + LAYOUT
+  ========================== -->
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/layout.css">
+
+  <!-- =========================
+        COMPONENTS
+  ========================== -->
+  <link rel="stylesheet" href="./css/components/navbar.css">
+  <link rel="stylesheet" href="./css/components/announcement.css">
+  <link rel="stylesheet" href="./css/components/footer.css">
+  <link rel="stylesheet" href="./css/components/cart.css">
+  <link rel="stylesheet" href="./css/components/cart-drawer.css">
+
+  <link rel="stylesheet" href="./css/components/modal.css">
+  <link rel="stylesheet" href="./css/components/toast.css">
+
+  <link rel="stylesheet" href="./css/components/product-info.css">
+  <link rel="stylesheet" href="./css/components/product-size.css">
+  <link rel="stylesheet" href="./css/components/product-actions.css">
+
+  <!-- =========================
+        PAGE
+  ========================== -->
+  <link rel="stylesheet" href="./css/pages/product.css">
 
   <!-- ICONS -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -19,144 +44,383 @@
 
 <body class="product-page">
 
+  <!-- ANNOUNCEMENT -->
+  <div class="announcement">
+
+  <div class="announcement__track">
+
+    <div class="announcement__group">
+      <span class="announcement__item">
+        Support available 9am–9pm, Mon–Sat
+      </span>
+
+      <span class="announcement__item">
+        Metro Manila orders arrive in 3–5 business days
+      </span>
+
+      <span class="announcement__item">
+        Outside Metro Manila orders arrive in 7–10 business days
+      </span>
+    </div>
+
+    <div class="announcement__group">
+      <span class="announcement__item">
+        Support available 9am–9pm, Mon–Sat
+      </span>
+
+      <span class="announcement__item">
+        Metro Manila orders arrive in 3–5 business days
+      </span>
+
+      <span class="announcement__item">
+        Outside Metro Manila orders arrive in 7–10 business days
+      </span>
+    </div>
+
+  </div>
+
+</div>
+
   <!-- ================= HEADER ================= -->
   <header>
+
     <nav class="navbar">
+
       <div class="nav-container">
 
         <div class="nav-left">
+
           <ul class="nav-links">
-            <li><a href="./index.html" class="nav-link">HOME</a></li>
-            <li><a href="./shop.html" class="nav-link">SHOP</a></li>
-            <li><a href="./lookbook.html" class="nav-link">LOOKBOOK</a></li>
-            <li><a href="./about.html" class="nav-link">ABOUT</a></li>
+            <li>
+              <a href="./index.html" class="nav-link">
+                HOME
+              </a>
+            </li>
+
+            <li>
+              <a href="./shop.html" class="nav-link">
+                SHOP
+              </a>
+            </li>
+
+            <li>
+              <a href="./lookbook.html" class="nav-link">
+                LOOKBOOK
+              </a>
+            </li>
+
+            <li>
+              <a href="./about.html" class="nav-link">
+                ABOUT
+              </a>
+            </li>
           </ul>
+
         </div>
 
         <div class="nav-right">
 
           <!-- SEARCH -->
           <div class="search-wrapper">
-            <span class="nav-icon" id="search-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+
+            <span
+              class="nav-icon"
+              id="search-icon"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
                 <circle cx="11" cy="11" r="7"></circle>
-                <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+
+                <line
+                  x1="16.5"
+                  y1="16.5"
+                  x2="21"
+                  y2="21"
+                ></line>
               </svg>
             </span>
 
-            <input 
-              type="text" 
-              id="search-input" 
-              class="search-input" 
+            <input
+              type="text"
+              id="search-input"
+              class="search-input"
               placeholder="Search"
             />
+
           </div>
 
           <!-- CART -->
-          <span class="nav-icon cart-icon" id="cart-icon">
+          <span
+            class="nav-icon cart-icon"
+            id="cart-icon"
+          >
             <i data-lucide="shopping-bag"></i>
-            <span id="cart-badge" class="cart-badge">0</span>
+
+            <span
+              id="cart-badge"
+              class="cart-badge"
+            >
+              0
+            </span>
           </span>
 
         </div>
 
       </div>
+
     </nav>
+
   </header>
 
-  <!-- ================= PRODUCT PAGE ================= -->
-  <main class="product-container">
 
-    <!-- IMAGE -->
-    <div class="product-image">
-      <div class="product-main-image">
-        <img id="product-image" src="" alt="Product Image" />
+  <!-- ================= PRODUCT PAGE ================= -->
+  <main class="product-detail">
+
+    <!-- ================= GALLERY ================= -->
+    <div class="product-detail__gallery">
+
+      <div class="product-detail__main-image">
+
+        <img
+          id="product-image"
+          class="product-detail__image"
+          src=""
+          alt="Product Image"
+        />
+
       </div>
 
-      <div id="product-thumbnails" class="product-thumbnails"></div>
+      <div
+        id="product-thumbnails"
+        class="product-detail__thumbnails"
+      ></div>
+
     </div>
 
-    <!-- DETAILS -->
-    <div class="product-details">
 
-      <div class="product-header">
-        <h2 id="product-name">Loading...</h2>
-        <p class="product__style"></p>
-        <p id="product-price">₱0</p>
+    <!-- ================= INFO ================= -->
+    <div class="product-detail__info">
+
+      <!-- HEADER -->
+      <div class="product-detail__header">
+
+        <h2
+          id="product-name"
+          class="product-detail__title"
+        >
+          Loading...
+        </h2>
+
+        <p class="product-detail__style"></p>
+
+        <p
+          id="product-price"
+          class="product-detail__price"
+        >
+          ₱0
+        </p>
+
       </div>
 
-      <div id="product-description" class="product-description"></div>
-      <div id="product-features" class="product-features"></div>
 
-      <!-- COLOR -->
-      <div class="product__colors">
-        <p class="label">COLOR</p>
-        <div id="color-container" class="color-container"></div>
+      <!-- DESCRIPTION -->
+      <div
+        id="product-description"
+        class="product-detail__description"
+      ></div>
+
+
+      <!-- FEATURES -->
+      <div
+        id="product-features"
+        class="product-detail__features"
+      ></div>
+
+
+      <!-- COLORS -->
+      <div class="product-detail__colors">
+
+        <p class="product-detail__color-label">
+          COLOR
+        </p>
+
+        <div
+          id="color-container"
+          class="product-detail__color-options"
+        ></div>
+
       </div>
 
-      <!-- SIZE -->
-      <div class="size-header">
-        <span>Size</span>
-        <button id="size-chart-btn" class="size-chart-btn">Size chart</button>
+
+      <!-- SIZES -->
+      <div class="product-detail__sizes">
+
+        <div class="product-detail__sizes-header">
+
+          <span class="product-detail__sizes-label">
+            Size
+          </span>
+
+          <button
+            id="size-chart-btn"
+            class="product-detail__size-chart-btn"
+          >
+            Size chart
+          </button>
+
+        </div>
+
+        <div
+          id="size-container"
+          class="product-size__options"
+        ></div>
+
       </div>
 
-      <div id="size-container" class="sizes"></div>
 
       <!-- FEEDBACK -->
-      <div class="selection-feedback">
-        <p id="selected-size-text" class="selected-size"></p>
-        <p id="stock-message" class="stock-message"></p>
-        <p id="size-error" class="error-message"></p>
+      <div class="product-detail__feedback">
+
+        <p
+          id="selected-size-text"
+          class="product-detail__selected-size"
+        ></p>
+
+        <p
+          id="stock-message"
+          class="product-detail__stock-message"
+        ></p>
+
+        <p
+          id="size-error"
+          class="product-detail__error"
+        ></p>
+
       </div>
+
 
       <!-- CTA -->
-      <div class="cta-block">
-        <button id="add-to-cart-btn">ADD TO BAG</button>
+      <div class="product-detail__cta">
 
-        <button id="buy-now-btn" class="buy-now-btn">
+        <button
+          id="add-to-cart-btn"
+          class="product-detail__add-btn"
+          data-action="add-to-cart"
+        >
+          ADD TO BAG
+        </button>
+
+        <button
+          id="buy-now-btn"
+          class="product-detail__buy-btn"
+          data-action="buy-now"
+        >
           BUY NOW
         </button>
+
       </div>
 
     </div>
+
   </main>
 
-  <!-- SIZE CHART -->
-  <div id="size-chart-modal" class="size-chart-modal">
-    <div class="size-chart-overlay"></div>
 
-    <div class="size-chart-content">
-      <button id="size-chart-close" class="size-chart-close">×</button>
-      <div class="size-guide-modal__body"></div>
+  <!-- ================= SIZE GUIDE MODAL ================= -->
+  <div
+    id="size-chart-modal"
+    class="modal size-chart-modal"
+  >
+
+    <div class="modal__overlay"></div>
+
+    <div class="modal__content">
+
+      <button
+        id="size-chart-close"
+        class="modal__close"
+      >
+        ×
+      </button>
+
+      <div class="modal__body"></div>
+
     </div>
+
   </div>
 
-  <!-- TOAST -->
+
+  <!-- ================= TOAST ================= -->
   <div id="toast-root"></div>
 
-  <!-- FOOTER -->
+
+  <!-- ================= FOOTER ================= -->
   <div id="footer-container"></div>
 
-  <!-- ================= CART DRAWER ================= -->
-  <div id="cart-overlay" class="cart-overlay"></div>
 
-  <div id="cart-drawer" class="cart-drawer">
-    <div class="cart-header">
-      <h3>Your Cart</h3>
-      <button id="close-cart" class="close-cart">×</button>
+    <!-- ================= CART DRAWER ================= -->
+
+  <div
+    class="cart-overlay"
+    id="cart-overlay"
+  ></div>
+
+  <aside
+    class="cart-drawer"
+    id="cart-drawer"
+  >
+
+    <!-- HEADER -->
+    <div class="cart-drawer__header">
+
+      <h2 class="cart-drawer__title">
+        Your Cart
+      </h2>
+
+      <button
+        id="close-cart"
+        class="cart-drawer__close"
+        aria-label="Close Cart"
+      >
+        ✕
+      </button>
+
     </div>
 
-    <div id="cart-items" class="cart-items"></div>
-    <div id="cart-total"></div>
-  </div>
+    <!-- ITEMS -->
+    <div
+      id="cart-items"
+      class="cart-drawer__items"
+    ></div>
 
-  <!-- JS -->
+    <!-- FOOTER -->
+    <div
+      id="cart-total"
+      class="cart-drawer__footer"
+    ></div>
+
+  </aside>
+
+
+  <!-- ================= JS ================= -->
   <script type="module" src="./js/components/navbar.js"></script>
-  <script type="module" src="./js/components/cartDrawer.js"></script>
+  <script type="module" src="./js/components/main.js"></script>
   <script type="module" src="./js/components/footerLoader.js"></script>
-  <script type="module" src="./js/pages/product.js"></script>
+  <script type="module" src="./js/pages/productPage.js"></script>
 
-  <!-- ICON INIT -->
+  <!-- GLOBAL INTERACTION SYSTEM -->
+  <script
+    type="module"
+    src="./js/core/interactions.js"
+  ></script>
+
+
+  <!-- ================= ICON INIT ================= -->
   <script>
     window.addEventListener("load", () => {
       if (window.lucide) {

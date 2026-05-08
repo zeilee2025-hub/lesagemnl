@@ -1,21 +1,24 @@
-import { getProductById } from "../services/productService.js";
-import { addToCart, getCart } from "../services/cartService.js";
-import { validateCartBeforeCheckout } from "../core/checkoutValidation.js";
+// ===============================
+//  PRODUCT PAGE (ORCHESTRATOR)
+// ===============================
 
-// ✅ COMPONENTS
+import { getProductById } from "../services/productService.js";
+import { updateCartBadge } from "../services/cartService.js";
+
+// COMPONENTS
 import { initProductGallery } from "../components/productGallery.js";
 import { initSizeSelector } from "../components/sizeSelector.js";
 import { initColorSelector } from "../components/colorSelector.js";
-import { initAddToCart } from "../components/addToCart.js";
 import { showToast } from "../components/toast.js";
 import { renderCart } from "../components/cartDrawer.js";
-
-import { updateCartBadge } from "../services/cartService.js";
 import { renderSizeGuide } from "../components/sizeGuide.js";
+
+// ACTIONS (NEW SYSTEM)
+import { handleAddToCart, handleBuyNow } from "./productActions.js";
 
 
 // ==========================
-// 🔥 CART ERROR LISTENER (NEW)
+//  CART ERROR LISTENER
 // ==========================
 window.addEventListener("cartError", (e) => {
   showToast(e.detail.message);
@@ -23,13 +26,14 @@ window.addEventListener("cartError", (e) => {
 
 
 // ==========================
-// 📦 GET PRODUCT ID FROM URL
+//  GET PRODUCT ID
 // ==========================
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 
+
 // ==========================
-// 🧱 ELEMENTS
+//  ELEMENTS
 // ==========================
 const imageEl = document.getElementById("product-image");
 const thumbnailsContainer = document.getElementById("product-thumbnails");
@@ -42,17 +46,17 @@ const sizeContainer = document.getElementById("size-container");
 const colorContainer = document.getElementById("color-container");
 
 const addBtn = document.getElementById("add-to-cart-btn");
-const buyNowBtn = document.getElementById("buy-now-btn");
 
 const selectedSizeText = document.getElementById("selected-size-text");
 const stockMessage = document.getElementById("stock-message");
 const sizeError = document.getElementById("size-error");
 
-// 🔥 SIZE CHART
+// SIZE CHART
 const sizeChartBtn = document.getElementById("size-chart-btn");
 const sizeChartModal = document.getElementById("size-chart-modal");
 const sizeChartClose = document.getElementById("size-chart-close");
-const sizeChartOverlay = document.querySelector(".size-chart-overlay");
+const sizeChartOverlay = document.querySelector(".modal__overlay");
+
 
 // ==========================
 // 📏 SIZE CHART CLOSE
@@ -65,23 +69,26 @@ sizeChartOverlay?.addEventListener("click", () => {
   sizeChartModal.classList.remove("active");
 });
 
+
 // ==========================
-// 🧠 STATE
+//  STATE
 // ==========================
 let selectedSize = null;
 let currentProduct = null;
 let selectedVariantIndex = 0;
 
+
 // ==========================
-// 🧠 HELPERS
+//  HELPERS
 // ==========================
 function formatSize(size) {
   if (!size) return "";
   return size === "ONE_SIZE" ? "One Size" : size;
 }
 
+
 // ==========================
-// 🚀 INIT
+//  INIT
 // ==========================
 init();
 
@@ -106,210 +113,140 @@ async function init() {
       type: product.type || mapCategoryToType(product.category)
     };
 
-    //  SET DEFAULT VARIANT
     currentProduct.selectedVariant = currentProduct.variants?.[0];
 
-    // 🔥 INITIAL BUTTON STATE (SAFE DEFAULT)
-if (addBtn) {
-  addBtn.disabled = true;
-  addBtn.textContent = "SELECT SIZE";
-}
+    // SAFE DEFAULT
+    if (addBtn) {
+      addBtn.disabled = true;
+      addBtn.textContent = "ADD TO BAG";
+    }
 
     renderProduct(currentProduct);
 
     // ==========================
-//  COLOR SELECTOR
-// ==========================
-initColorSelector(product.variants, colorContainer, (index) => {
-  selectedVariantIndex = index;
-
-  currentProduct.selectedVariant = currentProduct.variants[index];
-  const selectedVariant = currentProduct.selectedVariant;
-
-  selectedSize = null;
-  stockMessage.textContent = "";
-
-  //  RESET BUTTON STATE
-  if (addBtn) {
-    addBtn.disabled = true;
-    addBtn.textContent = "SELECT SIZE";
-  }
-
-  selectedSizeText.textContent =
-    selectedVariant?.sizes?.length === 1
-      ? "Selected: One Size"
-      : "Select Size";
-
-  //  UPDATE GALLERY
-  initProductGallery(currentProduct, {
-    imageEl,
-    thumbnailsContainer
-  });
-
-  //  UPDATE SIZES
-  initSizeSelector(
-  selectedVariant.sizes || [],
-  {
-    sizeContainer
-  },
-  handleSizeChange
-);
-
-  //  FIX: ONE SIZE AUTO SELECT
-  const sizes = selectedVariant.sizes || [];
-
-  if (sizes.length === 1) {
-    const item = sizes[0];
-    const onlySize = typeof item === "string" ? item : item.size;
-
-    selectedSize = onlySize;
-
-    if (selectedSizeText) {
-      selectedSizeText.textContent = `Selected: ${formatSize(onlySize)}`;
-    }
-
-    handleSizeChange(onlySize);
-
-  }
-});
-
-
-// ==========================
-// 📏 INITIAL SIZE SELECTOR
-// ==========================
-initSizeSelector(
-  currentProduct.selectedVariant?.sizes || [],
-  {
-    sizeContainer
-  },
-  handleSizeChange
-);
-
-
-//  FIX: ONE SIZE AUTO SELECT (INITIAL LOAD)
-const sizes = currentProduct.selectedVariant?.sizes || [];
-
-if (sizes.length === 1) {
-  const item = sizes[0];
-  const onlySize = typeof item === "string" ? item : item.size;
-
-  selectedSize = onlySize;
-
-  if (selectedSizeText) {
-    selectedSizeText.textContent = `Selected: ${formatSize(onlySize)}`;
-  }
-
-  handleSizeChange(onlySize);
-
-}
-
+    //  COLOR SELECTOR
     // ==========================
-    // 🛒 ADD TO CART (SAFE)
-    // ==========================
-    initAddToCart(
-      { addBtn },
-      () => ({
-        product: currentProduct,
-        selectedSize
-      }),
-      (product, size) => {
-        const variant = product.selectedVariant;
+    initColorSelector(product.variants, colorContainer, (index) => {
+      selectedVariantIndex = index;
 
-        if (!size && variant?.sizes?.length > 1) {
-          sizeError.textContent = "Please select a size";
-          return;
-        }
+      currentProduct.selectedVariant = currentProduct.variants[index];
+      const selectedVariant = currentProduct.selectedVariant;
 
-        sizeError.textContent = "";
+      selectedSize = null;
+      stockMessage.textContent = "";
 
-        const before = getCart().length;
-
-        addToCart(product, size, variant.name);
-
-        const after = getCart().length;
-
-        // ❌ blocked by stock
-        if (after === before) return;
-
-        updateCartBadge();
-
-        const displaySize = formatSize(size);
-
-        showToast(
-          `Added ${product.name} (${variant.name} - ${displaySize}) to cart`
-        );
-
-        openCart();
+      if (addBtn) {
+        addBtn.disabled = true;
+        addBtn.textContent = "ADD TO BAG";
       }
+
+      selectedSizeText.textContent =
+        selectedVariant?.sizes?.length === 1
+          ? "Selected: One Size"
+          : "Select Size";
+
+      initProductGallery(currentProduct, {
+        imageEl,
+        thumbnailsContainer
+      });
+
+      initSizeSelector(
+        selectedVariant.sizes || [],
+        {
+          sizeContainer,
+          addBtn
+        },
+        handleSizeChange
+      );
+
+      // ONE SIZE AUTO
+      const sizes = selectedVariant.sizes || [];
+
+      if (sizes.length === 1) {
+        const item = sizes[0];
+        const onlySize = typeof item === "string" ? item : item.size;
+
+        selectedSize = onlySize;
+
+        selectedSizeText.textContent = `Selected: ${formatSize(onlySize)}`;
+
+        handleSizeChange(onlySize);
+      }
+    });
+
+
+    // ==========================
+    //  INITIAL SIZE SELECTOR
+    // ==========================
+    initSizeSelector(
+      currentProduct.selectedVariant?.sizes || [],
+      {
+        sizeContainer,
+        addBtn
+      },
+      handleSizeChange
     );
 
-// ==========================
-// ⚡ BUY NOW (STOCK SAFE)
-// ==========================
-buyNowBtn?.addEventListener("click", () => {
-  // 🔒 HARD GUARD (prevents accidental clicks)
-  if (buyNowBtn.disabled) return;
+    // ONE SIZE AUTO INIT
+    const sizes = currentProduct.selectedVariant?.sizes || [];
 
-  const variant = currentProduct.selectedVariant;
+    if (sizes.length === 1) {
+      const item = sizes[0];
+      const onlySize = typeof item === "string" ? item : item.size;
 
-  // ❌ No size selected (only if multiple sizes exist)
-  if (!selectedSize && variant?.sizes?.length > 1) {
-    sizeError.textContent = "Please select a size";
-    return;
-  }
+      selectedSize = onlySize;
 
-  sizeError.textContent = "";
+      selectedSizeText.textContent = `Selected: ${formatSize(onlySize)}`;
 
-  // 🔄 UI STATE
-  buyNowBtn.textContent = "PROCESSING...";
-  buyNowBtn.disabled = true;
+      handleSizeChange(onlySize);
+    }
 
-  const before = getCart().length;
 
-  addToCart(currentProduct, selectedSize, variant.name);
-
-  const after = getCart().length;
-
-  // ❌ Blocked (out of stock / exceeded)
-  if (after === before) {
-    buyNowBtn.textContent = "BUY NOW";
-    buyNowBtn.disabled = false;
-    return;
-  }
-
-  updateCartBadge();
-
-  // ✅ SUCCESS → PROCEED
-  setTimeout(() => {
-    window.location.href = "./checkout.html";
-  }, 300);
-});
-
-// ==========================
-// 📏 SIZE CHART
-// ==========================
-sizeChartBtn?.addEventListener("click", () => {
-  const modalContent = document.querySelector(".size-guide-modal__body");
-
-  if (!modalContent || !currentProduct) return;
-
-  modalContent.innerHTML = renderSizeGuide(
-    currentProduct.type,
+    // ==========================
+    //  ACTIONS (NEW SYSTEM)
+    // ==========================
+    handleAddToCart(
+  () => ({
+    product: currentProduct,
     selectedSize
-  );
+  }),
+  openCart,
+  (msg) => { sizeError.textContent = msg; }
+);
 
-  sizeChartModal.classList.add("active");
-});
+handleBuyNow(
+  () => ({
+    product: currentProduct,
+    selectedSize
+  }),
+  (msg) => { sizeError.textContent = msg; }
+);
 
-} catch (error) {
-  console.error("Error loading product:", error);
-  nameEl.textContent = "Failed to load product";
-}
+    // ==========================
+    //  SIZE CHART
+    // ==========================
+    sizeChartBtn?.addEventListener("click", () => {
+      const modalContent = document.querySelector(".modal__body");
+
+      if (!modalContent || !currentProduct) return;
+
+      modalContent.innerHTML = renderSizeGuide(
+        currentProduct.type,
+        selectedSize
+      );
+
+      sizeChartModal.classList.add("active");
+    });
+
+  } catch (error) {
+    console.error("Error loading product:", error);
+    nameEl.textContent = "Failed to load product";
+  }
 }
 
 
 // ==========================
-// 📏 SIZE CHANGE HANDLER (FIXED)
+//  SIZE CHANGE HANDLER
 // ==========================
 function handleSizeChange(size) {
   selectedSize = size;
@@ -340,12 +277,7 @@ function handleSizeChange(size) {
 
   if (stock <= 0) {
     stockMessage.textContent = "Out of stock";
-    addBtn.disabled = true;
-    addBtn.textContent = "OUT OF STOCK";
   } else {
-    addBtn.disabled = false;
-    addBtn.textContent = "ADD TO BAG";
-
     if (stock <= 3) {
       stockMessage.textContent = `Only ${stock} left`;
       stockMessage.classList.add("low");
@@ -362,7 +294,7 @@ function handleSizeChange(size) {
 
 
 // ==========================
-// 🎨 RENDER PRODUCT
+//  RENDER PRODUCT
 // ==========================
 function renderProduct(product) {
   initProductGallery(product, {
@@ -372,7 +304,7 @@ function renderProduct(product) {
 
   nameEl.textContent = product.name;
 
-  const styleEl = document.querySelector(".product__style");
+  const styleEl = document.querySelector(".product-detail__style");
 
   if (styleEl && product.style) {
     styleEl.textContent = formatStyle(product.style);
@@ -386,7 +318,7 @@ function renderProduct(product) {
 
 
 // ==========================
-// 📋 FEATURES
+//  FEATURES
 // ==========================
 function renderFeatures(features) {
   const container = document.getElementById("product-features");
@@ -411,7 +343,7 @@ function renderFeatures(features) {
 
 
 // ==========================
-// 🎨 FORMAT STYLE
+//  FORMAT STYLE
 // ==========================
 function formatStyle(style) {
   if (!style) return "";
@@ -423,19 +355,17 @@ function formatStyle(style) {
 
 
 // ==========================
-// 🧠 CATEGORY → TYPE
+//  CATEGORY → TYPE
 // ==========================
 function mapCategoryToType(category) {
   const c = String(category || "").toLowerCase();
-
   if (c.includes("top")) return "tee";
-
   return null;
 }
 
 
 // ==========================
-// 🛒 OPEN CART
+//  OPEN CART
 // ==========================
 function openCart() {
   const cartDrawer = document.getElementById("cart-drawer");
@@ -443,8 +373,13 @@ function openCart() {
   const cartItems = document.getElementById("cart-items");
   const cartTotal = document.getElementById("cart-total");
 
-  cartDrawer?.classList.add("active");
-  cartOverlay?.classList.add("active");
+  cartDrawer?.classList.add(
+  "cart-drawer--active"
+);
+
+cartOverlay?.classList.add(
+  "cart-overlay--active"
+);
 
   renderCart(cartItems, cartTotal);
 }

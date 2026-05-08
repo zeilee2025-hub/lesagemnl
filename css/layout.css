@@ -1,24 +1,52 @@
-.container {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 0 60px;
+/* =========================
+   GLOBAL HEADER OFFSET (DYNAMIC)
+========================= */
+
+body {
+  padding-top: calc(var(--announcement-height) + var(--navbar-height));
+  transition: padding-top 0.3s ease;
+}
+
+/* 🔥 COLLAPSED STATE (SCROLL) */
+body.header-collapsed {
+  padding-top: var(--navbar-height);
+}
+
+/* REMOVE OFFSET FOR OVERLAY PAGES */
+body.home-page,
+body.lookbook-page {
+  padding-top: 0;
 }
 
 /* =========================
-   🔥 PRODUCT GRID
+   CONTAINER SYSTEM
+========================= */
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+/* =========================
+   PRODUCT GRID (GLOBAL)
 ========================= */
 
 .product-grid {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 48px;
-
-  max-width: 1600px;
-  margin: 0 auto;
-
-  padding: 0; /* ✅ IMPORTANT */
 }
 
+/* =========================
+   RESPONSIVE
+========================= */
 
 @media (max-width: 1200px) {
   .product-grid {
