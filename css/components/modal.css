@@ -1,5 +1,5 @@
 /* =========================
-   MODAL BASE
+   MODAL
 ========================= */
 
 .modal {
@@ -11,37 +11,42 @@
   justify-content: center;
 
   opacity: 0;
+
   pointer-events: none;
+
+  z-index: var(--z-modal, 1000);
 
   transition: opacity 0.25s ease;
 }
 
-.modal__body {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
+
+/* =========================
+   ACTIVE STATE
+========================= */
 
 .modal.active {
   opacity: 1;
+
   pointer-events: all;
 }
 
 
 /* =========================
-   MODAL OVERLAY
+   OVERLAY
 ========================= */
 
 .modal__overlay {
   position: absolute;
   inset: 0;
 
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.45);
+
+  backdrop-filter: blur(2px);
 }
 
 
 /* =========================
-   MODAL CONTENT
+   CONTENT
 ========================= */
 
 .modal__content {
@@ -49,52 +54,119 @@
   z-index: 2;
 
   width: 90%;
-  max-width: 700px;
+  max-width: 520px;
+  max-height: 80vh;
 
-  padding: 30px;
+  padding: 24px;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 
   background: #fff;
 
+  border-radius: 14px;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+
   opacity: 0;
+
   transform: translateY(10px);
 
   transition:
-    transform 0.25s ease,
-    opacity 0.25s ease;
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 
 .modal.active .modal__content {
   opacity: 1;
+
   transform: translateY(0);
 }
 
 
 /* =========================
-   MODAL CLOSE BUTTON
+   CLOSE BUTTON
 ========================= */
 
 .modal__close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 14px;
+  right: 14px;
+
+  border: none;
 
   background: none;
-  border: none;
 
   cursor: pointer;
 
   font-size: 20px;
+
+  opacity: 0.6;
+
+  transition: opacity 0.2s ease;
+}
+
+.modal__close:hover {
+  opacity: 1;
 }
 
 
 /* =========================
-   SIZE CHART MODAL
+   TITLE
 ========================= */
 
-.size-chart-modal {
+.modal__title {
+  flex-shrink: 0;
+
+  margin-bottom: 12px;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+.modal__body {
+  width: 100%;
+
+  overflow-y: auto;
+
+  padding-right: 4px;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+  color: #444;
+}
+
+
+/* =========================
+   MODIFIERS
+========================= */
+
+.modal--size-chart {
   z-index: var(--z-modal, 1000);
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes modalFade {
+
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
 }

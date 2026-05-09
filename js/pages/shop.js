@@ -329,6 +329,9 @@ function handleQuickAdd({
 
   qaAddBtn.disabled = true;
 
+qaAddBtn.textContent = "ADD TO CART";
+qaAddBtn.onclick = null;
+
   qaTitle.textContent =
     product.name;
 
@@ -473,7 +476,9 @@ if (sizes.length === 1) {
 function renderSizes(variant) {
 
   const sizes =
-    variant?.sizes || [];
+  (variant?.sizes || []).filter(
+    (sizeItem) => sizeItem.stock > 0
+  );
 
   qaSizes.innerHTML = "";
 
@@ -482,14 +487,23 @@ function renderSizes(variant) {
   // ===============================
   if (!sizes.length) {
 
-    qaSizes.innerHTML = `
-      <p class="quick-add__no-sizes">
-        Out of stock
-      </p>
-    `;
+  qaSizes.innerHTML = `
+    <p class="quick-add__no-sizes">
+      Out of stock
+    </p>
+  `;
 
-    return;
-  }
+  qaAddBtn.disabled = false;
+
+  qaAddBtn.textContent = "VIEW PRODUCT";
+
+  qaAddBtn.onclick = () => {
+    window.location.href =
+      `./product.html?id=${currentProduct.id}`;
+  };
+
+  return;
+}
 
   // ===============================
   // DISPLAY SIZES

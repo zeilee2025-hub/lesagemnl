@@ -1,0 +1,179 @@
+/* =========================
+   PAYMENT DETAILS
+========================= */
+
+.payment-details {
+  padding: 18px;
+
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+
+  background: #fff;
+}
+
+.payment-details__title {
+  margin-bottom: 14px;
+
+  font-size: 12px;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+
+  opacity: 0.4;
+}
+
+
+/* =========================
+   PAYMENT METHOD
+========================= */
+
+.payment-method {
+  margin-bottom: 12px;
+  padding: 16px;
+
+  border: 1px solid #eee;
+  border-radius: 12px;
+
+  background: #fff;
+
+  transition: all 0.25s ease;
+}
+
+.payment-method:last-of-type {
+  margin-bottom: 0;
+}
+
+.payment-method:hover {
+  border-color: #ccc;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.payment-method__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+/* =========================
+   COPY BUTTON
+========================= */
+
+.payment-method__copy-btn {
+  border: none;
+
+  background: none;
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+  color: #999;
+
+  opacity: 0.6;
+
+  transition: all 0.2s ease;
+}
+
+.payment-method__copy-btn:hover {
+  color: #000;
+
+  opacity: 1;
+}
+
+.payment-method__copy-btn.copied {
+  color: #000;
+
+  opacity: 1;
+
+  font-weight: 500;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.payment-method__label {
+  margin-top: 6px;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+
+  opacity: 0.45;
+}
+
+.payment-method__info {
+  margin-top: 2px;
+
+  font-size: 15px;
+
+  letter-spacing: 0.3px;
+
+  color: #111;
+}
+
+.payment-method__sub {
+  font-size: 12px;
+
+  opacity: 0.6;
+}
+
+
+/* =========================
+   PAYMENT STATUS
+========================= */
+
+.payment-status__title {
+  margin-bottom: 2px;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.payment-status__sub {
+  margin-top: 2px;
+
+  font-size: 12px;
+
+  opacity: 0.55;
+}
+
+
+/* =========================
+   ORDER ID COPY
+========================= */
+
+.manual-payment__order-id .payment-method__copy-btn {
+  border: none;
+
+  background: none;
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+  color: #999;
+
+  opacity: 0.6;
+
+  transition: all 0.2s ease;
+}
+
+.manual-payment__order-id .payment-method__copy-btn:hover {
+  color: #000;
+
+  opacity: 1;
+}

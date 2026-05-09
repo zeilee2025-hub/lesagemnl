@@ -1,24 +1,49 @@
 export function renderOrders(container, orders) {
+
   container.innerHTML = orders.map(order => {
+
     return `
-      <div class="admin-order" data-id="${order.id}">
-        
-        <div class="admin-order-main">
-          <div class="admin-order-top">
-            <span class="admin-id">${order.id}</span>
-            <span class="admin-status ${order.status}">
+      <article
+        class="admin-order"
+        data-id="${order.id}"
+      >
+
+        <div class="admin-order__main">
+
+          <div class="admin-order__top">
+
+            <span class="admin-order__id">
+              ${order.id}
+            </span>
+
+            <span class="
+              admin-order__status
+              ${getStatusModifier(order)}
+            ">
               ${formatStatus(order)}
             </span>
+
           </div>
 
-          <div class="admin-order-bottom">
-            <span>₱${calculateTotal(order.items || [])}</span>
-            <span>${formatDate(order)}</span>
+          <div class="admin-order__bottom">
+
+            <span>
+              ₱${calculateTotal(order.items || [])}
+            </span>
+
+            <span>
+              ${formatDate(order)}
+            </span>
+
           </div>
+
         </div>
 
-        <div class="admin-order-items hidden">
-          
+        <div class="
+          admin-order__items
+          hidden
+        ">
+
           ${renderCustomer(order)}
 
           ${renderProof(order)}
@@ -27,139 +52,545 @@ export function renderOrders(container, orders) {
 
           ${renderTracking(order)}
 
-          <div class="admin-actions">
+${renderTimeline(order)}
+
+<div class="admin-order__actions">
+
             ${renderActions(order)}
+
           </div>
 
         </div>
 
-      </div>
+      </article>
     `;
+
   }).join("");
+
 }
 
-// ==========================
-// 🧑 CUSTOMER INFO (NEW)
-// ==========================
+
+/* ==========================
+   CUSTOMER
+========================== */
+
 function renderCustomer(order) {
+
   return `
-    <div class="admin-customer">
-      <p><strong>Customer</strong></p>
-      <p>${order.firstName || ""} ${order.lastName || ""}</p>
-      <p>${order.phone || "—"}</p>
-      <p>
-        ${order.address || "—"}<br/>
-        ${order.city || ""}, ${order.province || ""}
+    <div class="admin-order__customer">
+
+      <p class="admin-order__section-title">
+        Customer
       </p>
+
+      <p>
+        ${order.firstName || ""}
+        ${order.lastName || ""}
+      </p>
+
+      <p>
+        ${order.phone || "—"}
+      </p>
+
+      <p>
+        ${order.address || "—"}
+        <br/>
+        ${order.city || ""},
+        ${order.province || ""}
+      </p>
+
     </div>
   `;
+
 }
 
-// ==========================
-// 🚚 TRACKING INPUT (NEW)
-// ==========================
+
+/* ==========================
+   TRACKING
+========================== */
 function renderTracking(order) {
-  if (!(order.status === "processing" && order.paymentStatus === "PAID")) {
+
+  /* ==========================
+     PAID → SHOW INPUT
+  ========================== */
+
+  if (
+    order.orderState === "PAID"
+  ) {
+
+    return `
+      <div class="admin-order__tracking">
+
+        <p class="admin-order__section-title">
+          Shipping
+        </p>
+
+        <input
+          type="text"
+          placeholder="Enter J&T Tracking Number"
+          class="admin-order__tracking-input"
+          data-tracking-input
+        />
+
+        <p class="admin-order__tracking-note">
+          Courier: J&T Express
+        </p>
+
+      </div>
+    `;
+
+  }
+
+
+  /* ==========================
+     SHIPPED → SHOW SAVED TRACKING
+  ========================== */
+
+  if (
+  order.orderState === "SHIPPED" ||
+  order.orderState === "COMPLETED"
+) {
+
+    return `
+      <div class="admin-order__tracking">
+
+        <p class="admin-order__section-title">
+          Shipment Details
+        </p>
+
+        <p class="admin-order__tracking-display">
+          Tracking Number:
+          <strong>
+            ${order.trackingNumber || "—"}
+          </strong>
+        </p>
+
+        <p class="admin-order__tracking-display">
+          Courier:
+          <strong>
+            ${order.courier || "J&T Express"}
+          </strong>
+        </p>
+
+      </div>
+    `;
+
+  }
+
+  return "";
+
+}
+/* ==========================
+   HELPERS
+========================== */
+
+function calculateTotal(items = []) {
+
+  return items.reduce((total, item) => {
+
+    return total + (
+      item.price * item.quantity
+    );
+
+  }, 0);
+
+}
+
+
+function formatDate(order) {
+
+  const date =
+    order.paidAt ||
+    order.createdAt;
+
+  if (!date) return "—";
+
+  if (date?.toMillis) {
+
+    return new Date(
+      date.toMillis()
+    ).toLocaleString();
+
+  }
+
+  if (typeof date === "string") {
+
+    return new Date(date)
+      .toLocaleString();
+
+  }
+
+  if (typeof date === "number") {
+
+    return new Date(date)
+      .toLocaleString();
+
+  }
+
+  return "—";
+
+}
+
+
+function formatStatus(order) {
+
+  const state =
+    order.orderState;
+
+  const statusMap = {
+
+    PENDING_PAYMENT:
+      "Waiting for Payment",
+
+    PROOF_UPLOADED:
+      "Proof Uploaded",
+
+    PAID:
+      "Paid",
+
+    SHIPPED:
+      "Shipped",
+
+    COMPLETED:
+      "Completed",
+
+    REJECTED:
+      "Rejected",
+
+    CANCELLED:
+      "Cancelled",
+
+    EXPIRED:
+      "Expired"
+
+  };
+
+  return (
+    statusMap[state] ||
+    "Unknown"
+  );
+
+}
+
+/* ==========================
+   LOG FORMATTERS
+========================== */
+
+function formatLogAction(action) {
+
+  const map = {
+
+    PAYMENT_APPROVED:
+      "Payment Approved",
+
+    PAYMENT_REJECTED:
+      "Payment Rejected",
+
+    PAYMENT_WEBHOOK_CONFIRMED:
+      "Payment Confirmed",
+
+    ORDER_SHIPPED:
+      "Order Shipped",
+
+    ORDER_COMPLETED:
+      "Order Completed"
+
+  };
+
+  return map[action] || action;
+
+}
+
+
+function formatLogDate(timestamp) {
+
+  if (!timestamp) {
+
+    return "—";
+
+  }
+
+  return new Date(timestamp)
+    .toLocaleString();
+
+}
+
+/* ==========================
+   STATUS MODIFIER
+========================== */
+
+function getStatusModifier(order) {
+
+  const state =
+    order.orderState;
+
+  const modifierMap = {
+
+    PENDING_PAYMENT:
+      "admin-order__status--pending",
+
+    PROOF_UPLOADED:
+      "admin-order__status--pending",
+
+    PAID:
+      "admin-order__status--paid",
+
+    SHIPPED:
+      "admin-order__status--shipped",
+
+    COMPLETED:
+      "admin-order__status--completed",
+
+    REJECTED:
+      "admin-order__status--rejected"
+
+  };
+
+  return (
+    modifierMap[state] || ""
+  );
+
+}
+
+/* ==========================
+   ORDER ITEMS
+========================== */
+
+function renderItems(items = []) {
+
+  if (!items.length) {
+
+    return `
+      <div class="admin-order__item">
+        No items
+      </div>
+    `;
+
+  }
+
+  return items.map(item => {
+
+    return `
+      <div class="admin-order__item">
+
+        <span>
+          ${item.name}
+        </span>
+
+        <span>
+          ${item.size}
+        </span>
+
+        <span>
+          x${item.quantity}
+        </span>
+
+        <span>
+          ₱${item.price}
+        </span>
+
+      </div>
+    `;
+
+  }).join("");
+
+}
+
+
+/* ==========================
+   PAYMENT PROOF
+========================== */
+
+function renderProof(order) {
+
+  if (!order.proofUrl) {
+
     return "";
+
   }
 
   return `
-    <div class="admin-tracking">
-      <p><strong>Shipping</strong></p>
+    <div class="admin-order__proof">
 
-      <input 
-        type="text" 
-        placeholder="Enter J&T Tracking Number"
-        class="tracking-input"
-        data-tracking-input
+      <p class="admin-order__section-title">
+        Payment Proof
+      </p>
+
+      <img
+        src="${order.proofUrl}"
+        class="admin-order__proof-image"
       />
 
-      <p class="tracking-note">
-        Courier: J&T Express
-      </p>
     </div>
   `;
+
 }
 
-// ==========================
-// 🔹 HELPERS
-// ==========================
-function calculateTotal(items = []) {
-  return items.reduce((t, i) => t + i.price * i.quantity, 0);
-}
+/* ==========================
+   ORDER TIMELINE
+========================== */
 
-function formatDate(order) {
-  const date = order.paidAt || order.createdAt;
-  if (!date) return "—";
+function renderTimeline(order) {
 
-  if (date?.toMillis) return new Date(date.toMillis()).toLocaleString();
-  if (typeof date === "string") return new Date(date).toLocaleString();
-  if (typeof date === "number") return new Date(date).toLocaleString();
+  const logs =
+    order.logs || [];
 
-  return "—";
-}
+  if (!logs.length) {
 
-function formatStatus(order) {
-  const { status, paymentStatus, proofUrl } = order;
+    return "";
 
-  if (status === "pending" && !proofUrl) return "Waiting for Payment";
-  if (status === "pending" && proofUrl) return "Proof Uploaded";
-  if (status === "processing" && paymentStatus === "PAID") return "Paid";
-  if (status === "shipped") return "Shipped";
-  if (status === "completed") return "Completed";
-  if (status === "rejected") return "Rejected";
-
-  return status;
-}
-
-function renderItems(items = []) {
-  if (!items.length) return `<div class="admin-item">No items</div>`;
-
-  return items.map(item => `
-    <div class="admin-item">
-      <span>${item.name}</span>
-      <span>${item.size}</span>
-      <span>x${item.quantity}</span>
-      <span>₱${item.price}</span>
-    </div>
-  `).join("");
-}
-
-function renderProof(order) {
-  if (!order.proofUrl) return "";
+  }
 
   return `
-    <div class="admin-proof">
-      <p>Payment Proof:</p>
-      <img src="${order.proofUrl}" />
+
+    <div class="admin-order__timeline">
+
+      <p class="admin-order__section-title">
+        Timeline
+      </p>
+
+      ${logs.map(log => {
+
+        return `
+
+          <div class="admin-order__timeline-item">
+
+            <div class="admin-order__timeline-action">
+
+              ${formatLogAction(log.action)}
+
+            </div>
+
+            <div class="admin-order__timeline-date">
+
+              ${formatLogDate(log.timestamp)}
+
+            </div>
+
+            ${log.details?.trackingNumber
+
+              ? `
+
+                <div class="admin-order__timeline-meta">
+
+                  Tracking:
+                  ${log.details.trackingNumber}
+
+                </div>
+
+              `
+
+              : ""
+
+            }
+
+          </div>
+
+        `;
+
+      }).join("")}
+
     </div>
+
   `;
+
 }
 
-// ==========================
-// 🔥 ACTIONS (UPDATED)
-// ==========================
+/* ==========================
+   ACTIONS
+========================== */
+
 function renderActions(order) {
-  const { status, paymentStatus, proofUrl } = order;
+
+  const state =
+    order.orderState;
 
   let buttons = "";
 
-  if (status === "pending" && proofUrl && paymentStatus === "PENDING") {
+  /* ==========================
+     PROOF UPLOADED
+  ========================== */
+
+  if (
+    state === "PROOF_UPLOADED"
+  ) {
+
     buttons = `
-      <button data-action="approve">Approve</button>
-      <button data-action="reject">Reject</button>
+      <button
+        class="
+          admin-order__button
+          admin-order__button--approve
+        "
+        data-action="approve"
+      >
+        Approve
+      </button>
+
+      <button
+        class="
+          admin-order__button
+          admin-order__button--reject
+        "
+        data-action="reject"
+      >
+        Reject
+      </button>
     `;
+
   }
 
-  else if (status === "processing" && paymentStatus === "PAID") {
-    buttons = `<button data-action="ship">Ship Order</button>`;
+
+  /* ==========================
+     PAID
+  ========================== */
+
+  else if (
+    state === "PAID"
+  ) {
+
+    buttons = `
+      <button
+        class="
+          admin-order__button
+          admin-order__button--ship
+        "
+        data-action="ship"
+      >
+        Ship Order
+      </button>
+    `;
+
   }
 
-  else if (status === "shipped") {
-    buttons = `<button data-action="complete">Mark as Completed</button>`;
+
+  /* ==========================
+     SHIPPED
+  ========================== */
+
+  else if (
+    state === "SHIPPED"
+  ) {
+
+    buttons = `
+      <button
+        class="
+          admin-order__button
+          admin-order__button--complete
+        "
+        data-action="complete"
+      >
+        Mark as Completed
+      </button>
+    `;
+
   }
 
   return buttons
-    ? `<div class="admin-buttons">${buttons}</div>`
+    ? `
+      <div class="admin-order__buttons">
+        ${buttons}
+      </div>
+    `
     : "";
+
 }

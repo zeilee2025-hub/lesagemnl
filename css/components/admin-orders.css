@@ -1,0 +1,355 @@
+/* ==========================
+   ADMIN ORDERS LIST
+========================== */
+
+.admin-orders {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+
+/* ==========================
+   ADMIN ORDER CARD
+========================== */
+
+.admin-order {
+  padding: 16px;
+
+  border: 1px solid #eee;
+  border-radius: 14px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.admin-order:hover {
+  border-color: #ddd;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+
+  transform: translateY(-1px);
+}
+
+
+/* ==========================
+   ADMIN ORDER HEADER
+========================== */
+
+.admin-order__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 6px;
+}
+
+.admin-order__id {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+
+  color: #111;
+}
+
+
+/* ==========================
+   ADMIN STATUS
+========================== */
+
+.admin-order__status {
+  padding: 5px 10px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+
+/* STATUS MODIFIERS */
+
+.admin-order__status--paid {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.08);
+}
+
+.admin-order__status--pending {
+  color: #d97706;
+  background: rgba(217, 119, 6, 0.08);
+}
+
+.admin-order__status--shipped {
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.admin-order__status--completed {
+  color: #111;
+  background: #f2f2f2;
+}
+
+.admin-order__status--rejected {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.08);
+}
+
+
+/* ==========================
+   ADMIN ORDER META
+========================== */
+
+.admin-order__bottom {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 6px;
+
+  font-size: 13px;
+
+  color: #666;
+}
+
+.admin-order__bottom strong {
+  font-weight: 600;
+  color: #111;
+}
+
+
+/* ==========================
+   ADMIN ORDER ITEMS
+========================== */
+
+.admin-order__items {
+  margin-top: 14px;
+  padding-top: 10px;
+
+  border-top: 1px solid #eee;
+}
+
+.admin-order__item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+
+  padding: 4px 0;
+
+  font-size: 12px;
+
+  color: #444;
+}
+
+
+/* ==========================
+   ADMIN ACTIONS
+========================== */
+
+.admin-order__actions {
+  margin-top: 12px;
+}
+
+.admin-order__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-order__button {
+  padding: 6px 12px;
+
+  border: 1px solid #111;
+  border-radius: 999px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  transition: all 0.2s ease;
+}
+
+.admin-order__button:hover {
+  background: #111;
+  color: #fff;
+}
+
+
+/* ==========================
+   BUTTON MODIFIERS
+========================== */
+
+.admin-order__button--approve {
+  border-color: #16a34a;
+  color: #16a34a;
+}
+
+.admin-order__button--approve:hover {
+  background: #16a34a;
+  color: #fff;
+}
+
+.admin-order__button--reject {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.admin-order__button--reject:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
+.admin-order__button--ship {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.admin-order__button--ship:hover {
+  background: #2563eb;
+  color: #fff;
+}
+
+.admin-order__button--complete {
+  border-color: #111;
+  color: #111;
+}
+
+
+/* ==========================
+   UTILITIES
+========================== */
+
+.hidden {
+  display: none;
+}
+
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 640px) {
+
+  .admin-order__top {
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 6px;
+  }
+
+  .admin-order__bottom {
+    flex-direction: column;
+
+    gap: 4px;
+  }
+
+  .admin-order__item {
+    grid-template-columns: 1fr;
+
+    gap: 2px;
+  }
+
+}
+
+/* ==========================
+   ADMIN DETAIL SECTIONS
+========================== */
+
+.admin-order__customer,
+.admin-order__proof,
+.admin-order__tracking {
+  margin-top: 14px;
+  padding-top: 14px;
+
+  border-top: 1px solid #eee;
+}
+
+
+/* ==========================
+   SECTION TITLE
+========================== */
+
+.admin-order__section-title {
+  margin-bottom: 8px;
+
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+
+  color: #777;
+}
+
+
+/* ==========================
+   CUSTOMER INFO
+========================== */
+
+.admin-order__customer p {
+  margin-bottom: 4px;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  color: #444;
+}
+
+
+/* ==========================
+   PAYMENT PROOF
+========================== */
+
+.admin-order__proof-image {
+  width: 100%;
+  max-width: 320px;
+
+  margin-top: 8px;
+
+  border: 1px solid #eee;
+  border-radius: 12px;
+
+  display: block;
+}
+
+
+/* ==========================
+   TRACKING INPUT
+========================== */
+
+.admin-order__tracking-input {
+  width: 100%;
+  max-width: 320px;
+
+  margin-top: 8px;
+  padding: 10px 12px;
+
+  border: 1px solid #ddd;
+  border-radius: 10px;
+
+  outline: none;
+
+  font-size: 13px;
+
+  transition: border-color 0.2s ease;
+}
+
+.admin-order__tracking-input:focus {
+  border-color: #111;
+}
+
+
+/* ==========================
+   TRACKING NOTE
+========================== */
+
+.admin-order__tracking-note {
+  margin-top: 6px;
+
+  font-size: 12px;
+
+  color: #777;
+}

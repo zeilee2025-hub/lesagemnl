@@ -1,3 +1,5 @@
+import "./search.js";
+
 import { renderCart } from "./cartDrawer.js";
 import { updateCartBadge } from "../services/cartService.js";
 

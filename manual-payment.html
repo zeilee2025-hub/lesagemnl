@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Complete Payment</title>
+
+  <!-- BASE -->
+  <link rel="stylesheet" href="./css/base.css" />
+
+  <!-- COMPONENTS -->
+  <link rel="stylesheet" href="./css/components/buttons.css" />
+  <link rel="stylesheet" href="./css/components/modal.css" />
+  <link rel="stylesheet" href="./css/components/order-summary.css" />
+  <link rel="stylesheet" href="./css/components/payment-method.css" />
+  <link rel="stylesheet" href="./css/components/payment-upload.css" />
+
+  <!-- PAGE -->
+  <link rel="stylesheet" href="./css/pages/manual-payment.css" />
+</head>
+
+<body class="manual-payment-page">
+
+  <main class="manual-payment">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+    <div class="manual-payment__header">
+
+      <div class="manual-payment__header-inner">
+
+        <a href="/" class="manual-payment__logo">
+          <img
+            src="./assets/logo.png"
+            alt="LÉ SAGE"
+          />
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="manual-payment__wrapper">
+
+      <div class="manual-payment__layout">
+
+        <!-- =========================
+             LEFT
+        ========================== -->
+        <div class="manual-payment__left">
+
+          <!-- INTRO -->
+          <div class="manual-payment__intro">
+
+            <h1 class="manual-payment__title">
+              Order Received
+            </h1>
+
+            <p
+              class="manual-payment__subtitle"
+              id="confirmation-subtitle"
+            >
+              Complete your payment to confirm your order
+            </p>
+
+            <!-- SUCCESS -->
+            <div
+              class="manual-payment__success-info"
+              id="confirmation-success-info"
+            >
+              <!-- JS inject -->
+            </div>
+
+            <!-- STATUS -->
+            <div class="manual-payment__meta-inline">
+
+              <span
+                class="manual-payment__status"
+                id="order-status-inline"
+                data-status="pending"
+              >
+                Waiting for payment · 24:00:00 left
+              </span>
+
+            </div>
+
+            <!-- ORDER ID -->
+            <p class="manual-payment__order-id">
+
+              Order ID:
+              <span id="order-id"></span>
+
+              <button
+                id="copy-order-btn"
+                class="payment-method__copy-btn"
+                type="button"
+              >
+                Copy
+              </button>
+
+            </p>
+
+          </div>
+
+          <!-- =========================
+               PAYMENT DETAILS
+          ========================== -->
+          <div class="payment-details">
+
+            <h3 class="payment-details__title">
+              Payment Details
+            </h3>
+
+            <!-- GCASH -->
+            <div class="payment-method payment-method--primary">
+
+              <div class="payment-method__header">
+
+                <p class="payment-method__name">
+                  GCash
+                </p>
+
+                <button
+                  type="button"
+                  class="payment-method__copy-btn"
+                  data-copy="+63919320296"
+                >
+                  Copy
+                </button>
+
+              </div>
+
+              <div class="payment-method__details">
+
+                <p class="payment-method__info">
+                  +63 919 320 296
+                </p>
+
+                <p class="payment-method__sub">
+                  John Cyril Albaladejo
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- BPI -->
+            <div class="payment-method">
+
+              <div class="payment-method__header">
+
+                <p class="payment-method__name">
+                  BPI
+                </p>
+
+                <button
+                  type="button"
+                  class="payment-method__copy-btn"
+                  data-copy="0606353416"
+                >
+                  Copy
+                </button>
+
+              </div>
+
+              <div class="payment-method__details">
+
+                <p class="payment-method__label">
+                  Account number
+                </p>
+
+                <p class="payment-method__info">
+                  0606 3534 16
+                </p>
+
+                <p class="payment-method__sub">
+                  John Cyril Albaladejo
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- GOTYME -->
+            <div class="payment-method">
+
+              <div class="payment-method__header">
+
+                <p class="payment-method__name">
+                  GoTyme Bank
+                </p>
+
+                <button
+                  type="button"
+                  class="payment-method__copy-btn"
+                  data-copy="014805150169"
+                >
+                  Copy
+                </button>
+
+              </div>
+
+              <div class="payment-method__details">
+
+                <p class="payment-method__label">
+                  Account number
+                </p>
+
+                <p class="payment-method__info">
+                  0148 0515 0169
+                </p>
+
+                <p class="payment-method__sub">
+                  John Cyril Albaladejo
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- =========================
+                 PAYMENT UPLOAD
+            ========================== -->
+            <div class="payment-upload">
+
+              <div
+                class="payment-upload__form"
+                id="payment-form"
+              >
+
+                <h4 class="payment-upload__title">
+                  Confirm your payment
+                </h4>
+
+                <p class="payment-upload__desc">
+                  Upload a screenshot of your payment
+                  to complete your order.
+                </p>
+
+                <input
+                  type="file"
+                  id="proof-input"
+                  accept="image/*"
+                  hidden
+                />
+
+                <button
+                  type="button"
+                  class="btn btn-secondary payment-upload__trigger"
+                  id="upload-btn"
+                >
+                  Select screenshot
+                </button>
+
+                <p
+                  class="payment-upload__filename"
+                  id="file-name"
+                ></p>
+
+                <button
+                  type="button"
+                  class="btn btn-primary payment-upload__submit"
+                  id="submit-proof"
+                >
+                  Confirm payment
+                </button>
+
+                <p class="payment-upload__note">
+                  We’ll review your payment and send
+                  your order details by email once
+                  it’s confirmed.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- =========================
+               SUPPORT
+          ========================== -->
+          <div class="manual-payment__support">
+
+            <div class="manual-payment__support-row">
+
+              <p class="manual-payment__support-text">
+
+                Need help?
+
+                <a
+                  href="https://www.facebook.com/lesage.mnl"
+                  class="support-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Contact us
+                </a>
+
+              </p>
+
+              <div
+                class="manual-payment__actions"
+                id="confirmation-actions"
+              ></div>
+
+            </div>
+
+          </div>
+
+          <!-- =========================
+               LEGAL
+          ========================== -->
+          <div class="manual-payment__legal">
+
+            <div class="manual-payment__legal-links">
+
+              <button
+                type="button"
+                class="legal-link"
+                data-policy="refund"
+              >
+                Refund policy
+              </button>
+
+              <button
+                type="button"
+                class="legal-link"
+                data-policy="privacy"
+              >
+                Privacy policy
+              </button>
+
+              <button
+                type="button"
+                class="legal-link"
+                data-policy="terms"
+              >
+                Terms of service
+              </button>
+
+              <button
+                type="button"
+                class="legal-link"
+                data-policy="cancellations"
+              >
+                Cancellations
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- =========================
+             RIGHT
+        ========================== -->
+        <div class="manual-payment__right">
+
+          <div
+            class="order-summary"
+            id="order-summary"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- =========================
+       MODAL
+  ========================== -->
+  <div
+    class="modal"
+    id="policy-modal"
+  >
+
+    <div
+      class="modal__overlay"
+      id="modal-overlay"
+    ></div>
+
+    <div class="modal__content">
+
+      <button
+        type="button"
+        class="modal__close"
+        id="modal-close"
+      >
+        ×
+      </button>
+
+      <h3
+        class="modal__title"
+        id="modal-title"
+      ></h3>
+
+      <div
+        class="modal__body"
+        id="modal-body"
+      ></div>
+
+    </div>
+
+  </div>
+
+  <script
+    type="module"
+    src="./js/pages/manualPayment.js"
+  ></script>
+
+</body>
+
+</html>

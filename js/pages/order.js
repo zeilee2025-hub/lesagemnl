@@ -115,46 +115,131 @@ function renderOrder(order) {
   // ==========================
 // TIMELINE
 // ==========================
-const timelineEl = document.getElementById("order-timeline-list");
+const timelineEl =
+  document.getElementById(
+    "order-timeline-list"
+  );
 
-const timelineSteps = [
-  { key: "PENDING_PAYMENT", label: "Order Placed", date: order.createdAt },
-  { key: "PAID", label: "Payment Confirmed" },
-  { key: "SHIPPED", label: "Shipped" },
-  { key: "COMPLETED", label: "Delivered" }
+const logs =
+  order.logs || [];
+
+const timeline = [
+
+  {
+    label: "Order Placed",
+    timestamp: order.createdAt
+  },
+
+  ...logs.map(log => ({
+
+    label:
+      formatTimelineAction(
+        log.action
+      ),
+
+    timestamp:
+      log.timestamp,
+
+    trackingNumber:
+      log.details?.trackingNumber
+
+  }))
+
 ];
 
-const currentIndex = timelineSteps.findIndex(s => s.key === order.orderState);
+timelineEl.innerHTML = timeline.map(event => `
 
-timelineEl.innerHTML = timelineSteps.map((step, i) => `
-  <div class="timeline-item ${i <= currentIndex ? "active" : ""}">
+  <div class="timeline-item active">
+
     <div class="timeline-dot"></div>
+
     <div class="timeline-content">
-      <div class="timeline-title">${step.label}</div>
-      ${
-        step.date
-          ? `<div class="timeline-date">${formatDate(step.date)}</div>`
-          : ""
+
+      <div class="timeline-title">
+
+        ${event.label}
+
+      </div>
+
+      <div class="timeline-date">
+
+        ${formatDate(event.timestamp)}
+
+      </div>
+
+      ${event.trackingNumber
+
+        ? `
+
+          <div class="timeline-meta">
+
+            Tracking:
+            ${event.trackingNumber}
+
+          </div>
+
+        `
+
+        : ""
+
       }
+
     </div>
+
   </div>
+
 `).join("");
 
   // ==========================
   // TRACKING
   // ==========================
-  const trackingSection = document.getElementById("tracking-section");
+  const trackingSection =
+    document.getElementById(
+      "tracking-section"
+    );
 
-  if (order.orderState === "SHIPPED" && order.trackingNumber) {
-    trackingSection.classList.remove("hidden");
+  if (
 
-    document.getElementById("tracking-number").textContent =
+    (
+      order.orderState === "SHIPPED" ||
+      order.orderState === "COMPLETED"
+    )
+
+    &&
+
+    order.trackingNumber
+
+  ) {
+
+    trackingSection.classList.remove(
+      "hidden"
+    );
+
+    document.getElementById(
+      "tracking-number"
+    ).textContent =
       order.trackingNumber;
 
-    document.getElementById("tracking-link").href =
+    document.getElementById(
+      "tracking-courier"
+    ).textContent =
+      order.courier ||
+      "J&T Express";
+
+    document.getElementById(
+      "tracking-link"
+    ).href =
+
       `https://www.jtexpress.ph/index/query/gzquery.html?billcodes=${order.trackingNumber}`;
-  } else {
-    trackingSection.classList.add("hidden");
+
+  }
+
+  else {
+
+    trackingSection.classList.add(
+      "hidden"
+    );
+
   }
 
   // ==========================
@@ -221,6 +306,34 @@ function applyStatus(el, stateRaw) {
 // ==========================
 function showError(message) {
   document.body.innerHTML = `<p style="padding:40px;">${message}</p>`;
+}
+
+// ==========================
+// TIMELINE LABELS
+// ==========================
+function formatTimelineAction(action) {
+
+  const map = {
+
+    PAYMENT_APPROVED:
+      "Payment Approved",
+
+    PAYMENT_REJECTED:
+      "Payment Rejected",
+
+    PAYMENT_WEBHOOK_CONFIRMED:
+      "Payment Confirmed",
+
+    ORDER_SHIPPED:
+      "Order Shipped",
+
+    ORDER_COMPLETED:
+      "Order Completed"
+
+  };
+
+  return map[action] || action;
+
 }
 
 // ==========================

@@ -1,260 +1,690 @@
-// ==========================
-// 📦 ADMIN PAGE LOGIC (FINAL)
-// ==========================
+import {
+  getOrders,
+  updateOrderStatus
+} from "../services/orderService.js";
 
-import { getOrders, updateOrderStatus } from "../services/orderService.js";
-import { renderOrders } from "../components/adminUI.js";
+import {
+  renderOrders
+} from "../components/adminUI.js";
 
-const container = document.getElementById("admin-orders");
+import { auth }
+from "../core/firebase.js";
 
-// ==========================
-// 🔍 STATE
-// ==========================
+import {
+
+  onAuthStateChanged,
+  signOut
+
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+
+/* ==============================
+   ADMIN AUTH PROTECTION
+============================== */
+
+onAuthStateChanged(
+
+  auth,
+
+  (user) => {
+
+    if (!user) {
+
+      window.location.href =
+        "../admin-login.html";
+
+    }
+
+  }
+
+);
+
+
+/* ==========================
+   ADMIN ELEMENTS
+========================== */
+
+const ordersContainer =
+  document.getElementById("admin-orders");
+
+const filterButtons =
+  document.querySelectorAll(".admin__filter-btn");
+
+const searchInput =
+  document.getElementById("order-search");
+
+  const logoutBtn =
+  document.getElementById(
+    "admin-logout-btn"
+  );
+
+
+/* ==========================
+   ADMIN STATE
+========================== */
+
 let allOrders = [];
+
 let currentFilter = "ALL";
 
-// ==========================
-// 📊 STATS SYSTEM
-// ==========================
+/* ==============================
+   ADMIN LOGOUT
+============================== */
+
+if (logoutBtn) {
+
+  logoutBtn.addEventListener(
+
+    "click",
+
+    async () => {
+
+      await signOut(auth);
+
+      window.location.href =
+        "../admin-login.html";
+
+    }
+
+  );
+
+}
+
+/* ==========================
+   ADMIN STATS
+========================== */
+
 function updateStats(orders) {
-  const totalEl = document.getElementById("stat-total");
-  const pendingEl = document.getElementById("stat-pending");
-  const paidEl = document.getElementById("stat-paid");
-  const revenueEl = document.getElementById("stat-revenue");
+
+  const totalElement =
+    document.getElementById("stat-total");
+
+  const pendingElement =
+    document.getElementById("stat-pending");
+
+  const paidElement =
+    document.getElementById("stat-paid");
+
+  const revenueElement =
+    document.getElementById("stat-revenue");
 
   if (!orders) return;
 
-  const total = orders.length;
+  const totalOrders = orders.length;
 
-  const pending = orders.filter(o =>
-    o.orderState === "PENDING_PAYMENT" ||
-    o.orderState === "PROOF_UPLOADED"
+  const pendingOrders = orders.filter(order =>
+    order.orderState === "PENDING_PAYMENT" ||
+    order.orderState === "PROOF_UPLOADED"
   ).length;
 
-  const paid = orders.filter(o =>
-    o.orderState === "PAID" ||
-    o.orderState === "SHIPPED" ||
-    o.orderState === "COMPLETED"
+  const paidOrders = orders.filter(order =>
+    order.orderState === "PAID" ||
+    order.orderState === "SHIPPED" ||
+    order.orderState === "COMPLETED"
   ).length;
 
-  const revenue = orders
-    .filter(o => o.paymentStatus === "PAID")
-    .reduce((sum, o) => sum + (o.total || 0), 0);
+  const totalRevenue = orders
+    .filter(order => order.paymentStatus === "PAID")
+    .reduce((sum, order) => {
+      return sum + (order.total || 0);
+    }, 0);
 
-  if (totalEl) totalEl.textContent = total;
-  if (pendingEl) pendingEl.textContent = pending;
-  if (paidEl) paidEl.textContent = paid;
-  if (revenueEl) revenueEl.textContent = `₱${revenue.toLocaleString()}`;
-}
-
-// ==========================
-// 🧠 FILTER LOGIC
-// ==========================
-function applyFilters() {
-  let filtered = [...allOrders];
-
-  if (currentFilter !== "ALL") {
-    filtered = filtered.filter(order =>
-      order.orderState === currentFilter
-    );
+  if (totalElement) {
+    totalElement.textContent = totalOrders;
   }
 
-  renderOrders(container, filtered);
-  updateStats(filtered);
+  if (pendingElement) {
+    pendingElement.textContent = pendingOrders;
+  }
+
+  if (paidElement) {
+    paidElement.textContent = paidOrders;
+  }
+
+  if (revenueElement) {
+    revenueElement.textContent =
+      `₱${totalRevenue.toLocaleString()}`;
+  }
+
 }
 
-// ==========================
-// 🔘 FILTER HANDLER
-// ==========================
-function setupFilters() {
-  const buttons = document.querySelectorAll(".filter-btn");
 
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      buttons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
+/* ==========================
+   ADMIN FILTERING
+========================== */
 
-      currentFilter = btn.dataset.filter;
+function getFilteredOrders() {
 
-      applyFilters();
+  let filteredOrders = [...allOrders];
+
+  if (currentFilter !== "ALL") {
+
+    filteredOrders = filteredOrders.filter(order => {
+      return order.orderState === currentFilter;
     });
-  });
+
+  }
+
+  const searchValue =
+    searchInput?.value?.toLowerCase()?.trim();
+
+  if (searchValue) {
+
+    filteredOrders = filteredOrders.filter(order => {
+
+      const orderNumber =
+        (order.orderNumber || order.id)
+          .toLowerCase();
+
+      return orderNumber.includes(searchValue);
+
+    });
+
+  }
+
+  return filteredOrders;
+
 }
 
-// ==========================
-// 🔍 SEARCH SYSTEM
-// ==========================
+
+function renderCurrentView() {
+
+  const filteredOrders = getFilteredOrders();
+
+  renderOrders(
+    ordersContainer,
+    filteredOrders
+  );
+
+  updateStats(filteredOrders);
+
+}
+
+
+/* ==========================
+   ADMIN FILTERS
+========================== */
+
+function setupFilters() {
+
+  if (!filterButtons.length) return;
+
+  filterButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      filterButtons.forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      currentFilter =
+        button.dataset.filter;
+
+      renderCurrentView();
+
+    });
+
+  });
+
+}
+
+
+/* ==========================
+   ADMIN SEARCH
+========================== */
+
 function setupSearch() {
-  const searchInput = document.getElementById("order-search");
+
   if (!searchInput) return;
 
-  searchInput.addEventListener("input", (e) => {
-    const value = e.target.value.toLowerCase().trim();
-
-    let filtered = [...allOrders];
-
-    if (currentFilter !== "ALL") {
-      filtered = filtered.filter(order =>
-        order.orderState === currentFilter
-      );
-    }
-
-    if (value) {
-      filtered = filtered.filter(order => {
-        const orderNumber = (order.orderNumber || order.id).toLowerCase();
-        return orderNumber.includes(value);
-      });
-    }
-
-    renderOrders(container, filtered);
-    updateStats(filtered);
+  searchInput.addEventListener("input", () => {
+    renderCurrentView();
   });
+
 }
 
-// ==========================
-// 🔄 REFRESH SYSTEM
-// ==========================
+
+/* ==========================
+   ADMIN ORDER REFRESH
+========================== */
+
 async function refreshOrders() {
+
   let orders = await getOrders();
 
   if (!Array.isArray(orders)) {
-    console.error("❌ Orders is not an array. FIXING...");
+
+    console.error(
+      "Orders is not an array."
+    );
+
     orders = [];
+
   }
 
   orders.sort((a, b) => {
-    const dateA = new Date(a.paidAt || a.createdAt || 0);
-    const dateB = new Date(b.paidAt || b.createdAt || 0);
+
+    const dateA =
+      new Date(a.paidAt || a.createdAt || 0);
+
+    const dateB =
+      new Date(b.paidAt || b.createdAt || 0);
+
     return dateB - dateA;
+
   });
 
   allOrders = orders;
 
-  applyFilters();
+  renderCurrentView();
+
 }
 
-// ==========================
-// 🎯 HANDLE INTERACTIONS (FIXED)
-// ==========================
-function setupInteractions() {
-  if (!container) return;
+/* ==========================
+   ORDER STATE MACHINE
+========================== */
 
-  container.addEventListener("click", async (e) => {
-    const card = e.target.closest(".admin-order");
-    if (!card) return;
+const allowedTransitions = {
 
-    const action = e.target.dataset.action;
+  PENDING_PAYMENT: [
+    "PROOF_UPLOADED",
+    "CANCELLED",
+    "EXPIRED"
+  ],
 
-    // ==========================
-    // 🚫 PREVENT TOGGLE WHEN INTERACTING INSIDE CONTENT
-    // ==========================
-    const clickedInsideContent =
-      e.target.closest("input") ||
-      e.target.closest("button") ||
-      e.target.closest(".admin-order-items");
+  PROOF_UPLOADED: [
+    "PAID",
+    "REJECTED"
+  ],
 
-    // ==========================
-    // 🔓 TOGGLE ONLY WHEN CLICKING HEADER AREA
-    // ==========================
-    if (!clickedInsideContent) {
-      const items = card.querySelector(".admin-order-items");
-      if (items) {
-        items.classList.toggle("hidden");
-      }
-      return;
+  PAID: [
+    "SHIPPED"
+  ],
+
+  SHIPPED: [
+    "COMPLETED"
+  ],
+
+  COMPLETED: [],
+
+  REJECTED: [],
+
+  CANCELLED: [],
+
+  EXPIRED: []
+
+};
+
+
+/* ==========================
+   VALIDATE STATE TRANSITION
+========================== */
+
+function canTransition(
+
+  currentState,
+  nextState
+
+) {
+
+  return allowedTransitions[
+    currentState
+  ]?.includes(nextState);
+
+}
+
+/* ==========================
+   ADMIN ACTIONS
+========================== */
+
+async function handleApprove(orderId) {
+
+  const order =
+    allOrders.find(order => {
+      return order.id === orderId;
+    });
+
+  if (!order) {
+
+    alert("Order not found");
+
+    return;
+
+  }
+
+  if (
+
+    !canTransition(
+      order.orderState,
+      "PAID"
+    )
+
+  ) {
+
+    alert(
+      "Invalid order transition"
+    );
+
+    return;
+
+  }
+
+  await fetch(
+    "http://localhost:3000/approve-order",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        orderId
+      })
     }
+  );
 
-    // ==========================
-    // 🔥 HANDLE ACTIONS
-    // ==========================
-    if (action) {
-      const orderId = card.dataset.id;
+}
+
+
+async function handleReject(orderId) {
+
+  const order =
+    allOrders.find(order => {
+      return order.id === orderId;
+    });
+
+  if (!order) {
+
+    alert("Order not found");
+
+    return;
+
+  }
+
+  if (
+
+    !canTransition(
+      order.orderState,
+      "REJECTED"
+    )
+
+  ) {
+
+    alert(
+      "Invalid order transition"
+    );
+
+    return;
+
+  }
+
+  await fetch(
+    "http://localhost:3000/reject-order",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        orderId
+      })
+    }
+  );
+
+}
+
+
+async function handleShip(card, orderId) {
+
+  const order =
+    allOrders.find(order => {
+      return order.id === orderId;
+    });
+
+  if (!order) {
+
+    alert("Order not found");
+
+    return;
+
+  }
+
+  if (
+
+    !canTransition(
+      order.orderState,
+      "SHIPPED"
+    )
+
+  ) {
+
+    alert(
+      "Invalid order transition"
+    );
+
+    return;
+
+  }
+
+  const trackingInput =
+    card.querySelector(
+      "[data-tracking-input]"
+    );
+
+  const trackingNumber =
+    trackingInput?.value?.trim();
+
+  if (!trackingNumber) {
+
+    alert(
+      "Tracking number is required."
+    );
+
+    return;
+
+  }
+
+  await fetch(
+    "http://localhost:3000/ship-order",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        orderId,
+        trackingNumber
+      })
+    }
+  );
+
+}
+
+
+async function handleComplete(orderId) {
+
+  const order =
+    allOrders.find(order => {
+      return order.id === orderId;
+    });
+
+  if (!order) {
+
+    alert("Order not found");
+
+    return;
+
+  }
+
+  if (
+
+    !canTransition(
+      order.orderState,
+      "COMPLETED"
+    )
+
+  ) {
+
+    alert(
+      "Invalid order transition"
+    );
+
+    return;
+
+  }
+
+  await updateOrderStatus(
+
+  orderId,
+
+  {
+    orderState: "COMPLETED"
+  },
+
+  {
+    action: "ORDER_COMPLETED"
+  }
+
+);
+
+}
+
+
+/* ==========================
+   ADMIN INTERACTIONS
+========================== */
+
+function setupInteractions() {
+
+  if (!ordersContainer) return;
+
+  ordersContainer.addEventListener(
+    "click",
+    async (event) => {
+
+      const orderCard =
+        event.target.closest(".admin-order");
+
+      if (!orderCard) return;
+
+      const action =
+        event.target.dataset.action;
+
+      const clickedInsideContent =
+        event.target.closest("input") ||
+        event.target.closest("button") ||
+        event.target.closest(
+          ".admin-order__items"
+        );
+
+      if (!clickedInsideContent) {
+
+        const orderItems =
+          orderCard.querySelector(
+            ".admin-order__items"
+          );
+
+        if (orderItems) {
+          orderItems.classList.toggle(
+            "hidden"
+          );
+        }
+
+        return;
+
+      }
+
+      if (!action) return;
+
+      const orderId =
+        orderCard.dataset.id;
 
       try {
-        let updates = null;
 
-        // ✅ APPROVE
         if (action === "approve") {
-          await fetch("http://localhost:3000/approve-order", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ orderId })
-          });
+
+          await handleApprove(orderId);
+
         }
 
-        // ❌ REJECT
         else if (action === "reject") {
-          await fetch("http://localhost:3000/reject-order", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ orderId })
-          });
+
+          await handleReject(orderId);
+
         }
 
-        // 🚚 SHIP (WITH TRACKING)
         else if (action === "ship") {
-          const input = card.querySelector("[data-tracking-input]");
-          const trackingNumber = input?.value?.trim();
 
-          if (!trackingNumber) {
-            alert("Tracking number is required.");
-            return;
-          }
+          await handleShip(
+            orderCard,
+            orderId
+          );
 
-          await fetch("http://localhost:3000/ship-order", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              orderId,
-              trackingNumber
-            })
-          });
         }
 
-        // 📦 COMPLETE
         else if (action === "complete") {
-          updates = {
-            status: "completed",
-            orderState: "COMPLETED"
-          };
-        }
 
-        if (updates) {
-          await updateOrderStatus(orderId, updates);
+          await handleComplete(orderId);
+
         }
 
         await refreshOrders();
 
-      } catch (error) {
-        console.error("❌ ACTION ERROR:", error);
       }
+
+      catch (error) {
+
+        console.error(
+          "Admin action error:",
+          error
+        );
+
+      }
+
     }
-  });
+  );
+
 }
 
-// ==========================
-// 🚀 INIT ADMIN
-// ==========================
+
+/* ==========================
+   ADMIN INIT
+========================== */
+
 async function initAdmin() {
-  if (!container) return;
+
+  if (!ordersContainer) return;
 
   try {
+
     await refreshOrders();
 
-    setupInteractions();
-    setupSearch();
     setupFilters();
+    setupSearch();
+    setupInteractions();
 
-  } catch (error) {
-    console.error("❌ ADMIN LOAD ERROR:", error);
-    container.innerHTML = "<p>Failed to load orders.</p>";
   }
+
+  catch (error) {
+
+    console.error(
+      "Admin load error:",
+      error
+    );
+
+    ordersContainer.innerHTML =
+      "<p>Failed to load orders.</p>";
+
+  }
+
 }
+
 
 initAdmin();

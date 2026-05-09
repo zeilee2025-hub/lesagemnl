@@ -349,10 +349,14 @@ function setupPaymentSelection() {
     card.addEventListener("click", () => {
 
       cards.forEach((currentCard) => {
-        currentCard.classList.remove("active");
+        currentCard.classList.remove(
+  "payment-card--active"
+);
       });
 
-      card.classList.add("active");
+      card.classList.add(
+  "payment-card--active"
+);
 
       paymentMethod = card.dataset.method;
 
@@ -407,6 +411,7 @@ async function handleCheckout() {
   try {
 
     button.disabled = true;
+    button.classList.add("is-disabled");
     button.textContent = "Processing...";
 
     const formData =
@@ -514,50 +519,85 @@ async function handleCheckout() {
 
 
     /* =========================
-       CREATE ORDER
+   CREATE ORDER
+========================= */
+
+const orderId =
+  await saveOrder({
+
+    /* =========================
+       CUSTOMER
     ========================= */
 
-    const orderId =
-      await saveOrder({
+    email: customer.email,
 
-        email: customer.email,
+    firstName:
+      customer.firstName,
 
-        firstName:
-          customer.firstName,
+    lastName:
+      customer.lastName,
 
-        lastName:
-          customer.lastName,
+    phone:
+      customer.phone,
 
-        phone:
-          customer.phone,
+    address:
+      customer.address,
 
-        address:
-          customer.address,
+    city:
+      customer.city,
 
-        city:
-          customer.city,
+    province:
+      customer.province,
 
-        province:
-          customer.province,
 
-        items: cartData,
+    /* =========================
+       ORDER ITEMS
+    ========================= */
 
-        subtotal:
-          totals.subtotal,
+    items: cartData,
 
-        shippingFee:
-          totals.shipping,
 
-        total:
-          totals.total,
+    /* =========================
+       TOTALS
+    ========================= */
 
-        status: "pending",
+    subtotal:
+      totals.subtotal,
 
-        paymentMethod,
+    shippingFee:
+      totals.shipping,
 
-        paymentStatus: "PENDING"
+    total:
+      totals.total,
 
-      });
+
+    /* =========================
+       NEW PRIMARY STATE SYSTEM
+    ========================= */
+
+    orderState:
+      "PENDING_PAYMENT",
+
+
+    /* =========================
+       LEGACY COMPATIBILITY
+       (TEMPORARY)
+    ========================= */
+
+    status:
+      "pending",
+
+    paymentStatus:
+      "PENDING",
+
+
+    /* =========================
+       PAYMENT
+    ========================= */
+
+    paymentMethod
+
+  });
 
 
     /* =========================
@@ -576,7 +616,7 @@ async function handleCheckout() {
     } else {
 
       window.location.href =
-        `/order-confirmation.html?id=${orderId}`;
+        `/manual-payment.html?id=${orderId}`;
 
     }
 
@@ -605,6 +645,7 @@ function resetButton(button) {
   if (!button) return;
 
   button.disabled = false;
+  button.classList.remove("is-disabled");
 
   updateCheckoutButton();
 

@@ -1,29 +1,136 @@
 /* =========================
-    BUTTONS
+   BUTTON BASE
 ========================= */
 
 .btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   padding: 12px 20px;
+
+  border: none;
+
   background: var(--color-accent);
+
   color: var(--color-white);
+
+  cursor: pointer;
+
   font-size: var(--text-sm);
+
   letter-spacing: var(--letter-normal);
-  transition: background 0.3s ease, transform 0.2s ease;
+
+  text-decoration: none;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .btn:hover {
   background: var(--color-black);
+
   transform: translateY(-2px);
 }
 
+.btn:active {
+  transform: translateY(0);
+}
+
+
+/* =========================
+   OUTLINE
+========================= */
+
 .btn-outline {
-  background: transparent;
   border: 1px solid var(--color-accent);
+
+  background: transparent;
+
   color: var(--color-accent);
 }
 
 .btn-outline:hover {
   background: var(--color-accent);
+
   color: var(--color-white);
+}
+
+
+/* =========================
+   PILL
+========================= */
+
+.btn-pill {
+  border-radius: 999px;
+}
+
+
+/* =========================
+   PRIMARY
+========================= */
+
+.btn-primary {
+  background: #111;
+
+  color: #fff;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.btn-primary:hover {
+  background: #000;
+
+  opacity: 0.95;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+   SECONDARY
+========================= */
+
+.btn-secondary {
+  border: 1px solid #ddd;
+
+  background: #fff;
+
+  color: #111;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.btn-secondary:hover {
+  background: #000;
+
+  color: #fff;
+
+  border-color: #000;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+   DISABLED
+========================= */
+
+.btn:disabled,
+.btn.is-disabled {
+  cursor: not-allowed;
+
+  opacity: 0.5;
+
+  transform: none;
+}
+
+.btn:disabled:hover,
+.btn.is-disabled:hover {
+  transform: none;
 }

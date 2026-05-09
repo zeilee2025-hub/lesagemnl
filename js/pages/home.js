@@ -1,5 +1,5 @@
 // ==========================
-// 📦 IMPORTS
+//  IMPORTS
 // ==========================
 import { listenToProducts, getProductById } from "../services/productService.js";
 
@@ -13,17 +13,17 @@ import { initSizeSelector } from "../components/sizeSelector.js";
 import { initAnnouncement } from "../components/announcement.js";
 import { initMarqueeDrag } from "../components/marquee.js";
 
-// ✅ SHARED CART
+//  SHARED CART
 import { renderCart } from "../components/cartDrawer.js";
 import { loadFooter } from "../components/footerLoader.js";
 
-// ✅ LOOKBOOK
+//  LOOKBOOK
 import { renderLookbookCarousel } from "../components/lookbookCarousel.js";
 import { initHero } from "../components/hero.js";
 
 
 // ==========================
-// 🧱 ELEMENTS
+//  ELEMENTS
 // ==========================
 const container = document.getElementById("product-list");
 
@@ -34,7 +34,7 @@ const cartItemsContainer = document.getElementById("cart-items");
 const cartTotalContainer = document.getElementById("cart-total");
 const cartIcon = document.getElementById("cart-icon");
 
-// 🔥 MODAL
+//  MODAL
 const modal = document.getElementById("quick-add-modal");
 const modalOverlay = document.getElementById("quick-add-overlay");
 const modalClose = document.getElementById("quick-add-close");
@@ -46,8 +46,8 @@ const qaColors = document.getElementById("qa-colors");
 const qaAddBtn = document.getElementById("qa-add-btn");
 
 
-// ==========================
-// 🧠 STATE
+// =========================
+//  STATE
 // ==========================
 let currentProduct = null;
 let selectedSize = null;
@@ -56,10 +56,10 @@ let allProducts = [];
 
 
 // ==========================
-// 🚀 INIT
+//  INIT
 // ==========================
 document.addEventListener("DOMContentLoaded", () => {
-  initHero(); // ✅ ADD THIS LINE FIRST
+  initHero(); 
 
   initAnnouncement();
   initMarqueeDrag();
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ========================== 
-// 🔥 DATA LISTENER
+//  DATA LISTENER
 // ==========================
 listenToProducts((products) => {
   allProducts = products;
@@ -89,12 +89,12 @@ listenToProducts((products) => {
 
 
 // ==========================
-// 🎨 PRODUCT GRID
+//  PRODUCT GRID
 // ==========================
 function renderProducts(products) {
   if (!container) return;
 
-  // 🔥 FORCE SINGLE GRID
+  //  FORCE SINGLE GRID
   container.classList.add("product-grid");
   container.innerHTML = "";
 
@@ -126,7 +126,7 @@ function renderProducts(products) {
 
 
 // ==========================
-// 🔥 QUICK ADD MODAL (UPDATED)
+//  QUICK ADD MODAL (UPDATED)
 // ==========================
 function handleQuickAdd({ product, colorIndex }) {
 
@@ -145,6 +145,9 @@ function handleQuickAdd({ product, colorIndex }) {
     variant?.name || "Default";
 
   qaAddBtn.disabled = true;
+
+qaAddBtn.textContent = "ADD TO CART";
+qaAddBtn.onclick = null;
 
   qaTitle.textContent =
     product.name;
@@ -262,15 +265,24 @@ if (sizes.length === 1) {
     // ==========================
     if (!sizes.length) {
 
-      qaSizes.innerHTML = `
-        <p class="quick-add__no-sizes">
-          Out of stock
-        </p>
-      `;
+  qaSizes.innerHTML = `
+    <p class="quick-add__no-sizes">
+      Out of stock
+    </p>
+  `;
 
-      return;
+  qaAddBtn.disabled = false;
 
-    }
+  qaAddBtn.textContent = "VIEW PRODUCT";
+
+  qaAddBtn.onclick = () => {
+    window.location.href =
+  `./product.html?id=${currentProduct.id}`;
+  };
+
+  return;
+
+}
 
     // ==========================
     // SHOW ONE SIZE LABEL
@@ -349,7 +361,7 @@ if (sizes.length === 1) {
 }
 
 // ==========================
-// 🛒 ADD TO CART
+//  ADD TO CART
 // ==========================
 qaAddBtn?.addEventListener("click", async () => {
 
@@ -399,7 +411,7 @@ qaAddBtn?.addEventListener("click", async () => {
 });
 
 // ==========================
-// ❌ CLOSE MODAL
+//  CLOSE MODAL
 // ==========================
 function closeModal() {
 
@@ -429,7 +441,7 @@ document.addEventListener("keydown", (e) => {
 
 
 // ==========================
-// 🛒 CART SYSTEM
+//  CART SYSTEM
 // ==========================
 function openCart() {
 
@@ -461,7 +473,7 @@ function closeCart() {
 }
 
 // ==========================
-// 🔥 DRAWER EVENTS
+//  DRAWER EVENTS
 // ==========================
 cartIcon?.addEventListener("click", openCart);
 closeCartBtn?.addEventListener("click", closeCart);
@@ -469,6 +481,6 @@ cartOverlay?.addEventListener("click", closeCart);
 
 
 // ==========================
-// 🦶 FOOTER INIT
+//  FOOTER INIT
 // ==========================
 loadFooter();

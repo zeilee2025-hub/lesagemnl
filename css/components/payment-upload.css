@@ -1,0 +1,185 @@
+/* =========================
+   PAYMENT UPLOAD
+========================= */
+
+.payment-upload {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  margin-top: 18px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.payment-upload__form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.payment-upload__status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 6px;
+
+  text-align: center;
+
+  opacity: 0;
+
+  transform: translateY(6px);
+}
+
+.payment-upload__status.active {
+  opacity: 1;
+
+  transform: translateY(0);
+
+  transition: all 0.25s ease;
+}
+
+
+/* =========================
+   TEXT
+========================= */
+
+.payment-upload__title {
+  font-size: 12px;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+
+  opacity: 0.4;
+}
+
+.payment-upload__desc {
+  font-size: 13px;
+
+  color: #666;
+}
+
+.payment-upload__filename {
+  font-size: 12px;
+
+  color: #666;
+}
+
+.payment-upload__note {
+  font-size: 12px;
+
+  text-align: center;
+
+  opacity: 0.55;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.payment-upload__trigger {
+  padding: 12px;
+
+  border: 1px solid #ddd;
+  border-radius: 10px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.payment-upload__trigger:hover {
+  border-color: #999;
+
+  background: #fafafa;
+}
+
+.payment-upload__submit {
+  width: 100%;
+  height: 54px;
+
+  margin-top: 6px;
+
+  border-radius: 12px;
+
+  background: #000;
+  color: #fff;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: all 0.2s ease;
+}
+
+.payment-upload__submit:hover {
+  opacity: 0.9;
+
+  transform: translateY(-1px);
+}
+
+.payment-upload__submit:active {
+  transform: translateY(0);
+
+  opacity: 0.85;
+}
+
+.payment-upload__submit.is-disabled {
+  background: #111;
+
+  opacity: 0.5;
+
+  cursor: default;
+}
+
+
+/* =========================
+   STATUS ACTIONS
+========================= */
+
+.payment-upload__status .payment-upload__submit {
+  width: auto;
+  min-width: 180px;
+  height: 48px;
+
+  padding: 0 20px;
+
+  margin-top: 4px;
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes fadeInUp {
+
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
