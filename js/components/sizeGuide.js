@@ -1,11 +1,11 @@
 // ==========================
-// 📏 SIZE GUIDE COMPONENT
+// SIZE GUIDE COMPONENT
 // ==========================
 
 export function renderSizeGuide(type, selectedSize) {
   const data = getSizeData(type);
 
-  // ❌ NO DATA
+  // NO DATA
   if (!data) {
     return `
       <div class="size-guide__empty">
@@ -51,24 +51,27 @@ export function renderSizeGuide(type, selectedSize) {
 }
 
 // ==========================
-// 📊 SIZE DATA (FINAL FIXED)
+// SIZE DATA
 // ==========================
 
 function getSizeData(type) {
-  // ✅ SAFETY NORMALIZATION (VERY IMPORTANT)
+
+  // SAFETY NORMALIZATION
   const t = String(type || "")
     .trim()
     .toLowerCase();
 
-  // 🔍 DEBUG (you can remove later)
   console.log("SIZE GUIDE TYPE:", t);
 
   if (!t) return null;
 
-  // 🧥 HOODIE
+  // ==========================
+  // HOODIE
+  // ==========================
   if (t === "hoodie") {
     return {
       headers: ["Size", "Length", "Width", "Sleeve", "Shoulder"],
+
       rows: [
         ["S", 27, 24.5, 18, 8.5],
         ["M", 28, 25.5, 19, 9],
@@ -79,10 +82,13 @@ function getSizeData(type) {
     };
   }
 
-  // 👕 TEE
+  // ==========================
+  // TEE
+  // ==========================
   if (t === "tee") {
     return {
       headers: ["Size", "Length", "Width", "Sleeve"],
+
       rows: [
         ["S", 28, 23, 10],
         ["M", 29, 24, 10.5],
@@ -92,10 +98,28 @@ function getSizeData(type) {
     };
   }
 
-  // 💪 MUSCLE
+  // ==========================
+  // RACERBACK
+  // ==========================
+  if (t === "racerback") {
+    return {
+      headers: ["Size", "Waist", "Length"],
+
+      rows: [
+        ["S", '20"-28"', '19"'],
+        ["M", '26"-30"', '20"'],
+        ["L", '28"-32"', '21"'],
+      ],
+    };
+  }
+
+  // ==========================
+  // MUSCLE
+  // ==========================
   if (t === "muscle") {
     return {
       headers: ["Size", "Length", "Width"],
+
       rows: [
         ["S", 24.2, 15],
         ["M", 26.2, 15.2],
@@ -104,10 +128,42 @@ function getSizeData(type) {
     };
   }
 
-  // 🧥 SWEATSHIRT
+  // ==========================
+  // PANTS
+  // ==========================
+  if (t === "pants") {
+    return {
+      headers: ["Waistline", "Length", "Leg Hole"],
+
+      rows: [
+        ['32"-40"', '38"', '15"'],
+      ],
+    };
+  }
+
+  // ==========================
+  // JORTZ
+  // ==========================
+  if (
+  t === "jortz" ||
+  t === "shorts"
+) {
+  return {
+    headers: ["Waistline", "Length", "Leg Hole"],
+
+    rows: [
+      ['32"-40"', '38"', '15"'],
+    ],
+  };
+}
+
+  // ==========================
+  // SWEATSHIRT
+  // ==========================
   if (t === "sweatshirt") {
     return {
       headers: ["Size", "Length", "Width"],
+
       rows: [
         ["S", 22, 24],
         ["M", 23, 25],
@@ -117,14 +173,21 @@ function getSizeData(type) {
     };
   }
 
-  // 🧢 ACCESSORY
+  // ==========================
+  // ACCESSORY
+  // ==========================
   if (t === "accessory") {
     return {
       headers: ["Size", "Description"],
-      rows: [["OS", "One Size Fits Most"]],
+
+      rows: [
+        ["OS", "One Size Fits Most"]
+      ],
     };
   }
 
-  // 🚫 DEFAULT
+  // ==========================
+  // DEFAULT
+  // ==========================
   return null;
 }

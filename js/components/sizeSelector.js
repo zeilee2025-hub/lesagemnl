@@ -34,7 +34,11 @@ export function initSizeSelector(sizes, elements, onSelect) {
     const size = String(sizeRaw).trim().toUpperCase();
 
     const btn = document.createElement("button");
-    btn.classList.add("product-size__option", "active");
+    btn.classList.add(
+  "product-size__option",
+  "product-size__option--active",
+  "product-size__option--auto"
+);
 
     btn.textContent = "ONE SIZE";
     btn.setAttribute("data-size", size);

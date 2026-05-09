@@ -109,9 +109,17 @@ async function init() {
     }
 
     currentProduct = {
-      ...product,
-      type: product.type || mapCategoryToType(product.category)
-    };
+  ...product,
+  type:
+    product.type ||
+    mapCategoryToType(
+      product.category || product.name
+    )
+};
+
+console.log("PRODUCT NAME:", product.name);
+console.log("PRODUCT CATEGORY:", product.category);
+console.log("PRODUCT TYPE:", currentProduct.type);
 
     currentProduct.selectedVariant = currentProduct.variants?.[0];
 
@@ -358,8 +366,44 @@ function formatStyle(style) {
 //  CATEGORY → TYPE
 // ==========================
 function mapCategoryToType(category) {
-  const c = String(category || "").toLowerCase();
+  const c = String(category || "")
+    .trim()
+    .toLowerCase();
+
+  // TOPS
   if (c.includes("top")) return "tee";
+
+  // RACERBACK
+  if (c.includes("racer")) return "racerback";
+
+  // MUSCLE
+  if (c.includes("muscle")) return "muscle";
+
+  // PANTS / BOTTOMS
+if (
+  c.includes("pant") ||
+  c.includes("bottom")
+) {
+  return "pants";
+}
+
+// JORTZ / SHORTS
+if (
+  c.includes("jort") ||
+  c.includes("short")
+) {
+  return "jortz";
+}
+
+  // HOODIE
+  if (c.includes("hoodie")) return "hoodie";
+
+  // SWEATSHIRT
+  if (c.includes("sweat")) return "sweatshirt";
+
+  // ACCESSORY
+  if (c.includes("accessory")) return "accessory";
+
   return null;
 }
 
