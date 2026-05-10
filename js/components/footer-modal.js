@@ -28,7 +28,7 @@ const modalContent = {
   <h2>Privacy Policy</h2>
 
   <p>
-    LÉ SAGE MNL values your privacy and is
+    Lé Sage MNL values your privacy and is
     committed to protecting your personal
     information in accordance with applicable
     laws and regulations.
@@ -181,7 +181,7 @@ const modalContent = {
   <h3>Policy Updates</h3>
 
   <p>
-    LÉ SAGE MNL reserves the right to update
+    Lé Sage MNL reserves the right to update
     this Privacy Policy at any time.
     Continued use of the website constitutes
     acceptance of any revisions.
@@ -193,7 +193,7 @@ const modalContent = {
 
   <p>
     By accessing, browsing, or placing an
-    order through LÉ SAGE MNL, you agree
+    order through Lé Sage MNL, you agree
     to comply with the following terms
     and conditions.
   </p>
@@ -224,7 +224,7 @@ const modalContent = {
   <h3>Manual Payment Verification</h3>
 
   <p>
-    LÉ SAGE MNL currently operates with
+    Lé Sage MNL currently operates with
     manual payment verification. Customers
     may be required to submit valid proof
     of payment.
@@ -295,7 +295,7 @@ const modalContent = {
   </p>
 
   <p>
-    LÉ SAGE MNL reserves the right to:
+    Lé Sage MNL reserves the right to:
   </p>
 
   <ul>
@@ -322,7 +322,7 @@ const modalContent = {
   </ul>
 
   <p>
-    LÉ SAGE MNL is not liable for failed
+    Lé Sage MNL is not liable for failed
     deliveries, delays, or losses caused
     by incorrect customer-provided
     information.
@@ -345,7 +345,7 @@ const modalContent = {
   </p>
 
   <p>
-    LÉ SAGE MNL shall not be held liable
+    Lé Sage MNL shall not be held liable
     for indirect, incidental, consequential,
     or special damages arising from the use
     of the website, products, or services.
@@ -366,7 +366,7 @@ const modalContent = {
   <h2>Returns, Exchanges & Refund Policy</h2>
 
   <p>
-    At LÉ SAGE MNL, all items are carefully
+    At Lé Sage MNL, all items are carefully
     inspected and packed before shipment
     to ensure quality and accuracy.
   </p>
@@ -383,7 +383,7 @@ const modalContent = {
     However, certain requests may be reviewed
     and considered for approval depending on
     the situation. Approval is strictly at
-    the discretion of LÉ SAGE MNL.
+    the discretion of Lé Sage MNL.
   </p>
 
   <h3>Eligible Concerns</h3>
@@ -473,7 +473,7 @@ const modalContent = {
 
   <p>
     All reviewed cases are subject to
-    evaluation by LÉ SAGE MNL.
+    evaluation by Lé Sage MNL.
     Submission of a request does not
     guarantee approval for return,
     exchange, refund, or replacement.
@@ -487,68 +487,96 @@ const modalContent = {
 `,
 
   contact: `
-  <h2>Contact Us</h2>
+  <div class="footer-contact">
 
-  <p>
-    We’d love to hear from you.
-    For inquiries, orders, collaborations,
-    or support, feel free to reach out
-    through any of the channels below.
-  </p>
+    <p class="footer-contact__eyebrow">
+      SUPPORT
+    </p>
 
-  <h3>Social Media</h3>
+    <h2 class="footer-contact__title">
+      Contact Us
+    </h2>
 
-  <ul>
+    <p class="footer-contact__intro">
+      For inquiries, orders, collaborations,
+      support, or payment concerns,
+      feel free to reach out through any
+      of the channels below.
+    </p>
 
-    <li>
-      Facebook:
+    <div class="footer-contact__section">
+
+      <p class="footer-contact__label">
+        Instagram
+      </p>
+
       <a
-  class="footer-modal__social-link"
-  href="https://www.facebook.com/lesage.mnl"
-      >
-        LÉ SAGE MNL
-      </a>
-    </li>
-
-    <li>
-      Instagram:
-      <a
-  class="footer-modal__social-link"
-  href="https://www.instagram.com/_lesage.mnl/"
+        class="footer-contact__link"
+        href="https://www.instagram.com/_lesage.mnl/"
+        target="_blank"
+        rel="noopener noreferrer"
       >
         @_lesage.mnl
       </a>
-    </li>
 
-  </ul>
+    </div>
 
-  <h3>Email</h3>
+    <div class="footer-contact__section">
 
-  <ul>
-    <li>
-      <a href="mailto:lesage2k24@gmail.com">
+      <p class="footer-contact__label">
+        Facebook
+      </p>
+
+      <a
+        class="footer-contact__link"
+        href="https://www.facebook.com/lesage.mnl"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Lé Sage MNL
+      </a>
+
+    </div>
+
+    <div class="footer-contact__section">
+
+      <p class="footer-contact__label">
+        Email
+      </p>
+
+      <p class="footer-contact__value">
         lesage2k24@gmail.com
-      </a>
-    </li>
-  </ul>
+      </p>
 
-  <h3>Contact Number</h3>
+    </div>
 
-  <ul>
-    <li>
-      <a href="tel:+639919320296">
+    <div class="footer-contact__section">
+
+      <p class="footer-contact__label">
+        Contact Number
+      </p>
+
+      <p class="footer-contact__value">
         +63 991 932 0296
-      </a>
-    </li>
-  </ul>
+      </p>
 
-  <h3>Customer Support Hours</h3>
+    </div>
 
-  <p>
-    Monday – Saturday
-    <br>
-    9:00 AM – 9:00 PM (PHT)
-  </p>
+    <div class="footer-contact__section">
+
+      <p class="footer-contact__label">
+        Customer Support Hours
+      </p>
+
+      <p class="footer-contact__value">
+        Monday — Saturday
+        <br>
+        9:00 AM — 9:00 PM (PHT)
+      </p>
+
+    </div>
+
+  </div>
 `,
 };
 
