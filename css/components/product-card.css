@@ -339,4 +339,25 @@
     z-index: 1;
   }
 
+    .product-card:hover {
+
+    transform: none;
+  }
+
+  .product-card:hover .product-card__media {
+
+    transform: none;
+
+    box-shadow: none;
+  }
+
+  .product-card:hover .product-card__image {
+
+    transform:
+      scale(1.008)
+      translateZ(0);
+
+    filter: brightness(1);
+  }
+
 }
