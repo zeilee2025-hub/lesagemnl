@@ -475,35 +475,34 @@ if (sizes.length === 1) {
 // ===============================
 function renderSizes(variant) {
 
-  const sizes =
-  (variant?.sizes || []).filter(
+  const sizes = variant?.sizes || [];
+
+    // ===============================
+  // OUT OF STOCK
+  // ===============================
+  const hasAvailableSizes = sizes.some(
     (sizeItem) => sizeItem.stock > 0
   );
 
-  qaSizes.innerHTML = "";
+  if (!hasAvailableSizes) {
 
-  // ===============================
-  // OUT OF STOCK
-  // ===============================
-  if (!sizes.length) {
+    qaSizes.innerHTML = `
+      <p class="quick-add__no-sizes">
+        Sold Out
+      </p>
+    `;
 
-  qaSizes.innerHTML = `
-    <p class="quick-add__no-sizes">
-      Out of stock
-    </p>
-  `;
+    qaAddBtn.disabled = false;
 
-  qaAddBtn.disabled = false;
+    qaAddBtn.textContent = "VIEW PRODUCT";
 
-  qaAddBtn.textContent = "VIEW PRODUCT";
+    qaAddBtn.onclick = () => {
+      window.location.href =
+        `./product.html?id=${currentProduct.id}`;
+    };
 
-  qaAddBtn.onclick = () => {
-    window.location.href =
-      `./product.html?id=${currentProduct.id}`;
-  };
-
-  return;
-}
+    return;
+  }
 
   // ===============================
   // DISPLAY SIZES

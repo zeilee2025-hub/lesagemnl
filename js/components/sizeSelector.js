@@ -23,7 +23,16 @@ export function initSizeSelector(sizes, elements, onSelect) {
   // ===============================
   //  ONE SIZE MODE
   // ===============================
-  const isOneSize = sizes.length === 1;
+  const firstItem = sizes[0];
+
+const firstSize =
+  typeof firstItem === "string"
+    ? firstItem
+    : firstItem?.size;
+
+const isOneSize =
+  sizes.length === 1 &&
+  String(firstSize).trim().toUpperCase() === "ONE SIZE";
 
   if (isOneSize) {
     const item = sizes[0];
