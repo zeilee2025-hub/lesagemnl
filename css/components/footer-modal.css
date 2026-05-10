@@ -1,0 +1,273 @@
+/* =========================
+   FOOTER MODAL
+========================= */
+
+.footer-modal {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 5rem 2rem;
+
+  z-index: 3000;
+}
+
+
+/* =========================
+   HIDDEN
+========================= */
+
+.footer-modal.hidden {
+  display: none;
+}
+
+
+/* =========================
+   OVERLAY
+========================= */
+
+.footer-modal__overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.72);
+
+  backdrop-filter: blur(4px);
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.footer-modal__container {
+  position: relative;
+  z-index: 2;
+
+  width: min(90%, 680px);
+  max-height: calc(100vh - 8rem);
+
+  overflow-y: auto;
+
+  background: #ffffff;
+  color: #111111;
+  border: 1px solid rgba(0,0,0,0.06);
+
+  border-radius: 16px;
+
+  padding: 3.2rem 3rem;
+  backdrop-filter: blur(10px);
+
+  animation: footerModalFade 0.25s ease;
+  transform: translateY(12px);
+
+  box-shadow:
+    0 25px 80px rgba(0,0,0,0.35);
+    
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.footer-modal__content {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.7rem;
+
+  line-height: 1.7;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.footer-modal__content h2 {
+  font-size: 2rem;
+  font-weight: 600;
+
+  color: #000;
+
+  margin-bottom: 1.4rem;
+
+  letter-spacing: -0.02em;
+}
+
+
+/* =========================
+   SECTION TITLES
+========================= */
+
+.footer-modal__content h3 {
+  margin-top: 1.8rem;
+  margin-bottom: 0.5rem;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+
+  color: #000;
+
+  letter-spacing: 0.01em;
+}
+
+
+/* =========================
+   TEXT
+========================= */
+
+.footer-modal__content p {
+  color: #333;
+
+  font-size: 0.94rem;
+
+  line-height: 1.75;
+}
+
+
+/* =========================
+   LISTS
+========================= */
+
+.footer-modal__content ul {
+  padding-left: 1.2rem;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.35rem;
+
+  color: #333;
+}
+
+.footer-modal__content li {
+  line-height: 1.8;
+}
+
+
+/* =========================
+   STRONG
+========================= */
+
+.footer-modal__content strong {
+  color: #000;
+  font-weight: 700;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+.footer-modal__content a {
+  color: #111;
+
+  transition: opacity 0.2s ease;
+}
+
+.footer-modal__content a:hover {
+  opacity: 0.6;
+}
+
+
+/* SOCIAL LINKS ONLY */
+
+.footer-modal__social-link {
+  text-decoration: underline;
+
+  text-underline-offset: 3px;
+}
+
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+.footer-modal__close {
+  position: absolute;
+  top: 1.3rem;
+  right: 1.3rem;
+
+  background: transparent;
+  border: none;
+
+  color: #111;
+
+  font-size: 1.3rem;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.footer-modal__close:hover {
+  opacity: 0.65;
+
+  transform: rotate(90deg);
+}
+
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+.footer-modal__container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.footer-modal__container::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.18);
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes footerModalFade {
+
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .footer-modal__container {
+    width: 96%;
+
+    padding: 2.5rem 1.3rem;
+  }
+
+  .footer-modal__content h2 {
+    font-size: 1.7rem;
+  }
+
+  .footer-modal__content h3 {
+    font-size: 1rem;
+  }
+
+  .footer-modal__content p,
+  .footer-modal__content li {
+    font-size: 0.94rem;
+  }
+
+}

@@ -1,145 +1,3 @@
-.footer__top {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-
-  max-width: 1600px; 
-  margin: 0 auto;
-  padding: 0 70px; 
-}
-
-/* LEFT */
-.footer__left {
-  display: flex;
-  flex-direction: column;
-}
-
-.footer__title {
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  margin-bottom: 16px;
-  opacity: 0.6;
-}
-
-.footer__links a {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #fff;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
-}
-
-.footer__links a:hover {
-  opacity: 1;
-}
-
-/* RIGHT */
-.footer__right {
-  display: flex;
-  flex-direction: column;
-}
-
-.footer__headline {
-  font-size: 18px;
-  letter-spacing: 0.06em;
-  margin-bottom: 12px;
-}
-
-.footer__subtext {
-  font-size: 13px;
-  opacity: 0.6;
-  margin-bottom: 16px;
-}
-
-/* FORM */
-.footer__form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.footer__form input {
-  flex: 1;
-  padding: 10px;
-  background: #111;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #fff;
-  font-size: 12px;
-}
-
-.footer__form button {
-  padding: 10px 16px;
-  background: #fff;
-  color: #000;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-}
-
-.footer__message {
-  font-size: 12px;
-}
-
-/* BOTTOM */
-.footer__bottom {
-  margin-top: 40px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-
-  border-top: 1px solid rgba(255,255,255,0.08);
-
-  max-width: 1600px;
-  margin-left: auto;
-  margin-right: auto;
-
-  padding: 20px 70px 0;
-}
-
-.footer__copy {
-  font-size: 12px;
-  opacity: 0.5;
-
-  line-height: 1.7;
-  text-align: right;
-  padding-top: 2px;
-}
-
-/* SOCIALS */
-.footer__socials {
-  display: flex;
-  gap: 16px;
-}
-
-.footer__socials img {
-  width: 18px;
-  height: 18px;
-  filter: invert(1);
-  opacity: 0.7;
-}
-
-.footer__socials a:hover img {
-  opacity: 1;
-}
-
-/* TEXT */
-.footer__copy {
-  font-size: 12px;
-  opacity: 0.5;
-}
-
-.footer__built {
-  font-size: 12px;
-  opacity: 0.5;
-}
-
-.footer__credit {
-  color: #fff;
-  text-decoration: none;
-}
-
 /* =========================
    ROOT FOOTER
 ========================= */
@@ -158,18 +16,142 @@
 
 
 /* =========================
+   TOP SECTION
+========================= */
+
+.footer__top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+
+  max-width: 1600px;
+
+  margin: 0 auto;
+  padding: 0 70px;
+}
+
+
+/* =========================
+   LEFT
+========================= */
+
+.footer__left {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer__title {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+
+  margin-bottom: 16px;
+
+  opacity: 0.6;
+}
+
+
+/* =========================
    LINKS CONTAINER
 ========================= */
 
 .footer__links {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+
+  gap: 10px;
 }
 
 
 /* =========================
-   FORM INPUT STATES
+   LINKS + MODAL BUTTONS
 ========================= */
+
+.footer__links a,
+.footer__links button {
+
+  background: none;
+  border: none;
+
+  padding: 0;
+  margin: 0;
+
+  width: fit-content;
+
+  color: #fff;
+
+  opacity: 0.7;
+
+  font-size: 14px;
+  font-weight: 400;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
+}
+
+
+/* HOVER */
+
+.footer__links a:hover,
+.footer__links button:hover {
+  opacity: 1;
+}
+
+
+/* =========================
+   RIGHT
+========================= */
+
+.footer__right {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer__headline {
+  font-size: 18px;
+  letter-spacing: 0.06em;
+
+  margin-bottom: 12px;
+}
+
+.footer__subtext {
+  font-size: 13px;
+
+  opacity: 0.6;
+
+  margin-bottom: 16px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.footer__form {
+  display: flex;
+  gap: 10px;
+
+  margin-bottom: 10px;
+}
+
+.footer__form input {
+  flex: 1;
+
+  padding: 10px;
+
+  background: #111;
+
+  border: 1px solid rgba(255,255,255,0.2);
+
+  color: #fff;
+
+  font-size: 12px;
+}
 
 .footer__form input::placeholder {
   color: rgba(255,255,255,0.35);
@@ -181,12 +163,21 @@
 }
 
 
-/* =========================
-   BUTTON HOVER
-========================= */
+/* BUTTON */
 
 .footer__form button {
+  padding: 10px 16px;
+
+  background: #fff;
+  color: #000;
+
   border: none;
+
+  font-size: 11px;
+  letter-spacing: 0.1em;
+
+  cursor: pointer;
+
   transition:
     opacity 0.2s ease,
     transform 0.2s ease;
@@ -198,10 +189,88 @@
 
 
 /* =========================
-   CREDIT HOVER
+   MESSAGE
+========================= */
+
+.footer__message {
+  font-size: 12px;
+}
+
+
+/* =========================
+   BOTTOM
+========================= */
+
+.footer__bottom {
+  margin-top: 40px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  max-width: 1600px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 20px 70px 0;
+}
+
+
+/* =========================
+   SOCIALS
+========================= */
+
+.footer__socials {
+  display: flex;
+  gap: 16px;
+}
+
+.footer__socials img {
+  width: 18px;
+  height: 18px;
+
+  filter: invert(1);
+
+  opacity: 0.7;
+
+  transition: opacity 0.2s ease;
+}
+
+.footer__socials a:hover img {
+  opacity: 1;
+}
+
+
+/* =========================
+   TEXT
+========================= */
+
+.footer__copy,
+.footer__built {
+  font-size: 12px;
+  opacity: 0.5;
+
+  line-height: 1.7;
+}
+
+.footer__copy {
+  text-align: right;
+  padding-top: 2px;
+}
+
+
+/* =========================
+   CREDIT
 ========================= */
 
 .footer__credit {
+  color: #fff;
+
+  text-decoration: none;
+
   transition: opacity 0.2s ease;
 }
 
@@ -222,6 +291,7 @@
 
   .footer__top {
     grid-template-columns: 1fr;
+
     gap: 48px;
 
     padding: 0 24px;
@@ -237,8 +307,10 @@
 
   .footer__bottom {
     flex-direction: column;
+
     align-items: center;
     text-align: center;
+
     gap: 18px;
 
     padding: 20px 24px 0;

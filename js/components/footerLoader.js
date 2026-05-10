@@ -3,6 +3,7 @@
 // ===============================
 
 import { initFooter } from "./footer.js";
+import "./footer-modal.js";
 
 // ===============================
 // 📦 LOAD FOOTER HTML

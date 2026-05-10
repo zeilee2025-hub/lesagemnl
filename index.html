@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="css/components/hero.css">
 <link rel="stylesheet" href="css/components/marquee.css">
 <link rel="stylesheet" href="css/components/footer.css">
+<link rel="stylesheet" href="./css/components/footer-modal.css">
 <link rel="stylesheet" href="css/components/cart.css">
 <link rel="stylesheet" href="css/components/cart-drawer.css">
 <link rel="stylesheet" href="css/components/payment.css">
@@ -326,6 +327,33 @@
 
   <!-- TOAST -->
   <div id="toast-root"></div>
+
+  <!-- ================= FOOTER MODAL ================= -->
+
+<div class="footer-modal hidden" id="footer-modal">
+
+  <div class="footer-modal__overlay"></div>
+
+  <div class="footer-modal__container">
+
+    <!-- CLOSE -->
+    <button
+      class="footer-modal__close"
+      id="footer-modal-close"
+      aria-label="Close footer modal"
+    >
+      ✕
+    </button>
+
+    <!-- CONTENT -->
+    <div
+      class="footer-modal__content"
+      id="footer-modal-content"
+    ></div>
+
+  </div>
+
+</div>
 
   <!-- FOOTER -->
   <div id="footer-container"></div>
