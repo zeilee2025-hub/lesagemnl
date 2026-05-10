@@ -12,9 +12,10 @@
 }
 
 .drop-banner img {
+
   width: 100%;
+
   display: block;
-  object-fit: cover;
 }
 
 /* =========================
@@ -170,18 +171,6 @@
 
 }
 
-.drop-banner img {
-
-  width: 100%;
-
-  height: 520px;
-
-  object-fit: cover;
-
-  object-position: center center;
-
-  display: block;
-}
 
 /* =========================
    NAVBAR CONTEXT (HOME ONLY)
@@ -232,11 +221,46 @@ body.home-page .nav-icon {
 
 @media (max-width: 768px) {
 
-  .home-video-grid {
+  .hero__content {
 
-    height: 200px;
+    position: absolute;
+
+    top: 58%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+
+    padding: 0 24px;
+
+    text-align: center;
+
+    z-index: 5;
+  }
+
+  .home-drop {
+    padding: 18px 0 48px;
+  }
+
+  .drop-banner {
+
+    height: 520px;
 
     overflow: hidden;
+  }
+
+  .drop-banner img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center center;
+
+    display: block;
   }
 
 }
