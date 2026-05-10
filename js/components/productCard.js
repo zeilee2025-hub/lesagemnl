@@ -179,7 +179,9 @@ function renderImage() {
 
   let src;
 
-  const isHovered = card.matches(":hover");
+  const isHovered =
+  window.innerWidth > 768 &&
+  card.matches(":hover");
 
   // ===============================
   // 🔥 MODEL MODE
@@ -270,34 +272,52 @@ function renderImage() {
   });
 
   // ===============================
-  //  SWATCHES
-  // ===============================
-  if (swatches.length && hasColors) {
-    swatches.forEach((swatch) => {
-      const index = Number(swatch.dataset.index);
+//  SWATCHES
+// ===============================
+if (swatches.length && hasColors) {
+
+  swatches.forEach((swatch) => {
+
+    const index = Number(swatch.dataset.index);
+
+    // DESKTOP HOVER ONLY
+    if (window.innerWidth > 768) {
 
       swatch.addEventListener("mouseenter", () => {
+
         state.hoverVariantIndex = index;
+
         renderImage();
       });
 
       swatch.addEventListener("mouseleave", () => {
+
         state.hoverVariantIndex = null;
-        renderImage();
-      });
-
-      swatch.addEventListener("click", (e) => {
-        e.stopPropagation();
-
-        state.activeVariantIndex = index;
-
-        swatches.forEach(s => s.classList.remove("active"));
-        swatch.classList.add("active");
 
         renderImage();
       });
+
+    }
+
+    // ACTIVE SELECT
+    swatch.addEventListener("click", (e) => {
+
+      e.stopPropagation();
+
+      state.activeVariantIndex = index;
+
+      swatches.forEach(s =>
+        s.classList.remove("active")
+      );
+
+      swatch.classList.add("active");
+
+      renderImage();
     });
-  }
+
+  });
+
+}
 
   // ===============================
 //  QUICK ADD
