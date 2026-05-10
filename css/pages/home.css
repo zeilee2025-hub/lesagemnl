@@ -147,16 +147,26 @@
 @media (max-width: 768px) {
 
   .hero__content {
-    top: auto;
-    bottom: 60px;
 
+    position: absolute;
+
+    top: 58%;
     left: 50%;
-    transform: translate(-50%, 0);
+
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+
+    padding: 0 24px;
 
     text-align: center;
-    width: 100%;
-    padding: 0 20px;
+
+    z-index: 5;
   }
+
+  .home-drop {
+  padding: 18px 0 48px;
+}
 
 }
 

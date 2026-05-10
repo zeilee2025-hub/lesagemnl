@@ -124,9 +124,12 @@ body.lookbook-page .navbar.scrolled {
 body.home-page .navbar:not(.scrolled) .nav-logo,
 body.home-page .navbar:not(.scrolled) .nav-link,
 body.home-page .navbar:not(.scrolled) .nav-icon,
+body.home-page .navbar:not(.scrolled) .nav-toggle,
+
 body.lookbook-page .navbar:not(.scrolled) .nav-logo,
 body.lookbook-page .navbar:not(.scrolled) .nav-link,
-body.lookbook-page .navbar:not(.scrolled) .nav-icon {
+body.lookbook-page .navbar:not(.scrolled) .nav-icon,
+body.lookbook-page .navbar:not(.scrolled) .nav-toggle {
   color: #fff;
 }
 
@@ -267,40 +270,6 @@ body.lookbook-page .logo-black {
 
 
 /* =========================
-    MOBILE NAVBAR
-========================= */
-
-.nav-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 4px;
-  cursor: pointer;
-}
-
-.nav-toggle span {
-  width: 18px;
-  height: 2px;
-  background: currentColor;
-  display: block;
-}
-
-@media (max-width: 768px) {
-  .nav-toggle {
-    display: flex;
-  }
-
-  .nav-icon {
-    width: 24px;
-    height: 24px;
-  }
-
-  .nav-icon svg {
-    width: 20px;
-    height: 20px;
-  }
-}
-
-/* =========================
    MOBILE MENU
 ========================= */
 
@@ -353,4 +322,96 @@ body.lookbook-page .logo-black {
 
 .mobile-menu__panel a:hover {
   opacity: 0.6;
+}
+
+/* =========================
+    MOBILE NAVBAR
+========================= */
+
+.nav-toggle {
+  display: none;
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+
+  cursor: pointer;
+
+  padding: 0;
+
+  background: transparent;
+  border: none;
+
+  color: inherit;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-toggle span {
+  width: 22px;
+  height: 1.5px;
+
+  background: currentColor;
+
+  display: block;
+
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+@media (max-width: 768px) {
+
+  /* =========================
+     MOBILE NAV LAYOUT
+  ========================= */
+
+  .nav-container {
+    padding: 0 20px;
+    height: 72px;
+  }
+
+  .nav-left {
+    gap: 0;
+  }
+
+  .nav-right {
+    gap: 18px;
+  }
+
+  /* =========================
+     HIDE DESKTOP LINKS
+  ========================= */
+
+  .nav-links {
+    display: none;
+  }
+
+  /* =========================
+     MOBILE TOGGLE
+  ========================= */
+
+  .nav-toggle {
+    display: flex;
+
+    width: 42px;
+    height: 42px;
+  }
+
+  /* =========================
+     MOBILE ICONS
+  ========================= */
+
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .nav-icon svg {
+    width: 21px;
+    height: 21px;
+  }
+
 }

@@ -4,8 +4,10 @@
 
 .hero {
   position: relative;
+
   width: 100%;
   height: 100vh;
+
   overflow: hidden;
 
   z-index: 1;
@@ -18,17 +20,42 @@
   overflow: hidden;
 }
 
-.hero__image {
+
+/* =========================
+   HERO IMAGE
+========================= */
+
+.hero__image,
+.hero__image img {
   position: absolute;
   inset: 0;
 
   width: 100%;
   height: 100%;
+}
 
+
+/* =========================
+   DESKTOP HERO IMAGE
+========================= */
+
+.hero__image img {
   object-fit: cover;
-  object-position: center 25%;
 
+  /* DESKTOP FRAMING */
+  object-position: center 22%;
+
+  display: block;
+}
+
+
+/* =========================
+   HERO ANIMATION
+========================= */
+
+.hero__image {
   opacity: 0;
+
   transform: scale(1);
 
   transition:
@@ -38,7 +65,39 @@
 
 .hero__image--active {
   opacity: 1;
-  transform: scale(1.02);
+
+  transform: scale(1);
+}
+
+
+/* =========================
+   MOBILE HERO
+========================= */
+
+@media (max-width: 768px) {
+
+  .hero {
+    height: 92svh;
+    min-height: 680px;
+  }
+
+  .hero__image img {
+
+    /* MOBILE IMAGE */
+    object-fit: cover;
+
+    /* MOBILE FRAMING */
+    object-position: center top;
+  }
+
+  .hero__image {
+    transform: scale(1);
+  }
+
+  .hero__image--active {
+    transform: scale(1);
+  }
+
 }
 
 

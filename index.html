@@ -138,17 +138,30 @@
   </header>
 
   <!-- ================= MAIN ================= -->
-  <main>
+<main>
 
-    <section class="hero">
-  <div class="hero__media">
-    <img
-  src="./assets/images/hero-1.jpg"
-  class="hero__image hero__image--active"
-  alt="LÉ SAGE MNL Hero"
-  fetchpriority="high"
-/>
-  </div>
+  <section class="hero">
+
+    <div class="hero__media">
+
+      <picture class="hero__image hero__image--active">
+
+        <!-- MOBILE HERO -->
+        <source
+          media="(max-width: 768px)"
+          srcset="./assets/images/hero-mobile.jpg"
+        />
+
+        <!-- DESKTOP HERO -->
+        <img
+          src="./assets/images/hero-1.jpg"
+          alt="LÉ SAGE MNL Hero"
+          fetchpriority="high"
+        />
+
+      </picture>
+
+    </div>
 
   <div class="hero__content">
     <a href="./shop.html" class="hero__cta">
