@@ -16,9 +16,11 @@
 .shop__controls {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
 
-  margin-bottom: 40px;
+  padding-bottom: 18px;
+
+  margin-bottom: 28px;
 }
 
 
@@ -29,9 +31,9 @@
 .shop__filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
 
-  margin-top: 16px;
+  margin-top: 10px;
 }
 
 .shop__filter-btn {
@@ -39,11 +41,11 @@
   align-items: center;
   justify-content: center;
 
-  min-height: 42px;
+  min-height: 38px;
 
-  padding: 0 18px;
+  padding: 0 16px;
 
-  border: 1px solid #ddd;
+  border: 1px solid rgba(0,0,0,0.08);
 
   background: transparent;
 
@@ -162,22 +164,22 @@ body.shop-page .nav-link {
   }
 
   .shop__controls {
-    flex-direction: column;
-    align-items: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
 
-    gap: 20px;
+  gap: 14px;
 
-    margin-bottom: 32px;
-  }
+  margin-bottom: 22px;
+}
 
   .shop__filters {
     margin-top: 0;
   }
 
   .product-grid {
-    grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
-    gap: 20px;
-  }
+  gap: 28px 16px;
+}
 
 }

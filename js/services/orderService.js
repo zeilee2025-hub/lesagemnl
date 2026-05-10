@@ -50,11 +50,14 @@ export async function saveOrder(order) {
 
     const orderData = {
 
-      email:
-        order.email || null,
+  email:
+    order.email || null,
 
-      items:
-        order.items,
+  uid:
+    order.uid || null,
+
+  items:
+    order.items,
 
 
       // ==========================

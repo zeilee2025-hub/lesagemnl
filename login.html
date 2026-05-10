@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    Login | LÉ SAGE MNL
+  </title>
+
+
+  <!-- FONTS -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+
+  <!-- BASE -->
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/layout.css">
+
+
+  <!-- COMPONENTS -->
+  <link rel="stylesheet" href="./css/components/navbar.css">
+  <link rel="stylesheet" href="./css/components/footer.css">
+  <link rel="stylesheet" href="./css/components/cart.css">
+  <link rel="stylesheet" href="./css/components/cart-drawer.css">
+  <link rel="stylesheet" href="./css/components/announcement.css">
+
+
+  <!-- PAGE -->
+  <link rel="stylesheet" href="./css/pages/auth.css">
+
+
+  <!-- ICONS -->
+  <script
+    src="https://unpkg.com/lucide@latest"
+    defer
+  ></script>
+
+</head>
+
+<body class="auth-page-body">
+
+
+  <!-- ================= HEADER ================= -->
+  <header>
+
+    <!-- ANNOUNCEMENT -->
+    <div class="announcement">
+
+      <div class="announcement__track">
+
+        <div class="announcement__group">
+
+          <span class="announcement__item">
+            Support available 9am–9pm, Mon–Sat
+          </span>
+
+          <span class="announcement__item">
+            Metro Manila orders arrive in 3–5 business days
+          </span>
+
+          <span class="announcement__item">
+            Outside Metro Manila orders arrive in 7–10 business days
+          </span>
+
+        </div>
+
+        <div class="announcement__group">
+
+          <span class="announcement__item">
+            Support available 9am–9pm, Mon–Sat
+          </span>
+
+          <span class="announcement__item">
+            Metro Manila orders arrive in 3–5 business days
+          </span>
+
+          <span class="announcement__item">
+            Outside Metro Manila orders arrive in 7–10 business days
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+      <div class="nav-container">
+
+        <div class="nav-left">
+
+          <button
+            class="nav-toggle"
+            id="navToggle"
+            aria-label="Open Menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+
+          <ul class="nav-links">
+
+            <li>
+              <a href="./index.html" class="nav-link">
+                HOME
+              </a>
+            </li>
+
+            <li>
+              <a href="./shop.html" class="nav-link">
+                SHOP
+              </a>
+            </li>
+
+            <li>
+              <a href="./lookbook.html" class="nav-link">
+                LOOKBOOK
+              </a>
+            </li>
+
+            <li>
+              <a href="./about.html" class="nav-link">
+                ABOUT
+              </a>
+            </li>
+
+          </ul>
+
+        </div>
+
+
+        <div class="nav-right">
+
+          <div class="search-wrapper">
+
+            <span class="nav-icon" id="search-icon">
+              <i data-lucide="search"></i>
+            </span>
+
+            <input
+              type="text"
+              id="search-input"
+              class="search-input"
+              placeholder="Search"
+            />
+
+          </div>
+
+
+          <!-- ACCOUNT -->
+          <a
+            href="./login.html"
+            class="nav-icon"
+            id="account-link"
+            aria-label="Account"
+          >
+            <i data-lucide="user"></i>
+          </a>
+
+
+          <!-- CART -->
+          <span
+            class="nav-icon cart-icon"
+            id="cart-icon"
+          >
+
+            <i data-lucide="shopping-bag"></i>
+
+            <span
+              id="cart-badge"
+              class="cart-badge"
+            >
+              0
+            </span>
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </nav>
+
+  </header>
+
+
+  <!-- ================= MAIN ================= -->
+  <main class="auth-page">
+
+    <section class="auth">
+
+      <div class="auth__container">
+
+        <!-- HEADER -->
+        <div class="auth__header">
+
+          <h1 class="auth__title">
+            LOGIN
+          </h1>
+
+          <p class="auth__subtitle">
+            Access your account and orders.
+          </p>
+
+        </div>
+
+
+        <!-- FORM -->
+        <form
+          id="login-form"
+          class="auth-form"
+        >
+
+          <!-- EMAIL -->
+          <div class="auth-form__group">
+
+            <label
+              for="login-email"
+              class="auth-form__label"
+            >
+              Email
+            </label>
+
+            <input
+              type="email"
+              id="login-email"
+              class="auth-form__input"
+              placeholder="Enter your email"
+              autocomplete="email"
+              required
+            />
+
+          </div>
+
+
+          <!-- PASSWORD -->
+          <div class="auth-form__group">
+
+            <label
+              for="login-password"
+              class="auth-form__label"
+            >
+              Password
+            </label>
+
+            <input
+              type="password"
+              id="login-password"
+              class="auth-form__input"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+
+          </div>
+
+
+          <!-- ERROR -->
+          <p
+            id="login-error"
+            class="auth-form__error"
+          ></p>
+
+
+          <!-- BUTTON -->
+          <button
+            type="submit"
+            class="auth-form__button"
+          >
+            SIGN IN
+          </button>
+
+        </form>
+
+
+        <!-- FOOTER -->
+        <div class="auth__footer">
+
+          <p class="auth__footer-text">
+            Don’t have an account?
+          </p>
+
+          <a
+            href="./signup.html"
+            class="auth__footer-link"
+          >
+            Create one
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ================= CART ================= -->
+  <div
+    class="cart-overlay"
+    id="cart-overlay"
+  ></div>
+
+
+  <aside
+    class="cart-drawer"
+    id="cart-drawer"
+  >
+
+    <div class="cart-drawer__header">
+
+      <h2 class="cart-drawer__title">
+        Your Cart
+      </h2>
+
+      <button
+        id="close-cart"
+        class="cart-drawer__close"
+        aria-label="Close Cart"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <div
+      id="cart-items"
+      class="cart-drawer__items"
+    ></div>
+
+
+    <div
+      id="cart-total"
+      class="cart-drawer__footer"
+    ></div>
+
+  </aside>
+
+
+  <!-- FOOTER -->
+  <div id="footer-container"></div>
+
+
+  <!-- MOBILE MENU -->
+  <div
+    class="mobile-menu"
+    id="mobileMenu"
+  >
+
+    <div class="mobile-menu__panel">
+
+      <a href="./index.html">
+        Home
+      </a>
+
+      <a href="./shop.html">
+        Shop
+      </a>
+
+      <a href="./lookbook.html">
+        Lookbook
+      </a>
+
+      <a href="./about.html">
+        About
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- SCRIPTS -->
+  <script
+    type="module"
+    src="./js/components/navbar.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/components/main.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/components/footerLoader.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/pages/login.js"
+  ></script>
+
+</body>
+
+</html>

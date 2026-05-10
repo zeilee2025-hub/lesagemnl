@@ -1,5 +1,5 @@
 // ===============================
-// 🔥 FIREBASE CORE (SINGLE SOURCE)
+//  FIREBASE CORE (SINGLE SOURCE)
 // ===============================
 
 // Firebase App
@@ -18,7 +18,7 @@ import {
 
 
 // ===============================
-// 🔑 CONFIG
+//  CONFIG
 // ===============================
 const firebaseConfig = {
   apiKey: "AIzaSyA_ADIYjoMUJiDMKbv0AInVSS2DG2dLeqM",
@@ -31,25 +31,25 @@ const firebaseConfig = {
 
 
 // ===============================
-// 🚀 INIT APP
+//  INIT APP
 // ===============================
 const app = initializeApp(firebaseConfig);
 
 
 // ===============================
-// 📦 EXPORTS
+//  EXPORTS
 // ===============================
 export const db = getFirestore(app);
 export const auth = getAuth(app);
-export const storage = getStorage(app); // ✅ ADD
+export const storage = getStorage(app); //  ADD
 
 
 // ===============================
-// 🔐 AUTH PERSISTENCE (CRITICAL)
+//  AUTH PERSISTENCE (CRITICAL)
 // ===============================
 setPersistence(auth, browserLocalPersistence)
   .then(() => {
-    console.log("✅ Auth persistence enabled");
+    console.log(" Auth persistence enabled");
   })
   .catch((error) => {
     console.error("❌ Auth persistence error:", error);

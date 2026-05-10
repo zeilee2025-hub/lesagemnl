@@ -34,6 +34,10 @@ import { syncCartWithStock } from "../core/stock.js";
 import { createPaymentSession } from "../services/paymentService.js";
 import { saveOrder } from "../services/orderService.js";
 
+import {
+  getCurrentUser
+} from "../services/authService.js";
+
 
 /* =========================
    DOM REFERENCES
@@ -512,10 +516,22 @@ async function handleCheckout() {
        CUSTOMER
     ========================= */
 
-    const customer = {
-      ...formData,
-      region: selectedRegion
-    };
+    const currentUser =
+  getCurrentUser();
+
+const customer = {
+  ...formData,
+
+  uid:
+    currentUser?.uid || null,
+
+  email:
+    currentUser?.email ||
+    formData.email,
+
+  region:
+    selectedRegion
+};
 
 
     /* =========================
@@ -530,6 +546,8 @@ const orderId =
     ========================= */
 
     email: customer.email,
+
+    uid: customer.uid,
 
     firstName:
       customer.firstName,

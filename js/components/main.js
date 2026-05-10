@@ -1,14 +1,77 @@
 import "./search.js";
 
 import { renderCart } from "./cartDrawer.js";
-import { updateCartBadge } from "../services/cartService.js";
 
+import {
+  updateCartBadge
+} from "../services/cartService.js";
+
+import {
+  initAuthListener,
+  getCurrentUser
+} from "../services/authService.js";
+
+
+// ===============================
+// PAGE LOAD
+// ===============================
 window.addEventListener("load", () => {
 
   // ===============================
   // PAGE ENTER ANIMATION
   // ===============================
   document.body.classList.add("page-enter");
+
+
+  // ===============================
+  // AUTH
+  // ===============================
+  initAuthListener(() => {
+
+    // ===============================
+    // ACCOUNT LINK
+    // ===============================
+    const accountLink =
+      document.getElementById("account-link");
+
+    const user =
+      getCurrentUser();
+
+    if (accountLink) {
+
+      // ===============================
+      // LOGGED IN
+      // ===============================
+      if (user) {
+
+        accountLink.href =
+          "./account.html";
+
+        accountLink.setAttribute(
+          "aria-label",
+          "Account"
+        );
+
+      }
+
+      // ===============================
+      // LOGGED OUT
+      // ===============================
+      else {
+
+        accountLink.href =
+          "./login.html";
+
+        accountLink.setAttribute(
+          "aria-label",
+          "Login"
+        );
+
+      }
+
+    }
+
+  });
 
 
   // ===============================
@@ -24,16 +87,21 @@ window.addEventListener("load", () => {
   // ==========================
   // ACTIVE NAV LINK
   // ==========================
-  const navLinks = document.querySelectorAll(".nav-link");
+  const navLinks =
+    document.querySelectorAll(".nav-link");
 
-  const currentPath = window.location.pathname;
+  const currentPath =
+    window.location.pathname;
 
   navLinks.forEach((link) => {
-    const linkPath = new URL(link.href).pathname;
+
+    const linkPath =
+      new URL(link.href).pathname;
 
     if (linkPath === currentPath) {
       link.classList.add("active");
     }
+
   });
 
 

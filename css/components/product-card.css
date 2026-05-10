@@ -298,17 +298,15 @@
 @media (max-width: 768px) {
 
   .product-card__swatches {
+  gap: 10px;
 
-    gap: 14px;
+  margin-top: 8px;
+}
 
-    margin-top: 12px;
-  }
-
-  .product-card__swatch {
-
-    width: 18px;
-    height: 18px;
-  }
+.product-card__swatch {
+  width: 14px;
+  height: 14px;
+}
 
   .product-card__quick-add {
 
@@ -364,5 +362,21 @@
 
     filter: brightness(1);
   }
+
+  .product-card__info {
+  margin-top: 6px;
+}
+
+.product-card__title {
+  margin-top: 4px;
+
+  font-size: 11px;
+}
+
+.product-card__price {
+  margin-top: 1px;
+
+  font-size: 11px;
+}
 
 }
