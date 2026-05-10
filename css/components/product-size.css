@@ -104,18 +104,33 @@
 
 /* item */
 .product-size__option {
+
   position: relative;
 
   padding: 6px 10px;
   margin: 12px 6px;
 
   font-size: 12px;
+
+  color: #111;
+
+  background: transparent;
+
+  -webkit-appearance: none;
+  appearance: none;
+
+  text-decoration: none;
+
   cursor: pointer;
 
   border: 1px solid transparent;
+
   opacity: 0.6;
 
-  transition: opacity 0.2s ease, border 0.2s ease, transform 0.15s ease;
+  transition:
+    opacity 0.2s ease,
+    border 0.2s ease,
+    transform 0.15s ease;
 }
 
 .product-size__option:hover:not(
