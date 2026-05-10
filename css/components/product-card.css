@@ -285,3 +285,24 @@
 .product-card__qa-swatch.active {
   border-color: #000;
 }
+
+/* =========================
+   MOBILE SWATCHES
+========================= */
+
+@media (max-width: 768px) {
+
+  .product-card__swatches {
+
+    gap: 14px;
+
+    margin-top: 12px;
+  }
+
+  .product-card__swatch {
+
+    width: 18px;
+    height: 18px;
+  }
+
+}

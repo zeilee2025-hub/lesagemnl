@@ -95,12 +95,12 @@
 
   .marquee {
 
-  margin: 8px 0 0;
+    margin: 32px 0 22px;
 
-  padding: 0;
+    padding: 0;
 
-  align-items: center;
-}
+    align-items: center;
+  }
 
   .marquee__track {
 
@@ -109,20 +109,20 @@
 
   .marquee__text {
 
-  font-size: clamp(34px, 9vw, 52px);
+    font-size: clamp(42px, 11vw, 64px);
 
-  font-weight: 700;
+    font-weight: 700;
 
-  letter-spacing: -0.05em;
+    letter-spacing: -0.06em;
 
-  line-height: 0.92;
+    line-height: 0.9;
 
-  padding: 0;
-}
+    padding: 0;
+  }
 
   .marquee__item {
 
-  margin-right: 56px;
-}
+    margin-right: 64px;
+  }
 
 }

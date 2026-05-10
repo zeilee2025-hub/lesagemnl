@@ -364,6 +364,11 @@ body.lookbook-page .logo-black {
 
 @media (max-width: 768px) {
 
+  body.home-page .navbar:not(.scrolled) {
+
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+  }
+
   /* =========================
      MOBILE NAV LAYOUT
   ========================= */

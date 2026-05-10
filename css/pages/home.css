@@ -170,6 +170,19 @@
 
 }
 
+.drop-banner img {
+
+  width: 100%;
+
+  height: 520px;
+
+  object-fit: cover;
+
+  object-position: center center;
+
+  display: block;
+}
+
 /* =========================
    NAVBAR CONTEXT (HOME ONLY)
 ========================= */
@@ -182,4 +195,36 @@ body.home-page .nav-link,
 body.home-page .nav-logo,
 body.home-page .nav-icon {
   color: white;
+}
+
+/* =========================
+   FOOTER VIDEO
+========================= */
+
+.home-video-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  width: 100%;
+
+  height: 200px;
+
+  overflow: hidden;
+}
+
+.video-item {
+
+  overflow: hidden;
+}
+
+.video-item video {
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
 }
