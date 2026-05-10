@@ -278,6 +278,7 @@
   opacity: 0.7;
 }
 
+
 /* =========================
    MOBILE
 ========================= */
@@ -286,40 +287,38 @@
 
   .footer {
 
-    padding: 28px 0 14px;
+    padding: 36px 0 18px;
   }
 
   .footer__top {
 
     grid-template-columns: 1fr;
 
-    gap: 24px;
+    gap: 32px;
 
     padding: 0 24px;
   }
 
   .footer__title {
 
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   .footer__links {
 
-    gap: 7px;
+    gap: 8px;
   }
 
   .footer__headline {
 
-    font-size: 15px;
+    font-size: 16px;
 
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .footer__subtext {
 
-    margin-bottom: 10px;
-
-    line-height: 1.5;
+    margin-bottom: 12px;
   }
 
   .footer__form {
@@ -328,26 +327,19 @@
 
     gap: 8px;
 
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .footer__form input {
 
-    padding: 10px;
-
-    font-size: 12px;
+    padding: 11px;
   }
 
   .footer__form button {
 
     width: 100%;
 
-    padding: 10px 16px;
-  }
-
-  .footer__message {
-
-    font-size: 11px;
+    padding: 11px 16px;
   }
 
   .footer__bottom {
@@ -358,22 +350,16 @@
 
     text-align: center;
 
-    gap: 10px;
+    gap: 14px;
 
-    margin-top: 20px;
+    margin-top: 28px;
 
-    padding: 14px 24px 0;
+    padding: 16px 24px 0;
   }
 
   .footer__socials {
 
-    gap: 12px;
-  }
-
-  .footer__socials img {
-
-    width: 17px;
-    height: 17px;
+    gap: 14px;
   }
 
   .footer__copy {

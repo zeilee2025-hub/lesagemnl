@@ -203,15 +203,11 @@ body.home-page .nav-icon {
 
 .home-video-grid {
 
+  width: 100%;
+
   display: grid;
 
   grid-template-columns: repeat(3, 1fr);
-
-  width: 100%;
-
-  height: 200px;
-
-  overflow: hidden;
 }
 
 .video-item {
@@ -227,4 +223,20 @@ body.home-page .nav-icon {
   object-fit: cover;
 
   display: block;
+}
+
+
+/* =========================
+   MOBILE FOOTER VIDEO
+========================= */
+
+@media (max-width: 768px) {
+
+  .home-video-grid {
+
+    height: 200px;
+
+    overflow: hidden;
+  }
+
 }
