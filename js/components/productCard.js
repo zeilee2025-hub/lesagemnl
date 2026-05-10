@@ -256,7 +256,7 @@ function renderImage() {
       modelTimer = setTimeout(() => {
         state.modelReady = true;
         renderImage();
-      }, 800);
+      }, 650);
     }
   });
 
