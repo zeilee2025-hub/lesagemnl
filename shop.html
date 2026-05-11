@@ -73,7 +73,7 @@
 
 </div>
 
-    <!-- NAVBAR -->
+     <!-- NAVBAR -->
 <nav class="navbar">
   <div class="nav-container container">
 
@@ -91,8 +91,9 @@
         <span></span>
       </button>
 
-      <!-- DESKTOP LINKS -->
+      <!-- DESKTOP NAV -->
       <ul class="nav-links">
+
         <li>
           <a href="./index.html" class="nav-link">
             HOME
@@ -117,15 +118,6 @@
           </a>
         </li>
 
-        <li>
-          <a
-            href="./login.html"
-            class="nav-link"
-            id="account-link"
-          >
-            LOGIN
-          </a>
-        </li>
       </ul>
 
     </div>
@@ -137,6 +129,7 @@
       <div class="search-wrapper">
 
         <span class="nav-icon" id="search-icon">
+
           <svg
             width="18"
             height="18"
@@ -154,6 +147,7 @@
               y2="21"
             ></line>
           </svg>
+
         </span>
 
         <input
@@ -183,43 +177,94 @@
 
 </header>
 
-  <!-- SHOP -->
-  <section class="shop">
 
-    <div class="shop__controls container">
+<!-- SHOP -->
+<section class="shop">
 
-      <div class="shop__filters">
-        <button class="shop__filter-btn shop__filter-btn--active" data-category="all">
-          All
-        </button>
+  <div class="shop__controls container">
 
-        <button class="shop__filter-btn" data-category="tops">
-          Tops
-        </button>
+    <!-- DESKTOP FILTERS -->
+    <div class="shop__filters">
 
-        <button class="shop__filter-btn" data-category="bottoms">
-          Bottoms
-        </button>
+      <button
+        class="shop__filter-btn shop__filter-btn--active"
+        data-category="all"
+      >
+        All
+      </button>
 
-        <button class="shop__filter-btn" data-category="accessories">
-          Accessories
-        </button>
-      </div>
+      <button
+        class="shop__filter-btn"
+        data-category="tops"
+      >
+        Tops
+      </button>
 
-      <div class="shop__sort">
-        <select id="sort-select">
-          <option value="newest">Newest</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-        </select>
-      </div>
+      <button
+        class="shop__filter-btn"
+        data-category="bottoms"
+      >
+        Bottoms
+      </button>
+
+      <button
+        class="shop__filter-btn"
+        data-category="accessories"
+      >
+        Accessories
+      </button>
 
     </div>
 
-    <!-- PRODUCT GRID -->
-    <div id="product-grid" class="product-grid"></div>
+    <!-- SORT / MOBILE FILTER -->
+    <div class="shop__sort">
 
-  </section>
+      <select id="shop-select">
+
+        <!-- FILTERS -->
+        <option value="all">
+          All Products
+        </option>
+
+        <option value="tops">
+          Tops
+        </option>
+
+        <option value="bottoms">
+          Bottoms
+        </option>
+
+        <option value="accessories">
+          Accessories
+        </option>
+
+        <!-- SORT -->
+        <option disabled>
+          ─────────
+        </option>
+
+        <option value="newest">
+          Newest
+        </option>
+
+        <option value="price-asc">
+          Price: Low to High
+        </option>
+
+        <option value="price-desc">
+          Price: High to Low
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+  <!-- PRODUCT GRID -->
+  <div id="product-grid" class="product-grid"></div>
+
+</section>
 
   <!-- ================= QUICK ADD ================= -->
 
