@@ -415,7 +415,7 @@ body.lookbook-page .logo-black {
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 16px;
+  padding: 0 20px;
 
   background: #fff;
 
@@ -460,7 +460,7 @@ body.header-collapsed .mobile-menu__header {
 .mobile-menu__close span {
   position: absolute;
 
-  width: 21px;
+  width: 18px;
   height: 1.5px;
 
   background: #111;
@@ -486,7 +486,7 @@ body.header-collapsed .mobile-menu__header {
   align-items: center;
 
   margin-left: auto;
-  margin-right: 14px;
+  margin-right: 8px;
 }
 
 .mobile-menu__search-input {
