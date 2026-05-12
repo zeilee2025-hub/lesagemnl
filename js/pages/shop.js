@@ -71,7 +71,7 @@ let selectedVariant = null;
 // ===============================
 const grid = document.getElementById("product-grid");
 const searchInput =  document.getElementById("search-input");
-const sortSelect = document.getElementById("sort-select");
+const sortSelect = document.getElementById("shop-select");
 const filterButtons = document.querySelectorAll(".shop__filter-btn");
 
 
@@ -234,7 +234,6 @@ function updateUI() {
 
 }
 
-
 // ===============================
 // EVENTS
 // ===============================
@@ -254,8 +253,58 @@ sortSelect?.addEventListener(
   "change",
   (e) => {
 
-    currentSort =
+    const value =
       e.target.value;
+
+    // ===============================
+    // CATEGORY VALUES
+    // ===============================
+    const categories = [
+      "all",
+      "tops",
+      "bottoms",
+      "accessories"
+    ];
+
+    // ===============================
+    // CATEGORY MODE
+    // ===============================
+    if (categories.includes(value)) {
+
+      currentCategory = value;
+
+      // reset sort when switching category
+      currentSort = "newest";
+
+      // ===============================
+      // SYNC DESKTOP BUTTONS
+      // ===============================
+      filterButtons.forEach((button) => {
+
+        button.classList.remove(
+          "shop__filter-btn--active"
+        );
+
+        if (
+          button.dataset.category === value
+        ) {
+
+          button.classList.add(
+            "shop__filter-btn--active"
+          );
+
+        }
+
+      });
+
+    } else {
+
+      // ===============================
+      // SORT MODE
+      // ===============================
+      currentSort = value;
+
+    }
 
     updateUI();
 
@@ -286,6 +335,21 @@ filterButtons.forEach((btn) => {
     // ===============================
     currentCategory =
       btn.dataset.category || "all";
+
+    // ===============================
+    // RESET SORT
+    // ===============================
+    currentSort = "newest";
+
+    // ===============================
+    // SYNC MOBILE SELECT
+    // ===============================
+    if (sortSelect) {
+
+      sortSelect.value =
+        currentCategory;
+
+    }
 
     // ===============================
     // REFRESH UI

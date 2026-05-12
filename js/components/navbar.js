@@ -1,5 +1,5 @@
 // ===============================
-// 🧠 NAVBAR SCROLL SYSTEM (FINAL CLEAN + FIXED)
+//  NAVBAR SCROLL SYSTEM
 // ===============================
 
 const navbar = document.querySelector(".navbar");
@@ -10,7 +10,7 @@ let isCartOpen = false;
 if (navbar) {
 
   // ===============================
-  // 🧠 PAGE MODE
+  //  PAGE MODE
   // ===============================
   const body = document.body;
 
@@ -21,40 +21,52 @@ if (navbar) {
   let ticking = false;
 
   // ===============================
-  // 🔄 UPDATE NAVBAR
+  //  UPDATE NAVBAR
   // ===============================
   function updateNavbar() {
+
     const scrollY = window.scrollY;
 
     // ===============================
-    // 🎨 COLOR STATE
+    //  COLOR STATE
     // ===============================
     if (isOverlayPage) {
+
       navbar.classList.toggle("scrolled", scrollY > 80);
+
     } else {
-      navbar.classList.add("scrolled"); // always white on non-overlay pages
+
+      // always white on non-overlay pages
+      navbar.classList.add("scrolled");
+
     }
 
     // ===============================
-    // 📦 HEADER COLLAPSE SYSTEM (FIXED)
+    //  HEADER COLLAPSE SYSTEM
     // ===============================
     const shouldCollapse = scrollY > 40;
 
-    // 🔥 control announcement (visual)
+    // announcement visibility
     if (announcementBar) {
       announcementBar.classList.toggle("hidden", shouldCollapse);
     }
 
-    // 🔥 control layout (this fixes gap / white bar)
+    // layout control
     body.classList.toggle("header-collapsed", shouldCollapse);
 
     ticking = false;
   }
 
   // ===============================
-  // ⚡ SCROLL HANDLER
+  //  SCROLL HANDLER
   // ===============================
   function onScroll() {
+
+    // freeze navbar while mobile menu open
+    if (document.body.classList.contains("menu-open")) {
+      return;
+    }
+
     if (isCartOpen) {
       updateNavbar();
       return;
@@ -70,6 +82,12 @@ if (navbar) {
   // 🚀 INIT
   // ===============================
   window.addEventListener("load", updateNavbar);
-  window.addEventListener("scroll", onScroll, { passive: true });
+
+  window.addEventListener(
+    "scroll",
+    onScroll,
+    { passive: true }
+  );
+
   window.addEventListener("resize", updateNavbar);
 }

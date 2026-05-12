@@ -1,3 +1,4 @@
+import "./mobileMenu.js";
 import "./search.js";
 
 import { renderCart } from "./cartDrawer.js";
@@ -10,7 +11,6 @@ import {
   initAuthListener,
   getCurrentUser
 } from "../services/authService.js";
-
 
 // ===============================
 // PAGE LOAD

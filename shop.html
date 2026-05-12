@@ -123,12 +123,84 @@
     </div>
 
     <!-- RIGHT -->
-    <div class="nav-right">
+<div class="nav-right">
 
-      <!-- SEARCH -->
-      <div class="search-wrapper">
+  <!-- SEARCH -->
+  <div class="search-wrapper">
 
-        <span class="nav-icon" id="search-icon">
+    <span class="nav-icon" id="search-icon">
+
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+      >
+        <circle cx="11" cy="11" r="7"></circle>
+
+        <line
+          x1="16.5"
+          y1="16.5"
+          x2="21"
+          y2="21"
+        ></line>
+      </svg>
+
+    </span>
+
+    <input
+      type="text"
+      id="search-input"
+      class="search-input"
+      placeholder="Search"
+    />
+
+  </div>
+
+  <!-- CART -->
+  <span class="nav-icon cart-icon" id="cart-icon">
+
+    <i data-lucide="shopping-bag"></i>
+
+    <span id="cart-badge" class="cart-badge">
+      0
+    </span>
+
+  </span>
+
+</div>
+
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+
+  <div class="mobile-menu__panel">
+
+    <!-- MOBILE MENU HEADER -->
+    <div class="mobile-menu__header">
+
+      <!-- CLOSE -->
+      <button
+        class="mobile-menu__close"
+        id="mobileMenuClose"
+        aria-label="Close Menu"
+      >
+        <span></span>
+        <span></span>
+      </button>
+
+                <!-- SEARCH -->
+      <div class="mobile-menu__search-wrapper">
+
+        <!-- SEARCH ICON -->
+        <span
+          class="nav-icon"
+          id="mobile-search-icon"
+        >
 
           <svg
             width="18"
@@ -150,30 +222,60 @@
 
         </span>
 
+        <!-- INPUT -->
         <input
           type="text"
-          id="search-input"
-          class="search-input"
+          class="mobile-menu__search-input"
+          id="mobile-search-input"
           placeholder="Search"
         />
 
       </div>
 
-      <!-- CART -->
-      <span class="nav-icon cart-icon" id="cart-icon">
+      <!-- RIGHT ICONS -->
+      <div class="mobile-menu__icons">
 
-        <i data-lucide="shopping-bag"></i>
+        <!-- CART -->
+        <span
+          class="nav-icon cart-icon"
+          id="mobile-cart-icon"
+        >
 
-        <span id="cart-badge" class="cart-badge">
-          0
+          <i data-lucide="shopping-bag"></i>
+
+          <span
+            class="cart-badge"
+            id="mobile-cart-badge"
+          >
+            0
+          </span>
+
         </span>
 
-      </span>
+      </div>
 
     </div>
 
+    <!-- MOBILE LINKS -->
+    <a href="./index.html">
+      Home
+    </a>
+
+    <a href="./shop.html">
+      Shop
+    </a>
+
+    <a href="./lookbook.html">
+      Lookbook
+    </a>
+
+    <a href="./about.html">
+      About
+    </a>
+
   </div>
-</nav>
+
+</div>
 
 </header>
 

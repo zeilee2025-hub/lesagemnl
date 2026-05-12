@@ -160,8 +160,8 @@ body.shop-page .nav-link {
 @media (max-width: 640px) {
 
   .shop {
-    padding: 20px 0 64px;
-  }
+  padding: 40px 0 64px;
+}
 
   .shop__controls {
     flex-direction: column;
@@ -169,7 +169,7 @@ body.shop-page .nav-link {
 
     gap: 14px;
 
-    margin-bottom: 22px;
+    margin-bottom: 16px;
   }
 
   /* =========================

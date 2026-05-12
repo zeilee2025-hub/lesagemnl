@@ -268,62 +268,6 @@ body.lookbook-page .logo-black {
   pointer-events: auto;
 }
 
-
-/* =========================
-   MOBILE MENU
-========================= */
-
-.mobile-menu {
-  position: fixed;
-  inset: 0;
-
-  background: rgba(0, 0, 0, 0.96);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
-
-  z-index: 5000;
-}
-
-.mobile-menu.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.mobile-menu__panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 28px;
-}
-
-.mobile-menu__panel a {
-  color: #fff;
-
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-
-  text-decoration: none;
-
-  transition: opacity 0.3s ease;
-}
-
-.mobile-menu__panel a:hover {
-  opacity: 0.6;
-}
-
 /* =========================
     MOBILE NAVBAR
 ========================= */
@@ -365,16 +309,12 @@ body.lookbook-page .logo-black {
 @media (max-width: 768px) {
 
   body.home-page .navbar:not(.scrolled) {
-
     border-bottom: 1px solid rgba(255,255,255,0.4);
   }
 
-  /* =========================
-     MOBILE NAV LAYOUT
-  ========================= */
-
   .nav-container {
     padding: 0 20px;
+
     height: 72px;
   }
 
@@ -386,17 +326,9 @@ body.lookbook-page .logo-black {
     gap: 18px;
   }
 
-  /* =========================
-     HIDE DESKTOP LINKS
-  ========================= */
-
   .nav-links {
     display: none;
   }
-
-  /* =========================
-     MOBILE TOGGLE
-  ========================= */
 
   .nav-toggle {
     display: flex;
@@ -404,10 +336,6 @@ body.lookbook-page .logo-black {
     width: 42px;
     height: 42px;
   }
-
-  /* =========================
-     MOBILE ICONS
-  ========================= */
 
   .nav-icon {
     width: 24px;
@@ -418,5 +346,238 @@ body.lookbook-page .logo-black {
     width: 21px;
     height: 21px;
   }
-
 }
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+.mobile-menu {
+  position: fixed;
+
+  top: var(--announcement-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: #fff;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease;
+
+  z-index: 6000;
+
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+
+/* =========================
+   MOBILE MENU HEADER
+========================= */
+
+.mobile-menu__header {
+  position: fixed;
+
+  top: var(--announcement-height);
+  left: 0;
+  right: 0;
+
+  width: 100%;
+  z-index: 20;
+
+  height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 16px;
+
+  background: #fff;
+
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+.mobile-menu__close {
+  width: 28px;
+  height: 28px;
+
+  border: none;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 1;
+
+  color: #111;
+
+  padding: 0;
+}
+
+.mobile-menu__close span {
+  position: absolute;
+
+  width: 14px;
+  height: 1.5px;
+
+  background: #111;
+
+  border-radius: 999px;
+}
+
+.mobile-menu__close span:first-child {
+  transform: rotate(45deg);
+}
+
+.mobile-menu__close span:last-child {
+  transform: rotate(-45deg);
+}
+
+
+/* =========================
+   MOBILE HEADER RIGHT
+========================= */
+
+.mobile-menu__search-wrapper {
+  display: flex;
+  align-items: center;
+
+  margin-left: auto;
+  margin-right: 14px;
+}
+
+.mobile-menu__search-input {
+  width: 0;
+
+  opacity: 0;
+
+  border: none;
+  border-bottom: 1px solid rgba(0,0,0,0.18);
+
+  background: transparent;
+
+  outline: none;
+
+  font-size: 14px;
+  color: #111;
+
+  margin-left: 8px;
+
+  transition:
+    width 0.28s ease,
+    opacity 0.2s ease;
+
+  pointer-events: none;
+}
+
+.mobile-menu__search-input.active {
+  width: 160px;
+
+  opacity: 1;
+
+  pointer-events: auto;
+}
+
+.mobile-menu__icons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mobile-menu__icons .nav-icon {
+  position: relative;
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.mobile-menu__icons .nav-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* MOBILE CART BADGE */
+
+.mobile-menu__icons .cart-badge {
+  top: -5px;
+  right: -5px;
+
+  min-width: 16px;
+  height: 16px;
+
+  font-size: 9px;
+}
+
+/* =========================
+   PANEL
+========================= */
+
+.mobile-menu__panel {
+  display: flex;
+  flex-direction: column;
+
+  padding: 56px 16px 40px;
+}
+
+
+/* =========================
+   LINKS
+========================= */
+
+.mobile-menu__panel a {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 56px;
+
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+
+  color: #111;
+
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  text-decoration: none;
+}
+
+/* =========================
+   MOBILE MENU HOVER
+========================= */
+
+.mobile-menu__panel a:active {
+  opacity: 0.55;
+}
+

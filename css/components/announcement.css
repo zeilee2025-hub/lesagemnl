@@ -92,3 +92,40 @@
   margin: 0 24px;
   opacity: 0.6;
 }
+
+/* =========================
+   MOBILE ANNOUNCEMENT
+========================= */
+
+@media (max-width: 768px) {
+
+  .announcement {
+    height: 42px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+
+    box-shadow: none;
+  }
+
+  .announcement__track {
+    height: 42px;
+  }
+
+  .announcement__group {
+    margin-right: 72px;
+  }
+
+  .announcement__item {
+    font-size: 10px;
+    font-weight: 500;
+
+    letter-spacing: 0.08em;
+
+    opacity: 0.92;
+  }
+
+  .announcement__item + .announcement__item {
+    margin-left: 72px;
+  }
+
+}
