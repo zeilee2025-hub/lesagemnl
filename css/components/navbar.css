@@ -190,6 +190,10 @@ body.lookbook-page .logo-black {
   opacity: 0.6;
 }
 
+.nav-icon:hover {
+  opacity: 0.6;
+}
+
 .nav-icon svg {
   width: 18px;
   height: 18px;
@@ -200,6 +204,14 @@ body.lookbook-page .logo-black {
   fill: none;
 
   display: block;
+}
+
+/* =========================
+   ACCOUNT ICON BALANCE
+========================= */
+
+#account-link svg {
+  transform: scale(1.12);
 }
 
 
@@ -313,10 +325,10 @@ body.lookbook-page .logo-black {
   }
 
   .nav-container {
-    padding: 0 20px;
+  padding: 0 20px;
 
-    height: 72px;
-  }
+  height: 64px;
+}
 
   .nav-left {
     gap: 0;
@@ -346,6 +358,7 @@ body.lookbook-page .logo-black {
     width: 21px;
     height: 21px;
   }
+
 }
 
 /* =========================
@@ -396,7 +409,7 @@ body.lookbook-page .logo-black {
   width: 100%;
   z-index: 20;
 
-  height: 68px;
+  height: 60px;
 
   display: flex;
   align-items: center;
@@ -407,6 +420,15 @@ body.lookbook-page .logo-black {
   background: #fff;
 
   border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+/* =========================
+   COLLAPSED HEADER FIX
+========================= */
+
+body.header-collapsed .mobile-menu,
+body.header-collapsed .mobile-menu__header {
+  top: 0;
 }
 
 
@@ -427,7 +449,6 @@ body.lookbook-page .logo-black {
 
   cursor: pointer;
 
-  font-size: 26px;
   font-weight: 300;
   line-height: 1;
 
@@ -439,7 +460,7 @@ body.lookbook-page .logo-black {
 .mobile-menu__close span {
   position: absolute;
 
-  width: 14px;
+  width: 21px;
   height: 1.5px;
 
   background: #111;
@@ -520,8 +541,8 @@ body.lookbook-page .logo-black {
 }
 
 .mobile-menu__icons .nav-icon svg {
-  width: 18px;
-  height: 18px;
+  width: 21px;
+  height: 21px;
 }
 
 /* MOBILE CART BADGE */
@@ -544,7 +565,7 @@ body.lookbook-page .logo-black {
   display: flex;
   flex-direction: column;
 
-  padding: 56px 16px 40px;
+  padding: 72px 16px 40px;
 }
 
 
@@ -559,15 +580,15 @@ body.lookbook-page .logo-black {
   align-items: center;
   justify-content: space-between;
 
-  height: 56px;
+  height: 62px;
 
   border-bottom: 1px solid rgba(0,0,0,0.08);
 
   color: #111;
 
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 
   text-decoration: none;
@@ -581,3 +602,13 @@ body.lookbook-page .logo-black {
   opacity: 0.55;
 }
 
+
+/* =========================
+   HIDE NAVBAR CONTENT
+   WHEN MOBILE MENU OPEN
+========================= */
+
+body.menu-open .navbar .nav-container {
+  opacity: 0;
+  pointer-events: none;
+}

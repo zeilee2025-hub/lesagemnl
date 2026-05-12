@@ -142,22 +142,6 @@
 }
 
 /* =========================
-   NAVBAR CONTEXT (HOME ONLY)
-========================= */
-
-body.home-page .navbar {
-  background: transparent;
-}
-
-body.home-page .nav-link,
-body.home-page .nav-logo,
-body.home-page .nav-icon {
-  color: white;
-}
-
-
-
-/* =========================
    MOBILE FOOTER VIDEO
 ========================= */
 
