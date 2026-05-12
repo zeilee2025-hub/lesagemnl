@@ -71,8 +71,17 @@ let selectedVariant = null;
 // ===============================
 const grid = document.getElementById("product-grid");
 const searchInput =  document.getElementById("search-input");
-const sortSelect = document.getElementById("shop-select");
 const filterButtons = document.querySelectorAll(".shop__filter-btn");
+
+const desktopSortSelect =
+  document.getElementById(
+    "desktop-sort-select"
+  );
+
+const mobileShopSelect =
+  document.getElementById(
+    "mobile-shop-select"
+  );
 
 
 // ===============================
@@ -249,7 +258,25 @@ searchInput?.addEventListener(
   }
 );
 
-sortSelect?.addEventListener(
+// ===============================
+// DESKTOP SORT
+// ===============================
+desktopSortSelect?.addEventListener(
+  "change",
+  (e) => {
+
+    currentSort =
+      e.target.value;
+
+    updateUI();
+
+  }
+);
+
+// ===============================
+// MOBILE FILTER + SORT
+// ===============================
+mobileShopSelect?.addEventListener(
   "change",
   (e) => {
 
@@ -273,7 +300,6 @@ sortSelect?.addEventListener(
 
       currentCategory = value;
 
-      // reset sort when switching category
       currentSort = "newest";
 
       // ===============================
@@ -297,12 +323,55 @@ sortSelect?.addEventListener(
 
       });
 
+      // sync desktop sort dropdown
+      if (desktopSortSelect) {
+
+        desktopSortSelect.value =
+          "newest";
+
+      }
+
     } else {
 
-      // ===============================
+            // ===============================
       // SORT MODE
       // ===============================
+
+      // reset category back to ALL
+      currentCategory = "all";
+
       currentSort = value;
+
+      // ===============================
+      // RESET DESKTOP FILTER BUTTONS
+      // ===============================
+      filterButtons.forEach((button) => {
+
+        button.classList.remove(
+          "shop__filter-btn--active"
+        );
+
+        if (
+          button.dataset.category === "all"
+        ) {
+
+          button.classList.add(
+            "shop__filter-btn--active"
+          );
+
+        }
+
+      });
+
+      // ===============================
+      // SYNC DESKTOP SORT DROPDOWN
+      // ===============================
+      if (desktopSortSelect) {
+
+        desktopSortSelect.value =
+          value;
+
+      }
 
     }
 
@@ -311,6 +380,9 @@ sortSelect?.addEventListener(
   }
 );
 
+// ===============================
+// DESKTOP FILTER BUTTONS
+// ===============================
 filterButtons.forEach((btn) => {
 
   btn.addEventListener("click", () => {
@@ -344,10 +416,20 @@ filterButtons.forEach((btn) => {
     // ===============================
     // SYNC MOBILE SELECT
     // ===============================
-    if (sortSelect) {
+    if (mobileShopSelect) {
 
-      sortSelect.value =
+      mobileShopSelect.value =
         currentCategory;
+
+    }
+
+    // ===============================
+    // SYNC DESKTOP SORT
+    // ===============================
+    if (desktopSortSelect) {
+
+      desktopSortSelect.value =
+        "newest";
 
     }
 
@@ -359,7 +441,6 @@ filterButtons.forEach((btn) => {
   });
 
 });
-
 
 // ===============================
 // QUICK ADD

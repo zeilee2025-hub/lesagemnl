@@ -96,6 +96,30 @@
   border-color: #000;
 }
 
+/* =========================
+   DESKTOP / MOBILE SELECTS
+========================= */
+
+.desktop-sort-select {
+  display: block;
+}
+
+.mobile-shop-select {
+  display: none;
+}
+
+@media (max-width: 640px) {
+
+  .desktop-sort-select {
+    display: none;
+  }
+
+  .mobile-shop-select {
+    display: block;
+  }
+
+}
+
 
 /* ===============================
    PRODUCT GRID

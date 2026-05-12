@@ -319,47 +319,71 @@
     </div>
 
     <!-- SORT / MOBILE FILTER -->
-    <div class="shop__sort">
+<div class="shop__sort">
 
-      <select id="shop-select">
+  <!-- DESKTOP SORT -->
+  <select
+    id="desktop-sort-select"
+    class="desktop-sort-select"
+  >
 
-        <!-- FILTERS -->
-        <option value="all">
-          All Products
-        </option>
+    <option value="newest">
+      Newest
+    </option>
 
-        <option value="tops">
-          Tops
-        </option>
+    <option value="price-asc">
+      Price: Low to High
+    </option>
 
-        <option value="bottoms">
-          Bottoms
-        </option>
+    <option value="price-desc">
+      Price: High to Low
+    </option>
 
-        <option value="accessories">
-          Accessories
-        </option>
+  </select>
 
-        <!-- SORT -->
-        <option disabled>
-          ─────────
-        </option>
+  <!-- MOBILE FILTER + SORT -->
+  <select
+    id="mobile-shop-select"
+    class="mobile-shop-select"
+  >
 
-        <option value="newest">
-          Newest
-        </option>
+    <!-- FILTERS -->
+    <option value="all">
+      All Products
+    </option>
 
-        <option value="price-asc">
-          Price: Low to High
-        </option>
+    <option value="tops">
+      Tops
+    </option>
 
-        <option value="price-desc">
-          Price: High to Low
-        </option>
+    <option value="bottoms">
+      Bottoms
+    </option>
 
-      </select>
+    <option value="accessories">
+      Accessories
+    </option>
 
-    </div>
+    <!-- SORT -->
+    <option disabled>
+      ─────────
+    </option>
+
+    <option value="newest">
+      Newest
+    </option>
+
+    <option value="price-asc">
+      Price: Low to High
+    </option>
+
+    <option value="price-desc">
+      Price: High to Low
+    </option>
+
+  </select>
+
+</div>
 
   </div>
 
