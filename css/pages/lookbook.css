@@ -426,76 +426,119 @@ LOOKBOOK PAGE
   ========================= */
 
   .lookbook-carousel {
-    height: 72svh;
-  }
+
+  height: 110svh;
+
+  overflow: hidden;
+
+  padding-bottom: 0;
+}
 
   .lookbook-track {
     height: 100%;
-  }
-
-  .lookbook-slide {
-    height: 100%;
-  }
+}
 
   /* =========================
-     MOBILE STACKED SLIDES
-  ========================= */
+   MOBILE STACKED SLIDES
+========================= */
 
-  .lookbook-slide:not(.solo) {
+.lookbook-slide {
 
-    flex-direction: column;
-  }
+  height: 100%;
+}
 
-  /* =========================
-     STACKED IMAGE HEIGHTS
-  ========================= */
+.lookbook-slide:not(.solo) {
 
-  .lookbook-slide:not(.solo) .lookbook-image {
+  flex-direction: column;
+}
 
-    flex: 1;
-  }
+/* =========================
+   STACKED IMAGE HEIGHTS
+========================= */
 
-  /* =========================
-     IMAGE SYSTEM
-  ========================= */
+.lookbook-slide:not(.solo) .lookbook-image {
 
-  .lookbook-image {
+  flex: 1;
 
-    height: 100%;
+  overflow: hidden;
+}
 
-    line-height: 0;
-  }
+/* =========================
+   IMAGE SYSTEM
+========================= */
 
-  .lookbook-image img {
+.lookbook-image {
 
-    width: 100%;
+  height: auto;
 
-    height: 100%;
+  line-height: 0;
+}
 
-    display: block;
-  }
+.lookbook-image img {
 
-  /* =========================
-     SOLO SLIDE
-  ========================= */
+  width: 100%;
 
-  .lookbook-slide.solo .lookbook-image img {
+  height: auto;
 
-    object-fit: cover;
+  display: block;
+}
 
-    object-position: center top;
-  }
+/* =========================
+   DOUBLE IMAGE SLIDES
+========================= */
 
-  /* =========================
-     DOUBLE IMAGE SLIDES
-  ========================= */
+.lookbook-slide:not(.solo) .lookbook-image img {
 
-  .lookbook-slide:not(.solo) .lookbook-image img {
+  width: 100%;
 
-    object-fit: cover;
+  height: 100%;
 
-    object-position: center;
-  }
+  object-fit: cover;
+}
+
+/* =========================
+   SOLO MOBILE POSITIONING
+========================= */
+
+.lookbook-slide.solo {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.lookbook-slide.solo .lookbook-image {
+
+  width: 100%;
+  max-width: 560px;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+
+  margin: 0 auto;
+}
+
+.lookbook-slide.solo .lookbook-image img {
+
+  width: 100%;
+
+  height: auto;
+
+  display: block;
+
+  transform: scale(1.06);
+
+  transform-origin: center center;
+}
 
   /* =========================
      DOTS
@@ -503,7 +546,7 @@ LOOKBOOK PAGE
 
   .lookbook-dots {
 
-    bottom: 18px;
+    bottom: -6px;
 
     gap: 8px;
   }

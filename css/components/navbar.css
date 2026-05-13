@@ -415,7 +415,7 @@ body.lookbook-page .logo-black {
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 20px;
+  padding: 0 16px;
 
   background: #fff;
 
@@ -485,8 +485,13 @@ body.header-collapsed .mobile-menu__header {
   display: flex;
   align-items: center;
 
+  flex: 1;
+
+  min-width: 0;
+
   margin-left: auto;
-  margin-right: 8px;
+
+  margin-right: 6px;
 }
 
 .mobile-menu__search-input {
@@ -514,7 +519,7 @@ body.header-collapsed .mobile-menu__header {
 }
 
 .mobile-menu__search-input.active {
-  width: 160px;
+  width: 100%;
 
   opacity: 1;
 

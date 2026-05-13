@@ -6,16 +6,37 @@ export function renderLookbookCarousel(root) {
   if (!root) return;
 
   // ==========================
-  // 📸 DATA
-  // ==========================
-  const slides = [
-    ["/assets/images/lookbook/lb1.jpg"],
+// 📸 DATA
+// ==========================
+const slides = [
 
-    ["/assets/images/lookbook/lb1a.jpg", "/assets/images/lookbook/lb1b.jpg"],
-    ["/assets/images/lookbook/lb2a.jpg", "/assets/images/lookbook/lb2b.jpg"],
-    ["/assets/images/lookbook/lb3a.jpg", "/assets/images/lookbook/lb3b.jpg"],
-    ["/assets/images/lookbook/lb4a.jpg", "/assets/images/lookbook/lb4b.jpg"],
-  ];
+  [
+    window.innerWidth <= 900
+      ? "/assets/images/lookbook/lb1-mobile.jpg"
+      : "/assets/images/lookbook/lb1.jpg"
+  ],
+
+  [
+    "/assets/images/lookbook/lb1a.jpg",
+    "/assets/images/lookbook/lb1b.jpg"
+  ],
+
+  [
+    "/assets/images/lookbook/lb2a.jpg",
+    "/assets/images/lookbook/lb2b.jpg"
+  ],
+
+  [
+    "/assets/images/lookbook/lb3a.jpg",
+    "/assets/images/lookbook/lb3b.jpg"
+  ],
+
+  [
+    "/assets/images/lookbook/lb4a.jpg",
+    "/assets/images/lookbook/lb4b.jpg"
+  ],
+
+];
 
   // ==========================
   // 🧱 RENDER
