@@ -94,114 +94,256 @@
 </div>
 
     <!-- NAVBAR -->
-    <nav class="navbar">
+<nav class="navbar">
+  <div class="nav-container container">
 
-      <div class="nav-container">
+    <!-- LEFT -->
+    <div class="nav-left">
 
-        <div class="nav-left">
+      <!-- MOBILE TOGGLE -->
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        aria-label="Open Menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
-          <ul class="nav-links">
+      <!-- DESKTOP NAV -->
+      <ul class="nav-links">
 
-            <li>
-              <a href="./index.html" class="nav-link">
-                HOME
-              </a>
-            </li>
+        <li>
+          <a href="./index.html" class="nav-link">
+            HOME
+          </a>
+        </li>
 
-            <li>
-              <a href="./shop.html" class="nav-link">
-                SHOP
-              </a>
-            </li>
+        <li>
+          <a href="./shop.html" class="nav-link">
+            SHOP
+          </a>
+        </li>
 
-            <li>
-              <a href="./lookbook.html" class="nav-link active">
-                LOOKBOOK
-              </a>
-            </li>
+        <li>
+          <a href="./lookbook.html" class="nav-link active">
+            LOOKBOOK
+          </a>
+        </li>
 
-            <li>
-              <a href="./about.html" class="nav-link">
-                ABOUT
-              </a>
-            </li>
+        <li>
+          <a href="./about.html" class="nav-link">
+            ABOUT
+          </a>
+        </li>
 
-          </ul>
+      </ul>
 
-        </div>
+    </div>
 
-        <div class="nav-right">
+    <!-- RIGHT -->
+<div class="nav-right">
 
-          <!-- SEARCH -->
-          <div class="search-wrapper">
+  <!-- SEARCH -->
+  <div class="search-wrapper">
 
-            <span
-              class="nav-icon"
-              id="search-icon"
-            >
-              <i data-lucide="search"></i>
-            </span>
+    <span class="nav-icon" id="search-icon">
 
-            <input
-              type="text"
-              id="search-input"
-              class="search-input"
-              placeholder="Search"
-            />
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+      >
+        <circle cx="11" cy="11" r="7"></circle>
 
-          </div>
+        <line
+          x1="16.5"
+          y1="16.5"
+          x2="21"
+          y2="21"
+        ></line>
+      </svg>
 
-          <!-- CART -->
-          <span
-            class="nav-icon cart-icon"
-            id="cart-icon"
+    </span>
+
+    <input
+      type="text"
+      id="search-input"
+      class="search-input"
+      placeholder="Search"
+    />
+
+  </div>
+
+  <!-- CART -->
+  <span class="nav-icon cart-icon" id="cart-icon">
+
+    <i data-lucide="shopping-bag"></i>
+
+    <span id="cart-badge" class="cart-badge">
+      0
+    </span>
+
+  </span>
+
+</div>
+
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+
+  <div class="mobile-menu__panel">
+
+    <!-- MOBILE MENU HEADER -->
+    <div class="mobile-menu__header">
+
+      <!-- CLOSE -->
+      <button
+        class="mobile-menu__close"
+        id="mobileMenuClose"
+        aria-label="Close Menu"
+      >
+        <span></span>
+        <span></span>
+      </button>
+
+                <!-- SEARCH -->
+      <div class="mobile-menu__search-wrapper">
+
+        <!-- SEARCH ICON -->
+        <span
+          class="nav-icon"
+          id="mobile-search-icon"
+        >
+
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
           >
+            <circle cx="11" cy="11" r="7"></circle>
 
-            <i data-lucide="shopping-bag"></i>
+            <line
+              x1="16.5"
+              y1="16.5"
+              x2="21"
+              y2="21"
+            ></line>
+          </svg>
 
-            <span
-              id="cart-badge"
-              class="cart-badge"
-            >
-              0
-            </span>
+        </span>
 
-          </span>
-
-        </div>
+        <!-- INPUT -->
+        <input
+          type="text"
+          class="mobile-menu__search-input"
+          id="mobile-search-input"
+          placeholder="Search"
+        />
 
       </div>
 
-    </nav>
+      <!-- RIGHT ICONS -->
+      <div class="mobile-menu__icons">
 
-  </header>
-
-  <!-- ================= MAIN ================= -->
-  <main class="lookbook-main">
-
-    <!-- HERO -->
-    <section class="lookbook-hero">
-
-      <video
-        class="lookbook-hero__video"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="metadata"
-        poster="./assets/images/lookbook/poster.jpg"
-      >
-
-        <source
-          src="./assets/images/lookbook/lookbook-hero.mp4"
-          type="video/mp4"
+        <!-- CART -->
+        <span
+          class="nav-icon cart-icon"
+          id="mobile-cart-icon"
         >
 
-      </video>
+          <i data-lucide="shopping-bag"></i>
 
-      <div class="lookbook-hero__overlay"></div>
+          <span
+            class="cart-badge"
+            id="mobile-cart-badge"
+          >
+            0
+          </span>
 
-    </section>
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- MOBILE LINKS -->
+    <a href="./index.html">
+      Home
+    </a>
+
+    <a href="./shop.html">
+      Shop
+    </a>
+
+    <a href="./lookbook.html">
+      Lookbook
+    </a>
+
+    <a href="./about.html">
+      About
+    </a>
+
+  </div>
+
+</div>
+
+</header>
+
+  <!-- ================= MAIN ================= -->
+<main class="lookbook-main">
+
+  <!-- HERO -->
+  <section class="lookbook-hero">
+
+    <!-- DESKTOP VIDEO -->
+    <video
+      class="lookbook-hero__video lookbook-hero__video--desktop"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="./assets/images/lookbook/poster.jpg"
+    >
+
+      <source
+        src="./assets/images/lookbook/lookbook-hero.mp4"
+        type="video/mp4"
+      >
+
+    </video>
+
+    <!-- MOBILE VIDEO -->
+    <video
+      class="lookbook-hero__video lookbook-hero__video--mobile"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="./assets/images/lookbook/poster.jpg"
+    >
+
+      <source
+        src="./assets/images/lookbook/lookbook-hero-mobile.mp4"
+        type="video/mp4"
+      >
+
+    </video>
+
+    <div class="lookbook-hero__overlay"></div>
+
+  </section>
 
     <!-- MARQUEE -->
     <section class="lookbook-marquee-section">
