@@ -133,10 +133,11 @@ const slides = [
   // ==========================
   // ⚙️ STATE
   // ==========================
-  let currentIndex = 0;
-  let autoTimer = null;
-  let resumeTimer = null;
-  let isAnimating = false;
+let currentIndex = 0;
+let autoTimer = null;
+let resumeTimer = null;
+let isAnimating = false;
+let hasStarted = false;
 
 const AUTO_DELAY = 8000;
 
@@ -277,7 +278,7 @@ function goToSlide(index) {
   // ==========================
   function startAuto() {
 
-    stopAuto();
+    stopAuto(true);
 
     autoTimer = setTimeout(() => {
 
@@ -302,19 +303,28 @@ function goToSlide(index) {
 
   }
 
-  function stopAuto() {
+  function stopAuto(resetProgress = false) {
 
   if (autoTimer) {
 
     clearTimeout(autoTimer);
 
-    resetProgressBars();
+    autoTimer = null;
 
   }
 
   if (resumeTimer) {
 
     clearTimeout(resumeTimer);
+
+    resumeTimer = null;
+
+  }
+
+  // ✅ only reset when needed
+  if (resetProgress) {
+
+    resetProgressBars();
 
   }
 
@@ -481,41 +491,43 @@ const observer =
       entries.forEach((entry) => {
 
         // ==========================
-        // ✅ START / RESUME
+        // ✅ ENTER VIEW
         // ==========================
         if (
           entry.isIntersecting &&
           entry.intersectionRatio >= 0.55
         ) {
 
-          // ✅ avoid duplicate timers
-          stopAuto();
+          // ✅ only start once
+          if (!hasStarted) {
 
-          // ✅ cinematic delay
-          setTimeout(() => {
+            hasStarted = true;
 
-            // ✅ don't restart at final slide
-            if (
-              currentIndex <
-              slidesEl.length - 1
-            ) {
+            setTimeout(() => {
 
-              startAuto();
+              if (
+                currentIndex <
+                slidesEl.length - 1
+              ) {
 
-            }
+                startAuto();
 
-          }, 1200);
+              }
+
+            }, 1200);
+
+          }
 
         }
 
         // ==========================
-        // ✅ PAUSE WHEN HIDDEN
+        // ✅ PAUSE WHEN FAR AWAY
         // ==========================
         if (
           entry.intersectionRatio < 0.15
         ) {
 
-          stopAuto();
+          stopAuto(false);
 
         }
 
