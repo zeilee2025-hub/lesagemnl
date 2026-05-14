@@ -41,7 +41,7 @@
   margin-top: 14px;
 
   font-size: 35px;
-  font-weight: 700;
+  font-weight: 600;
 
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -90,13 +90,13 @@
 .about__section p {
   font-size: clamp(20px, 1.5vw, 28px);
 
-  font-weight: 500;
+  font-weight: 400;
 
   line-height: 1.75;
 
   letter-spacing: -0.02em;
 
-  color: #ffffff;
+  color: #cec9c9;
 }
 
 /* ===============================
