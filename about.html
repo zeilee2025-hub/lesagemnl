@@ -8,7 +8,7 @@
 
   <!-- FONTS -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet"
   >
 
@@ -88,191 +88,245 @@
 
 </div>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
+   <!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-container container">
 
-      <div class="nav-container">
+    <!-- LEFT -->
+    <div class="nav-left">
 
-        <!-- LEFT -->
-        <div class="nav-left">
+      <!-- MOBILE TOGGLE -->
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        aria-label="Open Menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
-          <ul class="nav-links">
+      <!-- DESKTOP NAV -->
+      <ul class="nav-links">
 
-            <li>
-              <a href="./index.html" class="nav-link">
-                HOME
-              </a>
-            </li>
+        <li>
+          <a href="./index.html" class="nav-link">
+            HOME
+          </a>
+        </li>
 
-            <li>
-              <a href="./shop.html" class="nav-link">
-                SHOP
-              </a>
-            </li>
+        <li>
+          <a href="./shop.html" class="nav-link">
+            SHOP
+          </a>
+        </li>
 
-            <li>
-              <a href="./lookbook.html" class="nav-link">
-                LOOKBOOK
-              </a>
-            </li>
+        <li>
+          <a href="./lookbook.html" class="nav-link">
+            LOOKBOOK
+          </a>
+        </li>
 
-            <li>
-              <a href="./about.html" class="nav-link active">
-                ABOUT
-              </a>
-            </li>
-            <li>
-  <a
-    href="./login.html"
-    class="nav-link"
-    id="account-link"
-  >
-    LOGIN
-  </a>
-</li>
+        <li>
+          <a href="./about.html" class="nav-link active">
+            ABOUT
+          </a>
+        </li>
 
-          </ul>
+      </ul>
 
-        </div>
+    </div>
 
-        <!-- RIGHT -->
-        <div class="nav-right">
+    <!-- RIGHT -->
+    <div class="nav-right">
 
-          <!-- SEARCH -->
-          <div class="search-wrapper">
+      <!-- SEARCH -->
+      <div class="search-wrapper">
 
-            <span
-              class="nav-icon"
-              id="search-icon"
-            >
-              <i data-lucide="search"></i>
-            </span>
+        <span class="nav-icon" id="search-icon">
 
-            <input
-              type="text"
-              id="search-input"
-              class="search-input"
-              placeholder="Search"
-            />
-
-          </div>
-
-          <!-- CART -->
-          <span
-            class="nav-icon cart-icon"
-            id="cart-icon"
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
           >
+            <circle cx="11" cy="11" r="7"></circle>
 
-            <i data-lucide="shopping-bag"></i>
+            <line
+              x1="16.5"
+              y1="16.5"
+              x2="21"
+              y2="21"
+            ></line>
 
-            <span
-              id="cart-badge"
-              class="cart-badge"
-            >
-              0
-            </span>
+          </svg>
 
-          </span>
+        </span>
 
-        </div>
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder="Search"
+        />
 
       </div>
 
-    </nav>
+      <!-- CART -->
+      <span class="nav-icon cart-icon" id="cart-icon">
+
+        <i data-lucide="shopping-bag"></i>
+
+        <span id="cart-badge" class="cart-badge">
+          0
+        </span>
+
+      </span>
+
+    </div>
+
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+
+  <div class="mobile-menu__panel">
+
+    <!-- MOBILE MENU HEADER -->
+    <div class="mobile-menu__header">
+
+      <!-- CLOSE -->
+      <button
+        class="mobile-menu__close"
+        id="mobileMenuClose"
+        aria-label="Close Menu"
+      >
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- SEARCH -->
+      <div class="mobile-menu__search-wrapper">
+
+        <span
+          class="nav-icon"
+          id="mobile-search-icon"
+        >
+
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+
+            <line
+              x1="16.5"
+              y1="16.5"
+              x2="21"
+              y2="21"
+            ></line>
+
+          </svg>
+
+        </span>
+
+        <input
+          type="text"
+          class="mobile-menu__search-input"
+          id="mobile-search-input"
+          placeholder="Search"
+        />
+
+      </div>
+
+      <!-- RIGHT ICONS -->
+      <div class="mobile-menu__icons">
+
+        <!-- CART -->
+        <span
+          class="nav-icon cart-icon"
+          id="mobile-cart-icon"
+        >
+
+          <i data-lucide="shopping-bag"></i>
+
+          <span
+            class="cart-badge"
+            id="mobile-cart-badge"
+          >
+            0
+          </span>
+
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- MOBILE LINKS -->
+    <a href="./index.html">
+      Home
+    </a>
+
+    <a href="./shop.html">
+      Shop
+    </a>
+
+    <a href="./lookbook.html">
+      Lookbook
+    </a>
+
+    <a href="./about.html">
+      About
+    </a>
+
+  </div>
+
+</div>
+    
 
   </header>
 
-  <!-- ================= MAIN ================= -->
-  <main>
+    <!-- ================= MAIN ================= -->
+<main>
 
-    <section class="about">
+  <section class="about">
 
-      <!-- HERO -->
-      <div class="about__hero">
+    <!-- HERO -->
+    <div class="about__hero">
 
-        <img
-          src="./assets/icons/aboutlogo.png"
-          alt="LÉ SAGE MNL Logo"
-          class="about__brand-logo"
-        />
+      <img
+        src="./assets/icons/aboutlogo.png"
+        alt="LÉ SAGE MNL Logo"
+        class="about__brand-logo"
+      />
 
-        <p class="about__subtitle">
-          Wisdom of the New Generation
-        </p>
+      <p class="about__subtitle">
+        Wisdom of the New Generation
+      </p>
 
-      </div>
+    </div>
 
-      <!-- STATEMENT -->
-      <div class="about__statement">
+    <!-- SUPPORTING TEXT -->
+    <div class="about__section">
 
-        <p>
-          Presence over noise.
-        </p>
+      <p>
+        LÉ SAGE MNL is a culture inspired by those who move with purpose and think beyond the noise. Built on the idea of wisdom in the new generation where presence speaks louder than attention. The crowned owl represents silent power. A presence that does not need to prove itself. Because real wisdom does not compete. It exists.
+      </p>
 
-        <p>
-          Clarity over chaos.
-        </p>
+    </div>
 
-        <p>
-          Wisdom over validation.
-        </p>
+  </section>
 
-      </div>
-
-      <!-- STORY -->
-      <div class="about__section">
-
-        <p>
-          LÉ SAGE MNL is a culture inspired by those who move with purpose and think beyond the noise.
-          Built on the idea of wisdom in the new generation where presence speaks louder than attention.
-        </p>
-
-      </div>
-
-      <!-- SYMBOL -->
-      <div class="about__section about__section--center">
-
-        <p>
-          The crowned owl represents silent power.
-          A presence that does not need to prove itself.
-          Because real wisdom does not compete. It exists.
-        </p>
-
-      </div>
-
-      <!-- COMMUNITY -->
-      <div class="about__statement about__statement--soft">
-
-        <p>
-          For the ones building quietly.
-        </p>
-
-        <p>
-          For the ones who don’t need validation.
-        </p>
-
-        <p>
-          For the ones who move different.
-        </p>
-
-      </div>
-
-      <!-- CLOSING -->
-      <div class="about__closing">
-
-        <p>
-          Built for the hustle.
-        </p>
-
-        <p>
-          Rooted in respect.
-        </p>
-
-      </div>
-
-    </section>
-
-  </main>
+</main>
 
   <!-- ================= CART DRAWER ================= -->
 
@@ -310,12 +364,14 @@
     ></div>
 
     <!-- FOOTER -->
-    <div
-      id="cart-total"
-      class="cart-drawer__footer"
-    ></div>
+<div
+  id="cart-total"
+  class="cart-drawer__footer"
+></div>
 
-    <!-- ================= FOOTER MODAL ================= -->
+</aside>
+
+     <!-- ================= FOOTER MODAL ================= -->
 
 <div class="footer-modal hidden" id="footer-modal">
 
@@ -342,25 +398,22 @@
 
 </div>
 
-  </aside>
-
-  <!-- TOAST -->
-  <div id="toast-root"></div>
+<!-- TOAST -->
+<div id="toast-root"></div>
 
   <!-- FOOTER -->
   <div id="footer-container"></div>
 
-  <!-- ================= JS ================= -->
-
+  <!-- JS -->
   <script type="module" src="./js/components/navbar.js"></script>
-  <script type="module" src="./js/components/main.js"></script>
-  <script type="module" src="./js/components/footerLoader.js"></script>
+<script type="module" src="./js/components/main.js"></script>
 
-  <!-- GLOBAL INTERACTION SYSTEM -->
-  <script
-    type="module"
-    src="./js/core/interactions.js"
-  ></script>
+<script
+  type="module"
+  src="./js/core/interactions.js"
+></script>
+
+<script type="module" src="./js/components/footerLoader.js"></script>
 
   <!-- ICON INIT -->
   <script>
