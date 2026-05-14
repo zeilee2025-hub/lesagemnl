@@ -50,30 +50,6 @@
 }
 
 /* ===============================
-   MAIN STATEMENT
-================================ */
-
-.about__statement {
-  margin-top: 45px;
-
-  text-align: center;
-}
-
-.about__statement p {
-  font-size: clamp(24px, 2.6vw, 42px);
-
-  font-weight: 600;
-
-  line-height: 1.08;
-
-  letter-spacing: -0.04em;
-
-  margin-bottom: 8px;
-
-  color: #ffffff;
-}
-
-/* ===============================
    SUPPORTING TEXT
 ================================ */
 
@@ -100,6 +76,36 @@
 }
 
 /* ===============================
+   CLOSING
+================================ */
+
+.about__closing {
+  margin-top: 38px;
+
+  text-align: center;
+}
+
+.about__closing p {
+  font-size: clamp(20px, 1.5vw, 28px);
+
+  font-weight: 500;
+
+  line-height: 1.4;
+
+  letter-spacing: -0.03em;
+
+  color: #c2c0c0;
+}
+
+/* ===============================
+   PAGE OFFSET
+================================ */
+
+body.about-page {
+  padding-top: calc(var(--announcement-height) + 60px);
+}
+
+/* ===============================
    MOBILE
 ================================ */
 
@@ -109,60 +115,72 @@
     justify-content: flex-start;
 
     padding:
-      calc(var(--announcement-height) + 85px)
-      20px
-      90px;
+      calc(var(--announcement-height) + 55px)
+      26px
+      70px;
   }
 
+  /* HERO */
+
   .about__hero {
-    margin-top: 10px;
+    margin-top: 0;
   }
 
   .about__brand-logo {
-    width: 150px;
-    max-width: 100%;
+    width: 420px;
+    max-width: 95%;
   }
 
   .about__subtitle {
-    margin-top: 10px;
+    margin-top: 14px;
 
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 600;
 
-    letter-spacing: 0.22em;
+    letter-spacing: 0.18em;
+
+    line-height: 1.35;
+
+    text-transform: uppercase;
+
+    color: #ffffff;
   }
 
-  .about__statement {
-    margin-top: 40px;
-  }
-
-  .about__statement p {
-    font-size: 28px;
-
-    line-height: 1.12;
-
-    margin-bottom: 6px;
-  }
+  /* SUPPORTING TEXT */
 
   .about__section {
-    margin-top: 32px;
+    max-width: 100%;
 
-    padding: 0 8px;
+    margin-top: 24px;
+
+    padding: 0 4px;
   }
 
   .about__section p {
-    font-size: 18px;
+    font-size: 13px;
 
     font-weight: 500;
 
-    line-height: 1.75;
+    line-height: 1.9;
+
+    letter-spacing: -0.015em;
+
+    color: #cec9c9;
   }
-}
 
-/* ===============================
-   PAGE OFFSET
-================================ */
+  /* CLOSING */
 
-body.about-page {
-  padding-top: calc(var(--announcement-height) + 60px);
+  .about__closing {
+    margin-top: 28px;
+  }
+
+  .about__closing p {
+    font-size: 12px;
+
+    font-weight: 500;
+
+    line-height: 1.45;
+
+    letter-spacing: -0.02em;
+  }
 }
