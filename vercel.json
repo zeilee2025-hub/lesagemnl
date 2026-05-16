@@ -1,6 +1,26 @@
 {
-  "routes": [
-    { "src": "/order.html", "dest": "/order.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+  "cleanUrls": true,
+
+  "headers": [
+    {
+      "source": "/maintenance.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
+      ]
+    }
+  ],
+
+  "rewrites": [
+    {
+      "source": "/maintenance.html",
+      "destination": "/maintenance.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/maintenance.html"
+    }
   ]
 }
