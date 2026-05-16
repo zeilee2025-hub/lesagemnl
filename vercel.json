@@ -1,26 +1,9 @@
 {
-  "cleanUrls": true,
-
-  "headers": [
-    {
-      "source": "/maintenance.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store, no-cache, must-revalidate"
-        }
-      ]
-    }
-  ],
-
-  "rewrites": [
-    {
-      "source": "/maintenance.html",
-      "destination": "/maintenance.html"
-    },
+  "redirects": [
     {
       "source": "/(.*)",
-      "destination": "/maintenance.html"
+      "destination": "/maintenance.html",
+      "permanent": false
     }
   ]
 }
