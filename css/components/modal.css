@@ -57,6 +57,13 @@
   max-width: 720px;
   max-height: 80vh;
 
+  overflow-x: auto;
+
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
   padding: 24px;
 
   display: flex;
@@ -75,6 +82,10 @@
   transition:
     opacity 0.25s ease,
     transform 0.25s ease;
+}
+
+.modal__content::-webkit-scrollbar {
+  display: none;
 }
 
 .modal.active .modal__content {
@@ -169,6 +180,20 @@
   z-index: var(--z-modal, 1000);
 }
 
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .modal__content {
+    width: min(94vw, 560px);
+
+    padding: 22px 16px;
+  }
+
+}
 
 /* =========================
    ANIMATION

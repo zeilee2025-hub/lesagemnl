@@ -22,6 +22,8 @@
   ========================== -->
   <link rel="stylesheet" href="./css/components/navbar.css">
   <link rel="stylesheet" href="./css/components/announcement.css">
+  <link rel="stylesheet" href="./css/components/footer-modal.css">
+  <link rel="stylesheet" href="./css/components/typography.css">
   <link rel="stylesheet" href="./css/components/footer.css">
   <link rel="stylesheet" href="./css/components/cart.css">
   <link rel="stylesheet" href="./css/components/cart-drawer.css">
@@ -84,106 +86,223 @@
   <!-- ================= HEADER ================= -->
   <header>
 
-    <nav class="navbar">
+     <!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-container container">
 
-      <div class="nav-container">
+    <!-- LEFT -->
+    <div class="nav-left">
 
-        <div class="nav-left">
+      <!-- MOBILE TOGGLE -->
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        aria-label="Open Menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
-          <ul class="nav-links">
-            <li>
-              <a href="./index.html" class="nav-link">
-                HOME
-              </a>
-            </li>
+      <!-- DESKTOP NAV -->
+      <ul class="nav-links">
 
-            <li>
-              <a href="./shop.html" class="nav-link">
-                SHOP
-              </a>
-            </li>
+        <li>
+          <a href="./index.html" class="nav-link">
+            HOME
+          </a>
+        </li>
 
-            <li>
-              <a href="./lookbook.html" class="nav-link">
-                LOOKBOOK
-              </a>
-            </li>
+        <li>
+          <a href="./shop.html" class="nav-link">
+            SHOP
+          </a>
+        </li>
 
-            <li>
-              <a href="./about.html" class="nav-link">
-                ABOUT
-              </a>
-            </li>
-            <li>
-  <a
-    href="./login.html"
-    class="nav-link"
-    id="account-link"
-  >
-    LOGIN
-  </a>
-</li>
-          </ul>
+        <li>
+          <a href="./lookbook.html" class="nav-link">
+            LOOKBOOK
+          </a>
+        </li>
 
-        </div>
+        <li>
+          <a href="./about.html" class="nav-link">
+            ABOUT
+          </a>
+        </li>
 
-        <div class="nav-right">
-
-          <!-- SEARCH -->
-          <div class="search-wrapper">
-
-            <span
-              class="nav-icon"
-              id="search-icon"
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <circle cx="11" cy="11" r="7"></circle>
-
-                <line
-                  x1="16.5"
-                  y1="16.5"
-                  x2="21"
-                  y2="21"
-                ></line>
-              </svg>
-            </span>
-
-            <input
-              type="text"
-              id="search-input"
-              class="search-input"
-              placeholder="Search"
-            />
-
-          </div>
-
-          <!-- CART -->
-          <span
-            class="nav-icon cart-icon"
-            id="cart-icon"
+        <li>
+          <a
+            href="./login.html"
+            class="nav-link"
+            id="account-link"
           >
-            <i data-lucide="shopping-bag"></i>
+            LOGIN
+          </a>
+        </li>
 
-            <span
-              id="cart-badge"
-              class="cart-badge"
-            >
-              0
-            </span>
-          </span>
+      </ul>
 
-        </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="nav-right">
+
+      <!-- SEARCH -->
+      <div class="search-wrapper">
+
+        <span class="nav-icon" id="search-icon">
+
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+
+            <line
+              x1="16.5"
+              y1="16.5"
+              x2="21"
+              y2="21"
+            ></line>
+          </svg>
+
+        </span>
+
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder="Search"
+        />
 
       </div>
 
-    </nav>
+      <!-- CART -->
+      <span class="nav-icon cart-icon" id="cart-icon">
+
+        <i data-lucide="shopping-bag"></i>
+
+        <span id="cart-badge" class="cart-badge">
+          0
+        </span>
+
+      </span>
+
+    </div>
+
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+
+  <div class="mobile-menu__panel">
+
+    <!-- MOBILE MENU HEADER -->
+    <div class="mobile-menu__header">
+
+      <!-- CLOSE -->
+      <button
+        class="mobile-menu__close"
+        id="mobileMenuClose"
+        aria-label="Close Menu"
+      >
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- SEARCH -->
+      <div class="mobile-menu__search-wrapper">
+
+        <!-- SEARCH ICON -->
+        <span
+          class="nav-icon"
+          id="mobile-search-icon"
+        >
+
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+
+            <line
+              x1="16.5"
+              y1="16.5"
+              x2="21"
+              y2="21"
+            ></line>
+          </svg>
+
+        </span>
+
+        <!-- INPUT -->
+        <input
+          type="text"
+          class="mobile-menu__search-input"
+          id="mobile-search-input"
+          placeholder="Search"
+        />
+
+      </div>
+
+      <!-- RIGHT ICONS -->
+      <div class="mobile-menu__icons">
+
+        <!-- CART -->
+        <span
+          class="nav-icon cart-icon"
+          id="mobile-cart-icon"
+        >
+
+          <i data-lucide="shopping-bag"></i>
+
+          <span
+            class="cart-badge"
+            id="mobile-cart-badge"
+          >
+            0
+          </span>
+
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- MOBILE LINKS -->
+    <a href="./index.html">
+      Home
+    </a>
+
+    <a href="./shop.html">
+      Shop
+    </a>
+
+    <a href="./lookbook.html">
+      Lookbook
+    </a>
+
+    <a href="./about.html">
+      About
+    </a>
+
+    <a href="./login.html">
+      Login
+    </a>
+
+  </div>
+
+</div>
 
   </header>
 
@@ -370,6 +489,33 @@
 
   <!-- ================= FOOTER ================= -->
   <div id="footer-container"></div>
+
+  <!-- ================= FOOTER MODAL ================= -->
+
+<div class="footer-modal hidden" id="footer-modal">
+
+  <div class="footer-modal__overlay"></div>
+
+  <div class="footer-modal__container">
+
+    <!-- CLOSE -->
+    <button
+      class="footer-modal__close"
+      id="footer-modal-close"
+      aria-label="Close footer modal"
+    >
+      ✕
+    </button>
+
+    <!-- CONTENT -->
+    <div
+      class="footer-modal__content"
+      id="footer-modal-content"
+    ></div>
+
+  </div>
+
+</div>
 
 
     <!-- ================= CART DRAWER ================= -->
