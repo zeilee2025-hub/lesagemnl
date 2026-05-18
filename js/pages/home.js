@@ -73,18 +73,31 @@ document.addEventListener("DOMContentLoaded", () => {
 // ========================== 
 //  DATA LISTENER
 // ==========================
-listenToProducts((products) => {
-  allProducts = products;
+window.addEventListener("load", () => {
 
-  products.forEach(product => {
-    product.selectedVariant = product.variants?.[0] || null;
-  });
+  setTimeout(() => {
 
-  const featured = products
-    .filter(p => p.featured === true)
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
+    listenToProducts((products) => {
 
-  renderProducts(featured);
+      allProducts = products;
+
+      products.forEach(product => {
+        product.selectedVariant =
+          product.variants?.[0] || null;
+      });
+
+      const featured = products
+        .filter(p => p.featured === true)
+        .sort((a, b) =>
+          (a.order || 0) - (b.order || 0)
+        );
+
+      renderProducts(featured);
+
+    });
+
+  }, 1200);
+
 });
 
 
