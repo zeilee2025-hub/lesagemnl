@@ -9,7 +9,12 @@
   <meta name="description" content="LÉ SAGE MNL — modern streetwear with a minimal identity. Shop the latest drop." />
 
   <!-- HERO PRELOAD -->
-  <link rel="preload" as="image" href="./assets/images/hero-1.jpg">
+  <link
+  rel="preload"
+  as="image"
+  href="./assets/images/hero-1.webp"
+  type="image/webp"
+/>
 
   <!-- FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -171,20 +176,24 @@
 
       <picture class="hero__image hero__image--active">
 
-        <!-- MOBILE HERO -->
-        <source
-          media="(max-width: 768px)"
-          srcset="./assets/images/hero-mobile.jpg"
-        />
+  <!-- MOBILE HERO -->
+  <source
+    media="(max-width: 768px)"
+    srcset="./assets/images/hero-mobile.webp"
+    type="image/webp"
+  />
 
-        <!-- DESKTOP HERO -->
-        <img
-          src="./assets/images/hero-1.jpg"
-          alt="LÉ SAGE MNL Hero"
-          fetchpriority="high"
-        />
+  <!-- DESKTOP HERO -->
+  <img
+    src="./assets/images/hero-1.webp"
+    alt="LÉ SAGE MNL Hero"
+    fetchpriority="high"
+    decoding="async"
+    width="1920"
+    height="1080"
+  />
 
-      </picture>
+</picture>
 
     </div>
 

@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ========================== 
 //  DATA LISTENER
-// ==========================
+// ==========================l
 window.addEventListener("load", () => {
 
   setTimeout(() => {
