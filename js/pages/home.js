@@ -70,33 +70,29 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// ========================== 
+// ==========================
 //  DATA LISTENER
-// ==========================l
-window.addEventListener("load", () => {
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
 
-  setTimeout(() => {
+  listenToProducts((products) => {
 
-    listenToProducts((products) => {
+    allProducts = products;
 
-      allProducts = products;
-
-      products.forEach(product => {
-        product.selectedVariant =
-          product.variants?.[0] || null;
-      });
-
-      const featured = products
-        .filter(p => p.featured === true)
-        .sort((a, b) =>
-          (a.order || 0) - (b.order || 0)
-        );
-
-      renderProducts(featured);
-
+    products.forEach(product => {
+      product.selectedVariant =
+        product.variants?.[0] || null;
     });
 
-  }, 1200);
+    const featured = products
+      .filter(p => p.featured === true)
+      .sort((a, b) =>
+        (a.order || 0) - (b.order || 0)
+      );
+
+    renderProducts(featured);
+
+  });
 
 });
 

@@ -1,12 +1,12 @@
 // ==========================
-// 🔥 LOOKBOOK CAROUSEL
+// LOOKBOOK CAROUSEL
 // ==========================
 
 export function renderLookbookCarousel(root) {
   if (!root) return;
 
   // ==========================
-// 📸 DATA
+//  DATA
 // ==========================
 const slides = [
 
@@ -39,7 +39,7 @@ const slides = [
 ];
 
   // ==========================
-  // 🧱 RENDER
+  //  RENDER
   // ==========================
   root.innerHTML = `
     <div class="lookbook-carousel">
@@ -52,7 +52,7 @@ const slides = [
         ${slides.map((pair, i) => {
 
           // ==========================
-          // 🔥 SOLO SLIDE
+          //  SOLO SLIDE
           // ==========================
           if (pair.length === 1) {
 
@@ -76,7 +76,7 @@ const slides = [
           }
 
           // ==========================
-          // 🔥 DOUBLE SLIDE
+          //  DOUBLE SLIDE
           // ==========================
           return `
             <div class="lookbook-slide">
