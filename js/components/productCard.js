@@ -29,8 +29,21 @@ export function createProductCard(product, options = {}) {
     <div class="product-card" data-id="${product.id}">
       
       <div class="product-card__media">
-        <img src="${frontImage}" class="product-card__image product-card__image--front" alt="${product.name}" />
-        <img src="${backImage}" class="product-card__image product-card__image--back" alt="${product.name}" />
+        <img
+  src="${frontImage}"
+  class="product-card__image product-card__image--front"
+  alt="${product.name}"
+  loading="lazy"
+  decoding="async"
+/>
+
+<img
+  data-src="${backImage}"
+  class="product-card__image product-card__image--back"
+  alt="${product.name}"
+  loading="lazy"
+  decoding="async"
+/>
 
         <div class="product-card__overlay"></div>
 
@@ -95,22 +108,7 @@ export function initProductCard(card, onQuickAdd, product, options = {}) {
       ? state.hoverVariantIndex
       : state.activeVariantIndex;
   }
-
-  function isValidSrc(src) {
-    return typeof src === "string" && src.trim() !== "";
-  }
-
-  function swapImageSafely(imgEl, newSrc) {
-    if (!imgEl || !isValidSrc(newSrc) || imgEl.src === newSrc) return;
-
-    const temp = new Image();
-    temp.src = newSrc;
-
-    temp.onload = () => {
-      imgEl.src = newSrc;
-    };
-  }
-
+  
   // ===============================
   //  NORMALIZED VARIANTS
   // ===============================
@@ -165,83 +163,92 @@ export function initProductCard(card, onQuickAdd, product, options = {}) {
 //  RENDER
 // ===============================
 function renderImage() {
+
   const index = getCurrentVariantIndex();
-  const variant = variants[index] || variants[0];
-  const variantKey = variant.name || index;
+
+  const variant =
+    variants[index] || variants[0];
+
+  const variantKey =
+    variant.name || index;
 
   if (!imageCache[variantKey]) {
-    imageCache[variantKey] = { back: null, model: null };
+    imageCache[variantKey] = {
+      back: null,
+      model: null
+    };
   }
 
-  const front = variant.front || getProductImage(product, { type: "front" });
-  const back = variant.back || null;
-  const model = variant.model || null;
+  const front =
+    variant.front ||
+    getProductImage(product, { type: "front" });
+
+  const back =
+    variant.back || null;
+
+  const model =
+    variant.model || null;
 
   let src;
 
   const isHovered =
-  window.innerWidth > 768 &&
-  card.matches(":hover");
+    window.innerWidth > 768 &&
+    card.matches(":hover");
 
   // ===============================
   // 🔥 MODEL MODE
   // ===============================
   if (
-  hasModel &&
-  config.hoverMode === "model" &&
-  state.modelReady &&
-  isHovered
-) {
+    hasModel &&
+    config.hoverMode === "model" &&
+    state.modelReady &&
+    isHovered
+  ) {
 
-  // MODEL MODE
-  src = model || front;
+    src = model || front;
 
-  card.classList.add("product-card--model");
+    card.classList.add(
+      "product-card--model"
+    );
 
-} else if (isHovered && back) {
+  } else if (isHovered && back) {
 
-  // BACK IMAGE MODE
-  src = back;
+    src = back;
 
-  card.classList.remove("product-card--model");
+    card.classList.remove(
+      "product-card--model"
+    );
 
-} else {
+  } else {
 
-  // DEFAULT FRONT IMAGE
-  src = front;
+    src = front;
 
-  card.classList.remove("product-card--model");
-}
-
-  swapImageSafely(frontImg, src);
-}
+    card.classList.remove(
+      "product-card--model"
+    );
+  }
 
   // ===============================
-  //  PRELOAD
+  // 🚀 SMART IMAGE SWAP
   // ===============================
-  setTimeout(() => {
-    variants.forEach((variant, index) => {
-      const key = variant.name || index;
+  if (!src) return;
 
-      if (!imageCache[key]) {
-        imageCache[key] = { back: null, model: null };
-      }
+  const alreadyLoaded =
+    frontImg.dataset.loadedSrc === src;
 
-      const cache = imageCache[key];
+  if (alreadyLoaded) return;
 
-      if (variant.back) {
-        loadImage(variant.back, "low").then(() => {
-          cache.back = variant.back;
-        });
-      }
+  loadImage(src).then((loadedSrc) => {
 
-      if (hasModel && variant.model) {
-        loadImage(variant.model, "low").then(() => {
-          cache.model = variant.model;
-        });
-      }
-    });
-  }, 200);
+    if (!loadedSrc) return;
+
+    frontImg.src = loadedSrc;
+
+    frontImg.dataset.loadedSrc =
+      loadedSrc;
+  });
+
+}
 
   // ===============================
   //  HOVER

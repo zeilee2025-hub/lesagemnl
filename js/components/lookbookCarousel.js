@@ -12,28 +12,28 @@ const slides = [
 
   [
     window.innerWidth <= 900
-      ? "/assets/images/lookbook/lb1-mobile.jpg"
-      : "/assets/images/lookbook/lb1.jpg"
+      ? "/assets/images/lookbook/lb1-mobile.webp"
+      : "/assets/images/lookbook/lb1.webp"
   ],
 
   [
-    "/assets/images/lookbook/lb1a.jpg",
-    "/assets/images/lookbook/lb1b.jpg"
+    "/assets/images/lookbook/lb1a.webp",
+    "/assets/images/lookbook/lb1b.webp"
   ],
 
   [
-    "/assets/images/lookbook/lb2a.jpg",
-    "/assets/images/lookbook/lb2b.jpg"
+    "/assets/images/lookbook/lb2a.webp",
+    "/assets/images/lookbook/lb2b.webp"
   ],
 
   [
-    "/assets/images/lookbook/lb3a.jpg",
-    "/assets/images/lookbook/lb3b.jpg"
+    "/assets/images/lookbook/lb3a.webp",
+    "/assets/images/lookbook/lb3b.webp"
   ],
 
   [
-    "/assets/images/lookbook/lb4a.jpg",
-    "/assets/images/lookbook/lb4b.jpg"
+    "/assets/images/lookbook/lb4a.webp",
+    "/assets/images/lookbook/lb4b.webp"
   ],
 
 ];
@@ -62,10 +62,11 @@ const slides = [
                 <div class="lookbook-image">
 
                   <img
-                    src="${pair[0]}"
-                    alt="lookbook"
-                    loading="${i === 0 ? "eager" : "lazy"}"
-                  />
+  src="${pair[0]}"
+  alt="lookbook"
+  loading="${i === 0 ? "eager" : "lazy"}"
+  decoding="async"
+/>
 
                 </div>
 
@@ -83,20 +84,22 @@ const slides = [
               <div class="lookbook-image">
 
                 <img
-                  src="${pair[0]}"
-                  alt="lookbook"
-                  loading="${i === 0 ? "eager" : "lazy"}"
-                />
+  src="${pair[0]}"
+  alt="lookbook"
+  loading="${i === 0 ? "eager" : "lazy"}"
+  decoding="async"
+/>
 
               </div>
 
               <div class="lookbook-image">
 
                 <img
-                  src="${pair[1]}"
-                  alt="lookbook"
-                  loading="${i === 0 ? "eager" : "lazy"}"
-                />
+  src="${pair[1]}"
+  alt="lookbook"
+  loading="${i === 0 ? "eager" : "lazy"}"
+  decoding="async"
+/>
 
               </div>
 
