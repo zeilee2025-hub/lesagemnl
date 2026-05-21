@@ -1,5 +1,8 @@
+import { API_BASE_URL }
+from "./services/config/api.js";
+
 // ==========================
-// ✅ SUCCESS PAGE (BACKEND-DRIVEN)
+//  SUCCESS PAGE (BACKEND-DRIVEN)
 // ==========================
 
 document.addEventListener("DOMContentLoaded", init);
@@ -12,7 +15,7 @@ async function init() {
 
   try {
     // ==========================
-    // 📦 GET ORDER ID FROM URL
+    //  GET ORDER ID FROM URL
     // ==========================
     const params = new URLSearchParams(window.location.search);
     const orderId = params.get("orderId");
@@ -23,11 +26,11 @@ async function init() {
     }
 
     // ==========================
-    // 🔍 VERIFY ORDER FROM BACKEND
+    //  VERIFY ORDER FROM BACKEND
     // ==========================
     const res = await fetch(
-      `http://localhost:3000/order-status?orderId=${orderId}`
-    );
+  `${API_BASE_URL}/order-status?orderId=${orderId}`
+);
 
     const data = await res.json();
 
@@ -36,7 +39,7 @@ async function init() {
     }
 
     // ==========================
-    // ⏳ WAIT UNTIL PAID
+    //  WAIT UNTIL PAID
     // ==========================
     if (data.paymentStatus !== "PAID") {
   showError("Payment not confirmed yet.");
@@ -44,26 +47,26 @@ async function init() {
 }
 
     // ==========================
-    // ✅ DISPLAY SUCCESS
+    //  DISPLAY SUCCESS
     // ==========================
     orderText.innerText = "Order ID: " + orderId;
 
     // ==========================
-    // 🧹 CLEAR CART (SAFE)
+    //  CLEAR CART (SAFE)
     // ==========================
     localStorage.removeItem("cart");
     localStorage.removeItem("customerEmail");
 
-    console.log("✅ Order confirmed:", orderId);
+    console.log(" Order confirmed:", orderId);
 
   } catch (error) {
-    console.error("❌ Success error:", error);
+    console.error(" Success error:", error);
     showError("Something went wrong.");
   }
 }
 
 // ==========================
-// ❌ ERROR HANDLER
+//  ERROR HANDLER
 // ==========================
 function showError(message) {
   document.body.innerHTML = `

@@ -1,3 +1,6 @@
+import { API_BASE_URL }
+from "./config/api.js";
+
 // ==========================
 // FIREBASE (READ ONLY NOW)
 // ==========================
@@ -133,9 +136,9 @@ const endpoint =
 
   orderData.paymentMethod === "LOCAL"
 
-    ? "http://localhost:3000/create-manual-order"
+    ? `${API_BASE_URL}/create-manual-order`
 
-    : "http://localhost:3000/create-order";
+    : `${API_BASE_URL}/create-order`;
 
 
 // ==========================

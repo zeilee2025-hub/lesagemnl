@@ -1,5 +1,8 @@
+import { API_BASE_URL }
+from "./config/api.js";
+
 // ==========================
-// 💳 PAYMENT SERVICE (PAYMONGO - UPDATED)
+// 💳 PAYMENT SERVICE
 // ==========================
 
 export async function createPaymentSession({ items, customer, totals, orderId }) {
@@ -16,7 +19,9 @@ export async function createPaymentSession({ items, customer, totals, orderId })
       throw new Error("Missing orderId");
     }
 
-    const res = await fetch("http://localhost:3000/create-checkout-session", {
+    const res = await fetch(
+  `${API_BASE_URL}/create-checkout-session`,
+  {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

@@ -1,3 +1,6 @@
+import { API_BASE_URL }
+from "../services/config/api.js";
+
 import {
   getOrders,
   updateOrderStatus
@@ -507,7 +510,7 @@ async function handleApprove(orderId) {
   }
 
   await fetch(
-    "http://localhost:3000/approve-order",
+  `${API_BASE_URL}/approve-order`,
     {
       method: "POST",
 
@@ -556,7 +559,7 @@ async function handleReject(orderId) {
   }
 
   await fetch(
-    "http://localhost:3000/reject-order",
+  `${API_BASE_URL}/reject-order`,
     {
       method: "POST",
 
@@ -623,7 +626,7 @@ async function handleShip(card, orderId) {
   }
 
   await fetch(
-    "http://localhost:3000/ship-order",
+  `${API_BASE_URL}/ship-order`,
     {
       method: "POST",
 
