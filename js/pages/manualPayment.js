@@ -37,9 +37,14 @@ import {
 // GET ORDER ID
 // ==========================
 const params =
-  new URLSearchParams(window.location.search);
+  new URLSearchParams(
+    window.location.search
+  );
 
 const orderId =
+
+  params.get("orderId") ||
+
   params.get("id");
 
 
@@ -93,7 +98,7 @@ function updateHeaderUI(order) {
   ) return;
 
 
-  // ==========================
+    // ==========================
   // RESET
   // ==========================
   if (successBox) {
@@ -104,16 +109,58 @@ function updateHeaderUI(order) {
 
 
   const {
-    status,
-    paymentStatus,
+    orderState,
     proofUrl
   } = order;
 
 
   // ==========================
+  // EXPIRED
+  // ==========================
+  if (orderState === "EXPIRED") {
+
+    title.textContent =
+      "Payment Expired";
+
+    subtitle.textContent =
+      "This order is no longer payable";
+
+    stopManualPaymentCountdown();
+
+    const statusInline =
+      document.getElementById(
+        "order-status-inline"
+      );
+
+    if (statusInline) {
+
+      statusInline.textContent = "";
+
+    }
+
+    if (successBox) {
+
+      successBox.innerHTML = `
+        <div class="manual-payment__success-item">
+          This payment window has expired.
+        </div>
+
+        <div class="manual-payment__success-item">
+          Please place a new order if you'd still like to purchase this item.
+        </div>
+      `;
+
+    }
+
+    return;
+
+  }
+
+
+  // ==========================
   // COMPLETED
   // ==========================
-  if (status === "completed") {
+  if (orderState === "COMPLETED") {
 
     title.textContent =
       "Order Delivered";
@@ -152,11 +199,10 @@ function updateHeaderUI(order) {
 
   }
 
-
   // ==========================
   // SHIPPED
   // ==========================
-  if (status === "shipped") {
+  if (orderState === "SHIPPED") {
 
     title.textContent =
       "Your order has been shipped";
@@ -204,7 +250,7 @@ function updateHeaderUI(order) {
   // ==========================
   // PAID
   // ==========================
-  if (paymentStatus === "PAID") {
+  if (orderState === "PAID") {
 
     title.textContent =
       "Payment confirmed!";
@@ -252,9 +298,8 @@ function updateHeaderUI(order) {
   // UNDER REVIEW
   // ==========================
   if (
-    status === "pending" &&
-    proofUrl
-  ) {
+  orderState === "PROOF_UPLOADED"
+) {
 
     title.textContent =
       "Order Received";
@@ -295,20 +340,26 @@ function togglePaymentUI(order) {
 
 
   const {
-    status,
-    paymentStatus
+    orderState
   } = order;
 
 
   if (
-    paymentStatus === "PAID" &&
-    status !== "pending"
-  ) {
+
+  orderState === "PROOF_UPLOADED" ||
+  orderState === "PAID" ||
+  orderState === "SHIPPED" ||
+  orderState === "COMPLETED" ||
+  orderState === "EXPIRED"
+
+) {
 
     paymentSection.style.display =
       "none";
 
-  } else {
+  }
+
+  else {
 
     paymentSection.style.display =
       "block";
@@ -341,19 +392,17 @@ function handleUploadState(order) {
 
 
   const {
-    status,
-    paymentStatus,
-    proofUrl
-  } = order;
+  orderState,
+  proofUrl
+} = order;
 
 
   // ==========================
   // WAITING FOR PAYMENT
   // ==========================
   if (
-    status === "pending" &&
-    !proofUrl
-  ) {
+  orderState === "PENDING_PAYMENT"
+) {
 
     submitBtn.disabled = false;
     uploadBtn.disabled = false;
@@ -377,7 +426,7 @@ function handleUploadState(order) {
   // ==========================
   // REJECTED
   // ==========================
-  if (status === "rejected") {
+  if (orderState === "REJECTED") {
 
     submitBtn.disabled = false;
     uploadBtn.disabled = false;
@@ -425,10 +474,8 @@ function handleUploadState(order) {
   // UNDER REVIEW
   // ==========================
   if (
-    status === "pending" &&
-    proofUrl &&
-    paymentStatus === "PENDING"
-  ) {
+  orderState === "PROOF_UPLOADED"
+) {
 
     submitBtn.disabled = true;
     uploadBtn.disabled = true;
@@ -454,7 +501,7 @@ function handleUploadState(order) {
   // ==========================
   // PAID
   // ==========================
-  if (paymentStatus === "PAID") {
+  if (orderState === "PAID") {
 
     submitBtn.disabled = true;
     uploadBtn.disabled = true;
@@ -478,7 +525,7 @@ function handleUploadState(order) {
   // ==========================
   // SHIPPED
   // ==========================
-  if (status === "shipped") {
+  if (orderState === "SHIPPED") {
 
     submitBtn.disabled = true;
     uploadBtn.disabled = true;
@@ -498,11 +545,40 @@ function handleUploadState(order) {
 
   }
 
+  // ==========================
+// EXPIRED
+// ==========================
+if (
+
+  orderState === "EXPIRED"
+
+) {
+
+  submitBtn.disabled = true;
+  uploadBtn.disabled = true;
+
+  submitBtn.classList.add(
+    "is-disabled"
+  );
+
+  uploadBtn.classList.add(
+    "is-disabled"
+  );
+
+  submitBtn.textContent =
+    "Payment expired";
+
+  stopManualPaymentCountdown();
+
+  return;
+
+}
+
 
   // ==========================
   // COMPLETED
   // ==========================
-  if (status === "completed") {
+  if (orderState === "COMPLETED") {
 
     submitBtn.disabled = true;
     uploadBtn.disabled = true;
@@ -541,9 +617,11 @@ function subscribeToOrder(orderId) {
 
 
     const order = {
-      id: snapshot.id,
-      ...snapshot.data()
-    };
+  id: snapshot.id,
+  ...snapshot.data()
+};
+
+window.currentOrder = order;
 
 
     // ==========================
@@ -601,51 +679,53 @@ function subscribeToOrder(orderId) {
     // COUNTDOWN
     // ==========================
     if (
-      order.createdAt &&
-      order.paymentStatus !== "PAID" &&
-      order.status === "pending" &&
-      !order.proofUrl
-    ) {
 
-      let created;
+  order.createdAt &&
 
+  order.orderState ===
+    "PENDING_PAYMENT"
 
-      if (order.createdAt?.toMillis) {
+) {
 
-        created =
-          order.createdAt.toMillis();
-
-      } else if (
-        typeof order.createdAt === "number"
-      ) {
-
-        created =
-          order.createdAt;
-
-      } else if (
-        typeof order.createdAt === "string"
-      ) {
-
-        created =
-          new Date(order.createdAt)
-            .getTime();
-
-      } else {
-
-        console.warn(
-          "Invalid createdAt format",
-          order.createdAt
-        );
-
-        return;
-
-      }
+      let expiryTime;
 
 
-      const expiryTime =
-        created +
-        (24 * 60 * 60 * 1000);
+if (order.expiresAt?.toMillis) {
 
+  expiryTime =
+    order.expiresAt.toMillis();
+
+}
+
+else if (
+  typeof order.expiresAt === "number"
+) {
+
+  expiryTime =
+    order.expiresAt;
+
+}
+
+else if (
+  typeof order.expiresAt === "string"
+) {
+
+  expiryTime =
+    new Date(order.expiresAt)
+      .getTime();
+
+}
+
+else {
+
+  console.warn(
+    "Invalid expiresAt format",
+    order.expiresAt
+  );
+
+  return;
+
+}
 
       startManualPaymentCountdown(
         expiryTime

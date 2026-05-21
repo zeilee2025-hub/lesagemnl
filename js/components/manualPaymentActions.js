@@ -52,10 +52,10 @@ export function renderManualPaymentActions(order) {
   // SHOW VIEW ORDER
   // ==========================
   if (
-    order.paymentStatus === "PAID" ||
-    order.status === "shipped" ||
-    order.status === "completed"
-  ) {
+  order.orderState === "PAID" ||
+  order.orderState === "SHIPPED" ||
+  order.orderState === "COMPLETED"
+) {
 
     container.appendChild(
       viewBtn

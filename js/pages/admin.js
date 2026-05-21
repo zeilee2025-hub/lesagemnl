@@ -206,11 +206,31 @@ function updateStats(orders) {
     order.orderState === "COMPLETED"
   ).length;
 
-  const totalRevenue = orders
-    .filter(order => order.paymentStatus === "PAID")
-    .reduce((sum, order) => {
-      return sum + (order.total || 0);
-    }, 0);
+  const revenueStates = [
+
+  "PAID",
+  "SHIPPED",
+  "COMPLETED"
+
+];
+
+const totalRevenue = orders
+
+  .filter(order => {
+
+    return revenueStates.includes(
+      order.orderState
+    );
+
+  })
+
+  .reduce((sum, order) => {
+
+    return sum + (
+      Number(order.total) || 0
+    );
+
+  }, 0);
 
   if (totalElement) {
     totalElement.textContent = totalOrders;
@@ -279,7 +299,7 @@ function renderCurrentView() {
     filteredOrders
   );
 
-  updateStats(filteredOrders);
+  updateStats(allOrders);
 
 }
 

@@ -99,6 +99,19 @@
   background: rgba(220, 38, 38, 0.08);
 }
 
+.admin-order__status--expired {
+
+  background:
+    rgba(120, 120, 120, 0.08);
+
+  color:
+    #666;
+
+  border:
+    1px solid rgba(120, 120, 120, 0.18);
+
+}
+
 
 /* ==========================
    ADMIN ORDER META

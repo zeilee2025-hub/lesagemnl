@@ -624,6 +624,14 @@ const orderId =
 
     if (paymentMethod === "PAYMONGO") {
 
+      // =========================
+      // CLEAR CART
+      // =========================
+      saveCart([]);
+
+      updateCartBadge([]);
+
+
       await createPaymentSession({
         items: cartData,
         totals,
@@ -631,7 +639,16 @@ const orderId =
         orderId
       });
 
-    } else {
+    }
+
+    else {
+
+      // =========================
+      // CLEAR CART
+      // =========================
+      saveCart([]);
+
+      updateCartBadge([]);
 
       window.location.href =
         `/manual-payment.html?id=${orderId}`;

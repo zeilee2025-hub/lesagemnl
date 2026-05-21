@@ -11,18 +11,14 @@ let countdownInterval = null;
 export function getManualPaymentStatusLabel(order) {
 
   const {
-    status,
-    paymentStatus,
-    proofUrl
-  } = order;
+  orderState
+} = order;
 
-
-  // ==========================
+    // ==========================
   // WAITING FOR PAYMENT
   // ==========================
   if (
-    status === "pending" &&
-    !proofUrl
+    orderState === "PENDING_PAYMENT"
   ) {
 
     return "Waiting for payment";
@@ -34,9 +30,7 @@ export function getManualPaymentStatusLabel(order) {
   // UNDER REVIEW
   // ==========================
   if (
-    status === "pending" &&
-    proofUrl &&
-    paymentStatus === "PENDING"
+    orderState === "PROOF_UPLOADED"
   ) {
 
     return "Under review";
@@ -48,8 +42,7 @@ export function getManualPaymentStatusLabel(order) {
   // PAYMENT VERIFIED
   // ==========================
   if (
-    status === "processing" &&
-    paymentStatus === "PAID"
+    orderState === "PAID"
   ) {
 
     return "Payment verified";
@@ -60,7 +53,9 @@ export function getManualPaymentStatusLabel(order) {
   // ==========================
   // SHIPPED
   // ==========================
-  if (status === "shipped") {
+  if (
+    orderState === "SHIPPED"
+  ) {
 
     return "Shipped";
 
@@ -70,7 +65,9 @@ export function getManualPaymentStatusLabel(order) {
   // ==========================
   // COMPLETED
   // ==========================
-  if (status === "completed") {
+  if (
+    orderState === "COMPLETED"
+  ) {
 
     return "Completed";
 
@@ -80,12 +77,27 @@ export function getManualPaymentStatusLabel(order) {
   // ==========================
   // REJECTED
   // ==========================
-  if (status === "rejected") {
+  if (
+    orderState === "REJECTED"
+  ) {
 
     return "Payment rejected";
 
   }
 
+  // ==========================
+// EXPIRED
+// ==========================
+if (
+
+  orderState ===
+    "EXPIRED"
+
+) {
+
+  return "Payment expired";
+
+}
 
   // ==========================
   // FALLBACK
@@ -100,14 +112,30 @@ export function getManualPaymentStatusLabel(order) {
 // ==========================
 export function stopManualPaymentCountdown() {
 
-  if (!countdownInterval) return;
+  if (countdownInterval) {
+
+    clearInterval(
+      countdownInterval
+    );
+
+    countdownInterval = null;
+
+  }
 
 
-  clearInterval(
-    countdownInterval
-  );
+  // ==========================
+  // RESET STATUS UI
+  // ==========================
+  const statusInline =
+    document.getElementById(
+      "order-status-inline"
+    );
 
-  countdownInterval = null;
+  if (statusInline) {
+
+    statusInline.textContent = "";
+
+  }
 
 }
 
@@ -150,19 +178,76 @@ export function startManualPaymentCountdown(
     // ==========================
     if (diff <= 0) {
 
-      statusInline.textContent =
-        "Expired";
+  statusInline.textContent =
+    "Expired";
 
-      statusInline.setAttribute(
-        "data-status",
-        "expired"
-      );
+  statusInline.setAttribute(
+    "data-status",
+    "expired"
+  );
 
-      stopManualPaymentCountdown();
 
-      return;
+  // ==========================
+  // AUTO EXPIRE ORDER
+  // ==========================
+  if (
 
-    }
+    window.currentOrder &&
+
+    window.currentOrder.orderState ===
+      "PENDING_PAYMENT"
+
+  ) {
+
+    import("../services/orderService.js")
+
+      .then(async ({
+        updateOrderStatus
+      }) => {
+
+        try {
+
+          await updateOrderStatus(
+
+            window.currentOrder.id,
+
+            {
+              orderState:
+                "EXPIRED"
+            },
+
+            {
+              action:
+                "ORDER_EXPIRED"
+            }
+
+          );
+
+          console.log(
+            "Order expired automatically"
+          );
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "Expiration update failed:",
+            error
+          );
+
+        }
+
+      });
+
+  }
+
+
+  stopManualPaymentCountdown();
+
+  return;
+
+}
 
 
     // ==========================

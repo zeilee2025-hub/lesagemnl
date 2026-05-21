@@ -368,7 +368,10 @@ function getStatusModifier(order) {
       "admin-order__status--completed",
 
     REJECTED:
-      "admin-order__status--rejected"
+      "admin-order__status--rejected",
+
+    EXPIRED:
+      "admin-order__status--expired"
 
   };
 

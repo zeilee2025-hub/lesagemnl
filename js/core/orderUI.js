@@ -1,81 +1,256 @@
 // ==========================
-// 🧠 ORDER UI STATE ENGINE
+//  ORDER UI STATE ENGINE
 // ==========================
 
 export function deriveOrderUI(order) {
+
   if (!order) {
+
     return fallbackState();
+
   }
+
 
   const {
-    status = "pending",
-    paymentStatus = "PENDING",
-    proofUrl = null,
-    trackingNumber = null
+
+    orderState =
+      "PENDING_PAYMENT",
+
+    trackingNumber =
+      null
+
   } = order;
 
-  if (status === "pending" && !proofUrl) {
+
+  // ==========================
+  // WAITING FOR PAYMENT
+  // ==========================
+  if (
+
+    orderState ===
+      "PENDING_PAYMENT"
+
+  ) {
+
     return {
-      label: "Waiting for Payment",
-      type: "pending",
-      action: "upload",
-      actionLabel: "Upload Proof"
+
+      label:
+        "Waiting for Payment",
+
+      type:
+        "pending",
+
+      action:
+        "upload",
+
+      actionLabel:
+        "Upload Proof"
+
     };
+
   }
 
-  if (status === "pending" && proofUrl && paymentStatus === "PENDING") {
+
+  // ==========================
+  // UNDER REVIEW
+  // ==========================
+  if (
+
+    orderState ===
+      "PROOF_UPLOADED"
+
+  ) {
+
     return {
-      label: "Under Review",
-      type: "review",
-      action: null,
-      actionLabel: null
+
+      label:
+        "Under Review",
+
+      type:
+        "review",
+
+      action:
+        null,
+
+      actionLabel:
+        null
+
     };
+
   }
 
-  if (status === "rejected") {
+
+  // ==========================
+  // REJECTED
+  // ==========================
+  if (
+
+    orderState ===
+      "REJECTED"
+
+  ) {
+
     return {
-      label: "Payment Rejected",
-      type: "cancelled",
-      action: "upload",
-      actionLabel: "Upload Again"
+
+      label:
+        "Payment Rejected",
+
+      type:
+        "cancelled",
+
+      action:
+        "upload",
+
+      actionLabel:
+        "Upload Again"
+
     };
+
   }
 
-  if (paymentStatus === "PAID" && status === "processing") {
-    return {
-      label: "Payment Confirmed",
-      type: "paid",
-      action: "view",
-      actionLabel: "View Order"
-    };
-  }
+  // ==========================
+// EXPIRED
+// ==========================
+if (
 
-  if (status === "shipped") {
-    return {
-      label: "Shipped",
-      type: "shipped",
-      action: trackingNumber ? "track" : "view",
-      actionLabel: trackingNumber ? "Track Order" : "View Order"
-    };
-  }
+  orderState ===
+    "EXPIRED"
 
-  if (status === "completed") {
-    return {
-      label: "Completed",
-      type: "completed",
-      action: "view",
-      actionLabel: "View Order"
-    };
-  }
+) {
 
-  return fallbackState();
+  return {
+
+    label:
+      "Payment Expired",
+
+    type:
+      "cancelled",
+
+    action:
+      "view",
+
+    actionLabel:
+      "View Order"
+
+  };
+
 }
 
+  // ==========================
+  // PAID
+  // ==========================
+  if (
+
+    orderState ===
+      "PAID"
+
+  ) {
+
+    return {
+
+      label:
+        "Payment Confirmed",
+
+      type:
+        "paid",
+
+      action:
+        "view",
+
+      actionLabel:
+        "View Order"
+
+    };
+
+  }
+
+
+  // ==========================
+  // SHIPPED
+  // ==========================
+  if (
+
+    orderState ===
+      "SHIPPED"
+
+  ) {
+
+    return {
+
+      label:
+        "Shipped",
+
+      type:
+        "shipped",
+
+      action:
+        trackingNumber
+          ? "track"
+          : "view",
+
+      actionLabel:
+        trackingNumber
+          ? "Track Order"
+          : "View Order"
+
+    };
+
+  }
+
+
+  // ==========================
+  // COMPLETED
+  // ==========================
+  if (
+
+    orderState ===
+      "COMPLETED"
+
+  ) {
+
+    return {
+
+      label:
+        "Completed",
+
+      type:
+        "completed",
+
+      action:
+        "view",
+
+      actionLabel:
+        "View Order"
+
+    };
+
+  }
+
+
+  return fallbackState();
+
+}
+
+
+// ==========================
+// FALLBACK
+// ==========================
 function fallbackState() {
+
   return {
-    label: "Processing",
-    type: "pending",
-    action: "view",
-    actionLabel: "View Order"
+
+    label:
+      "Processing",
+
+    type:
+      "pending",
+
+    action:
+      "view",
+
+    actionLabel:
+      "View Order"
+
   };
+
 }
