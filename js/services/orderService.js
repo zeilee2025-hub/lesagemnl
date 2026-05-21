@@ -255,44 +255,68 @@ export async function getOrdersByEmail(email) {
 
   try {
 
-    if (!email) return [];
+    if (!email) {
 
-    const q = query(
+      return [];
 
-      collection(db, "orders"),
+    }
 
-      where(
-        "email",
-        "==",
-        email
-      ),
+    // ==========================
+    // BACKEND REQUEST
+    // ==========================
+    const response =
+      await fetch(
 
-      orderBy(
-        "createdAt",
-        "desc"
-      )
+        `${API_BASE_URL}/guest-orders`,
 
-    );
+        {
 
-    const snapshot =
-      await getDocs(q);
+          method: "POST",
 
-    return snapshot.docs.map(doc => ({
+          headers: {
 
-      id:
-        doc.id,
+            "Content-Type":
+              "application/json"
 
-      ...doc.data()
+          },
 
-    }));
+          body: JSON.stringify({
+
+            email
+
+          })
+
+        }
+
+      );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Failed to fetch guest orders"
+      );
+
+    }
+
+    const data =
+      await response.json();
+
+    return Array.isArray(data.orders)
+
+      ? data.orders
+
+      : [];
 
   }
 
   catch (error) {
 
     console.error(
+
       "FETCH EMAIL ORDERS ERROR:",
+
       error
+
     );
 
     return [];

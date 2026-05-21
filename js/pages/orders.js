@@ -1,16 +1,23 @@
 // ==========================
-// 📦 IMPORTS
+//  IMPORTS
 // ==========================
-import { getOrdersByEmail } from "../services/orderService.js";
-import { renderOrderCard } from "../components/orderCard.js";
+import { getOrdersByEmail }
+from "../services/orderService.js";
+
+import { renderOrderCard }
+from "../components/orderCard.js";
+
+import {
+  getCurrentUser
+} from "../services/authService.js";
 
 // ==========================
-// 📦 ELEMENT
+//  ELEMENT
 // ==========================
 const container = document.getElementById("orders-container");
 
 // ==========================
-// 🚀 INIT ORDERS (FETCH + RENDER)
+//  INIT ORDERS (FETCH + RENDER)
 // ==========================
 async function initOrders() {
   if (!container) {
@@ -20,19 +27,45 @@ async function initOrders() {
 
   try {
     // ==========================
-    // 📧 GET EMAIL
+//  AUTH + GUEST EMAIL
+// ==========================
+const currentUser =
+  getCurrentUser();
+
+const email =
+
+  currentUser?.email ||
+
+  localStorage.getItem(
+    "customerEmail"
+  );
+
+console.log(
+  "EMAIL USED:",
+  email
+);
+
+// ==========================
+// NO ACCESS FOUND
+// ==========================
+if (!email) {
+
+  container.innerHTML = `
+
+    <p class="orders-empty">
+
+      No orders found.
+
+    </p>
+
+  `;
+
+  return;
+
+}
+
     // ==========================
-    const email = localStorage.getItem("customerEmail");
-
-    console.log("EMAIL USED:", email);
-
-    if (!email) {
-      container.innerHTML = "<p>No orders found. (No email detected)</p>";
-      return;
-    }
-
-    // ==========================
-    // 📦 FETCH ORDERS
+    //  FETCH ORDERS
     // ==========================
     let orders = await getOrdersByEmail(email);
 
@@ -44,14 +77,14 @@ async function initOrders() {
     }
 
     // ==========================
-    // 🔽 SORT (LATEST FIRST)
+    //  SORT (LATEST FIRST)
     // ==========================
     orders.sort((a, b) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
     // ==========================
-    // 🎨 RENDER
+    //  RENDER
     // ==========================
     container.innerHTML = orders.map(order => {
       return renderOrderCard(order);
@@ -64,7 +97,7 @@ async function initOrders() {
 }
 
 // ==========================
-// 🔥 SMART INTERACTION SYSTEM
+//  SMART INTERACTION SYSTEM
 // ==========================
 function setupNavigation() {
   if (!container) return;
@@ -83,7 +116,7 @@ function setupNavigation() {
     }
 
     // ==========================
-    // 🎯 BUTTON ACTION (PRIORITY)
+    //  BUTTON ACTION (PRIORITY)
     // ==========================
     if (actionBtn) {
       e.stopPropagation();
@@ -92,19 +125,19 @@ function setupNavigation() {
 
       console.log("👉 ACTION:", action, "ORDER:", orderId);
 
-      // 📤 UPLOAD PROOF
+      //  UPLOAD PROOF
       if (action === "upload") {
         window.location.href = `order.html?orderId=${orderId}&action=upload`;
         return;
       }
 
-      // 👁 VIEW ORDER
+      //  VIEW ORDER
       if (action === "view") {
         window.location.href = `order.html?orderId=${orderId}`;
         return;
       }
 
-      // 🚚 TRACK ORDER
+      //  TRACK ORDER
       if (action === "track") {
         const trackingNumber = card.dataset.tracking;
 
@@ -125,16 +158,16 @@ function setupNavigation() {
     }
 
     // ==========================
-    // 🧾 CARD CLICK (DEFAULT)
+    //  CARD CLICK (DEFAULT)
     // ==========================
-    console.log("👉 CARD CLICK:", orderId);
+    console.log(" CARD CLICK:", orderId);
 
     window.location.href = `order.html?orderId=${orderId}`;
   });
 }
 
 // ==========================
-// 🚀 START
+//  START
 // ==========================
 initOrders();
 setupNavigation();

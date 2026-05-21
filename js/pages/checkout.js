@@ -608,65 +608,90 @@ const orderId =
     paymentStatus:
       "PENDING",
 
-
     /* =========================
-       PAYMENT
-    ========================= */
+   PAYMENT
+========================= */
 
-    paymentMethod
+paymentMethod
+
+});
+
+
+/* =========================
+   PAYMENT FLOW
+========================= */
+
+if (paymentMethod === "PAYMONGO") {
+
+  // =========================
+  // CLEAR CART
+  // =========================
+  saveCart([]);
+
+  updateCartBadge([]);
+
+  // =========================
+  // SAVE CUSTOMER EMAIL
+  // =========================
+  localStorage.setItem(
+    "customerEmail",
+    customer.email
+  );
+
+  // =========================
+  // CREATE PAYMENT SESSION
+  // =========================
+  await createPaymentSession({
+
+    items: cartData,
+
+    totals,
+
+    customer,
+
+    orderId
 
   });
 
+}
 
-    /* =========================
-       PAYMENT FLOW
-    ========================= */
+else {
 
-    if (paymentMethod === "PAYMONGO") {
+  // =========================
+  // CLEAR CART
+  // =========================
+  saveCart([]);
 
-      // =========================
-      // CLEAR CART
-      // =========================
-      saveCart([]);
+  updateCartBadge([]);
 
-      updateCartBadge([]);
+  // =========================
+  // SAVE CUSTOMER EMAIL
+  // =========================
+  localStorage.setItem(
+    "customerEmail",
+    customer.email
+  );
 
+  // =========================
+  // REDIRECT TO MANUAL PAYMENT
+  // =========================
+  window.location.href =
+    `/manual-payment.html?id=${orderId}`;
 
-      await createPaymentSession({
-        items: cartData,
-        totals,
-        customer,
-        orderId
-      });
+}
 
-    }
+} catch (error) {
 
-    else {
+  console.error(
+    "Checkout error:",
+    error
+  );
 
-      // =========================
-      // CLEAR CART
-      // =========================
-      saveCart([]);
+  alert("Checkout failed.");
 
-      updateCartBadge([]);
+  resetButton(button);
 
-      window.location.href =
-        `/manual-payment.html?id=${orderId}`;
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "Checkout error:",
-      error
-    );
-
-    alert("Checkout failed.");
-
-    resetButton(button);
-
-  }
+}
 
 }
 
@@ -680,7 +705,10 @@ function resetButton(button) {
   if (!button) return;
 
   button.disabled = false;
-  button.classList.remove("is-disabled");
+
+  button.classList.remove(
+    "is-disabled"
+  );
 
   updateCheckoutButton();
 
