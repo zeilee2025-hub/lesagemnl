@@ -8,7 +8,8 @@ import {
   onSnapshot,
   doc,
   getDoc,
-  updateDoc
+  updateDoc,
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 
@@ -42,10 +43,10 @@ function normalizeProduct(product) {
     variants = product.colors.map(color => {
 
       const sizes = normalizeSizes(
-        (Array.isArray(color.sizes) && color.sizes.length > 0)
-          ? color.sizes
-          : product.sizes
-      );
+  Array.isArray(color.sizes)
+    ? color.sizes
+    : []
+);
 
       return {
         name: color.name || "Default",
@@ -139,41 +140,43 @@ function normalizeProduct(product) {
   }
 
   // ===============================
-  // 🔥 FAILSAFE (NEVER BREAK UI)
-  // ===============================
-  else {
-    variants = [
-      {
-        name: "Default",
-        value: "#000000",
-        images: {
-          front: "",
-          back: "",
-          model: "",
-          detail: "",
-          close: ""
-        },
-        sizes: []
-      }
-    ];
-  }
+// FAILSAFE (NEVER BREAK UI)
+// ===============================
+else {
+  variants = [
+    {
+      name: "Default",
+      value: "#000000",
+      images: {
+        front: "",
+        back: "",
+        model: "",
+        detail: "",
+        close: ""
+      },
+      sizes: []
+    }
+  ];
+}
 
-  return {
+return {
   ...product,
 
-  hasModel: product.hasModel === true, // ✅ ADD THIS LINE
+  hasModel: product.hasModel === true,
 
-  // 🔥 KEEP ORIGINAL FOR COMPATIBILITY
-  colors: Array.isArray(product.colors) ? product.colors : [],
+  // KEEP ORIGINAL FOR COMPATIBILITY
+  colors: Array.isArray(product.colors)
+    ? product.colors
+    : [],
 
-  // 🔥 MAIN SYSTEM
+  // MAIN SYSTEM
   variants
-   };
+};
 }
 
 
 // ===============================
-// 🛍️ REAL-TIME PRODUCTS LISTENER
+// REAL-TIME PRODUCTS LISTENER
 // ===============================
 export function listenToProducts(callback) {
   const colRef = collection(db, "products");
@@ -188,56 +191,308 @@ export function listenToProducts(callback) {
         })
       );
 
-      console.log("📦 PRODUCTS LOADED:", JSON.parse(JSON.stringify(products)));
+      console.log(
+        "PRODUCTS LOADED:",
+        JSON.parse(JSON.stringify(products))
+      );
 
       callback(products);
     },
     (error) => {
-      console.error("❌ Product listener error:", error);
+      console.error(
+        "Product listener error:",
+        error
+      );
     }
   );
 }
 
 
 // ===============================
-// 🔍 GET SINGLE PRODUCT
+// GET SINGLE PRODUCT
 // ===============================
 export async function getProductById(id) {
   try {
-    const ref = doc(db, "products", id);
-    const snap = await getDoc(ref);
 
-    if (!snap.exists()) return null;
+    const ref = doc(
+      db,
+      "products",
+      id
+    );
+
+    const snap =
+      await getDoc(ref);
+
+    if (!snap.exists()) {
+      return null;
+    }
 
     return normalizeProduct({
       id: snap.id,
       ...snap.data()
     });
+
   } catch (error) {
-    console.error("❌ getProductById error:", error);
+
+    console.error(
+      "getProductById error:",
+      error
+    );
+
     return null;
   }
 }
 
 
 // ===============================
-// 📦 UPDATE PRODUCT STOCK
+// UPDATE PRODUCT STOCK
 // ===============================
-export async function updateProductStock(productId, updatedSizes) {
+export async function updateProductStock(
+  productId,
+  variantName,
+  updatedSizes
+) {
+
   try {
+
     if (!Array.isArray(updatedSizes)) {
-      throw new Error("Invalid sizes data");
+      throw new Error(
+        "Invalid sizes data"
+      );
     }
 
-    const ref = doc(db, "products", productId);
+    const ref = doc(
+      db,
+      "products",
+      productId
+    );
 
-    await updateDoc(ref, {
+    // ===============================
+    // GET CURRENT PRODUCT
+    // ===============================
+    const snap =
+      await getDoc(ref);
+
+    if (!snap.exists()) {
+      throw new Error(
+        "Product not found"
+      );
+    }
+
+    const data =
+      snap.data();
+
+    const colors =
+      Array.isArray(data.colors)
+        ? [...data.colors]
+        : [];
+
+    // ===============================
+    // FIND TARGET VARIANT
+    // ===============================
+    const variantIndex =
+      colors.findIndex(
+        (variant) =>
+          String(variant.name)
+            .trim()
+            .toLowerCase() ===
+          String(variantName)
+            .trim()
+            .toLowerCase()
+      );
+
+    if (variantIndex === -1) {
+      throw new Error(
+        "Variant not found"
+      );
+    }
+
+    // ===============================
+    // UPDATE TARGET VARIANT
+    // ===============================
+    colors[variantIndex] = {
+      ...colors[variantIndex],
       sizes: updatedSizes
+    };
+
+    // ===============================
+    // WRITE UPDATED COLORS
+    // ===============================
+    await updateDoc(ref, {
+      colors
     });
 
-    console.log(`✅ Stock updated for product: ${productId}`);
+    console.log(
+      `Variant stock updated: ${productId}`
+    );
+
   } catch (error) {
-    console.error("❌ updateProductStock error:", error);
+
+    console.error(
+      "updateProductStock error:",
+      error
+    );
+
+    throw error;
+  }
+}
+
+
+// ===============================
+// ATOMIC STOCK DEDUCTION
+// ===============================
+export async function deductStockTransaction(cart) {
+
+  try {
+
+    await runTransaction(
+      db,
+      async (transaction) => {
+
+        for (const item of cart) {
+
+          // ===============================
+          // PRODUCT REF
+          // ===============================
+          const productRef = doc(
+            db,
+            "products",
+            item.id
+          );
+
+          // ===============================
+          // FETCH LATEST SNAPSHOT
+          // ===============================
+          const snap =
+            await transaction.get(productRef);
+
+          if (!snap.exists()) {
+            throw new Error(
+              `${item.name} no longer exists`
+            );
+          }
+
+          const product =
+            snap.data();
+
+          // ===============================
+          // VALIDATE COLORS
+          // ===============================
+          const colors =
+            Array.isArray(product.colors)
+              ? [...product.colors]
+              : [];
+
+          // ===============================
+          // FIND VARIANT
+          // ===============================
+          const variantIndex =
+            colors.findIndex(
+              (variant) =>
+                String(variant.name)
+                  .trim()
+                  .toLowerCase() ===
+                String(item.color)
+                  .trim()
+                  .toLowerCase()
+            );
+
+          if (variantIndex === -1) {
+            throw new Error(
+              `${item.name} variant unavailable`
+            );
+          }
+
+          const variant =
+            colors[variantIndex];
+
+          // ===============================
+          // VALIDATE SIZES
+          // ===============================
+          const sizes =
+            Array.isArray(variant.sizes)
+              ? [...variant.sizes]
+              : [];
+
+          const sizeIndex =
+            sizes.findIndex(
+              (size) =>
+                String(size.size)
+                  .trim()
+                  .toUpperCase() ===
+                String(item.size)
+                  .trim()
+                  .toUpperCase()
+            );
+
+          if (sizeIndex === -1) {
+            throw new Error(
+              `${item.name} size unavailable`
+            );
+          }
+
+          const sizeData =
+            sizes[sizeIndex];
+
+          const currentStock =
+            Number(sizeData.stock) || 0;
+
+          // ===============================
+          // REVALIDATE STOCK
+          // ===============================
+          if (currentStock <= 0) {
+            throw new Error(
+              `${item.name} is sold out`
+            );
+          }
+
+          if (item.quantity > currentStock) {
+            throw new Error(
+              `${item.name} only has ${currentStock} left`
+            );
+          }
+
+          // ===============================
+          // DEDUCT STOCK
+          // ===============================
+          sizes[sizeIndex] = {
+            ...sizeData,
+            stock:
+              currentStock - item.quantity
+          };
+
+          // ===============================
+          // UPDATE VARIANT
+          // ===============================
+          colors[variantIndex] = {
+            ...variant,
+            sizes
+          };
+
+          // ===============================
+          // ATOMIC WRITE
+          // ===============================
+          transaction.update(
+            productRef,
+            { colors }
+          );
+
+        }
+
+      }
+    );
+
+    console.log(
+      "Atomic stock deduction success"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "deductStockTransaction error:",
+      error
+    );
+
     throw error;
   }
 }

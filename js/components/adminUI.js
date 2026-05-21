@@ -27,17 +27,31 @@ export function renderOrders(container, orders) {
 
           <div class="admin-order__bottom">
 
-            <span>
-              ₱${calculateTotal(order.items || [])}
-            </span>
+  <div>
 
-            <span>
-              ${formatDate(order)}
-            </span>
+    <span>
+      ₱${calculateTotal(order)}
+    </span>
 
-          </div>
+    <div class="admin-order__payment-method">
 
-        </div>
+      ${
+        order.paymentMethod === "PAYMONGO"
+
+          ? "PayMongo"
+
+          : "Manual Payment"
+      }
+
+    </div>
+
+  </div>
+
+  <span>
+    ${formatDate(order)}
+  </span>
+
+</div>
 
         <div class="
           admin-order__items
@@ -49,6 +63,8 @@ export function renderOrders(container, orders) {
           ${renderProof(order)}
 
           ${renderItems(order.items || [])}
+
+          ${renderSummary(order)}
 
           ${renderTracking(order)}
 
@@ -184,15 +200,25 @@ function renderTracking(order) {
    HELPERS
 ========================== */
 
-function calculateTotal(items = []) {
+function calculateTotal(order) {
 
-  return items.reduce((total, item) => {
+  const subtotal = (order.items || []).reduce(
 
-    return total + (
-      item.price * item.quantity
-    );
+    (total, item) => {
 
-  }, 0);
+      return total + (
+        item.price * item.quantity
+      );
+
+    },
+
+    0
+
+  );
+
+  return subtotal + (
+    Number(order.shippingFee) || 0
+  );
 
 }
 
@@ -393,6 +419,62 @@ function renderItems(items = []) {
     `;
 
   }).join("");
+
+}
+
+function renderSummary(order) {
+
+  const subtotal = (order.items || []).reduce(
+
+    (total, item) => {
+
+      return total + (
+        item.price * item.quantity
+      );
+
+    },
+
+    0
+
+  );
+
+  const shippingFee =
+    Number(order.shippingFee) || 0;
+
+  const total =
+    subtotal + shippingFee;
+
+  return `
+
+    <div class="admin-order__summary">
+
+      <div class="admin-order__summary-row">
+
+        <span>Subtotal</span>
+
+        <span>₱${subtotal}</span>
+
+      </div>
+
+      <div class="admin-order__summary-row">
+
+        <span>Shipping</span>
+
+        <span>₱${shippingFee}</span>
+
+      </div>
+
+      <div class="admin-order__summary-row admin-order__summary-row--total">
+
+        <span>Total</span>
+
+        <span>₱${total}</span>
+
+      </div>
+
+    </div>
+
+  `;
 
 }
 

@@ -119,71 +119,82 @@ export async function saveOrder(order) {
       orderData
     );
 
+// ==========================
+// GENERATE ORDER ID
+// ==========================
+const orderId =
+  generateOrderId();
 
-    // ==========================
-    // GENERATE ORDER ID
-    // ==========================
-    const orderId =
-      generateOrderId();
+
+// ==========================
+// RESOLVE ORDER ENDPOINT
+// ==========================
+const endpoint =
+
+  orderData.paymentMethod === "LOCAL"
+
+    ? "http://localhost:3000/create-manual-order"
+
+    : "http://localhost:3000/create-order";
 
 
-    // ==========================
-    // SEND TO BACKEND
-    // ==========================
-    const res = await fetch(
-      "http://localhost:3000/create-manual-order",
-      {
+// ==========================
+// SEND TO BACKEND
+// ==========================
+const res = await fetch(
+  endpoint,
+  {
 
-        method: "POST",
+    method: "POST",
 
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
+    headers: {
+      "Content-Type":
+        "application/json"
+    },
 
-        body: JSON.stringify({
+    body: JSON.stringify({
 
-          order: {
+      order: {
 
-            id: orderId,
+        id: orderId,
 
-            ...orderData
-
-          }
-
-        })
+        ...orderData
 
       }
-    );
 
-
-    if (!res.ok) {
-
-      throw new Error(
-        "Failed to create order in backend"
-      );
-
-    }
-
-    console.log(
-      "Order successfully created via backend:",
-      orderId
-    );
-
-    return orderId;
+    })
 
   }
+);
 
-  catch (error) {
 
-    console.error(
-      "SAVE ORDER ERROR:",
-      error
-    );
+if (!res.ok) {
 
-    throw error;
+  throw new Error(
+    "Failed to create order in backend"
+  );
 
-  }
+}
+
+console.log(
+  "Order successfully created via backend:",
+  orderId
+);
+
+return orderId;
+
+}
+
+catch (error) {
+
+console.error(
+  "SAVE ORDER ERROR:",
+  error
+);
+
+throw error;
+
+}
 
 }
 

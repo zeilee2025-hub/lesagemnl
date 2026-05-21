@@ -140,6 +140,11 @@ export async function deductStock(cart) {
     // ⚠️ IMPORTANT:
     // Your DB currently expects root "sizes"
     // (we keep compatibility to avoid breaking your backend)
-    await updateProductStock(item.id, updatedSizes);
+    await updateProductStock(
+  item.id,
+  variant.name,
+  updatedSizes
+);
+
   }
 }

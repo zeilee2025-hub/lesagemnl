@@ -22,13 +22,96 @@ import {
    ADMIN AUTH PROTECTION
 ============================== */
 
+import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+import { db }
+from "../core/firebase.js";
+
+
 onAuthStateChanged(
 
   auth,
 
-  (user) => {
+  async (user) => {
 
+    // ==============================
+    // NOT LOGGED IN
+    // ==============================
     if (!user) {
+
+      window.location.href =
+        "../admin-login.html";
+
+      return;
+
+    }
+
+    try {
+
+      // ==============================
+      // GET USER PROFILE
+      // ==============================
+      const userRef =
+        doc(
+          db,
+          "users",
+          user.uid
+        );
+
+      const snapshot =
+        await getDoc(userRef);
+
+      if (!snapshot.exists()) {
+
+        await signOut(auth);
+
+        window.location.href =
+          "../admin-login.html";
+
+        return;
+
+      }
+
+      const userData =
+        snapshot.data();
+
+      // ==============================
+      // ADMIN VALIDATION
+      // ==============================
+      if (
+        userData.role !== "admin"
+      ) {
+
+        console.warn(
+          "Unauthorized admin access attempt"
+        );
+
+        await signOut(auth);
+
+        window.location.href =
+          "../admin-login.html";
+
+        return;
+
+      }
+
+      console.log(
+        "Admin authenticated"
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Admin auth error:",
+        error
+      );
+
+      await signOut(auth);
 
       window.location.href =
         "../admin-login.html";
@@ -336,6 +419,38 @@ function canTransition(
 }
 
 /* ==========================
+   ADMIN TOKEN
+========================== */
+
+async function getAdminHeaders() {
+
+  const user =
+    auth.currentUser;
+
+  if (!user) {
+
+    throw new Error(
+      "Admin not authenticated"
+    );
+
+  }
+
+  const token =
+    await user.getIdToken();
+
+  return {
+
+    "Content-Type":
+      "application/json",
+
+    Authorization:
+      `Bearer ${token}`
+
+  };
+
+}
+
+/* ==========================
    ADMIN ACTIONS
 ========================== */
 
@@ -376,9 +491,8 @@ async function handleApprove(orderId) {
     {
       method: "POST",
 
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers:
+  await getAdminHeaders(),
 
       body: JSON.stringify({
         orderId
@@ -426,9 +540,8 @@ async function handleReject(orderId) {
     {
       method: "POST",
 
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers:
+  await getAdminHeaders(),
 
       body: JSON.stringify({
         orderId
@@ -494,9 +607,8 @@ async function handleShip(card, orderId) {
     {
       method: "POST",
 
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers:
+  await getAdminHeaders(),
 
       body: JSON.stringify({
         orderId,
@@ -555,6 +667,8 @@ async function handleComplete(orderId) {
 );
 
 }
+
+
 
 
 /* ==========================
