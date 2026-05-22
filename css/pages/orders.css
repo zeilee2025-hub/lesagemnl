@@ -509,8 +509,10 @@
   }
 
   .order-card {
-    gap: 12px;
-  }
+  gap: 14px;
+
+  padding: 16px;
+}
 
   .order-card__body {
   display: flex;
@@ -523,14 +525,15 @@
 }
 
   .order-card__image {
-    width: 76px;
-    height: 96px;
-  }
+  width: 84px;
+  height: 106px;
+}
 
   .order-card__content {
     flex: 1;
 
     min-width: 0;
+    gap: 12px;
   }
 
   .order-card__summary {
@@ -546,7 +549,7 @@
 }
 
 .order-card__total {
-  font-size: 13px;
+  font-size: 14px;
 
   line-height: 1;
 }
@@ -556,7 +559,7 @@
 
   min-width: unset;
 
-  padding: 9px 10px;
+  padding: 10px 12px;
 
   justify-content: center;
 }
@@ -574,7 +577,7 @@
   }
 
   .order-card__top {
-  gap: 6px;
+  gap: 10px;
 }
 
 }
