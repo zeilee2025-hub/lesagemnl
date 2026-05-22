@@ -1,5 +1,5 @@
 // ==========================
-// 🧠 ORDER UI STATE ENGINE
+//  ORDER UI STATE ENGINE
 // ==========================
 
 export function deriveOrderUI(order) {
@@ -16,7 +16,7 @@ export function deriveOrderUI(order) {
   } = order;
 
   // ==========================
-  // 🟡 WAITING FOR PAYMENT
+  //  WAITING FOR PAYMENT
   // ==========================
   if (status === "pending" && !proofUrl) {
     return {
@@ -29,7 +29,7 @@ export function deriveOrderUI(order) {
   }
 
   // ==========================
-  // 🟡 UNDER REVIEW
+  //  UNDER REVIEW
   // ==========================
   if (status === "pending" && proofUrl && paymentStatus === "PENDING") {
     return {
@@ -42,7 +42,7 @@ export function deriveOrderUI(order) {
   }
 
   // ==========================
-  // 🔴 PAYMENT REJECTED
+  //  PAYMENT REJECTED
   // ==========================
   if (status === "rejected") {
     return {
@@ -55,7 +55,7 @@ export function deriveOrderUI(order) {
   }
 
   // ==========================
-  // 🟢 PAYMENT CONFIRMED
+  //  PAYMENT CONFIRMED
   // ==========================
   if (paymentStatus === "PAID" && status === "processing") {
     return {
@@ -68,7 +68,7 @@ export function deriveOrderUI(order) {
   }
 
   // ==========================
-  // 🚚 SHIPPED
+  //  SHIPPED
   // ==========================
   if (status === "shipped") {
     return {
@@ -81,7 +81,7 @@ export function deriveOrderUI(order) {
   }
 
   // ==========================
-  // 📦 COMPLETED
+  //  COMPLETED
   // ==========================
   if (status === "completed") {
     return {
@@ -94,13 +94,13 @@ export function deriveOrderUI(order) {
   }
 
   // ==========================
-  // ⚪ FALLBACK
+  //  FALLBACK
   // ==========================
   return fallbackState();
 }
 
 // ==========================
-// ⚪ FALLBACK STATE
+//  FALLBACK STATE
 // ==========================
 function fallbackState() {
   return {

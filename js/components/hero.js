@@ -5,10 +5,10 @@
 export function initHero() {
   const images = document.querySelectorAll('.hero__image');
 
-  // 🔒 CONFIG (you can toggle later)
+  //  CONFIG (you can toggle later)
   const ENABLE_HERO_SLIDE = false;
 
-  // ❌ Do nothing if:
+  //  Do nothing if:
   // - slider disabled
   // - or only 1 image
   if (!ENABLE_HERO_SLIDE || images.length <= 1) return;

@@ -79,7 +79,7 @@ if (navbar) {
   }
 
   // ===============================
-  // 🚀 INIT
+  //  INIT
   // ===============================
   window.addEventListener("load", updateNavbar);
 

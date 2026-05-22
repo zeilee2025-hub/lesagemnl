@@ -1,9 +1,9 @@
 // ===============================
-// 🧠 UNIVERSAL IMAGE RESOLVER (FINAL — VARIANT FIXED)
+//  UNIVERSAL IMAGE RESOLVER (FINAL — VARIANT FIXED)
 // ===============================
 
 // ===============================
-// 🔄 NORMALIZE PATH
+//  NORMALIZE PATH
 // ===============================
 function normalizePath(img) {
   if (!img) return "/assets/placeholder.jpg";
@@ -17,7 +17,7 @@ function normalizePath(img) {
 
 
 // ===============================
-// 🖼️ GET PRODUCT IMAGE
+//  GET PRODUCT IMAGE
 // ===============================
 export function getProductImage(product, {
   type = "front",
@@ -26,7 +26,7 @@ export function getProductImage(product, {
   if (!product) return "/assets/placeholder.jpg";
 
   // ===============================
-  // 🧠 TYPE NORMALIZATION
+  //  TYPE NORMALIZATION
   // ===============================
   let resolvedType = type;
 
@@ -45,7 +45,7 @@ export function getProductImage(product, {
   let img = null;
 
   // ===============================
-  // 🔥 0. SELECTED VARIANT (CRITICAL FIX)
+  // 0. SELECTED VARIANT (CRITICAL FIX)
   // ===============================
   if (product?.selectedVariant?.images) {
     img =
@@ -58,7 +58,7 @@ export function getProductImage(product, {
   }
 
   // ===============================
-  // 🎨 1. COLOR LEVEL (LEGACY SUPPORT)
+  //  1. COLOR LEVEL (LEGACY SUPPORT)
   // ===============================
   if (Array.isArray(product.colors) && product.colors.length > 0) {
     const color = product.colors[colorIndex] || product.colors[0];
@@ -74,7 +74,7 @@ export function getProductImage(product, {
   }
 
   // ===============================
-  // 🖼️ 2. PRODUCT IMAGES
+  //  2. PRODUCT IMAGES
   // ===============================
   if (product.images) {
     if (typeof product.images === "object" && !Array.isArray(product.images)) {
@@ -96,21 +96,21 @@ export function getProductImage(product, {
   }
 
   // ===============================
-  // 🧱 3. FLAT STRUCTURE
+  //  3. FLAT STRUCTURE
   // ===============================
   if (product[resolvedType]) {
     return normalizePath(product[resolvedType]);
   }
 
   // ===============================
-  // 🧩 4. CART ITEM SUPPORT
+  //  4. CART ITEM SUPPORT
   // ===============================
   if (product.image) {
     return normalizePath(product.image);
   }
 
   // ===============================
-  // 🚫 FINAL FALLBACK
+  //  FINAL FALLBACK
   // ===============================
   return "/assets/placeholder.jpg";
 }

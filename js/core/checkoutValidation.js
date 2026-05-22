@@ -1,5 +1,5 @@
 // ==========================
-// 🧠 VALIDATE CART BEFORE CHECKOUT (FINAL FIX)
+// VALIDATE CART BEFORE CHECKOUT (FINAL FIX)
 // ==========================
 import { getProductById } from "../services/productService.js";
 
@@ -7,7 +7,7 @@ export async function validateCartBeforeCheckout(cart) {
   const errors = [];
 
   // ===============================
-  // ✅ GUARD
+  //  GUARD
   // ===============================
   if (!cart || !Array.isArray(cart) || cart.length === 0) {
     return {
@@ -20,14 +20,14 @@ export async function validateCartBeforeCheckout(cart) {
     try {
       const product = await getProductById(item.id);
 
-      // ❌ Product missing
+      //  Product missing
       if (!product || !Array.isArray(product.variants)) {
         errors.push(`${item.name} is no longer available`);
         continue;
       }
 
       // ===============================
-      // 🔥 FIX 1: FIND VARIANT (COLOR MATCH)
+      //  FIX 1: FIND VARIANT (COLOR MATCH)
       // ===============================
       const variant =
         product.variants.find(v =>
@@ -41,7 +41,7 @@ export async function validateCartBeforeCheckout(cart) {
       }
 
       // ===============================
-      // 🔥 FIX 2: VALIDATE SIZES
+      //  FIX 2: VALIDATE SIZES
       // ===============================
       if (!Array.isArray(variant.sizes) || variant.sizes.length === 0) {
         errors.push(`${item.name} has no size data`);
@@ -49,7 +49,7 @@ export async function validateCartBeforeCheckout(cart) {
       }
 
       // ===============================
-      // 🔥 FIX 3: FIND SIZE
+      //  FIX 3: FIND SIZE
       // ===============================
       const sizeData = variant.sizes.find(
         (s) =>
@@ -63,7 +63,7 @@ export async function validateCartBeforeCheckout(cart) {
       }
 
       // ===============================
-      // 🔥 STOCK CHECK
+      //  STOCK CHECK
       // ===============================
       if (sizeData.stock <= 0) {
         errors.push(`${item.name} (${item.size}) is out of stock`);

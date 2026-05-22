@@ -1,25 +1,25 @@
 // ==========================
-// 🧾 ORDER CARD (CONNECTED SYSTEM)
+//  ORDER CARD (CONNECTED SYSTEM)
 // ==========================
 
 import { deriveOrderUI } from "../core/orderUI.js";
 
 export function renderOrderCard(order) {
   if (!order) {
-    console.error("❌ renderOrderCard: missing order");
+    console.error(" renderOrderCard: missing order");
     return "";
   }
 
   const orderId = order.id || order.orderId || "";
 
   if (!orderId) {
-    console.error("❌ Missing order.id:", order);
+    console.error(" Missing order.id:", order);
   }
 
   const ui = deriveOrderUI(order);
 
   // ==========================
-  // 📦 ITEMS SUMMARY
+  //  ITEMS SUMMARY
   // ==========================
   const items = order.items || [];
 
@@ -35,14 +35,14 @@ export function renderOrderCard(order) {
       : itemName;
 
   // ==========================
-  // 💰 TOTAL
+  //  TOTAL
   // ==========================
   const total =
     order.total ||
     items.reduce((sum, i) => sum + (i.price * i.quantity), 0);
 
   // ==========================
-  // 📅 DATE
+  //  DATE
   // ==========================
   const date = formatDate(order.createdAt);
 
@@ -107,7 +107,7 @@ export function renderOrderCard(order) {
 }
 
 // ==========================
-// 📅 FORMAT DATE
+//  FORMAT DATE
 // ==========================
 function formatDate(date) {
   if (!date) return "—";

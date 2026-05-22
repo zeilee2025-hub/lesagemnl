@@ -1,5 +1,5 @@
 // ===============================
-// 🧠 CART VALIDATION (ASYNC — BULLETPROOF 🔥)
+//  CART VALIDATION (ASYNC — BULLETPROOF )
 // ===============================
 
 import { getCart, saveCart } from "../services/cartService.js";
@@ -7,7 +7,7 @@ import { getProductById } from "../services/productService.js";
 
 
 // ===============================
-// 🔒 COLOR NORMALIZATION
+//  COLOR NORMALIZATION
 // ===============================
 function normalizeColor(product, color) {
   if (!color) return "Default";
@@ -28,31 +28,31 @@ function normalizeColor(product, color) {
 
 
 // ===============================
-// 🔍 SUPER SAFE VARIANT MATCH
+//  SUPER SAFE VARIANT MATCH
 // ===============================
 function findVariant(product, color) {
   if (!product?.variants) return null;
 
   const normalized = (color || "").toLowerCase().trim();
 
-  // ✅ 1. EXACT MATCH
+  //  1. EXACT MATCH
   let variant = product.variants.find(v =>
     (v.name || "").toLowerCase().trim() === normalized
   );
 
-  // ✅ 2. HEX MATCH
+  //  2. HEX MATCH
   if (!variant && color?.startsWith("#")) {
     variant = product.variants.find(v => v.value === color);
   }
 
-  // ✅ 3. PARTIAL MATCH (CRITICAL FIX)
+  //  3. PARTIAL MATCH (CRITICAL FIX)
   if (!variant) {
     variant = product.variants.find(v =>
       (v.name || "").toLowerCase().includes(normalized)
     );
   }
 
-  // ✅ 4. FINAL FALLBACK
+  //  4. FINAL FALLBACK
   if (!variant) {
     console.warn("⚠️ Variant fallback used:", color);
     variant = product.variants[0];
@@ -63,7 +63,7 @@ function findVariant(product, color) {
 
 
 // ===============================
-// 🔍 VALIDATION
+//  VALIDATION
 // ===============================
 export async function validateCartAsync() {
   const cart = getCart();
@@ -76,7 +76,7 @@ export async function validateCartAsync() {
     if (!product || !Array.isArray(product.variants)) continue;
 
     // ===============================
-    // 🔥 NORMALIZE COLOR
+    //  NORMALIZE COLOR
     // ===============================
     const normalizedColor = normalizeColor(product, item.color);
 
@@ -86,30 +86,30 @@ export async function validateCartAsync() {
     }
 
     // ===============================
-    // 🔥 BULLETPROOF VARIANT MATCH
+    //  BULLETPROOF VARIANT MATCH
     // ===============================
     const variant = findVariant(product, item.color);
 
     if (!variant) continue;
 
     // ===============================
-    // 🔥 SAFE SIZE MATCHING
+    //  SAFE SIZE MATCHING
     // ===============================
     const sizeData = variant.sizes?.find(s =>
       String(s.size).trim().toUpperCase() ===
       String(item.size).trim().toUpperCase()
     );
 
-    // ⚠️ DO NOT REMOVE if size missing
+    //  DO NOT REMOVE if size missing
     if (!sizeData) {
-      console.warn("⚠️ Size not found, skipping:", item);
+      console.warn(" Size not found, skipping:", item);
       continue;
     }
 
     const stock = typeof sizeData.stock === "number" ? sizeData.stock : 0;
 
     // ===============================
-    // 🔥 STOCK RULES
+    //  STOCK RULES
     // ===============================
     if (stock === 0) {
       item.quantity = 0;
@@ -121,12 +121,12 @@ export async function validateCartAsync() {
   }
 
   // ===============================
-  // 🧹 CLEAN CART
+  //  CLEAN CART
   // ===============================
   const cleaned = cart.filter(item => item.quantity > 0);
 
   if (updated) {
     saveCart(cleaned);
-    console.warn("⚠️ Cart normalized / adjusted");
+    console.warn(" Cart normalized / adjusted");
   }
 }

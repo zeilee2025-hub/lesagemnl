@@ -1,5 +1,5 @@
 // ==========================
-// 📄 MODAL COMPONENT
+//  MODAL COMPONENT
 // ==========================
 
 const policyContent = {
@@ -116,7 +116,7 @@ const policyContent = {
 
 
 // ==========================
-// 🚀 INIT MODAL
+//  INIT MODAL
 // ==========================
 export function initPolicyModal() {
   const modal = document.getElementById("policy-modal");

@@ -116,7 +116,7 @@ const slides = [
   `;
 
   // ==========================
-  // ⚙️ ELEMENTS
+  //  ELEMENTS
   // ==========================
   const track =
     root.querySelector(".lookbook-track");
@@ -134,7 +134,7 @@ const slides = [
     root.querySelector(".lookbook-arrow.right");
 
   // ==========================
-  // ⚙️ STATE
+  //  STATE
   // ==========================
 let currentIndex = 0;
 let autoTimer = null;
@@ -147,7 +147,7 @@ const AUTO_DELAY = 8000;
 const RESUME_DELAY = 2500;
 
   // ==========================
-  // 🔘 DOTS
+  //  DOTS
   // ==========================
   dotsContainer.innerHTML = slides.map((_, i) => `
   <span
@@ -179,7 +179,7 @@ function resetProgressBars() {
     bar.style.transform =
       "scaleX(0)";
 
-    // ✅ force repaint
+    //  force repaint
     bar.offsetHeight;
 
   });
@@ -211,7 +211,7 @@ function startProgressBar(index) {
 
 function goToSlide(index) {
 
-  // ✅ prevent overlap
+  //  prevent overlap
   if (
     isAnimating &&
     index !== currentIndex
@@ -223,7 +223,7 @@ function goToSlide(index) {
 
   currentIndex = index;
 
-  // ✅ preload next slide images
+  //  preload next slide images
 const nextSlide =
   slidesEl[index + 1];
 
@@ -232,7 +232,7 @@ if (nextSlide) {
   const nextImages =
     nextSlide.querySelectorAll("img");
 
-  // ✅ desktop-only aggressive decode
+  // desktop-only aggressive decode
   if (window.innerWidth > 900) {
 
     nextImages.forEach((img) => {
@@ -249,11 +249,11 @@ if (nextSlide) {
 
 }
 
-  // ✅ move track
+  //  move track
   track.style.transform =
     `translateX(-${index * 100}%)`;
 
-  // ✅ update dots
+  //  update dots
   dots.forEach((dot) => {
 
     dot.classList.remove("active");
@@ -262,17 +262,17 @@ if (nextSlide) {
 
   dots[index].classList.add("active");
 
-  // ✅ reset all progress bars
+  //  reset all progress bars
   resetProgressBars();
 
-  // ✅ don't animate final slide
+  //  don't animate final slide
   if (index < slidesEl.length - 1) {
 
     startProgressBar(index);
 
   }
 
-  // ✅ unlock after transition
+  //  unlock after transition
   setTimeout(() => {
 
     isAnimating = false;
@@ -282,7 +282,7 @@ if (nextSlide) {
 }
 
   // ==========================
-  // 🔁 AUTOPLAY
+  //  AUTOPLAY
   // ==========================
   function startAuto() {
 
@@ -290,7 +290,7 @@ if (nextSlide) {
 
     autoTimer = setTimeout(() => {
 
-      // ✅ stop forever at last slide
+      //  stop forever at last slide
       if (
         currentIndex >= slidesEl.length - 1
       ) {
@@ -304,7 +304,7 @@ if (nextSlide) {
 
       goToSlide(currentIndex);
 
-      // ✅ schedule next slide
+      //  schedule next slide
       startAuto();
 
     }, AUTO_DELAY);
@@ -329,7 +329,7 @@ if (nextSlide) {
 
   }
 
-  // ✅ only reset when needed
+  //  only reset when needed
   if (resetProgress) {
 
     resetProgressBars();
@@ -340,17 +340,17 @@ if (nextSlide) {
 
 function resumeAuto() {
 
-  // ✅ clear old resume timer
+  //  clear old resume timer
   if (resumeTimer) {
 
     clearTimeout(resumeTimer);
 
   }
 
-  // ✅ delay restart
+  //  delay restart
   resumeTimer = setTimeout(() => {
 
-    // ✅ don't restart at final slide
+    //  don't restart at final slide
     if (
       currentIndex >= slidesEl.length - 1
     ) {
@@ -364,7 +364,7 @@ function resumeAuto() {
 }
 
   // ==========================
-  // 🔘 DOT CLICK
+  //  DOT CLICK
   // ==========================
   dots.forEach((dot) => {
 
@@ -383,7 +383,7 @@ function resumeAuto() {
 });
 
   // ==========================
-  // ⬅️➡️ ARROWS
+  //  ARROWS
   // ==========================
   prevBtn.addEventListener("click", () => {
 
@@ -415,7 +415,7 @@ function resumeAuto() {
 });
 
   // ==========================
-  // 📱 TOUCH SWIPE
+  //  TOUCH SWIPE
   // ==========================
   let touchStartX = 0;
 
@@ -443,7 +443,7 @@ track.addEventListener(
     const threshold = 70;
 
     // ==========================
-    // 👉 PREV
+    //  PREV
     // ==========================
     if (diff > threshold) {
 
@@ -453,7 +453,7 @@ track.addEventListener(
     }
 
     // ==========================
-    // 👉 NEXT
+    //  NEXT
     // ==========================
     else if (diff < -threshold) {
 
@@ -474,7 +474,7 @@ track.addEventListener(
 );
 
   // ==========================
-  // 🖱 HOVER PAUSE
+  //  HOVER PAUSE
   // ==========================
   root.addEventListener(
     "mouseenter",
@@ -491,12 +491,12 @@ track.addEventListener(
 );
 
   // ==========================
-  // 🚀 INIT
+  //  INIT
   // ==========================
   goToSlide(0);
 
   // ==========================
-// 👀 START WHEN VISIBLE
+//  START WHEN VISIBLE
 // ==========================
 
 const observer =
@@ -507,14 +507,14 @@ const observer =
       entries.forEach((entry) => {
 
         // ==========================
-        // ✅ ENTER VIEW
+        //  ENTER VIEW
         // ==========================
         if (
           entry.isIntersecting &&
           entry.intersectionRatio >= 0.55
         ) {
 
-          // ✅ only start once
+          //  only start once
           if (!hasStarted) {
 
             hasStarted = true;
@@ -537,7 +537,7 @@ const observer =
         }
 
         // ==========================
-        // ✅ PAUSE WHEN FAR AWAY
+        //  PAUSE WHEN FAR AWAY
         // ==========================
         if (
           entry.intersectionRatio < 0.15

@@ -1,5 +1,5 @@
 // ===============================
-// 🧠 IMAGE LOADER (QUEUE + PRIORITY)
+//  IMAGE LOADER (QUEUE + PRIORITY)
 // ===============================
 
 const MAX_CONCURRENT = 4;
@@ -40,7 +40,7 @@ function processQueue() {
 
 
 // ===============================
-// 🚀 LOAD IMAGE (PUBLIC)
+//  LOAD IMAGE (PUBLIC)
 // ===============================
 export function loadImage(src, priority = "normal") {
   return new Promise((resolve) => {

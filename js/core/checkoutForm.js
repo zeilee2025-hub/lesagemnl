@@ -1,5 +1,5 @@
 // ===============================
-// 🧠 GET FORM DATA
+//  GET FORM DATA
 // ===============================
 export function getCheckoutFormData() {
   const citySelect = document.getElementById("checkout-city");
@@ -14,7 +14,7 @@ export function getCheckoutFormData() {
     apartment: document.getElementById("checkout-apartment")?.value.trim(),
     province: document.getElementById("checkout-province-input")?.value.trim(),
 
-    // 👇 THIS IS THE FIX
+    //  THIS IS THE FIX
     city: (cityManual?.value || citySelect?.value || "").trim(),
 
     postal: document.getElementById("checkout-postal")?.value.trim(),
@@ -22,7 +22,7 @@ export function getCheckoutFormData() {
 }
 
 // ===============================
-// ✅ VALIDATE FORM
+//  VALIDATE FORM
 // ===============================
 export function validateCheckoutForm(data) {
   const errors = {};

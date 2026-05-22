@@ -15,14 +15,14 @@ export function initAnnouncement() {
     showSlide(index);
   }
 
-  // ✅ ensure first is active (important safety)
+  //  ensure first is active (important safety)
   showSlide(index);
 
   // auto change every 4s
   setInterval(nextSlide, 4000);
 }
 
-// ✅🔥 AUTO INIT (THIS WAS MISSING)
+//  AUTO INIT (THIS WAS MISSING)
 document.addEventListener("DOMContentLoaded", () => {
   initAnnouncement();
 });

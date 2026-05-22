@@ -1,5 +1,5 @@
 // ===============================
-// 🧾 CHECKOUT UI (FINAL CLEAN)
+//  CHECKOUT UI (FINAL CLEAN)
 // ===============================
 
 export function renderCheckoutItems(container, items) {
@@ -45,7 +45,7 @@ export function renderCheckoutItems(container, items) {
 }
 
 // ===============================
-// 📭 EMPTY STATE
+//  EMPTY STATE
 // ===============================
 export function renderEmptyState(container) {
   container.innerHTML = `

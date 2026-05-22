@@ -1,5 +1,5 @@
 // ===============================
-// 🧠 FILTER PRODUCTS (FINAL + BULLETPROOF)
+//  FILTER PRODUCTS (FINAL + BULLETPROOF)
 // ===============================
 export function filterProducts(products, {
   category,
@@ -9,7 +9,7 @@ export function filterProducts(products, {
   let result = Array.isArray(products) ? [...products] : [];
 
   // ===============================
-  // 🧩 CATEGORY (SAFE)
+  //  CATEGORY (SAFE)
   // ===============================
   if (category && category !== "all") {
     result = result.filter(p => {
@@ -19,7 +19,7 @@ export function filterProducts(products, {
   }
 
   // ===============================
-  // 🔍 SEARCH (SAFE)
+  //  SEARCH (SAFE)
   // ===============================
   if (search) {
     const term = search.toLowerCase();
@@ -30,13 +30,13 @@ export function filterProducts(products, {
   }
 
   // ===============================
-  // 📦 NORMALIZE SIZES (IMPORTANT)
+  //  NORMALIZE SIZES (IMPORTANT)
   // ===============================
   result = result.map(p => {
-    // ✅ already array
+    //  already array
     if (Array.isArray(p.sizes)) return p;
 
-    // ✅ object → array
+    //  object → array
     if (p.sizes && typeof p.sizes === "object") {
       const normalizedSizes = Object.entries(p.sizes).map(([size, stock]) => ({
         size,
@@ -49,7 +49,7 @@ export function filterProducts(products, {
       };
     }
 
-    // ✅ no sizes → keep as empty array
+    //  no sizes → keep as empty array
     return {
       ...p,
       sizes: []
@@ -57,16 +57,16 @@ export function filterProducts(products, {
   });
 
   // ===============================
-  // 📦 AVAILABILITY (FIXED CORRECTLY)
+  //  AVAILABILITY (FIXED CORRECTLY)
   // ===============================
   result = result.filter(p => {
-    // ✅ No sizes at all → allow
+    //  No sizes at all → allow
     if (!p.sizes) return true;
 
-    // ✅ Empty sizes → allow (KEY FIX)
+    //  Empty sizes → allow (KEY FIX)
     if (Array.isArray(p.sizes) && p.sizes.length === 0) return true;
 
-    // ✅ If sizes exist → check stock
+    //  If sizes exist → check stock
     const hasStock = p.sizes.some(s => (s.stock || 0) > 0);
 
     // ⚠️ IMPORTANT:
@@ -76,7 +76,7 @@ export function filterProducts(products, {
   });
 
   // ===============================
-  // 🔄 SORT (SAFE)
+  //  SORT (SAFE)
   // ===============================
   if (sort === "newest") {
     result.sort((a, b) => {

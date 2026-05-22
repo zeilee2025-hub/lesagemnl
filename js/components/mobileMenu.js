@@ -112,7 +112,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ===============================
-// 🔍 MOBILE SEARCH
+//  MOBILE SEARCH
 // ===============================
 
 const mobileSearchIcon =
@@ -141,7 +141,7 @@ mobileSearchIcon?.addEventListener("click", () => {
 
 
 // ===============================
-// 🛒 MOBILE CART
+//  MOBILE CART
 // ===============================
 
 const desktopCartIcon =
@@ -157,7 +157,7 @@ mobileCartIcon?.addEventListener("click", () => {
 
 
 // ===============================
-// 🔢 SYNC MOBILE CART BADGE
+//  SYNC MOBILE CART BADGE
 // ===============================
 
 const desktopCartBadge =
