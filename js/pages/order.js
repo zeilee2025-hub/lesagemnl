@@ -1,4 +1,10 @@
-import { getOrderById } from "../services/orderService.js";
+import { getOrderById }
+from "../services/orderService.js";
+
+import {
+  derivePaymentLabel
+}
+from "../core/orderUI.js";
 
 // ==========================
 // 🚀 INIT
@@ -90,7 +96,7 @@ function renderOrder(order) {
     `₱${total.toLocaleString()}`;
 
   document.getElementById("summary-payment").textContent =
-    order.paymentMethod || "—";
+  derivePaymentLabel(order);
 
   // ==========================
   // SHIPPING

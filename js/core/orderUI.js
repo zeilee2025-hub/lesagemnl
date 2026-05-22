@@ -231,6 +231,68 @@ if (
 
 }
 
+// ==========================
+// PAYMENT LABEL ENGINE
+// ==========================
+export function derivePaymentLabel(order) {
+
+  if (!order) {
+    return "—";
+  }
+
+  const {
+    paymentMethod,
+    paymentChannel
+  } = order;
+
+  // ==========================
+  // MANUAL PAYMENT
+  // ==========================
+  if (
+    paymentMethod ===
+    "MANUAL_PAYMENT"
+  ) {
+
+    return "Manual Payment";
+
+  }
+
+  // ==========================
+  // PAYMONGO CHANNELS
+  // ==========================
+  if (
+    paymentMethod ===
+    "PAYMONGO"
+  ) {
+
+    const normalized =
+      String(paymentChannel || "")
+        .trim()
+        .toUpperCase();
+
+    const map = {
+
+      PAYMAYA:
+        "Maya",
+
+      GRAB_PAY:
+        "GrabPay",
+
+      QRPH:
+        "QRPH"
+
+    };
+
+    return (
+      map[normalized] ||
+      "PayMongo"
+    );
+
+  }
+
+  return "—";
+
+}
 
 // ==========================
 // FALLBACK
