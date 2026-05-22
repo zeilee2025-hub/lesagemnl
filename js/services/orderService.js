@@ -325,7 +325,6 @@ export async function getOrdersByEmail(email) {
 
 }
 
-
 // ==========================
 // GET SINGLE ORDER
 // ==========================
@@ -335,50 +334,50 @@ export async function getOrderById(orderId) {
 
     if (!orderId) {
 
+      return null;
+
+    }
+
+    // ==========================
+    // BACKEND REQUEST
+    // ==========================
+    const response =
+      await fetch(
+
+        `${API_BASE_URL}/guest-order/${orderId}`
+
+      );
+
+    if (!response.ok) {
+
       throw new Error(
-        "Missing orderId"
+        "Failed to fetch order"
       );
 
     }
 
-    const orderRef =
-      doc(db, "orders", orderId);
+    const data =
+      await response.json();
 
-    const snapshot =
-      await getDoc(orderRef);
-
-    if (!snapshot.exists()) {
-
-      throw new Error(
-        "Order not found"
-      );
-
-    }
-
-    return {
-
-      id:
-        snapshot.id,
-
-      ...snapshot.data()
-
-    };
+    return data.order || null;
 
   }
 
   catch (error) {
 
     console.error(
+
       "GET ORDER ERROR:",
+
       error
+
     );
 
-    throw error;
+    return null;
 
   }
 
 }
-
 
 // ==========================
 // UPDATE ORDER
