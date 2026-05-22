@@ -240,10 +240,29 @@ export function derivePaymentLabel(order) {
     return "—";
   }
 
-  const {
-    paymentMethod,
-    paymentChannel
-  } = order;
+  // ==========================
+  // NORMALIZE VALUES
+  // ==========================
+  const paymentMethod =
+    String(order.paymentMethod || "")
+      .trim()
+      .toUpperCase();
+
+  const paymentChannel =
+    String(order.paymentChannel || "")
+      .trim()
+      .toUpperCase();
+
+  // ==========================
+  // DEBUG
+  // ==========================
+  console.log(
+    "PAYMENT LABEL DEBUG:",
+    {
+      paymentMethod,
+      paymentChannel
+    }
+  );
 
   // ==========================
   // MANUAL PAYMENT
@@ -258,17 +277,12 @@ export function derivePaymentLabel(order) {
   }
 
   // ==========================
-  // PAYMONGO CHANNELS
+  // PAYMONGO
   // ==========================
-  if (
+    if (
     paymentMethod ===
     "PAYMONGO"
   ) {
-
-    const normalized =
-      String(paymentChannel || "")
-        .trim()
-        .toUpperCase();
 
     const map = {
 
@@ -284,13 +298,16 @@ export function derivePaymentLabel(order) {
     };
 
     return (
-      map[normalized] ||
+      map[paymentChannel] ||
       "PayMongo"
     );
 
   }
 
-  return "—";
+  // ==========================
+  // GENERIC FALLBACK
+  // ==========================
+  return paymentMethod || "—";
 
 }
 
