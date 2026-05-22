@@ -1,5 +1,5 @@
 import { API_BASE_URL }
-from "./services/config/api.js";
+from "../services/config/api.js";
 
 // ==========================
 //  SUCCESS PAGE (BACKEND-DRIVEN)
@@ -26,6 +26,12 @@ async function init() {
     }
 
     // ==========================
+//  RENDER ORDER ID IMMEDIATELY
+// ==========================
+orderText.textContent =
+  `#${orderId}`;
+
+    // ==========================
     //  VERIFY ORDER FROM BACKEND
     // ==========================
     const res = await fetch(
@@ -49,7 +55,8 @@ async function init() {
     // ==========================
     //  DISPLAY SUCCESS
     // ==========================
-    orderText.innerText = "Order ID: " + orderId;
+    orderText.textContent =
+  `#${orderId}`;
 
     // ==========================
     //  CLEAR CART (SAFE)

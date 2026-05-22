@@ -17,11 +17,15 @@ export async function loadFooter() {
   }
 
   try {
-    //  FIXED PATH (RELATIVE — WORKS ON ALL PAGES + VERCEL)
-    const path = "./footer.html";
-    console.log(" Fetching footer from:", path);
 
-    const res = await fetch(path);
+  // ===============================
+  //  PRODUCTION-SAFE ROOT PATH
+  // ===============================
+  const path = "/footer.html";
+
+  console.log(" Fetching footer from:", path);
+
+  const res = await fetch(path);
 
     console.log(" Fetch response status:", res.status);
 
