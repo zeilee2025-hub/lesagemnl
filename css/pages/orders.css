@@ -233,9 +233,13 @@
 }
 
 .order-card__item {
-  font-size: 22px;
+  font-size: 18px;
+
   font-weight: 500;
-  line-height: 1.2;
+
+  line-height: 1.15;
+
+  letter-spacing: -0.02em;
 
   color: #111;
 
