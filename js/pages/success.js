@@ -62,7 +62,6 @@ orderText.textContent =
     //  CLEAR CART (SAFE)
     // ==========================
     localStorage.removeItem("cart");
-    localStorage.removeItem("customerEmail");
 
     console.log(" Order confirmed:", orderId);
 
