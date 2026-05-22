@@ -311,7 +311,17 @@ function applyStatus(el, stateRaw) {
 // ERROR HANDLER
 // ==========================
 function showError(message) {
-  document.body.innerHTML = `<p style="padding:40px;">${message}</p>`;
+
+  document.body.innerHTML = `
+    <main class="order-page">
+
+      <div class="card empty-state">
+        ${message}
+      </div>
+
+    </main>
+  `;
+
 }
 
 // ==========================
