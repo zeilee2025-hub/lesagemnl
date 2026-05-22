@@ -55,6 +55,32 @@ function getSearchFromURL() {
 // ===============================
 let allProducts = [];
 
+// ===============================
+// SESSION CACHE
+// ===============================
+const cachedProducts =
+  sessionStorage.getItem(
+    "shop-products"
+  );
+
+if (cachedProducts) {
+
+  try {
+
+    allProducts =
+      JSON.parse(cachedProducts);
+
+  } catch (error) {
+
+    console.error(
+      "Failed to parse shop cache:",
+      error
+    );
+
+  }
+
+}
+
 let currentCategory = "all";
 let currentSearch = "";
 let currentSort = "newest";
@@ -118,18 +144,32 @@ function init() {
     searchInput.value = currentSearch;
   }
 
-  listenToProducts((products) => {
+  if (allProducts.length) {
 
-    allProducts =
-      Array.isArray(products)
-        ? products
-        : [];
+  updateUI();
 
-    validateCartOnLoad();
+}
 
-    updateUI();
+listenToProducts((products) => {
 
-  });
+  allProducts =
+    Array.isArray(products)
+      ? products
+      : [];
+
+  // ===============================
+  // SAVE SESSION CACHE
+  // ===============================
+  sessionStorage.setItem(
+    "shop-products",
+    JSON.stringify(allProducts)
+  );
+
+  validateCartOnLoad();
+
+  updateUI();
+
+});
 
   updateCartBadge();
 

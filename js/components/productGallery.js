@@ -1,6 +1,7 @@
 // ===============================
-// 🖼 PRODUCT GALLERY COMPONENT
+//  PRODUCT GALLERY COMPONENT
 // ===============================
+import { loadImage } from "../core/imageLoader.js";
 
 export function initProductGallery(product, elements) {
   const { imageEl, thumbnailsContainer } = elements;
@@ -8,69 +9,96 @@ export function initProductGallery(product, elements) {
   let currentImageIndex = 0;
 
   // ==========================
-  // RESOLVE VARIANT
-  // ==========================
-  const resolvedProduct = {
-    ...product,
-    selectedVariant:
-      product.selectedVariant || product.variants?.[0]
-  };
+// RESOLVE VARIANT
+// ==========================
+const resolvedProduct = {
+  ...product,
+  selectedVariant:
+    product.selectedVariant || product.variants?.[0]
+};
 
-  const productImages = buildImageArray(resolvedProduct);
+const productImages = buildImageArray(resolvedProduct);
 
-  // ==========================
-  // INIT
-  // ==========================
-  if (!productImages.length) return;
+// ==========================
+// INIT
+// ==========================
+if (!productImages.length) return;
 
-  imageEl.src = productImages[0];
-  imageEl.style.opacity = "1";
-  imageEl.style.transform = "scale(1.02) translate(0, 0)";
+// ==========================
+// PRELOAD INITIAL IMAGE
+// ==========================
+imageEl.style.opacity = "0";
 
-  renderThumbnails(productImages);
+loadImage(productImages[0], "high")
+  .then((loadedSrc) => {
+
+    if (!loadedSrc) return;
+
+    imageEl.src = loadedSrc;
+
+    requestAnimationFrame(() => {
+      imageEl.style.opacity = "1";
+    });
+
+  });
+
+imageEl.style.transform =
+  "scale(1.02) translate(0, 0)";
+
+renderThumbnails(productImages);
+
+// ==========================
+// DESKTOP-ONLY MOVEMENT
+// ==========================
+if (
+  window.matchMedia(
+    "(hover: hover) and (pointer: fine)"
+  ).matches
+) {
   initAdvancedMovement();
+}
 
-  // ==========================
-  // BUILD IMAGE ARRAY
-  // ==========================
-  function buildImageArray(product) {
-    const images = [];
+// ==========================
+// BUILD IMAGE ARRAY
+// ==========================
+function buildImageArray(product) {
+  const images = [];
 
-    const order = [
-      "front",
-      "back",
-      "model",
-      "detail",
-      "close"
-    ];
+  const order = [
+    "front",
+    "back",
+    "model",
+    "detail",
+    "close"
+  ];
 
-    // VARIANT IMAGES
-    if (product.selectedVariant?.images) {
+  // VARIANT IMAGES
+  if (product.selectedVariant?.images) {
 
-      order.forEach(type => {
-        if (product.selectedVariant.images[type]) {
-          images.push(
-            product.selectedVariant.images[type]
-          );
-        }
-      });
+    order.forEach(type => {
+      if (product.selectedVariant.images[type]) {
+        images.push(
+          product.selectedVariant.images[type]
+        );
+      }
+    });
 
-      if (images.length) return images;
-    }
-
-    // FALLBACK PRODUCT IMAGES
-    if (product.images) {
-
-      order.forEach(type => {
-        if (product.images[type]) {
-          images.push(product.images[type]);
-        }
-      });
-
-    }
-
-    return images;
+    if (images.length) return images;
   }
+
+  // FALLBACK PRODUCT IMAGES
+  if (product.images) {
+
+    order.forEach(type => {
+      if (product.images[type]) {
+        images.push(product.images[type]);
+      }
+    });
+
+  }
+
+  return images;
+}
 
   // ==========================
   // THUMBNAILS

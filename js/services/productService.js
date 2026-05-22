@@ -12,9 +12,16 @@ import {
   runTransaction
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// ===============================
+// PRODUCT CACHE
+// ===============================
+const productCache = new Map();
+
+let productsCache = null;
+
 
 // ===============================
-// 🧠 NORMALIZE SIZES
+//  NORMALIZE SIZES
 // ===============================
 function normalizeSizes(sizes) {
   if (!Array.isArray(sizes)) return [];
@@ -28,15 +35,15 @@ function normalizeSizes(sizes) {
 
 
 // ===============================
-// 🧠 NORMALIZE PRODUCT (FINAL)
+//  NORMALIZE PRODUCT (FINAL)
 // ===============================
 function normalizeProduct(product) {
-  console.log("🧠 NORMALIZING:", product.id);
+  console.log(" NORMALIZING:", product.id);
 
   let variants = [];
 
   // ===============================
-  // ✅ CASE 1: COLOR VARIANTS
+  //  CASE 1: COLOR VARIANTS
   // ===============================
   if (Array.isArray(product.colors) && product.colors.length > 0) {
 
@@ -51,7 +58,7 @@ function normalizeProduct(product) {
       return {
         name: color.name || "Default",
 
-        // 🔥 ALWAYS ENSURE COLOR VALUE EXISTS
+        //  ALWAYS ENSURE COLOR VALUE EXISTS
         value: color.value || "#000000",
 
         images: {
@@ -72,7 +79,7 @@ function normalizeProduct(product) {
           model:
             color.images?.model ||
             color.model ||
-            product.images?.model || // ✅ FIX
+            product.images?.model || //  FIX
             product.model ||
             "",
 
@@ -98,7 +105,7 @@ function normalizeProduct(product) {
   }
 
   // ===============================
-  // ✅ CASE 2: SIMPLE PRODUCT
+  //  CASE 2: SIMPLE PRODUCT
   // ===============================
   else if (Array.isArray(product.sizes) && product.sizes.length > 0) {
 
@@ -119,7 +126,7 @@ function normalizeProduct(product) {
             "",
 
           model:
-            product.images?.model || // ✅ FIX
+            product.images?.model || //  FIX
             product.model ||
             "",
 
@@ -207,13 +214,45 @@ export function listenToProducts(callback) {
   );
 }
 
-
 // ===============================
 // GET SINGLE PRODUCT
 // ===============================
 export async function getProductById(id) {
+
   try {
 
+    // ===============================
+    // MEMORY CACHE
+    // ===============================
+    if (productCache.has(id)) {
+
+      return productCache.get(id);
+
+    }
+
+    // ===============================
+    // SESSION CACHE
+    // ===============================
+    const sessionKey =
+      `product-${id}`;
+
+    const cached =
+      sessionStorage.getItem(sessionKey);
+
+    if (cached) {
+
+      const parsed =
+        JSON.parse(cached);
+
+      productCache.set(id, parsed);
+
+      return parsed;
+
+    }
+
+    // ===============================
+    // FIRESTORE FETCH
+    // ===============================
     const ref = doc(
       db,
       "products",
@@ -227,10 +266,26 @@ export async function getProductById(id) {
       return null;
     }
 
-    return normalizeProduct({
-      id: snap.id,
-      ...snap.data()
-    });
+    const normalized =
+      normalizeProduct({
+        id: snap.id,
+        ...snap.data()
+      });
+
+    // ===============================
+    // SAVE CACHE
+    // ===============================
+    productCache.set(
+      id,
+      normalized
+    );
+
+    sessionStorage.setItem(
+      sessionKey,
+      JSON.stringify(normalized)
+    );
+
+    return normalized;
 
   } catch (error) {
 

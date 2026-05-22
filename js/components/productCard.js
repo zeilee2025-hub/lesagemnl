@@ -3,8 +3,12 @@
 // ===============================
 
 import { loadImage } from "../core/imageLoader.js";
-import { getProductImage } from "../core/imageResolver.js";
 
+import { getProductImage }
+  from "../core/imageResolver.js";
+
+import { getProductById }
+  from "../services/productService.js";
 
 // ===============================
 //  HTML TEMPLATE
@@ -347,15 +351,61 @@ if (quickAddBtn) {
 }
 
   // ===============================
-  // 🧭 NAVIGATION (CARD CLICK)
-  // ===============================
-  card.addEventListener("click", () => {
-    const productId = card.dataset.id;
-    window.location.href = `./product.html?id=${productId}`;
-  });
+//  PREFETCH PRODUCT
+// ===============================
+let hasPrefetched = false;
+
+async function prefetchProduct() {
+
+  if (hasPrefetched) return;
+
+  hasPrefetched = true;
+
+  try {
+
+    await getProductById(product.id);
+
+  } catch (error) {
+
+    console.error(
+      "Product prefetch failed:",
+      error
+    );
+
+  }
+
+}
+
+// ===============================
+// PREFETCH ON INTENT
+// ===============================
+card.addEventListener(
+  "mouseenter",
+  prefetchProduct,
+  { passive: true }
+);
+
+card.addEventListener(
+  "touchstart",
+  prefetchProduct,
+  { passive: true }
+);
+
+// ===============================
+//  NAVIGATION (CARD CLICK)
+// ===============================
+card.addEventListener("click", () => {
+
+  const productId =
+    card.dataset.id;
+
+  window.location.href =
+    `./product.html?id=${productId}`;
+
+});
 
   // ===============================
-  // 🔥 INITIAL RENDER
+  //  INITIAL RENDER
   // ===============================
   renderImage();
 }
