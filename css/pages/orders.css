@@ -497,3 +497,52 @@
 }
 
 }
+
+@media (max-width: 560px) {
+
+  .orders-container {
+    gap: 10px;
+  }
+
+  .order-card {
+    gap: 12px;
+  }
+
+  .order-card__image {
+    width: 76px;
+    height: 96px;
+  }
+
+  .order-card__content {
+    flex: 1;
+
+    min-width: 0;
+  }
+
+  .order-card__summary {
+    width: 100%;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 8px;
+  }
+
+  .order-card__action {
+    width: 100%;
+  }
+
+  .order-card__item {
+    font-size: 15px;
+
+    line-height: 1.1;
+
+    word-break: break-word;
+  }
+
+  .order-card__status {
+    align-self: flex-start;
+  }
+
+}
