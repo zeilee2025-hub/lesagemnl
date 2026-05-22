@@ -1,0 +1,278 @@
+/* ===============================
+   SUCCESS PAGE
+=============================== */
+
+.success-page {
+  background: #fff;
+  color: #111;
+}
+
+
+/* ===============================
+   MAIN LAYOUT
+=============================== */
+
+.success {
+  padding-top: calc(40px + 72px + 8px);
+  padding-bottom: 100px;
+}
+
+.success__container {
+  max-width: 760px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+
+/* ===============================
+   SUCCESS ICON
+=============================== */
+
+.success__icon {
+  width: 82px;
+  height: 82px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 50%;
+
+  margin-bottom: 32px;
+}
+
+.success__icon svg {
+  width: 32px;
+  height: 32px;
+
+  stroke-width: 1.6;
+}
+
+
+/* ===============================
+   HEADER
+=============================== */
+
+.success__header {
+  max-width: 540px;
+
+  margin-bottom: 42px;
+}
+
+.success__eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+
+  text-transform: uppercase;
+
+  opacity: 0.55;
+
+  margin-bottom: 18px;
+}
+
+.success__title {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+
+  margin-bottom: 18px;
+}
+
+.success__description {
+  font-size: 15px;
+  line-height: 1.8;
+
+  color: rgba(17, 17, 17, 0.68);
+}
+
+
+/* ===============================
+   SUCCESS CARD
+=============================== */
+
+.success-card {
+  width: 100%;
+
+  border: 1px solid rgba(17, 17, 17, 0.08);
+
+  padding: 36px;
+
+  margin-bottom: 40px;
+}
+
+
+/* ===============================
+   META
+=============================== */
+
+.success-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+
+  padding-bottom: 28px;
+  margin-bottom: 28px;
+
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.success-card__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  text-align: left;
+}
+
+.success-card__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+
+  opacity: 0.5;
+}
+
+.success-card__value {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.success-card__status {
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #0f7b42;
+}
+
+
+/* ===============================
+   SUMMARY
+=============================== */
+
+.success-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+
+/* ===============================
+   ACTIONS
+=============================== */
+
+.success__actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+
+  justify-content: center;
+}
+
+
+/* ===============================
+   BUTTONS
+=============================== */
+
+.success-btn {
+  min-width: 220px;
+
+  padding: 16px 26px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.success-btn:hover {
+  transform: translateY(-2px);
+}
+
+.success-btn--primary {
+  background: #111;
+  color: #fff;
+
+  border: 1px solid #111;
+}
+
+.success-btn--primary:hover {
+  background: #000;
+}
+
+.success-btn--secondary {
+  border: 1px solid rgba(17, 17, 17, 0.14);
+
+  color: #111;
+
+  background: transparent;
+}
+
+.success-btn--secondary:hover {
+  border-color: #111;
+}
+
+
+/* ===============================
+   MOBILE
+=============================== */
+
+@media (max-width: 768px) {
+
+  .success {
+    padding-top: calc(60px + 40px);
+    padding-bottom: 100px;
+  }
+
+  .success__container {
+    padding-inline: 20px;
+  }
+
+  .success__header {
+    margin-bottom: 42px;
+  }
+
+  .success-card {
+    padding: 24px;
+  }
+
+  .success-card__meta {
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 20px;
+  }
+
+  .success__actions {
+    width: 100%;
+
+    flex-direction: column;
+  }
+
+  .success-btn {
+    width: 100%;
+    min-width: 100%;
+  }
+
+}

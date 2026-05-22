@@ -47,63 +47,94 @@ export function renderOrderCard(order) {
   const date = formatDate(order.createdAt);
 
   return `
-    <div class="order-card" data-id="${orderId}">
+  <div
+    class="order-card"
+    data-id="${orderId}"
+  >
 
-      <!-- LEFT: IMAGE -->
-      <div class="order-card__image">
-        <img src="${itemImage}" alt="${itemName}" />
-      </div>
+    <!-- IMAGE -->
+    <div class="order-card__image">
 
-      <!-- CENTER: INFO -->
-      <div class="order-card__info">
+      <img
+        src="${itemImage}"
+        alt="${itemName}"
+      />
 
-        <div class="order-card__top">
+    </div>
+
+    <!-- CONTENT -->
+    <div class="order-card__content">
+
+      <!-- TOP -->
+      <div class="order-card__top">
+
+        <div class="order-card__identity">
+
+          <span class="order-card__eyebrow">
+            Order
+          </span>
+
           <span class="order-card__id">
             #${order.orderNumber || order.id}
           </span>
 
-          <span class="order-card__status status-${ui.type}">
-            ${ui.label}
-          </span>
         </div>
 
-        <div class="order-card__meta">
-          <span class="order-card__item">
+        <span
+          class="order-card__status status-${ui.type}"
+        >
+          ${ui.label}
+        </span>
+
+      </div>
+
+      <!-- BODY -->
+      <div class="order-card__body">
+
+        <div class="order-card__details">
+
+          <h3 class="order-card__item">
             ${itemSummary}
-          </span>
+          </h3>
 
           <span class="order-card__date">
             ${date}
           </span>
+
         </div>
 
-      </div>
+        <div class="order-card__summary">
 
-      <!-- RIGHT: TOTAL + ACTION -->
-      <div class="order-card__side">
-
-        <div class="order-card__total">
-          ₱${Number(total).toLocaleString()}
-        </div>
-
-        ${
-          ui.action
-            ? `
-          <button class="order-card__action" data-action="${ui.action}">
-            ${ui.actionLabel}
-          </button>
-        `
-            : `
-          <div class="order-card__action disabled">
-            ${ui.label}
+          <div class="order-card__total">
+            ₱${Number(total).toLocaleString()}
           </div>
-        `
-        }
+
+          ${
+            ui.action
+              ? `
+            <button
+              class="order-card__action"
+              data-action="${ui.action}"
+            >
+              ${ui.actionLabel}
+            </button>
+          `
+              : `
+            <div class="order-card__action disabled">
+              ${ui.label}
+            </div>
+          `
+          }
+
+        </div>
 
       </div>
 
     </div>
-  `;
+
+  </div>
+`;
+
 }
 
 // ==========================

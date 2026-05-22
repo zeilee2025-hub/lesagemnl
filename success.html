@@ -1,25 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Order Success</title>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    Order Confirmed — LÉ SAGE MNL
+  </title>
+
+  <!-- BASE -->
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/layout.css" />
+
+  <!-- COMPONENTS -->
+  <link rel="stylesheet" href="./css/components/navbar.css" />
+  <link rel="stylesheet" href="./css/components/footer.css" />
+  <link rel="stylesheet" href="./css/components/announcement.css" />
+
+  <!-- PAGE -->
+  <link rel="stylesheet" href="./css/pages/success.css" />
+
+  <!-- ICONS -->
+  <script
+    src="https://unpkg.com/lucide@latest"
+    defer
+  ></script>
+
 </head>
-<body>
 
-  <h1>✅ Order Confirmed</h1>
-  <p>Thank you for your purchase.</p>
+<body class="success-page">
 
-  <p id="order-id"></p>
+  <!-- ================= HEADER ================= -->
+  <header>
 
-  <a href="index.html">
-    <button>Continue Shopping</button>
-  </a>
+    <!-- ANNOUNCEMENT -->
+    <div class="announcement">
 
-  <a href="orders.html" class="btn-primary">
-     View Your Orders
-  </a>
+      <div class="announcement__track">
 
-  <script type="module" src="./js/pages/success.js"></script>
+        <div class="announcement__group">
+
+          <span class="announcement__item">
+            Support available 9am–9pm, Mon–Sat
+          </span>
+
+          <span class="announcement__item">
+            Metro Manila orders arrive in 3–5 business days
+          </span>
+
+          <span class="announcement__item">
+            Outside Metro Manila orders arrive in 7–10 business days
+          </span>
+
+        </div>
+
+        <div class="announcement__group">
+
+          <span class="announcement__item">
+            Support available 9am–9pm, Mon–Sat
+          </span>
+
+          <span class="announcement__item">
+            Metro Manila orders arrive in 3–5 business days
+          </span>
+
+          <span class="announcement__item">
+            Outside Metro Manila orders arrive in 7–10 business days
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+      <div class="nav-container container">
+
+        <div class="nav-left">
+
+          <!-- MOBILE TOGGLE -->
+          <button
+            class="nav-toggle"
+            id="navToggle"
+            aria-label="Open Menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+
+          <!-- NAV LINKS -->
+          <ul class="nav-links">
+
+            <li>
+              <a href="./index.html" class="nav-link">
+                HOME
+              </a>
+            </li>
+
+            <li>
+              <a href="./shop.html" class="nav-link">
+                SHOP
+              </a>
+            </li>
+
+            <li>
+              <a href="./lookbook.html" class="nav-link">
+                LOOKBOOK
+              </a>
+            </li>
+
+            <li>
+              <a href="./about.html" class="nav-link">
+                ABOUT
+              </a>
+            </li>
+
+          </ul>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="nav-right">
+
+          <!-- SEARCH -->
+          <div class="search-wrapper">
+
+            <span class="nav-icon" id="search-icon">
+
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <circle cx="11" cy="11" r="7"></circle>
+
+                <line
+                  x1="16.5"
+                  y1="16.5"
+                  x2="21"
+                  y2="21"
+                ></line>
+
+              </svg>
+
+            </span>
+
+            <input
+              type="text"
+              id="search-input"
+              class="search-input"
+              placeholder="Search"
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </nav>
+
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main class="success">
+
+    <section class="success__container container">
+
+      <!-- SUCCESS ICON -->
+      <div class="success__icon">
+
+        <i data-lucide="check"></i>
+
+      </div>
+
+      <!-- HEADER -->
+      <div class="success__header">
+
+        <p class="success__eyebrow">
+          PAYMENT CONFIRMED
+        </p>
+
+        <h1 class="success__title">
+          Your order has been confirmed.
+        </h1>
+
+        <p class="success__description">
+          Thank you for shopping with LÉ SAGE MNL.
+          Your order is now being processed.
+        </p>
+
+      </div>
+
+      <!-- ORDER CARD -->
+      <div class="success-card">
+
+        <!-- ORDER META -->
+        <div class="success-card__meta">
+
+          <div class="success-card__meta-item">
+
+            <span class="success-card__label">
+              Order ID
+            </span>
+
+            <span
+              id="order-id"
+              class="success-card__value"
+            >
+              —
+            </span>
+
+          </div>
+
+          <div class="success-card__meta-item">
+
+            <span class="success-card__label">
+              Payment Status
+            </span>
+
+            <span class="success-card__status">
+              Paid
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- ORDER SUMMARY -->
+        <div
+          id="success-summary"
+          class="success-summary"
+        ></div>
+
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="success__actions">
+
+        <a
+          href="./orders.html"
+          class="success-btn success-btn--primary"
+        >
+          View Your Orders
+        </a>
+
+        <a
+          href="./shop.html"
+          class="success-btn success-btn--secondary"
+        >
+          Continue Shopping
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MOBILE MENU -->
+  <div
+    class="mobile-menu"
+    id="mobileMenu"
+  >
+
+    <div class="mobile-menu__panel">
+
+      <div class="mobile-menu__header">
+
+        <!-- CLOSE -->
+        <button
+          class="mobile-menu__close"
+          id="mobileMenuClose"
+          aria-label="Close Menu"
+        >
+          <span></span>
+          <span></span>
+        </button>
+
+      </div>
+
+      <!-- LINKS -->
+      <a href="./index.html">
+        Home
+      </a>
+
+      <a href="./shop.html">
+        Shop
+      </a>
+
+      <a href="./lookbook.html">
+        Lookbook
+      </a>
+
+      <a href="./about.html">
+        About
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div id="footer-container"></div>
+
+  <!-- COMPONENTS -->
+  <script
+    type="module"
+    src="./js/components/navbar.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/components/main.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/components/footerLoader.js"
+  ></script>
+
+  <!-- PAGE -->
+  <script
+    type="module"
+    src="./js/pages/success.js"
+  ></script>
 
 </body>
+
 </html>

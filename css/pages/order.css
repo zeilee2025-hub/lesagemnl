@@ -2,9 +2,14 @@
    PAGE (WIDE WORKSPACE)
 ========================= */
 .order-page {
-  max-width: 1480px;
-  margin: 64px auto;
-  padding: 0 20px 80px; /* 🔥 bottom space added */
+  max-width: 1240px;
+
+  margin: 0 auto;
+
+  padding:
+    calc(40px + 72px + 40px)
+    24px
+    120px;
 }
 
 /* =========================
@@ -130,8 +135,13 @@
 ========================= */
 .order-content {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) 460px;
-  gap: 40px;                                  /* more layout breathing */
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    380px;
+
+  gap: 32px;
+
   align-items: start;
 }
 
@@ -163,14 +173,16 @@
 
 .item {
   display: flex;
-  gap: 16px;
-  align-items: center;
-  padding: 6px 0;
+  gap: 18px;
+
+  align-items: flex-start;
+
+  padding: 10px 0;
 }
 
 .item-image {
-  width: 96px;
-  height: 96px;
+  width: 110px;
+  height: 132px;
   border-radius: 10px;
   background: #f5f5f5;
   overflow: hidden;
@@ -420,7 +432,6 @@ body {
 /* ACTIVE STATE */
 .timeline-item.active .timeline-dot {
   background: #111;
-  transform: scale(1.1);
 }
 
 /* CONTENT */
@@ -478,10 +489,12 @@ body {
   }
 
   .order-header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: center;
-  }
+  flex-direction: column;
+
+  gap: 18px;
+
+  align-items: flex-start;
+}
 
   #order-status {
     align-self: flex-start;
