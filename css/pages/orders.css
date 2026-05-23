@@ -515,6 +515,30 @@
     margin-bottom: 24px;
   }
 
+  .orders-title {
+    font-size: 2.4rem;
+
+    line-height: 0.95;
+
+    letter-spacing: -0.04em;
+
+    margin-bottom: 8px;
+  }
+
+  .orders-subtitle {
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    color: rgba(17, 17, 17, 0.56);
+  }
+
+  .orders-back {
+    font-size: 11px;
+
+    letter-spacing: 0.14em;
+  }
+
   .orders-container {
     gap: 14px;
   }
@@ -561,31 +585,57 @@
 
     justify-content: space-between;
 
-    gap: 12px;
+    gap: 10px;
 
     margin-bottom: 0;
   }
 
   .order-card__identity {
+    display: flex;
+
+    flex-direction: column;
+
     gap: 6px;
+
+    min-width: 0;
   }
 
   .order-card__eyebrow {
-    font-size: 10px;
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.18em;
+
+    text-transform: uppercase;
+
+    color: rgba(17, 17, 17, 0.42);
   }
 
   .order-card__id {
-    font-size: 13px;
+    font-size: 12px;
 
-    line-height: 1.25;
+    font-weight: 500;
+
+    line-height: 1.35;
+
+    letter-spacing: -0.01em;
+
+    color: #111;
+
+    word-break: break-word;
   }
 
   .order-card__status {
     padding: 6px 10px;
 
-    font-size: 8px;
+    font-size: 7px;
 
-    letter-spacing: 0.08em;
+    font-weight: 700;
+
+    letter-spacing: 0.1em;
+
+    flex-shrink: 0;
   }
 
   .order-card__body {
@@ -599,17 +649,31 @@
   }
 
   .order-card__details {
+    display: flex;
+
+    flex-direction: column;
+
     gap: 4px;
   }
 
   .order-card__item {
-    font-size: 17px;
+    font-size: 16px;
+
+    font-weight: 500;
 
     line-height: 1.15;
+
+    letter-spacing: -0.02em;
+
+    color: #111;
   }
 
   .order-card__date {
-    font-size: 12px;
+    font-size: 11px;
+
+    line-height: 1.4;
+
+    color: rgba(17, 17, 17, 0.48);
   }
 
   .order-card__summary {
@@ -625,9 +689,15 @@
   }
 
   .order-card__total {
-    font-size: 20px;
+    font-size: 18px;
+
+    font-weight: 600;
+
+    letter-spacing: -0.03em;
 
     line-height: 1;
+
+    color: #111;
   }
 
   .order-card__action {
@@ -637,9 +707,11 @@
 
     padding: 12px 14px;
 
-    font-size: 10px;
+    font-size: 9px;
 
-    letter-spacing: 0.12em;
+    font-weight: 600;
+
+    letter-spacing: 0.14em;
   }
 
 }
