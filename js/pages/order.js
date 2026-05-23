@@ -53,28 +53,72 @@ function renderOrder(order) {
   applyStatus(statusEl, order.orderState);
 
   // ==========================
-  // ITEMS
-  // ==========================
-  const itemsContainer = document.getElementById("order-items");
+// ITEMS
+// ==========================
+const itemsContainer =
+  document.getElementById(
+    "order-items"
+  );
 
-  if (!items.length) {
-    itemsContainer.innerHTML = `<div class="empty-state">No items</div>`;
-  } else {
-    itemsContainer.innerHTML = items.map(item => `
+if (!items.length) {
+
+  itemsContainer.innerHTML = `
+    <div class="empty-state">
+      No items
+    </div>
+  `;
+
+}
+
+else {
+
+  itemsContainer.innerHTML =
+    items.map(item => `
+
       <div class="item">
+
         <div class="item-image">
-          <img src="${item.image}" />
+
+          <img
+            src="${item.image}"
+            alt="${item.name}"
+          />
+
         </div>
-        <div>
-          <div class="item-name">${item.name}</div>
-          <div class="item-meta">
-            Size: ${item.size || "-"} • Qty: ${item.quantity || 1}
+
+        <div class="item-info">
+
+          <div class="item-name">
+            ${item.name}
           </div>
-          <div class="item-price">₱${Number(item.price).toLocaleString()}</div>
+
+          <div class="item-meta">
+
+            Size:
+            ${item.size || "-"}
+
+            •
+
+            Qty:
+            ${item.quantity || 1}
+
+          </div>
+
+          <div class="item-price">
+
+            ₱${Number(
+              item.price
+            ).toLocaleString()}
+
+          </div>
+
         </div>
+
       </div>
+
     `).join("");
-  }
+
+}
 
   // ==========================
   // SUMMARY
@@ -155,9 +199,7 @@ const timeline = [
 
 timelineEl.innerHTML = timeline.map(event => `
 
-  <div class="timeline-item active">
-
-    <div class="timeline-dot"></div>
+  <div class="timeline-item">
 
     <div class="timeline-content">
 
@@ -294,7 +336,7 @@ function applyStatus(el, stateRaw) {
   el.textContent = formatState(state);
 
   // reset classes safely
-  el.className = "";
+  el.className = "order-status";
 
   const map = {
     PENDING_PAYMENT: "status-pending",
@@ -312,14 +354,14 @@ function applyStatus(el, stateRaw) {
 // ==========================
 function showError(message) {
 
-  document.body.innerHTML = `
-    <main class="order-page">
+  const root = document.querySelector(".order-flow");
 
-      <div class="card empty-state">
-        ${message}
-      </div>
+  if (!root) return;
 
-    </main>
+  root.innerHTML = `
+    <div class="empty-state">
+      ${message}
+    </div>
   `;
 
 }
@@ -363,8 +405,18 @@ function formatState(state) {
 }
 
 function formatDate(date) {
+
   if (!date) return "—";
-  return new Date(date).toLocaleString();
+
+  return new Date(date).toLocaleDateString(
+    "en-PH",
+    {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    }
+  );
+
 }
 
 // ==========================

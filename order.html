@@ -331,35 +331,32 @@
 
   </header>
 
-  <!-- ========================================
-       PAGE
-  ========================================= -->
   <main class="order-page">
 
-    <!-- ========================================
-         HEADER
-    ========================================= -->
-    <header class="order-header">
+  <!-- ========================================
+       ORDER HERO
+  ========================================= -->
+  <section class="order-hero">
 
-      <div class="order-header-left">
+    <a
+      href="./orders.html"
+      class="back-link"
+    >
+      &lt; Back to Orders
+    </a>
 
-        <!-- BACK -->
-        <a
-          href="./orders.html"
-          class="back-link"
-        >
-          &lt; Back to Orders
-        </a>
+    <div class="order-hero__top">
 
-        <!-- ORDER TITLE -->
+      <div class="order-hero__identity">
+
         <div class="order-title-row">
 
-          <div
+          <h1
             class="order-id"
             id="order-id"
           >
             Order #—
-          </div>
+          </h1>
 
           <button
             class="copy-btn"
@@ -370,183 +367,155 @@
 
         </div>
 
-        <!-- DATE -->
-        <div
-          class="order-date"
-          id="order-date"
-        ></div>
-
-      </div>
-
-      <!-- STATUS -->
-      <div id="order-status">
-        STATUS
-      </div>
-
-    </header>
-
-    <!-- ========================================
-         LAYOUT
-    ========================================= -->
-    <section class="order-content">
-
-      <!-- ========================================
-           MAIN
-      ========================================= -->
-      <div class="order-main">
-
-        <!-- ITEMS -->
-        <section class="card">
-
-          <div class="card-title">
-            Items
-          </div>
-
-          <div id="order-items"></div>
-
-        </section>
-
-        <!-- TIMELINE -->
-        <section id="order-timeline">
-
-          <div class="card-title">
-            Order Timeline
-          </div>
+        <div class="order-meta-row">
 
           <div
-            class="timeline"
-            id="order-timeline-list"
+            class="order-date"
+            id="order-date"
           ></div>
 
-        </section>
-
-        <!-- TRACKING -->
-        <section
-          id="tracking-section"
-          class="card hidden"
-        >
-
-          <div class="card-title">
-            Tracking
-          </div>
-
-          <div class="shipping-info">
-
-            <div class="info-row">
-
-              <span class="label">
-                Courier:
-              </span>
-
-              <span id="tracking-courier">
-                J&T Express
-              </span>
-
-            </div>
-
-            <div class="info-row">
-
-              <span class="label">
-                Tracking No:
-              </span>
-
-              <span id="tracking-number"></span>
-
-            </div>
-
-            <a
-              href="#"
-              target="_blank"
-              id="tracking-link"
-              class="btn-primary"
-            >
-              Track on J&T
-            </a>
-
-          </div>
-
-        </section>
-
-      </div>
-
-      <!-- ========================================
-           SIDEBAR
-      ========================================= -->
-      <aside class="order-sidebar">
-
-        <div class="card">
-
-          <div class="card-title">
-            Summary & Shipping
-          </div>
-
-          <!-- SUMMARY -->
-          <div class="summary-section">
-
-            <div class="summary-row">
-
-              <span>Subtotal</span>
-
-              <span id="summary-subtotal"></span>
-
-            </div>
-
-            <div class="summary-row">
-
-              <span>Shipping</span>
-
-              <span id="summary-shipping"></span>
-
-            </div>
-
-            <div class="summary-row total">
-
-              <span>Total</span>
-
-              <span id="summary-total"></span>
-
-            </div>
-
-            <div class="summary-row">
-
-              <span>Payment</span>
-
-              <span id="summary-payment"></span>
-
-            </div>
-
-          </div>
-
-          <div class="divider"></div>
-
-          <!-- SHIPPING -->
           <div
-            class="shipping-info"
-            id="shipping-info"
-          ></div>
-
-          <div class="divider"></div>
-
-          <!-- PAYMENT PROOF -->
-          <button
-            class="btn-primary hidden"
-            id="proof-toggle"
+            id="order-status"
+            class="order-status"
           >
-            View Proof
-          </button>
-
-          <div
-            id="proof-container"
-            class="hidden"
-          ></div>
+            STATUS
+          </div>
 
         </div>
 
-      </aside>
+      </div>
 
-    </section>
+    </div>
 
-  </main>
+  </section>
+
+  <!-- ========================================
+       ORDER LAYOUT
+  ========================================= -->
+  <section class="order-layout">
+
+    <!-- ========================================
+         MAIN FLOW
+    ========================================= -->
+    <div class="order-flow">
+
+      <!-- ITEMS -->
+      <section class="order-section">
+
+        <div class="section-label">
+          Items
+        </div>
+
+        <div id="order-items"></div>
+
+      </section>
+
+      <!-- TIMELINE -->
+      <section class="order-section">
+
+        <div class="section-label">
+          Timeline
+        </div>
+
+        <div
+          class="timeline"
+          id="order-timeline-list"
+        ></div>
+
+      </section>
+
+      <!-- SUMMARY -->
+      <section class="order-summary">
+
+        <div class="section-label">
+          Summary & Shipping
+        </div>
+
+        <!-- TOTALS -->
+        <div class="summary-block">
+
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="summary-subtotal"></span>
+          </div>
+
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span id="summary-shipping"></span>
+          </div>
+
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="summary-total"></span>
+          </div>
+
+          <div class="summary-row">
+            <span>Payment</span>
+            <span id="summary-payment"></span>
+          </div>
+
+        </div>
+
+        <!-- SHIPPING -->
+        <div
+          class="shipping-info"
+          id="shipping-info"
+        ></div>
+
+      </section>
+
+      <!-- TRACKING -->
+      <section
+        id="tracking-section"
+        class="order-section hidden"
+      >
+
+        <div class="section-label">
+          Tracking
+        </div>
+
+        <div class="shipping-info">
+
+          <div class="info-row">
+
+            <span class="label">
+              Courier:
+            </span>
+
+            <span id="tracking-courier">
+              J&T Express
+            </span>
+
+          </div>
+
+          <div class="info-row">
+
+            <span class="label">
+              Tracking No:
+            </span>
+
+            <span id="tracking-number"></span>
+
+          </div>
+
+          <a
+            href="#"
+            target="_blank"
+            id="tracking-link"
+            class="btn-primary"
+          >
+            Track Package
+          </a>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </section>
+
+</main>
 
   <!-- ========================================
        CART DRAWER
