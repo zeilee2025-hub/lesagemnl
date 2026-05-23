@@ -595,11 +595,11 @@ body {
 @media (max-width: 480px) {
 
   .order-page {
-    padding:
-      calc(56px + 20px)
-      14px
-      72px;
-  }
+  padding:
+    calc(56px + 20px)
+    18px
+    72px;
+}
 
   .order-id {
     font-size: 1.9rem;
@@ -627,7 +627,8 @@ body {
   }
 
   .timeline-content {
-  gap: 0;
+  column-gap: 10px;
+  row-gap: 4px;
 }
 
   .summary-row.total {
