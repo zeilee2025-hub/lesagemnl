@@ -602,8 +602,10 @@ body {
 }
 
   .order-id {
-    font-size: 1.9rem;
-  }
+  font-size: 1.72rem;
+
+  line-height: 0.96;
+}
 
   .order-title-row {
     gap: 8px;
