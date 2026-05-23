@@ -328,8 +328,10 @@
 .timeline-content {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 
-  gap: 0;
+  column-gap: 8px;
+  row-gap: 2px;
 
   min-width: 0;
 }
@@ -364,7 +366,7 @@
 ========================= */
 
 .order-summary {
-  padding-top: 6px;
+  padding-top: 12px;
 
   border-top: 1px solid rgba(17, 17, 17, 0.08);
 }
@@ -631,5 +633,9 @@ body {
   .summary-row.total {
     font-size: 15px;
   }
+
+  .copy-btn {
+  margin-top: 2px;
+}
 
 }
