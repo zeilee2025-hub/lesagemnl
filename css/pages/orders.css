@@ -506,37 +506,17 @@
 
   .orders-page {
     padding:
-      calc(56px + 24px)
-      12px
-      72px;
-  }
-
-  .orders-container {
-    gap: 10px;
+      calc(56px + 28px)
+      16px
+      80px;
   }
 
   .orders-header {
-    margin-bottom: 18px;
+    margin-bottom: 24px;
   }
 
-  .orders-title {
-    font-size: 2rem;
-
-    line-height: 1;
-
-    margin-bottom: 6px;
-  }
-
-  .orders-subtitle {
-    font-size: 12px;
-
-    line-height: 1.5;
-  }
-
-  .orders-back {
-    font-size: 10px;
-
-    letter-spacing: 0.1em;
+  .orders-container {
+    gap: 14px;
   }
 
   .order-card {
@@ -546,16 +526,16 @@
 
     align-items: flex-start;
 
-    gap: 12px;
+    gap: 16px;
 
-    padding: 12px;
+    padding: 18px;
 
-    overflow: hidden;
+    min-height: 170px;
   }
 
   .order-card__image {
-    width: 72px;
-    height: 92px;
+    width: 92px;
+    height: 118px;
 
     flex-shrink: 0;
   }
@@ -571,7 +551,7 @@
 
     justify-content: space-between;
 
-    gap: 8px;
+    gap: 14px;
   }
 
   .order-card__top {
@@ -581,39 +561,31 @@
 
     justify-content: space-between;
 
-    gap: 8px;
+    gap: 12px;
 
     margin-bottom: 0;
   }
 
   .order-card__identity {
-    gap: 4px;
-
-    min-width: 0;
+    gap: 6px;
   }
 
   .order-card__eyebrow {
-    font-size: 9px;
-
-    letter-spacing: 0.14em;
+    font-size: 10px;
   }
 
   .order-card__id {
-    font-size: 12px;
+    font-size: 13px;
 
-    line-height: 1.2;
-
-    word-break: break-word;
+    line-height: 1.25;
   }
 
   .order-card__status {
-    padding: 5px 8px;
+    padding: 6px 10px;
 
     font-size: 8px;
 
     letter-spacing: 0.08em;
-
-    flex-shrink: 0;
   }
 
   .order-card__body {
@@ -623,21 +595,21 @@
 
     align-items: flex-start;
 
-    gap: 8px;
+    gap: 12px;
   }
 
   .order-card__details {
-    gap: 2px;
+    gap: 4px;
   }
 
   .order-card__item {
-    font-size: 14px;
+    font-size: 17px;
 
     line-height: 1.15;
   }
 
   .order-card__date {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .order-card__summary {
@@ -649,11 +621,11 @@
 
     align-items: flex-start;
 
-    gap: 8px;
+    gap: 10px;
   }
 
   .order-card__total {
-    font-size: 14px;
+    font-size: 20px;
 
     line-height: 1;
   }
@@ -663,9 +635,9 @@
 
     min-width: unset;
 
-    padding: 10px 12px;
+    padding: 12px 14px;
 
-    font-size: 9px;
+    font-size: 10px;
 
     letter-spacing: 0.12em;
   }
