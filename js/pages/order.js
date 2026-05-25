@@ -246,7 +246,7 @@ timelineEl.innerHTML = timeline.map(event => `
 
 `).join("");
 
-  // ==========================
+    // ==========================
   // TRACKING
   // ==========================
   const trackingSection =
@@ -255,6 +255,8 @@ timelineEl.innerHTML = timeline.map(event => `
     );
 
   if (
+
+    trackingSection &&
 
     (
       order.orderState === "SHIPPED" ||
@@ -271,26 +273,46 @@ timelineEl.innerHTML = timeline.map(event => `
       "hidden"
     );
 
-    document.getElementById(
-      "tracking-number"
-    ).textContent =
-      order.trackingNumber;
+    const trackingNumberEl =
+      document.getElementById(
+        "tracking-number"
+      );
 
-    document.getElementById(
-      "tracking-courier"
-    ).textContent =
-      order.courier ||
-      "J&T Express";
+    const trackingCourierEl =
+      document.getElementById(
+        "tracking-courier"
+      );
 
-    document.getElementById(
-      "tracking-link"
-    ).href =
+    const trackingLinkEl =
+      document.getElementById(
+        "tracking-link"
+      );
 
-      `https://www.jtexpress.ph/index/query/gzquery.html?billcodes=${order.trackingNumber}`;
+    if (trackingNumberEl) {
+
+      trackingNumberEl.textContent =
+        order.trackingNumber;
+
+    }
+
+    if (trackingCourierEl) {
+
+      trackingCourierEl.textContent =
+        order.courier ||
+        "J&T Express";
+
+    }
+
+    if (trackingLinkEl) {
+
+      trackingLinkEl.href =
+        `https://www.jtexpress.ph/index/query/gzquery.html?billcodes=${order.trackingNumber}`;
+
+    }
 
   }
 
-  else {
+  else if (trackingSection) {
 
     trackingSection.classList.add(
       "hidden"
