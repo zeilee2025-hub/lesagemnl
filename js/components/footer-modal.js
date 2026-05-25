@@ -613,14 +613,11 @@ function closeFooterModal() {
 
 function initFooterModal() {
 
-  console.log("INIT MODAL");
-
   const buttons =
     document.querySelectorAll(
       "[data-footer-modal]"
     );
 
-  console.log(buttons);
 
   buttons.forEach((button) => {
 

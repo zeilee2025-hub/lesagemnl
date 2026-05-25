@@ -175,8 +175,6 @@ if (!email) {
     // ==========================
     let orders = await getOrdersByEmail(email);
 
-    console.log("FETCHED ORDERS:", orders);
-
     if (!Array.isArray(orders) || orders.length === 0) {
       container.innerHTML = "<p>No orders yet.</p>";
       return;
@@ -229,7 +227,6 @@ function setupNavigation() {
 
       const action = actionBtn.dataset.action;
 
-      console.log("👉 ACTION:", action, "ORDER:", orderId);
 
       //  UPLOAD PROOF
       if (action === "upload") {
@@ -266,8 +263,6 @@ function setupNavigation() {
     // ==========================
     //  CARD CLICK (DEFAULT)
     // ==========================
-    console.log(" CARD CLICK:", orderId);
-
     window.location.href = `order.html?orderId=${orderId}`;
   });
 }
