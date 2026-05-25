@@ -366,3 +366,138 @@
 
   color: #777;
 }
+
+/* ==========================
+   ADMIN DETAIL POLISH
+========================== */
+
+.admin-order__customer p,
+.admin-order__tracking-note {
+
+  font-size: 14px;
+  line-height: 1.65;
+
+  color: #444;
+
+}
+
+
+.admin-order__customer p strong,
+.admin-order__tracking-note strong {
+
+  color: #111;
+  font-weight: 600;
+
+}
+
+
+/* ==========================
+   ORDER ITEM HIERARCHY
+========================== */
+
+.admin-order__item {
+
+  align-items: center;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+}
+
+
+.admin-order__item strong {
+
+  font-weight: 600;
+  color: #111;
+
+}
+
+
+/* ==========================
+   TOTALS RHYTHM
+========================== */
+
+.admin-order__totals {
+
+  margin-top: 14px;
+
+}
+
+
+.admin-order__totals-row {
+
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 6px;
+
+  font-size: 14px;
+
+  color: #555;
+
+}
+
+
+.admin-order__totals-row--total {
+
+  margin-top: 10px;
+  padding-top: 10px;
+
+  border-top: 1px solid #eee;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  color: #111;
+
+}
+
+
+/* ==========================
+   TIMELINE POLISH
+========================== */
+
+.admin-order__timeline {
+
+  margin-top: 10px;
+
+}
+
+
+.admin-order__timeline-item {
+
+  margin-bottom: 10px;
+
+}
+
+
+.admin-order__timeline-title {
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #111;
+
+}
+
+
+.admin-order__timeline-date {
+
+  margin-top: 2px;
+
+  font-size: 12px;
+
+  color: #777;
+
+}
+
+
+/* ==========================
+   SHIPPING META
+========================== */
+
+.admin-order__tracking-note {
+
+  margin-top: 10px;
+
+}
