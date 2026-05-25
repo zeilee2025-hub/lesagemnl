@@ -1,5 +1,5 @@
 // ===============================
-// 🛒 CART SERVICE (FINAL — STOCK SAFE + VARIANT-AWARE 🔥)
+//  CART SERVICE (FINAL — STOCK SAFE + VARIANT-AWARE )
 // ===============================
 
 import { getProductImage } from "../core/imageResolver.js";
@@ -8,7 +8,7 @@ const STORAGE_KEY = "cart";
 
 
 // ==========================
-// 🔔 GLOBAL EVENT SYSTEM
+//  GLOBAL EVENT SYSTEM
 // ==========================
 function emitCartUpdate(detail = {}) {
   window.dispatchEvent(new CustomEvent("cartUpdated", { detail }));
@@ -22,7 +22,7 @@ function emitCartError(message) {
 
 
 // ==========================
-// 📦 GET CART
+//  GET CART
 // ==========================
 export function getCart() {
   try {
@@ -34,7 +34,7 @@ export function getCart() {
 
 
 // ==========================
-// 💾 SAVE CART
+//  SAVE CART
 // ==========================
 export function saveCart(cart) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
@@ -42,7 +42,7 @@ export function saveCart(cart) {
 
 
 // ==========================
-// 🔑 CREATE UNIQUE KEY
+//  CREATE UNIQUE KEY
 // ==========================
 function createKey(id, size, color) {
   return `${id}_${size}_${color || "default"}`;
@@ -50,14 +50,30 @@ function createKey(id, size, color) {
 
 
 // ==========================
-// 🖼️ IMAGE RESOLUTION
+//  IMAGE RESOLUTION
 // ==========================
 function resolveCartImage(product, colorName) {
-  if (!product?.variants) return "";
+  const variantsSource =
+
+  Array.isArray(product?.variants)
+
+    ? product.variants
+
+    : Array.isArray(product?.colors)
+
+      ? product.colors
+
+      : [];
+
+if (!variantsSource.length) return "";
 
   const variant =
-    product.variants.find(v => v.name === colorName) ||
-    product.variants[0];
+
+  variantsSource.find(
+    v => v.name === colorName
+  ) ||
+
+  variantsSource[0];
 
   return (
     variant?.images?.front ||
@@ -70,7 +86,7 @@ function resolveCartImage(product, colorName) {
 
 
 // ==========================
-// 🔒 COLOR NORMALIZATION
+//  COLOR NORMALIZATION
 // ==========================
 function normalizeColor(product, color) {
   if (!color) return "Default";
@@ -89,14 +105,34 @@ function normalizeColor(product, color) {
 
 
 // ==========================
-// 🧠 GET VARIANT + STOCK
+//  GET VARIANT + STOCK
 // ==========================
 function getVariant(product, color) {
+
+  const variantsSource =
+
+    Array.isArray(product.variants)
+
+      ? product.variants
+
+      : Array.isArray(product.colors)
+
+        ? product.colors
+
+        : [];
+
   return (
+
     product.selectedVariant ||
-    product.variants?.find(v => v.name === color) ||
-    product.variants?.[0]
+
+    variantsSource.find(
+      v => v.name === color
+    ) ||
+
+    variantsSource[0]
+
   );
+
 }
 
 function getSizeStock(variant, size) {
@@ -113,7 +149,7 @@ function getSizeStock(variant, size) {
 
 
 // ==========================
-// ➕ ADD TO CART (STOCK SAFE)
+//  ADD TO CART (STOCK SAFE)
 // ==========================
 export function addToCart(product, size, color = "Default") {
   const cart = getCart();
@@ -125,7 +161,7 @@ export function addToCart(product, size, color = "Default") {
 
   const stock = getSizeStock(variant, size);
 
-  // ❌ OUT OF STOCK
+  //  OUT OF STOCK
   if (stock <= 0) {
     emitCartError("This size is out of stock");
     return;
@@ -137,7 +173,7 @@ export function addToCart(product, size, color = "Default") {
 
   const currentQty = existing ? existing.quantity : 0;
 
-  // ❌ EXCEEDS STOCK
+  //  EXCEEDS STOCK
   if (currentQty + 1 > stock) {
     emitCartError(`Only ${stock} available`);
     return;
@@ -155,8 +191,8 @@ export function addToCart(product, size, color = "Default") {
   color: normalizedColor,
   quantity: 1,
 
-  // 🔥 CACHE STOCK
-  stock: stock ?? 999,
+  //  CACHE STOCK
+  stock: Number(stock) || 0,
 
   image: resolveCartImage(product, normalizedColor)
 });
@@ -168,7 +204,7 @@ export function addToCart(product, size, color = "Default") {
 
 
 // ==========================
-// ❌ REMOVE
+//  REMOVE
 // ==========================
 export function removeFromCart(key) {
   const cart = getCart();
@@ -180,7 +216,7 @@ export function removeFromCart(key) {
 
 
 // ==========================
-// 🔄 UPDATE QUANTITY (FAST)
+//  UPDATE QUANTITY (FAST)
 // ==========================
 export async function updateQuantity(
   key,
@@ -196,11 +232,11 @@ export async function updateQuantity(
 
   if (newQty < 1) return;
 
-  // 🔥 USE CACHED STOCK
+  //  USE CACHED STOCK
   const stock =
   typeof item.stock === "number"
     ? item.stock
-    : 999;
+    : 0;
 
   if (newQty > stock) {
 
@@ -227,7 +263,7 @@ export async function updateQuantity(
 
 
 // ==========================
-// 💰 GET TOTAL
+//  GET TOTAL
 // ==========================
 export function getCartTotal() {
   const cart = getCart();
@@ -239,7 +275,7 @@ export function getCartTotal() {
 
 
 // ==========================
-// 🔔 CART BADGE
+//  CART BADGE
 // ==========================
 export function updateCartBadge() {
   const badge = document.getElementById("cart-badge");
