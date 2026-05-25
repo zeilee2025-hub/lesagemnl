@@ -21,7 +21,11 @@ export function renderOrderCard(order) {
   // ==========================
   //  ITEMS SUMMARY
   // ==========================
-  const items = order.items || [];
+  const items =
+  order.items ||
+  order.cartItems ||
+  order.products ||
+  [];
 
   const firstItem = items[0] || {};
   const extraCount = items.length - 1;

@@ -35,10 +35,14 @@ async function init() {
 }
 
 // ==========================
-// 🎨 RENDER ORDER
+//  RENDER ORDER
 // ==========================
 function renderOrder(order) {
-  const items = order.items || [];
+  const items =
+  order.items ||
+  order.cartItems ||
+  order.products ||
+  [];
 
   // ==========================
   // HEADER
@@ -390,7 +394,10 @@ function formatTimelineAction(action) {
       "Order Shipped",
 
     ORDER_COMPLETED:
-      "Order Completed"
+      "Order Completed",
+
+    ORDER_EXPIRED:
+      "Order Expired"
 
   };
 
