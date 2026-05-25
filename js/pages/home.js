@@ -80,8 +80,20 @@ document.addEventListener("DOMContentLoaded", () => {
     allProducts = products;
 
     products.forEach(product => {
-      product.selectedVariant =
-        product.variants?.[0] || null;
+      const variantsSource =
+
+  Array.isArray(product?.variants)
+
+    ? product.variants
+
+    : Array.isArray(product?.colors)
+
+      ? product.colors
+
+      : [];
+
+product.selectedVariant =
+  variantsSource[0] || null;
     });
 
     const featured = products
@@ -145,10 +157,25 @@ function handleQuickAdd({ product, colorIndex }) {
 
   selectedSize = null;
 
-  const variant =
-    product.selectedVariant ||
-    product.variants?.[colorIndex] ||
-    product.variants?.[0];
+  const variantsSource =
+
+  Array.isArray(product?.variants)
+
+    ? product.variants
+
+    : Array.isArray(product?.colors)
+
+      ? product.colors
+
+      : [];
+
+const variant =
+
+  product.selectedVariant ||
+
+  variantsSource[colorIndex] ||
+
+  variantsSource[0];
 
   selectedColor =
     variant?.name || "Default";
@@ -170,7 +197,16 @@ qaAddBtn.onclick = null;
   qaColors.innerHTML = "";
 
   const variants =
-    product.variants || [];
+
+  Array.isArray(product?.variants)
+
+    ? product.variants
+
+    : Array.isArray(product?.colors)
+
+      ? product.colors
+
+      : [];
 
   // ==========================
   // RENDER COLOR SWATCHES
@@ -336,10 +372,40 @@ const sizes =
 
 if (sizes.length === 1) {
 
-  selectedSize =
-    sizes[0].size;
+  const onlySizeData =
+    sizes[0];
 
-  qaAddBtn.disabled = false;
+  const onlyStock =
+    Number(
+      onlySizeData?.stock || 0
+    );
+
+  selectedSize =
+    onlySizeData.size;
+
+  // ==========================
+  // OUT OF STOCK
+  // ==========================
+  if (onlyStock <= 0) {
+
+    qaAddBtn.disabled = true;
+
+    qaAddBtn.textContent =
+      "OUT OF STOCK";
+
+  }
+
+  // ==========================
+  // IN STOCK
+  // ==========================
+  else {
+
+    qaAddBtn.disabled = false;
+
+    qaAddBtn.textContent =
+      "ADD TO CART";
+
+  }
 
   setTimeout(() => {
 
@@ -386,25 +452,107 @@ qaAddBtn?.addEventListener("click", async () => {
       currentProduct.id
     );
 
-  if (!freshProduct) return;
+  if (!freshProduct) {
+    return;
+  }
 
+  // ==========================
+  // SUPPORT:
+  // variants OR colors
+  // ==========================
+  const variantsSource =
+
+    Array.isArray(freshProduct?.variants)
+
+      ? freshProduct.variants
+
+      : Array.isArray(freshProduct?.colors)
+
+        ? freshProduct.colors
+
+        : [];
+
+  // ==========================
+  // FIND VARIANT
+  // ==========================
   const variant =
-    freshProduct.variants?.find(
+
+    variantsSource.find(
       (v) =>
+
         (v.name || "")
           .toLowerCase()
           .trim() ===
+
         (selectedColor || "")
           .toLowerCase()
           .trim()
+
     ) ||
-    freshProduct.variants?.[0];
 
-  if (!variant) return;
+    variantsSource[0];
 
+  // ==========================
+  // INVALID VARIANT
+  // ==========================
+  if (!variant) {
+
+    qaAddBtn.disabled = true;
+
+    qaAddBtn.textContent =
+      "OUT OF STOCK";
+
+    return;
+
+  }
+
+  // ==========================
+  // FIND SIZE
+  // ==========================
+  const sizeData =
+
+    Array.isArray(variant?.sizes)
+
+      ? variant.sizes.find(
+          (s) =>
+
+            String(s.size)
+              .trim()
+              .toUpperCase() ===
+
+            String(selectedSize)
+              .trim()
+              .toUpperCase()
+        )
+
+      : null;
+
+  // ==========================
+  // OUT OF STOCK
+  // ==========================
+  if (
+    !sizeData ||
+    Number(sizeData.stock || 0) <= 0
+  ) {
+
+    qaAddBtn.disabled = true;
+
+    qaAddBtn.textContent =
+      "OUT OF STOCK";
+
+    return;
+
+  }
+
+  // ==========================
+  // SAFE COLOR
+  // ==========================
   const finalColor =
     variant.name;
 
+  // ==========================
+  // ADD TO CART
+  // ==========================
   addToCart(
     freshProduct,
     selectedSize,
