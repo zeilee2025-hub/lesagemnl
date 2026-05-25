@@ -1,5 +1,3 @@
-console.log("FOOTER MODAL LOADED");
-
 // ==========================
 // ELEMENTS
 // ==========================
@@ -629,8 +627,6 @@ function initFooterModal() {
     button.addEventListener(
       "click",
       () => {
-
-        console.log("CLICKED");
 
         const modalType =
           button.dataset.footerModal;
