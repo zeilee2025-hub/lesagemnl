@@ -295,23 +295,52 @@ function updateHeaderUI(order) {
 
 
   // ==========================
-  // UNDER REVIEW
-  // ==========================
-  if (
+// UNDER REVIEW
+// ==========================
+if (
   orderState === "PROOF_UPLOADED"
 ) {
 
-    title.textContent =
-      "Order Received";
+  title.textContent =
+    "Order Received";
 
-    subtitle.textContent =
-      "Your payment is under review";
+  subtitle.textContent =
+    "Your payment is under review";
 
-    stopManualPaymentCountdown();
+  stopManualPaymentCountdown();
 
-    return;
+  const statusInline =
+    document.getElementById(
+      "order-status-inline"
+    );
+
+  if (statusInline) {
+
+    statusInline.textContent = "";
 
   }
+
+  if (successBox) {
+
+    successBox.innerHTML = `
+      <div class="manual-payment__success-item">
+        We’ve received your payment proof
+      </div>
+
+      <div class="manual-payment__success-item">
+        Our team is currently verifying your payment
+      </div>
+
+      <div class="manual-payment__success-item">
+        You’ll receive an email once your payment has been approved
+      </div>
+    `;
+
+  }
+
+  return;
+
+}
 
 
   // ==========================
