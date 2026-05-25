@@ -22,13 +22,25 @@ export function validateAddToCart(
   // ==========================
   // RESOLVE VARIANT SIZES
   // ==========================
-  const sizes =
+  const variantsSource =
 
-    product.selectedVariant?.sizes ||
+  Array.isArray(product?.variants)
 
-    product.variants?.[0]?.sizes ||
+    ? product.variants
 
-    [];
+    : Array.isArray(product?.colors)
+
+      ? product.colors
+
+      : [];
+
+const sizes =
+
+  product.selectedVariant?.sizes ||
+
+  variantsSource[0]?.sizes ||
+
+  [];
 
   // ==========================
   // NO SIZE DATA
@@ -158,13 +170,25 @@ export function validateQuantityUpdate(
   // ==========================
   // RESOLVE VARIANT SIZES
   // ==========================
-  const sizes =
+  const variantsSource =
 
-    product.selectedVariant?.sizes ||
+  Array.isArray(product?.variants)
 
-    product.variants?.[0]?.sizes ||
+    ? product.variants
 
-    [];
+    : Array.isArray(product?.colors)
+
+      ? product.colors
+
+      : [];
+
+const sizes =
+
+  product.selectedVariant?.sizes ||
+
+  variantsSource[0]?.sizes ||
+
+  [];
 
   // ==========================
   // INVALID PRODUCT

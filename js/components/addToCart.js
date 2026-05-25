@@ -45,12 +45,27 @@ export function initAddToCart(
     // ==========================
     // GET VARIANT
     // ==========================
-    const variant =
-      product.selectedVariant ||
-      product.variants?.find(
-        (v) => v.name === color
-      ) ||
-      product.variants?.[0];
+    const variantsSource =
+
+  Array.isArray(product?.variants)
+
+    ? product.variants
+
+    : Array.isArray(product?.colors)
+
+      ? product.colors
+
+      : [];
+
+const variant =
+
+  product.selectedVariant ||
+
+  variantsSource.find(
+    (v) => v.name === color
+  ) ||
+
+  variantsSource[0];
 
 
     // ==========================
