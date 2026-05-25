@@ -52,6 +52,7 @@ export function renderManualPaymentActions(order) {
   // SHOW VIEW ORDER
   // ==========================
   if (
+  order.orderState === "PROOF_UPLOADED" ||
   order.orderState === "PAID" ||
   order.orderState === "SHIPPED" ||
   order.orderState === "COMPLETED"

@@ -3,8 +3,6 @@
 // ==========================
 export function renderManualPaymentSummary(order) {
 
-  console.log("MANUAL ORDER:", order);
-
   const container =
     document.getElementById(
       "order-summary"
