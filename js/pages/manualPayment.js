@@ -320,11 +320,7 @@ if (
   if (successBox) {
 
     successBox.innerHTML = `
-      <div class="manual-payment__success-item">
-        We’ve received your payment proof
-      </div>
-
-      <div class="manual-payment__success-item">
+     <div class="manual-payment__success-item">
         Our team is currently verifying your payment
       </div>
 
