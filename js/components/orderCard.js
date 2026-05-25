@@ -56,9 +56,13 @@ export function renderOrderCard(order) {
     <div class="order-card__image">
 
       <img
-        src="${itemImage}"
-        alt="${itemName}"
-      />
+  src="${itemImage}"
+  alt="${itemName}"
+
+  loading="lazy"
+
+  decoding="async"
+/>
 
     </div>
 

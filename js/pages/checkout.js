@@ -534,7 +534,7 @@ const customer = {
 };
 
 
-    /* =========================
+/* =========================
    CREATE ORDER
 ========================= */
 
@@ -545,9 +545,11 @@ const orderId =
        CUSTOMER
     ========================= */
 
-    email: customer.email,
+    email:
+      customer.email,
 
-    uid: customer.uid,
+    uid:
+      customer.uid,
 
     firstName:
       customer.firstName,
@@ -572,7 +574,8 @@ const orderId =
        ORDER ITEMS
     ========================= */
 
-    items: cartData,
+    items:
+      cartData,
 
 
     /* =========================
@@ -599,7 +602,6 @@ const orderId =
 
     /* =========================
        LEGACY COMPATIBILITY
-       (TEMPORARY)
     ========================= */
 
     status:
@@ -608,13 +610,29 @@ const orderId =
     paymentStatus:
       "PENDING",
 
-    /* =========================
-   PAYMENT
-========================= */
 
-paymentMethod
+    /* =========================
+       PAYMENT
+    ========================= */
+
+    paymentMethod
 
 });
+
+
+/* =========================
+   SAVE SESSION RECOVERY
+========================= */
+
+localStorage.setItem(
+  "lastOrderId",
+  orderId
+);
+
+localStorage.setItem(
+  "customerEmail",
+  customer.email
+);
 
 
 /* =========================
@@ -629,14 +647,6 @@ if (paymentMethod === "PAYMONGO") {
   saveCart([]);
 
   updateCartBadge([]);
-
-  // =========================
-  // SAVE CUSTOMER EMAIL
-  // =========================
-  localStorage.setItem(
-    "customerEmail",
-    customer.email
-  );
 
   // =========================
   // CREATE PAYMENT SESSION
@@ -663,14 +673,6 @@ else {
   saveCart([]);
 
   updateCartBadge([]);
-
-  // =========================
-  // SAVE CUSTOMER EMAIL
-  // =========================
-  localStorage.setItem(
-    "customerEmail",
-    customer.email
-  );
 
   // =========================
   // REDIRECT TO MANUAL PAYMENT

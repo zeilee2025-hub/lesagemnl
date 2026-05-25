@@ -80,9 +80,13 @@ else {
         <div class="item-image">
 
           <img
-            src="${item.image}"
-            alt="${item.name}"
-          />
+  src="${item.image}"
+  alt="${item.name}"
+
+  loading="lazy"
+
+  decoding="async"
+/>
 
         </div>
 

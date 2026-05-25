@@ -45,6 +45,26 @@ orderText.textContent =
     }
 
     // ==========================
+// RESTORE CUSTOMER SESSION
+// ==========================
+if (data.email) {
+
+  localStorage.setItem(
+    "customerEmail",
+    data.email
+  );
+
+}
+
+// ==========================
+// RESTORE LAST ORDER
+// ==========================
+localStorage.setItem(
+  "lastOrderId",
+  orderId
+);
+
+    // ==========================
     //  WAIT UNTIL PAID
     // ==========================
     if (data.paymentStatus !== "PAID") {
@@ -52,6 +72,22 @@ orderText.textContent =
   return;
 }
 
+// ==========================
+// RESTORE CUSTOMER SESSION
+// ==========================
+if (data.email) {
+
+  localStorage.setItem(
+    "customerEmail",
+    data.email
+  );
+
+  console.log(
+    "Customer email restored:",
+    data.email
+  );
+
+}
     // ==========================
     //  DISPLAY SUCCESS
     // ==========================

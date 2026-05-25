@@ -251,11 +251,13 @@
 
   object-fit: cover;
 
-  transition: transform 0.5s ease;
-}
+  display: block;
 
-.item:hover .item-image img {
-  transform: scale(1.03);
+backface-visibility: hidden;
+
+-webkit-backface-visibility: hidden;
+
+transition: transform 0.35s ease;
 }
 
 .item-info {
@@ -644,5 +646,13 @@ body {
   .copy-btn {
   margin-top: 2px;
 }
+
+}
+
+@media (hover: hover) {
+
+  .item:hover .item-image img {
+    transform: scale(1.03);
+  }
 
 }
