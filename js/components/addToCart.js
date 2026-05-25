@@ -71,11 +71,16 @@ const variant =
     // ==========================
     // NO VARIANT
     // ==========================
-    if (!variant) {
-      return;
-    }
+if (!variant) {
 
+  addBtn.disabled = true;
 
+  addBtn.textContent =
+    "OUT OF STOCK";
+
+  return;
+
+}
     // ==========================
     // GET SIZE STOCK
     // ==========================
@@ -99,10 +104,17 @@ const variant =
     // ==========================
     // OUT OF STOCK
     // ==========================
-    if (stock <= 0) {
-      alert("This size is out of stock");
-      return;
-    }
+if (stock <= 0) {
+
+  // DISABLE BUTTON UI
+  addBtn.disabled = true;
+
+  addBtn.textContent =
+    "OUT OF STOCK";
+
+  return;
+
+}
 
 
     // ==========================
