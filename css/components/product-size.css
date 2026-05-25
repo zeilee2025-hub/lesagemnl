@@ -44,7 +44,39 @@
 .size-guide__unit {
   font-size: 12px;
   color: #777;
+}
+
+/* =========================
+   SIZE GUIDE HEADER
+========================= */
+
+.size-guide__header {
   margin-bottom: 16px;
+}
+
+.size-guide__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.size-guide__hint {
+  display: none;
+
+  font-size: 11px;
+  color: #888;
+
+  letter-spacing: 0.03em;
+}
+
+/* =========================
+   TABLE WRAPPER
+========================= */
+
+.size-guide__table-wrapper {
+  overflow-x: auto;
+
+  -webkit-overflow-scrolling: touch;
 }
 
 .size-guide__table {
@@ -302,3 +334,10 @@
   opacity: 1;
 }
 
+@media (max-width: 768px) {
+
+  .size-guide__hint {
+    display: block;
+  }
+
+}

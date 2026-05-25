@@ -17,10 +17,29 @@ export function renderSizeGuide(type, selectedSize) {
   return `
     <div class="size-guide__content">
       
-      <h2 class="size-guide__title">SIZE GUIDE</h2>
-      <p class="size-guide__unit">All measurements in inches</p>
+      <div class="size-guide__header">
 
-      <table class="size-guide__table">
+  <h2 class="size-guide__title">
+    SIZE GUIDE
+  </h2>
+
+  <div class="size-guide__meta">
+
+    <p class="size-guide__unit">
+      All measurements in inches
+    </p>
+
+    <p class="size-guide__hint">
+      Slide to view full chart →
+    </p>
+
+  </div>
+
+</div>
+
+<div class="size-guide__table-wrapper">
+
+  <table class="size-guide__table">
         
         <thead>
           <tr>
@@ -46,7 +65,9 @@ export function renderSizeGuide(type, selectedSize) {
 
       </table>
 
-    </div>
+</div>
+
+</div>
   `;
 }
 
