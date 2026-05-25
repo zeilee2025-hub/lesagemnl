@@ -1,8 +1,8 @@
 // ==========================
-// 📦 UPLOAD SERVICE (FINAL FIXED)
+//  UPLOAD SERVICE (FINAL FIXED)
 // ==========================
 
-const CLOUD_NAME = "dvgzb9dld"; // ✅ FIXED
+const CLOUD_NAME = "dvgzb9dld"; //  FIXED
 const UPLOAD_PRESET = "proof_unsigned";
 
 export async function uploadProof(file, orderId) {
@@ -10,7 +10,7 @@ export async function uploadProof(file, orderId) {
     if (!file) throw new Error("No file selected");
     if (!orderId) throw new Error("Missing order ID");
 
-    console.log("🚀 Uploading to Cloudinary:", {
+    console.log(" Uploading to Cloudinary:", {
       cloud: CLOUD_NAME,
       preset: UPLOAD_PRESET,
       fileName: file.name,
@@ -32,16 +32,16 @@ export async function uploadProof(file, orderId) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("❌ Cloudinary FULL error:", data);
+      console.error(" Cloudinary FULL error:", data);
       throw new Error(data.error?.message || "Upload failed");
     }
 
-    console.log("✅ Uploaded proof URL:", data.secure_url);
+    console.log(" Uploaded proof URL:", data.secure_url);
 
     return data.secure_url;
 
   } catch (error) {
-    console.error("❌ Upload error:", error);
+    console.error(" Upload error:", error);
     throw error;
   }
 }

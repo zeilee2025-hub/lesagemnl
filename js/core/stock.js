@@ -10,8 +10,15 @@ import {
 function resolveVariant(product, item) {
 
   const variants =
-    Array.isArray(product.variants)
-      ? product.variants
+
+  Array.isArray(product?.variants)
+
+    ? product.variants
+
+    : Array.isArray(product?.colors)
+
+      ? product.colors
+
       : [];
 
   const hasSingleVariant =

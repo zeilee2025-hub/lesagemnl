@@ -2,7 +2,7 @@ import { API_BASE_URL }
 from "./config/api.js";
 
 // ==========================
-// 💳 PAYMENT SERVICE
+//  PAYMENT SERVICE
 // ==========================
 
 export async function createPaymentSession({ items, customer, totals, orderId }) {
@@ -44,7 +44,7 @@ export async function createPaymentSession({ items, customer, totals, orderId })
           total: totals.total
         },
 
-        orderId   // 🔥 CRITICAL LINK
+        orderId   //  CRITICAL LINK
       })
     });
 
@@ -61,7 +61,7 @@ export async function createPaymentSession({ items, customer, totals, orderId })
     window.location.href = data.checkoutUrl;
 
   } catch (error) {
-    console.error("❌ Payment error:", error);
+    console.error(" Payment error:", error);
     alert("Payment failed. Please try again.");
     throw error;
   }

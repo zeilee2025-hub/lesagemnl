@@ -1,90 +1,215 @@
 // ==========================
-// VALIDATE CART BEFORE CHECKOUT (FINAL FIX)
+// VALIDATE CART BEFORE CHECKOUT
 // ==========================
-import { getProductById } from "../services/productService.js";
+
+import { getProductById }
+from "../services/productService.js";
 
 export async function validateCartBeforeCheckout(cart) {
+
   const errors = [];
 
   // ===============================
-  //  GUARD
+  // GUARD
   // ===============================
-  if (!cart || !Array.isArray(cart) || cart.length === 0) {
+  if (
+    !cart ||
+    !Array.isArray(cart) ||
+    cart.length === 0
+  ) {
+
     return {
+
       valid: false,
-      errors: ["Cart is empty"]
+
+      errors: [
+        "Cart is empty"
+      ]
+
     };
+
   }
 
+  // ===============================
+  // VALIDATE EACH ITEM
+  // ===============================
   for (const item of cart) {
-    try {
-      const product = await getProductById(item.id);
 
-      //  Product missing
-      if (!product || !Array.isArray(product.variants)) {
-        errors.push(`${item.name} is no longer available`);
+    try {
+
+      const product =
+        await getProductById(item.id);
+
+      // ===============================
+      // SUPPORT BOTH:
+      // variants OR colors
+      // ===============================
+      const variantsSource =
+
+        Array.isArray(product?.variants)
+
+          ? product.variants
+
+          : Array.isArray(product?.colors)
+
+            ? product.colors
+
+            : [];
+
+      // ===============================
+      // PRODUCT INVALID
+      // ===============================
+      if (
+        !product ||
+        !variantsSource.length
+      ) {
+
+        errors.push(
+          `${item.name} is no longer available`
+        );
+
         continue;
+
       }
 
       // ===============================
-      //  FIX 1: FIND VARIANT (COLOR MATCH)
+      // FIND VARIANT
       // ===============================
       const variant =
-        product.variants.find(v =>
-          (v.name || "").toLowerCase() === (item.color || "").toLowerCase()
+
+        variantsSource.find((v) =>
+
+          String(v.name || "")
+            .trim()
+            .toLowerCase() ===
+
+          String(item.color || "")
+            .trim()
+            .toLowerCase()
+
         ) ||
-        product.variants[0];
 
+        variantsSource[0];
+
+      // ===============================
+      // INVALID VARIANT
+      // ===============================
       if (!variant) {
-        errors.push(`${item.name} variant not found`);
+
+        errors.push(
+          `${item.name} variant not found`
+        );
+
         continue;
+
       }
 
       // ===============================
-      //  FIX 2: VALIDATE SIZES
+      // VALIDATE SIZES
       // ===============================
-      if (!Array.isArray(variant.sizes) || variant.sizes.length === 0) {
-        errors.push(`${item.name} has no size data`);
+      const sizes =
+
+        Array.isArray(variant.sizes)
+
+          ? variant.sizes
+
+          : [];
+
+      if (!sizes.length) {
+
+        errors.push(
+          `${item.name} has no size data`
+        );
+
         continue;
+
       }
 
       // ===============================
-      //  FIX 3: FIND SIZE
+      // FIND SIZE
       // ===============================
-      const sizeData = variant.sizes.find(
-        (s) =>
-          String(s.size).trim().toUpperCase() ===
-          String(item.size).trim().toUpperCase()
+      const sizeData =
+        sizes.find((s) =>
+
+          String(s.size)
+            .trim()
+            .toUpperCase() ===
+
+          String(item.size)
+            .trim()
+            .toUpperCase()
+
+        );
+
+      // ===============================
+      // INVALID SIZE
+      // ===============================
+      if (!sizeData) {
+
+        errors.push(
+          `${item.name} (${item.size}) is invalid`
+        );
+
+        continue;
+
+      }
+
+      // ===============================
+      // STOCK CHECK
+      // ===============================
+      const stock =
+        Number(sizeData.stock) || 0;
+
+      if (stock <= 0) {
+
+        errors.push(
+          `${item.name} (${item.size}) is out of stock`
+        );
+
+        continue;
+
+      }
+
+      // ===============================
+      // QUANTITY CHECK
+      // ===============================
+      if (item.quantity > stock) {
+
+        errors.push(
+          `${item.name} (${item.size}) only has ${stock} left`
+        );
+
+        continue;
+
+      }
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Validation error:",
+        error
       );
 
-      if (!sizeData) {
-        errors.push(`${item.name} (${item.size}) is invalid`);
-        continue;
-      }
+      errors.push(
+        `Failed to validate ${item.name}`
+      );
 
-      // ===============================
-      //  STOCK CHECK
-      // ===============================
-      if (sizeData.stock <= 0) {
-        errors.push(`${item.name} (${item.size}) is out of stock`);
-        continue;
-      }
-
-      if (item.quantity > sizeData.stock) {
-        errors.push(
-          `${item.name} (${item.size}) only has ${sizeData.stock} left`
-        );
-        continue;
-      }
-
-    } catch (error) {
-      console.error("Validation error:", error);
-      errors.push(`Failed to validate ${item.name}`);
     }
+
   }
 
+  // ===============================
+  // RESULT
+  // ===============================
   return {
-    valid: errors.length === 0,
+
+    valid:
+      errors.length === 0,
+
     errors
+
   };
+
 }

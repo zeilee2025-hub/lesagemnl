@@ -31,7 +31,7 @@ const REGION_TO_ZONE = {
 };
 
 // ==============================
-// 💰 ZONE → BASE RATE (0–500g)
+//  ZONE → BASE RATE (0–500g)
 // ==============================
 const SHIPPING_RATES = {
   NCR: 85,
@@ -42,14 +42,14 @@ const SHIPPING_RATES = {
 };
 
 // ==============================
-// 📦 GET ZONE
+//  GET ZONE
 // ==============================
 export function getZone(region) {
   return REGION_TO_ZONE[region] || "Luzon";
 }
 
 // ==============================
-// 🚚 GET SHIPPING FEE (MVP: flat)
+//  GET SHIPPING FEE (MVP: flat)
 // ==============================
 export function getShippingFee(region) {
   const zone = getZone(region);
