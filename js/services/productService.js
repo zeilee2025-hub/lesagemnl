@@ -38,7 +38,6 @@ function normalizeSizes(sizes) {
 //  NORMALIZE PRODUCT (FINAL)
 // ===============================
 function normalizeProduct(product) {
-  console.log(" NORMALIZING:", product.id);
 
   let variants = [];
 

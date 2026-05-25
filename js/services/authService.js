@@ -63,7 +63,6 @@ export function initAuthListener(callback = null) {
 
         currentUser = null;
 
-        console.log("No authenticated user");
 
         if (typeof callback === "function") {
           callback(null);

@@ -8,7 +8,6 @@ from "../services/config/api.js";
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
-  console.log("SUCCESS PAGE");
 
   const orderText = document.getElementById("order-id");
   if (!orderText) return;
@@ -98,8 +97,6 @@ if (data.email) {
     //  CLEAR CART (SAFE)
     // ==========================
     localStorage.removeItem("cart");
-
-    console.log(" Order confirmed:", orderId);
 
   } catch (error) {
     console.error(" Success error:", error);

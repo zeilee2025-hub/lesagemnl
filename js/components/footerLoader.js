@@ -23,11 +23,8 @@ export async function loadFooter() {
   // ===============================
   const path = "/footer.html";
 
-  console.log(" Fetching footer from:", path);
-
   const res = await fetch(path);
 
-    console.log(" Fetch response status:", res.status);
 
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
@@ -35,17 +32,12 @@ export async function loadFooter() {
 
     const html = await res.text();
 
-    //  DEBUG: Check raw HTML
-    console.log(" Footer HTML loaded:", html);
-
     if (!html || !html.trim()) {
       throw new Error(" Footer HTML is EMPTY");
     }
 
     //  Inject HTML
     container.innerHTML = html;
-
-    console.log(" Footer injected into DOM");
 
     //  DEBUG: Confirm injection
     setTimeout(() => {
@@ -57,7 +49,7 @@ export async function loadFooter() {
     // ===============================
     try {
       initFooter();
-      console.log(" Footer logic initialized");
+
     } catch (err) {
       console.error(" Footer init error:", err);
     }

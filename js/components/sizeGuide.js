@@ -61,7 +61,6 @@ function getSizeData(type) {
     .trim()
     .toLowerCase();
 
-  console.log("SIZE GUIDE TYPE:", t);
 
   if (!t) return null;
 
