@@ -680,7 +680,7 @@ window.currentOrder = order;
     // ==========================
     if (
 
-  order.createdAt &&
+  order.expiresAt &&
 
   order.orderState ===
     "PENDING_PAYMENT"
