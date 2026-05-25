@@ -3,6 +3,8 @@
 // ==========================
 export function renderManualPaymentSummary(order) {
 
+  console.log("MANUAL ORDER:", order);
+
   const container =
     document.getElementById(
       "order-summary"
@@ -12,10 +14,13 @@ export function renderManualPaymentSummary(order) {
 
 
   // ==========================
-  // ORDER ITEMS
-  // ==========================
-  const items =
-    order.items || [];
+// ORDER ITEMS
+// ==========================
+const items =
+  order.items ||
+  order.cartItems ||
+  order.products ||
+  [];
 
 
   // ==========================
