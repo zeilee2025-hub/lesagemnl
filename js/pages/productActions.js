@@ -14,7 +14,7 @@ export function handleAddToCart(getPayload, openCart, setSizeError) {
     const { product, selectedSize } = getPayload();
     const variant = product?.selectedVariant;
 
-    // ❌ guard (multi-size only)
+    //  guard (multi-size only)
     if (!selectedSize && variant?.sizes?.length > 1) {
       setSizeError?.("Please select a size");
       return;
@@ -28,7 +28,7 @@ export function handleAddToCart(getPayload, openCart, setSizeError) {
 
     const after = getCart().length;
 
-    // ❌ blocked (stock / validation)
+    //  blocked (stock / validation)
     if (after === before) return;
 
     updateCartBadge();
@@ -67,7 +67,7 @@ export function handleBuyNow(getPayload, setSizeError) {
 
     const after = getCart().length;
 
-    // ❌ blocked
+    //  blocked
     if (after === before) return;
 
     updateCartBadge();

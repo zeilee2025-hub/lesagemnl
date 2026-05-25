@@ -86,172 +86,322 @@ function formatSize(size) {
   return size === "ONE_SIZE" ? "One Size" : size;
 }
 
-
-// ==========================
+  // ==========================
 //  INIT
 // ==========================
 init();
 
 async function init() {
+
   updateCartBadge();
 
   if (!productId) {
-    nameEl.textContent = "Product not found";
+
+    nameEl.textContent =
+      "Product not found";
+
     return;
+
   }
 
   try {
-    const product = await getProductById(productId);
+
+    const product =
+      await getProductById(productId);
 
     if (!product) {
-      nameEl.textContent = "Product not found";
+
+      nameEl.textContent =
+        "Product not found";
+
       return;
+
     }
 
     currentProduct = {
-  ...product,
-  type:
-    product.type ||
-    mapCategoryToType(
-      product.category || product.name
-    )
-};
 
-console.log("PRODUCT NAME:", product.name);
-console.log("PRODUCT CATEGORY:", product.category);
-console.log("PRODUCT TYPE:", currentProduct.type);
+      ...product,
 
-    currentProduct.selectedVariant = currentProduct.variants?.[0];
+      type:
 
+        product.type ||
+
+        mapCategoryToType(
+          product.category || product.name
+        )
+
+    };
+
+    console.log(
+      "PRODUCT NAME:",
+      product.name
+    );
+
+    console.log(
+      "PRODUCT CATEGORY:",
+      product.category
+    );
+
+    console.log(
+      "PRODUCT TYPE:",
+      currentProduct.type
+    );
+
+    // ==========================
+    // SUPPORT:
+    // variants OR colors
+    // ==========================
+    const variantsSource =
+
+      Array.isArray(currentProduct?.variants)
+
+        ? currentProduct.variants
+
+        : Array.isArray(currentProduct?.colors)
+
+          ? currentProduct.colors
+
+          : [];
+
+    // ==========================
+    // INITIAL VARIANT
+    // ==========================
+    currentProduct.selectedVariant =
+      variantsSource[0];
+
+    // ==========================
     // SAFE DEFAULT
+    // ==========================
     if (addBtn) {
+
       addBtn.disabled = true;
-      addBtn.textContent = "ADD TO BAG";
+
+      addBtn.textContent =
+        "ADD TO BAG";
+
     }
 
     renderProduct(currentProduct);
 
     // ==========================
-    //  COLOR SELECTOR
+    // COLOR SELECTOR
     // ==========================
-    initColorSelector(product.variants, colorContainer, (index) => {
-      selectedVariantIndex = index;
+    initColorSelector(
 
-      currentProduct.selectedVariant = currentProduct.variants[index];
-      const selectedVariant = currentProduct.selectedVariant;
+      variantsSource,
 
-      selectedSize = null;
-      stockMessage.textContent = "";
+      colorContainer,
 
-      if (addBtn) {
-        addBtn.disabled = true;
-        addBtn.textContent = "ADD TO BAG";
+      (index) => {
+
+        selectedVariantIndex = index;
+
+        currentProduct.selectedVariant =
+          variantsSource[index];
+
+        const selectedVariant =
+          currentProduct.selectedVariant;
+
+        selectedSize = null;
+
+        stockMessage.textContent = "";
+
+        if (addBtn) {
+
+          addBtn.disabled = true;
+
+          addBtn.textContent =
+            "ADD TO BAG";
+
+        }
+
+        selectedSizeText.textContent =
+
+          selectedVariant?.sizes?.length === 1
+
+            ? "Selected: One Size"
+
+            : "Select Size";
+
+        initProductGallery(
+          currentProduct,
+          {
+            imageEl,
+            thumbnailsContainer
+          }
+        );
+
+        initSizeSelector(
+
+          selectedVariant.sizes || [],
+
+          {
+            sizeContainer,
+            addBtn
+          },
+
+          handleSizeChange
+
+        );
+
+        // ONE SIZE AUTO
+        const sizes =
+          selectedVariant.sizes || [];
+
+        if (sizes.length === 1) {
+
+          const item = sizes[0];
+
+          const onlySize =
+
+            typeof item === "string"
+
+              ? item
+
+              : item.size;
+
+          selectedSize = onlySize;
+
+          selectedSizeText.textContent =
+            `Selected: ${formatSize(onlySize)}`;
+
+          handleSizeChange(
+            onlySize
+          );
+
+        }
+
       }
 
-      selectedSizeText.textContent =
-        selectedVariant?.sizes?.length === 1
-          ? "Selected: One Size"
-          : "Select Size";
-
-      initProductGallery(currentProduct, {
-        imageEl,
-        thumbnailsContainer
-      });
-
-      initSizeSelector(
-        selectedVariant.sizes || [],
-        {
-          sizeContainer,
-          addBtn
-        },
-        handleSizeChange
-      );
-
-      // ONE SIZE AUTO
-      const sizes = selectedVariant.sizes || [];
-
-      if (sizes.length === 1) {
-        const item = sizes[0];
-        const onlySize = typeof item === "string" ? item : item.size;
-
-        selectedSize = onlySize;
-
-        selectedSizeText.textContent = `Selected: ${formatSize(onlySize)}`;
-
-        handleSizeChange(onlySize);
-      }
-    });
-
+    );
 
     // ==========================
-    //  INITIAL SIZE SELECTOR
+    // INITIAL SIZE SELECTOR
     // ==========================
     initSizeSelector(
+
       currentProduct.selectedVariant?.sizes || [],
+
       {
         sizeContainer,
         addBtn
       },
+
       handleSizeChange
+
     );
 
+    // ==========================
     // ONE SIZE AUTO INIT
-    const sizes = currentProduct.selectedVariant?.sizes || [];
+    // ==========================
+    const sizes =
+      currentProduct.selectedVariant?.sizes || [];
 
     if (sizes.length === 1) {
+
       const item = sizes[0];
-      const onlySize = typeof item === "string" ? item : item.size;
+
+      const onlySize =
+
+        typeof item === "string"
+
+          ? item
+
+          : item.size;
 
       selectedSize = onlySize;
 
-      selectedSizeText.textContent = `Selected: ${formatSize(onlySize)}`;
+      selectedSizeText.textContent =
+        `Selected: ${formatSize(onlySize)}`;
 
-      handleSizeChange(onlySize);
-    }
-
-
-    // ==========================
-    //  ACTIONS (NEW SYSTEM)
-    // ==========================
-    handleAddToCart(
-  () => ({
-    product: currentProduct,
-    selectedSize
-  }),
-  openCart,
-  (msg) => { sizeError.textContent = msg; }
-);
-
-handleBuyNow(
-  () => ({
-    product: currentProduct,
-    selectedSize
-  }),
-  (msg) => { sizeError.textContent = msg; }
-);
-
-    // ==========================
-    //  SIZE CHART
-    // ==========================
-    sizeChartBtn?.addEventListener("click", () => {
-      const modalContent = document.querySelector(".modal__body");
-
-      if (!modalContent || !currentProduct) return;
-
-      modalContent.innerHTML = renderSizeGuide(
-        currentProduct.type,
-        selectedSize
+      handleSizeChange(
+        onlySize
       );
 
-      sizeChartModal.classList.add("active");
-    });
+    }
 
-  } catch (error) {
-    console.error("Error loading product:", error);
-    nameEl.textContent = "Failed to load product";
+    // ==========================
+    // ACTIONS
+    // ==========================
+    handleAddToCart(
+
+      () => ({
+        product: currentProduct,
+        selectedSize
+      }),
+
+      openCart,
+
+      (msg) => {
+
+        sizeError.textContent = msg;
+
+      }
+
+    );
+
+    handleBuyNow(
+
+      () => ({
+        product: currentProduct,
+        selectedSize
+      }),
+
+      (msg) => {
+
+        sizeError.textContent = msg;
+
+      }
+
+    );
+
+    // ==========================
+    // SIZE CHART
+    // ==========================
+    sizeChartBtn?.addEventListener(
+      "click",
+      () => {
+
+        const modalContent =
+          document.querySelector(
+            ".modal__body"
+          );
+
+        if (
+          !modalContent ||
+          !currentProduct
+        ) {
+          return;
+        }
+
+        modalContent.innerHTML =
+          renderSizeGuide(
+            currentProduct.type,
+            selectedSize
+          );
+
+        sizeChartModal.classList.add(
+          "active"
+        );
+
+      }
+    );
+
   }
-}
 
+  catch (error) {
+
+    console.error(
+  "Error loading product:",
+  error
+);
+
+    nameEl.textContent =
+      "Failed to load product";
+
+  }
+
+}
 
 // ==========================
 //  SIZE CHANGE HANDLER
