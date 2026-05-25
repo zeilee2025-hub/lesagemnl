@@ -50,6 +50,8 @@
   justify-content: center;
 
   perspective: 1000px;
+
+  touch-action: pan-y;
 }
 
 .product-detail__image {
