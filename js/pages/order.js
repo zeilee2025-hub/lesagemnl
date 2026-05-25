@@ -320,30 +320,55 @@ timelineEl.innerHTML = timeline.map(event => `
 
   }
 
-  // ==========================
+    // ==========================
   // PROOF
   // ==========================
   if (order.proofUrl) {
-    const btn = document.getElementById("proof-toggle");
-    const box = document.getElementById("proof-container");
 
-    btn.classList.remove("hidden");
+    const btn =
+      document.getElementById(
+        "proof-toggle"
+      );
 
-    box.innerHTML = `
-      <img src="${order.proofUrl}" />
-    `;
+    const box =
+      document.getElementById(
+        "proof-container"
+      );
 
-    box.classList.add("hidden");
+    if (btn && box) {
 
-    btn.onclick = () => {
-      box.classList.toggle("hidden");
+      btn.classList.remove(
+        "hidden"
+      );
 
-      btn.textContent = box.classList.contains("hidden")
-        ? "View Proof"
-        : "Hide Proof";
-    };
+      box.innerHTML = `
+        <img src="${order.proofUrl}" />
+      `;
+
+      box.classList.add(
+        "hidden"
+      );
+
+      btn.onclick = () => {
+
+        box.classList.toggle(
+          "hidden"
+        );
+
+        btn.textContent =
+          box.classList.contains(
+            "hidden"
+          )
+
+            ? "View Proof"
+
+            : "Hide Proof";
+
+      };
+
+    }
+
   }
-
   // ==========================
   // COPY
   // ==========================
