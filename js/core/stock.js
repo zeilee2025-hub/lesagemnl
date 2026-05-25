@@ -1,150 +1,346 @@
-import { getProductById, updateProductStock } from "../services/productService.js";
+import {
+  getProductById,
+  updateProductStock
+} from "../services/productService.js";
 
 
 // ==========================
-// 🔄 SYNC CART WITH STOCK (FIXED ✅)
+// RESOLVE PRODUCT VARIANT
+// ==========================
+function resolveVariant(product, item) {
+
+  const variants =
+    Array.isArray(product.variants)
+      ? product.variants
+      : [];
+
+  const hasSingleVariant =
+    variants.length === 1;
+
+  const matchedVariant =
+    variants.find((v) =>
+
+      String(v.name || "")
+        .trim()
+        .toLowerCase() ===
+
+      String(item.color || "")
+        .trim()
+        .toLowerCase()
+
+    );
+
+  // ==========================
+  // STRICT MATCH
+  // ==========================
+  if (matchedVariant) {
+    return matchedVariant;
+  }
+
+  // ==========================
+  // SAFE SINGLE VARIANT FALLBACK
+  // ==========================
+  if (hasSingleVariant) {
+    return variants[0];
+  }
+
+  return null;
+
+}
+
+
+// ==========================
+// SYNC CART WITH STOCK
 // ==========================
 export async function syncCartWithStock(cart) {
+
   const updatedCart = [];
+
   const changes = [];
 
   for (const item of cart) {
-    try {
-      const product = await getProductById(item.id);
 
-      // ❌ Product missing
+    try {
+
+      const product =
+        await getProductById(item.id);
+
+      // ==========================
+      // PRODUCT REMOVED
+      // ==========================
       if (!product) {
-        changes.push(`${item.name} was removed (no longer available)`);
+
+        changes.push(
+          `${item.name} was removed (no longer available)`
+        );
+
         continue;
+
       }
 
-      // ✅ FIND MATCHING VARIANT (SAFE NORMALIZATION)
+      // ==========================
+      // RESOLVE VARIANT
+      // ==========================
       const variant =
-        product.variants?.find(v =>
-          (v.name || "").toLowerCase().trim() ===
-          (item.color || "").toLowerCase().trim()
-        ) ||
-        product.variants?.[0];
+        resolveVariant(product, item);
 
       if (!variant) {
-        changes.push(`${item.name} has invalid variant`);
+
+        changes.push(
+          `${item.name} variant is no longer available`
+        );
+
         continue;
+
       }
 
-      const sizes = Array.isArray(variant.sizes) ? variant.sizes : [];
+      // ==========================
+      // VALIDATE SIZES
+      // ==========================
+      const sizes =
+        Array.isArray(variant.sizes)
+          ? variant.sizes
+          : [];
 
-      // ❌ No sizes
       if (!sizes.length) {
-        changes.push(`${item.name} is out of stock`);
+
+        changes.push(
+          `${item.name} is out of stock`
+        );
+
         continue;
+
       }
 
-      // ✅ MATCH SIZE (SAFE)
-      const sizeData = sizes.find(
-        (s) =>
-          String(s.size).trim().toUpperCase() ===
-          String(item.size).trim().toUpperCase()
-      );
+      // ==========================
+      // MATCH SIZE
+      // ==========================
+      const sizeData =
+        sizes.find((s) =>
 
-      // ❌ Invalid size
+          String(s.size)
+            .trim()
+            .toUpperCase() ===
+
+          String(item.size)
+            .trim()
+            .toUpperCase()
+
+        );
+
+      // ==========================
+      // INVALID SIZE
+      // ==========================
       if (!sizeData) {
-        changes.push(`${item.name} (${item.size}) was removed (invalid size)`);
+
+        changes.push(
+          `${item.name} (${item.size}) was removed (invalid size)`
+        );
+
         continue;
+
       }
 
-      const stock = Number(sizeData.stock) || 0;
+      const stock =
+        Number(sizeData.stock) || 0;
 
-      // ❌ Out of stock
+      // ==========================
+      // OUT OF STOCK
+      // ==========================
       if (stock <= 0) {
-        changes.push(`${item.name} (${item.size}) is out of stock and was removed`);
+
+        changes.push(
+          `${item.name} (${item.size}) is out of stock and was removed`
+        );
+
         continue;
+
       }
 
-      // ⚠️ Adjust quantity safely
+      // ==========================
+      // ADJUST QUANTITY
+      // ==========================
       if (item.quantity > stock) {
+
         updatedCart.push({
+
           ...item,
+
           quantity: stock
+
         });
 
         changes.push(
           `${item.name} (${item.size}) quantity adjusted to ${stock}`
         );
-      } else {
-        updatedCart.push(item);
+
       }
 
-    } catch (error) {
-      console.error("Stock sync error:", error);
-      changes.push(`Failed to validate ${item.name}`);
+      // ==========================
+      // VALID ITEM
+      // ==========================
+      else {
+
+        updatedCart.push(item);
+
+      }
+
     }
+
+    catch (error) {
+
+      console.error(
+        "Stock sync error:",
+        error
+      );
+
+      changes.push(
+        `Failed to validate ${item.name}`
+      );
+
+    }
+
   }
 
   return {
+
     updatedCart,
     changes
+
   };
+
 }
 
 
 // ==========================
-// 🔥 DEDUCT STOCK (FIXED ✅)
+// DEDUCT STOCK
 // ==========================
 export async function deductStock(cart) {
-  for (const item of cart) {
-    const product = await getProductById(item.id);
 
+  for (const item of cart) {
+
+    const product =
+      await getProductById(item.id);
+
+    // ==========================
+    // PRODUCT MISSING
+    // ==========================
     if (!product) {
-      throw new Error(`${item.name} no longer exists`);
+
+      throw new Error(
+        `${item.name} no longer exists`
+      );
+
     }
 
-    // ✅ FIND VARIANT
+    // ==========================
+    // RESOLVE VARIANT
+    // ==========================
     const variant =
-      product.variants?.find(v =>
-        (v.name || "").toLowerCase().trim() ===
-        (item.color || "").toLowerCase().trim()
-      ) ||
-      product.variants?.[0];
+      resolveVariant(product, item);
 
     if (!variant) {
-      throw new Error(`${item.name} has invalid variant`);
+
+      throw new Error(
+        `${item.name} variant no longer exists`
+      );
+
     }
 
-    const sizes = Array.isArray(variant.sizes) ? variant.sizes : [];
+    // ==========================
+    // VALIDATE SIZES
+    // ==========================
+    const sizes =
+      Array.isArray(variant.sizes)
+        ? variant.sizes
+        : [];
 
     if (!sizes.length) {
-      throw new Error(`${item.name} has no stock data`);
+
+      throw new Error(
+        `${item.name} has no stock data`
+      );
+
     }
 
-    // ✅ UPDATE SIZES INSIDE VARIANT
-    const updatedSizes = sizes.map((s) => {
-      if (
-        String(s.size).trim().toUpperCase() ===
-        String(item.size).trim().toUpperCase()
-      ) {
-        const newStock = (Number(s.stock) || 0) - item.quantity;
+    // ==========================
+    // TRACK MATCHED SIZE
+    // ==========================
+    let matchedSize = false;
 
+    // ==========================
+    // UPDATE SIZES
+    // ==========================
+    const updatedSizes =
+      sizes.map((s) => {
+
+        const isMatch =
+
+          String(s.size)
+            .trim()
+            .toUpperCase() ===
+
+          String(item.size)
+            .trim()
+            .toUpperCase();
+
+        if (!isMatch) {
+          return s;
+        }
+
+        matchedSize = true;
+
+        const currentStock =
+          Number(s.stock) || 0;
+
+        const newStock =
+          currentStock - item.quantity;
+
+        // ==========================
+        // PREVENT NEGATIVE STOCK
+        // ==========================
         if (newStock < 0) {
-          throw new Error(`${item.name} stock changed, try again`);
+
+          throw new Error(
+            `${item.name} stock changed, try again`
+          );
+
         }
 
         return {
+
           ...s,
+
           stock: newStock
+
         };
-      }
 
-      return s;
-    });
+      });
 
-    // ⚠️ IMPORTANT:
-    // Your DB currently expects root "sizes"
-    // (we keep compatibility to avoid breaking your backend)
+    // ==========================
+    // INVALID SIZE
+    // ==========================
+    if (!matchedSize) {
+
+      throw new Error(
+        `${item.name} size no longer exists`
+      );
+
+    }
+
+    // ==========================
+    // UPDATE PRODUCT STOCK
+    // ==========================
     await updateProductStock(
-  item.id,
-  variant.name,
-  updatedSizes
-);
+
+      item.id,
+
+      variant.name,
+
+      updatedSizes
+
+    );
 
   }
+
 }

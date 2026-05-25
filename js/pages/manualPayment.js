@@ -1,14 +1,11 @@
 // ==========================
 // IMPORTS
 // ==========================
+
+import { API_BASE_URL }
+from "../services/config/api.js";
+
 import { initPolicyModal } from "../components/policyModal.js";
-
-import { db } from "../core/firebase.js";
-
-import {
-  doc,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import {
   initManualPaymentClipboard
@@ -627,31 +624,39 @@ if (
 
 }
 
-
 // ==========================
-// REAL-TIME ORDER LISTENER
+// FETCH ORDER
 // ==========================
-function subscribeToOrder(orderId) {
+async function fetchOrder() {
 
   if (!orderId) return;
 
+  try {
 
-  const ref =
-    doc(db, "orders", orderId);
+    const response =
+      await fetch(
 
+        `${API_BASE_URL}/order-status?orderId=${orderId}`
 
-  onSnapshot(ref, (snapshot) => {
+      );
 
-    if (!snapshot.exists()) return;
+    const order =
+      await response.json();
 
+    if (!response.ok) {
 
-    const order = {
-  id: snapshot.id,
-  ...snapshot.data()
-};
+      throw new Error(
+        order.error ||
+        "Failed to fetch order"
+      );
 
-window.currentOrder = order;
+    }
 
+    // ==========================
+    // STORE ORDER
+    // ==========================
+    window.currentOrder =
+      order;
 
     // ==========================
     // ORDER ID
@@ -667,7 +672,6 @@ window.currentOrder = order;
         order.orderNumber || order.id;
 
     }
-
 
     // ==========================
     // STATUS LABEL
@@ -689,7 +693,6 @@ window.currentOrder = order;
 
     }
 
-
     // ==========================
     // UI
     // ==========================
@@ -703,73 +706,47 @@ window.currentOrder = order;
 
     renderManualPaymentActions(order);
 
-
     // ==========================
     // COUNTDOWN
     // ==========================
     if (
 
-  order.expiresAt &&
+      order.expiresAt &&
 
-  order.orderState ===
-    "PENDING_PAYMENT"
+      order.orderState ===
+        "PENDING_PAYMENT"
 
-) {
+    ) {
 
-      let expiryTime;
-
-
-if (order.expiresAt?.toMillis) {
-
-  expiryTime =
-    order.expiresAt.toMillis();
-
-}
-
-else if (
-  typeof order.expiresAt === "number"
-) {
-
-  expiryTime =
-    order.expiresAt;
-
-}
-
-else if (
-  typeof order.expiresAt === "string"
-) {
-
-  expiryTime =
-    new Date(order.expiresAt)
-      .getTime();
-
-}
-
-else {
-
-  console.warn(
-    "Invalid expiresAt format",
-    order.expiresAt
-  );
-
-  return;
-
-}
+      const expiryTime =
+        new Date(
+          order.expiresAt
+        ).getTime();
 
       startManualPaymentCountdown(
         expiryTime
       );
 
-    } else {
+    }
+
+    else {
 
       stopManualPaymentCountdown();
 
     }
 
-  });
+  }
+
+  catch (error) {
+
+    console.error(
+      "Order polling error:",
+      error
+    );
+
+  }
 
 }
-
 
 // ==========================
 // INITIALIZE PAGE
@@ -782,9 +759,25 @@ document.addEventListener(
 
     initPolicyModal();
 
-    subscribeToOrder(orderId);
+    initManualPaymentUpload(
+      orderId
+    );
 
-    initManualPaymentUpload(orderId);
+    // ==========================
+    // INITIAL FETCH
+    // ==========================
+    fetchOrder();
+
+    // ==========================
+    // POLLING
+    // ==========================
+    setInterval(
+
+      fetchOrder,
+
+      5000
+
+    );
 
   }
 );
