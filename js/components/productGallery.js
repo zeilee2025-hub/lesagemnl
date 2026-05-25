@@ -7,6 +7,7 @@ export function initProductGallery(product, elements) {
   const { imageEl, thumbnailsContainer } = elements;
 
   let currentImageIndex = 0;
+  let swipeInitialized = false;
 
   // ==========================
 // RESOLVE VARIANT
@@ -100,64 +101,190 @@ function buildImageArray(product) {
   return images;
 }
 
-  // ==========================
-  // THUMBNAILS
-  // ==========================
-  function renderThumbnails(images) {
+// ==========================
+// ACTIVE IMAGE
+// ==========================
+function updateActiveImage(index) {
 
-    if (!thumbnailsContainer) return;
+  if (
+    index < 0 ||
+    index >= productImages.length
+  ) return;
 
-    thumbnailsContainer.innerHTML = "";
+  const nextImage = productImages[index];
 
-    images.forEach((img, index) => {
+  imageEl.classList.add("image-fade");
 
-      const thumb = document.createElement("img");
+  setTimeout(() => {
 
-      thumb.src = img;
+    imageEl.src = nextImage;
 
-      thumb.classList.add(
-        "product-detail__thumbnail"
+    imageEl.style.transform =
+      "scale(1.02) translate(0, 0)";
+
+    imageEl.classList.remove("image-fade");
+
+  }, 180);
+
+  currentImageIndex = index;
+
+  thumbnailsContainer
+    ?.querySelectorAll(
+      ".product-detail__thumbnail"
+    )
+    .forEach((thumbnail, thumbIndex) => {
+
+      thumbnail.classList.toggle(
+        "active",
+        thumbIndex === index
       );
 
-      if (index === 0) {
-        thumb.classList.add("active");
-      }
+    });
+}
 
-      thumb.addEventListener("click", () => {
 
-        if (currentImageIndex === index) return;
+// ==========================
+// THUMBNAILS
+// ==========================
+function renderThumbnails(images) {
 
-        imageEl.classList.add("image-fade");
+  if (!thumbnailsContainer) return;
 
-        setTimeout(() => {
+  thumbnailsContainer.innerHTML = "";
 
-          imageEl.src = img;
+  images.forEach((img, index) => {
 
-          imageEl.style.transform =
-            "scale(1.02) translate(0, 0)";
+    const thumb = document.createElement("img");
 
-          imageEl.classList.remove("image-fade");
+    thumb.src = img;
 
-        }, 180);
+    thumb.classList.add(
+      "product-detail__thumbnail"
+    );
 
-        currentImageIndex = index;
+    if (index === 0) {
+      thumb.classList.add("active");
+    }
 
-        thumbnailsContainer
-          .querySelectorAll(
-            ".product-detail__thumbnail"
-          )
-          .forEach(thumbnail => {
-            thumbnail.classList.remove("active");
-          });
+    thumb.addEventListener("click", () => {
 
-        thumb.classList.add("active");
+      if (currentImageIndex === index) return;
 
-      });
-
-      thumbnailsContainer.appendChild(thumb);
+      updateActiveImage(index);
 
     });
+
+    thumbnailsContainer.appendChild(thumb);
+
+  });
+
+  if (!swipeInitialized) {
+  initMobileSwipe();
+  swipeInitialized = true;
+}
+
+}
+
+// ==========================
+// MOBILE SWIPE
+// ==========================
+function initMobileSwipe() {
+
+  // DESKTOP SHOULD NOT USE SWIPE
+  if (
+    window.matchMedia(
+      "(hover: hover) and (pointer: fine)"
+    ).matches
+  ) {
+    return;
   }
+
+  const container =
+    imageEl.parentElement;
+
+  if (!container) return;
+
+  let startX = 0;
+  let currentX = 0;
+
+  let isSwiping = false;
+
+  const swipeThreshold = 50;
+
+  // ==========================
+  // TOUCH START
+  // ==========================
+  container.addEventListener(
+    "touchstart",
+    (e) => {
+
+      startX = e.touches[0].clientX;
+
+      currentX = startX;
+
+      isSwiping = true;
+
+    },
+    { passive: true }
+  );
+
+  // ==========================
+  // TOUCH MOVE
+  // ==========================
+  container.addEventListener(
+    "touchmove",
+    (e) => {
+
+      if (!isSwiping) return;
+
+      currentX =
+        e.touches[0].clientX;
+
+    },
+    { passive: true }
+  );
+
+  // ==========================
+  // TOUCH END
+  // ==========================
+  container.addEventListener("touchend", () => {
+
+    if (!isSwiping) return;
+
+    const deltaX =
+      currentX - startX;
+
+    // SWIPE LEFT
+    if (deltaX < -swipeThreshold) {
+
+      const nextIndex =
+        currentImageIndex + 1;
+
+      if (nextIndex < productImages.length) {
+        updateActiveImage(nextIndex);
+      }
+
+    }
+
+    // SWIPE RIGHT
+    else if (
+      deltaX > swipeThreshold
+    ) {
+
+      const prevIndex =
+        currentImageIndex - 1;
+
+      if (prevIndex >= 0) {
+        updateActiveImage(prevIndex);
+      }
+
+    }
+
+    isSwiping = false;
+
+  });
+
+}
 
   // ==========================
   // ADVANCED MOVEMENT
