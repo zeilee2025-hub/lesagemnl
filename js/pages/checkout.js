@@ -467,17 +467,27 @@ async function handleCheckout() {
 
     if (changes.length > 0) {
 
-      alert(
-        "Cart updated:\n\n" +
-        changes.join("\n")
-      );
+  alert(
+    "Cart updated:\n\n" +
+    changes.join("\n")
+  );
 
-      updateSummary();
+  renderCheckoutItems(
+    itemsContainer,
+    updatedCart
+  );
 
-      resetButton(button);
+  updateCartBadge(
+    updatedCart
+  );
 
-      return;
-    }
+  updateSummary();
+
+  resetButton(button);
+
+  return;
+
+}
 
 
     /* =========================
