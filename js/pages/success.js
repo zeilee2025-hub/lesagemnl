@@ -98,6 +98,9 @@ if (data.email) {
     // ==========================
     localStorage.removeItem("cart");
 
+// Optional cleanup
+localStorage.removeItem("checkoutData");
+
   } catch (error) {
     console.error(" Success error:", error);
     showError("Something went wrong.");

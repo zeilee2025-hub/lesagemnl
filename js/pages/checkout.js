@@ -651,26 +651,11 @@ localStorage.setItem(
 
 if (paymentMethod === "PAYMONGO") {
 
-  // =========================
-  // CLEAR CART
-  // =========================
-  saveCart([]);
-
-  updateCartBadge([]);
-
-  // =========================
-  // CREATE PAYMENT SESSION
-  // =========================
   await createPaymentSession({
-
     items: cartData,
-
     totals,
-
     customer,
-
     orderId
-
   });
 
 }
