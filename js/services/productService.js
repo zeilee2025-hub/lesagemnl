@@ -216,18 +216,31 @@ export function listenToProducts(callback) {
 // ===============================
 // GET SINGLE PRODUCT
 // ===============================
-export async function getProductById(id) {
+export async function getProductById(
+  id,
+  options = {}
+) {
+
+  const {
+    fresh = false
+  } = options;
 
   try {
 
     // ===============================
     // MEMORY CACHE
     // ===============================
-    if (productCache.has(id)) {
+    if (
 
-      return productCache.get(id);
+  !fresh &&
 
-    }
+  productCache.has(id)
+
+) {
+
+  return productCache.get(id);
+
+}
 
     // ===============================
     // SESSION CACHE
@@ -236,18 +249,24 @@ export async function getProductById(id) {
       `product-${id}`;
 
     const cached =
-      sessionStorage.getItem(sessionKey);
+  sessionStorage.getItem(sessionKey);
 
-    if (cached) {
+if (
 
-      const parsed =
-        JSON.parse(cached);
+  !fresh &&
 
-      productCache.set(id, parsed);
+  cached
 
-      return parsed;
+) {
 
-    }
+  const parsed =
+    JSON.parse(cached);
+
+  productCache.set(id, parsed);
+
+  return parsed;
+
+}
 
     // ===============================
     // FIRESTORE FETCH

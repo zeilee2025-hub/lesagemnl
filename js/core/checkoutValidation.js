@@ -38,7 +38,12 @@ export async function validateCartBeforeCheckout(cart) {
     try {
 
       const product =
-        await getProductById(item.id);
+  await getProductById(
+    item.id,
+    {
+      fresh: true
+    }
+  );
 
       // ===============================
       // SUPPORT BOTH:
