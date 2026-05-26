@@ -1,12 +1,12 @@
 // /services/locationService.js
 
 // ==========================
-// 🧠 CACHE (prevents re-fetch)
+//  CACHE (prevents re-fetch)
 // ==========================
 let locationsCache = null;
 
 // ==========================
-// 🚀 LOAD DATA (LAZY)
+//  LOAD DATA (LAZY)
 // ==========================
 async function loadLocations() {
   if (locationsCache) return locationsCache;
@@ -30,7 +30,7 @@ async function loadLocations() {
 }
 
 // ==========================
-// 📍 GET REGIONS
+//  GET REGIONS
 // ==========================
 export async function getRegions() {
   const data = await loadLocations();
@@ -38,7 +38,7 @@ export async function getRegions() {
 }
 
 // ==========================
-// 🏙 GET PROVINCES
+//  GET PROVINCES
 // ==========================
 export async function getProvinces(regionName) {
   if (!regionName) return [];
@@ -50,7 +50,7 @@ export async function getProvinces(regionName) {
 }
 
 // ==========================
-// 🏢 GET CITIES
+//  GET CITIES
 // ==========================
 export async function getCities(regionName, provinceName) {
   if (!regionName || !provinceName) return [];
@@ -64,7 +64,7 @@ export async function getCities(regionName, provinceName) {
 }
 
 // ==========================
-// 🔁 FIND REGION BY PROVINCE (NEW)
+//  FIND REGION BY PROVINCE (NEW)
 // ==========================
 export async function findRegionByProvince(provinceName) {
   if (!provinceName) return null;
