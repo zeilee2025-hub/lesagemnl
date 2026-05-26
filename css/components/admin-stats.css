@@ -32,3 +32,16 @@
   font-weight: 700;
   color: #111;
 }
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media (max-width: 768px) {
+
+  .admin-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+}

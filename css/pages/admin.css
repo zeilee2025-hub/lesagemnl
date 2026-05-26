@@ -76,7 +76,7 @@
 }
 
 .admin__filter-btn {
-  padding: 6px 12px;
+  padding: 8px 14px;
 
   border: 1px solid #ddd;
   border-radius: 999px;
@@ -101,17 +101,17 @@
   color: #fff;
 }
 
+
 /* ==========================
    ADMIN HEADER TOP
 ========================== */
 
 .admin__header-top {
-
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 20px;
 
+  gap: 20px;
 }
 
 
@@ -120,7 +120,6 @@
 ========================== */
 
 .admin__logout-btn {
-
   border: 1px solid #ddd;
   background: white;
 
@@ -134,13 +133,56 @@
   font-weight: 500;
 
   transition: all 0.2s ease;
+}
 
+.admin__logout-btn:hover {
+  background: #111;
+  color: white;
 }
 
 
-.admin__logout-btn:hover {
+/* ==========================
+   MOBILE
+========================== */
 
-  background: #111;
-  color: white;
+@media (max-width: 768px) {
+
+  .admin {
+    padding: 28px 16px 60px;
+  }
+
+  .admin__header {
+    margin-bottom: 24px;
+  }
+
+  .admin__header-top {
+    align-items: center;
+  }
+
+  .admin__title {
+    font-size: 24px;
+  }
+
+  .admin__subtitle {
+    max-width: 220px;
+  }
+
+  .admin__filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+
+    padding-bottom: 4px;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .admin__filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin__filter-btn {
+    flex-shrink: 0;
+  }
 
 }
