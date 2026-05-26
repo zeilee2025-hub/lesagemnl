@@ -52,5 +52,6 @@ export function getZone(region) {
 //  GET SHIPPING FEE (MVP: flat)
 // ==============================
 export function getShippingFee(region) {
-  return 0;
+  const zone = getZone(region);
+  return SHIPPING_RATES[zone] || 95;
 }
