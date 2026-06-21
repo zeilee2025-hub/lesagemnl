@@ -14,31 +14,96 @@
     Admin Login
   </title>
 
+  <link
+    rel="stylesheet"
+    href="./css/base.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="./css/pages/admin-login.css"
+  />
+
 </head>
 
-<body>
+<body class="admin-login-page">
 
-  <h1>
-    Admin Login
-  </h1>
+  <main class="admin-login">
 
-  <input
-    type="email"
-    id="admin-email"
-    placeholder="Admin Email"
-  />
+    <section
+      class="admin-login__card"
+      aria-labelledby="admin-login-title"
+    >
 
-  <input
-    type="password"
-    id="admin-password"
-    placeholder="Password"
-  />
+      <div class="admin-login__header">
 
-  <button id="admin-login-btn">
+        <p class="admin-login__eyebrow">
+          LÉ SAGE MNL / Admin Portal
+        </p>
 
-    Login
+        <h1
+          class="admin-login__title"
+          id="admin-login-title"
+        >
+          Admin Login
+        </h1>
 
-  </button>
+        <p class="admin-login__text">
+          Sign in with an authorized administrator account to manage orders.
+        </p>
+
+      </div>
+
+      <div class="admin-login__form">
+
+        <label
+          class="admin-login__field"
+          for="admin-email"
+        >
+          <span>Email</span>
+
+          <input
+            type="email"
+            id="admin-email"
+            class="admin-login__input"
+            placeholder="Admin Email"
+            autocomplete="email"
+          />
+        </label>
+
+        <label
+          class="admin-login__field"
+          for="admin-password"
+        >
+          <span>Password</span>
+
+          <input
+            type="password"
+            id="admin-password"
+            class="admin-login__input"
+            placeholder="Password"
+            autocomplete="current-password"
+          />
+        </label>
+
+        <p
+          class="admin-login__error"
+          id="admin-login-error"
+          aria-live="polite"
+        ></p>
+
+        <button
+          id="admin-login-btn"
+          class="admin-login__button"
+        >
+          Login
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
 
   <script
     type="module"

@@ -12,9 +12,15 @@ export function renderOrders(container, orders) {
 
           <div class="admin-order__top">
 
-            <span class="admin-order__id">
-              ${order.id}
-            </span>
+            <div class="admin-order__identity">
+              <span class="admin-order__eyebrow">
+                Order
+              </span>
+
+              <span class="admin-order__id">
+                ${order.id}
+              </span>
+            </div>
 
             <span class="
               admin-order__status
@@ -27,52 +33,50 @@ export function renderOrders(container, orders) {
 
           <div class="admin-order__bottom">
 
-  <div>
+            <div>
+              <span class="admin-order__total-preview">
+                &#8369;${calculateTotal(order)}
+              </span>
 
-    <span>
-      ₱${calculateTotal(order)}
-    </span>
+              <div class="admin-order__payment-method">
+                ${
+                  order.paymentMethod === "PAYMONGO"
+                    ? "PayMongo"
+                    : "Manual Payment"
+                }
+              </div>
+            </div>
 
-    <div class="admin-order__payment-method">
+            <span class="admin-order__date">
+              ${formatDate(order)}
+            </span>
 
-      ${
-        order.paymentMethod === "PAYMONGO"
+          </div>
 
-          ? "PayMongo"
+          <div class="
+            admin-order__items
+            hidden
+          ">
 
-          : "Manual Payment"
-      }
+            <div class="admin-order__expanded-inner">
 
-    </div>
+              ${renderCustomer(order)}
 
-  </div>
+              ${renderProof(order)}
 
-  <span>
-    ${formatDate(order)}
-  </span>
+              ${renderItems(order.items || [])}
 
-</div>
+              ${renderSummary(order)}
 
-        <div class="
-          admin-order__items
-          hidden
-        ">
+              ${renderTracking(order)}
 
-          ${renderCustomer(order)}
+              ${renderTimeline(order)}
 
-          ${renderProof(order)}
+              <div class="admin-order__actions">
+                ${renderActions(order)}
+              </div>
 
-          ${renderItems(order.items || [])}
-
-          ${renderSummary(order)}
-
-          ${renderTracking(order)}
-
-${renderTimeline(order)}
-
-<div class="admin-order__actions">
-
-            ${renderActions(order)}
+            </div>
 
           </div>
 
@@ -93,27 +97,49 @@ ${renderTimeline(order)}
 function renderCustomer(order) {
 
   return `
-    <div class="admin-order__customer">
+    <div class="admin-order__section admin-order__customer">
 
       <p class="admin-order__section-title">
         Customer
       </p>
 
-      <p>
-        ${order.firstName || ""}
-        ${order.lastName || ""}
-      </p>
+      <div class="admin-order__customer-grid">
 
-      <p>
-        ${order.phone || "—"}
-      </p>
+        <div>
+          <span class="admin-order__label">
+            Name
+          </span>
 
-      <p>
-        ${order.address || "—"}
-        <br/>
-        ${order.city || ""},
-        ${order.province || ""}
-      </p>
+          <p>
+            ${order.firstName || ""}
+            ${order.lastName || ""}
+          </p>
+        </div>
+
+        <div>
+          <span class="admin-order__label">
+            Phone
+          </span>
+
+          <p>
+            ${order.phone || "&mdash;"}
+          </p>
+        </div>
+
+        <div class="admin-order__customer-address">
+          <span class="admin-order__label">
+            Address
+          </span>
+
+          <p>
+            ${order.address || "&mdash;"}
+            <br/>
+            ${order.city || ""},
+            ${order.province || ""}
+          </p>
+        </div>
+
+      </div>
 
     </div>
   `;
@@ -124,18 +150,15 @@ function renderCustomer(order) {
 /* ==========================
    TRACKING
 ========================== */
-function renderTracking(order) {
 
-  /* ==========================
-     PAID → SHOW INPUT
-  ========================== */
+function renderTracking(order) {
 
   if (
     order.orderState === "PAID"
   ) {
 
     return `
-      <div class="admin-order__tracking">
+      <div class="admin-order__section admin-order__tracking">
 
         <p class="admin-order__section-title">
           Shipping
@@ -157,18 +180,13 @@ function renderTracking(order) {
 
   }
 
-
-  /* ==========================
-     SHIPPED → SHOW SAVED TRACKING
-  ========================== */
-
   if (
-  order.orderState === "SHIPPED" ||
-  order.orderState === "COMPLETED"
-) {
+    order.orderState === "SHIPPED" ||
+    order.orderState === "COMPLETED"
+  ) {
 
     return `
-      <div class="admin-order__tracking">
+      <div class="admin-order__section admin-order__tracking">
 
         <p class="admin-order__section-title">
           Shipment Details
@@ -177,7 +195,7 @@ function renderTracking(order) {
         <p class="admin-order__tracking-display">
           Tracking Number:
           <strong>
-            ${order.trackingNumber || "—"}
+            ${order.trackingNumber || "&mdash;"}
           </strong>
         </p>
 
@@ -196,6 +214,8 @@ function renderTracking(order) {
   return "";
 
 }
+
+
 /* ==========================
    HELPERS
 ========================== */
@@ -203,17 +223,12 @@ function renderTracking(order) {
 function calculateTotal(order) {
 
   const subtotal = (order.items || []).reduce(
-
     (total, item) => {
-
       return total + (
         item.price * item.quantity
       );
-
     },
-
     0
-
   );
 
   return subtotal + (
@@ -229,31 +244,25 @@ function formatDate(order) {
     order.paidAt ||
     order.createdAt;
 
-  if (!date) return "—";
+  if (!date) return "&mdash;";
 
   if (date?.toMillis) {
-
     return new Date(
       date.toMillis()
     ).toLocaleString();
-
   }
 
   if (typeof date === "string") {
-
     return new Date(date)
       .toLocaleString();
-
   }
 
   if (typeof date === "number") {
-
     return new Date(date)
       .toLocaleString();
-
   }
 
-  return "—";
+  return "&mdash;";
 
 }
 
@@ -264,7 +273,6 @@ function formatStatus(order) {
     order.orderState;
 
   const statusMap = {
-
     PENDING_PAYMENT:
       "Waiting for Payment",
 
@@ -288,7 +296,6 @@ function formatStatus(order) {
 
     EXPIRED:
       "Expired"
-
   };
 
   return (
@@ -298,6 +305,7 @@ function formatStatus(order) {
 
 }
 
+
 /* ==========================
    LOG FORMATTERS
 ========================== */
@@ -305,7 +313,6 @@ function formatStatus(order) {
 function formatLogAction(action) {
 
   const map = {
-
     PAYMENT_APPROVED:
       "Payment Approved",
 
@@ -320,7 +327,6 @@ function formatLogAction(action) {
 
     ORDER_COMPLETED:
       "Order Completed"
-
   };
 
   return map[action] || action;
@@ -331,15 +337,14 @@ function formatLogAction(action) {
 function formatLogDate(timestamp) {
 
   if (!timestamp) {
-
-    return "—";
-
+    return "&mdash;";
   }
 
   return new Date(timestamp)
     .toLocaleString();
 
 }
+
 
 /* ==========================
    STATUS MODIFIER
@@ -351,7 +356,6 @@ function getStatusModifier(order) {
     order.orderState;
 
   const modifierMap = {
-
     PENDING_PAYMENT:
       "admin-order__status--pending",
 
@@ -375,7 +379,6 @@ function getStatusModifier(order) {
 
     EXPIRED:
       "admin-order__status--expired"
-
   };
 
   return (
@@ -383,6 +386,7 @@ function getStatusModifier(order) {
   );
 
 }
+
 
 /* ==========================
    ORDER ITEMS
@@ -393,55 +397,83 @@ function renderItems(items = []) {
   if (!items.length) {
 
     return `
-      <div class="admin-order__item">
-        No items
+      <div class="admin-order__section admin-order__line-items">
+        <p class="admin-order__section-title">
+          Items
+        </p>
+
+        <div class="admin-order__empty">
+          No items
+        </div>
       </div>
     `;
 
   }
 
-  return items.map(item => {
+  return `
+    <div class="admin-order__section admin-order__line-items">
 
-    return `
-      <div class="admin-order__item">
+      <p class="admin-order__section-title">
+        Items
+      </p>
 
-        <span>
-          ${item.name}
-        </span>
+      <div class="admin-order__item-list">
 
-        <span>
-          ${item.size}
-        </span>
+        ${items.map(item => {
 
-        <span>
-          x${item.quantity}
-        </span>
+          return `
+            <div class="admin-order__item">
 
-        <span>
-          ₱${item.price}
-        </span>
+              <div class="admin-order__item-media">
+                ${
+                  item.image
+                    ? `
+                      <img
+                        src="${item.image}"
+                        alt="${item.name || "Product"}"
+                        loading="lazy"
+                      />
+                    `
+                    : ""
+                }
+              </div>
+
+              <div class="admin-order__item-main">
+                <span class="admin-order__item-name">
+                  ${item.name}
+                </span>
+
+                <span class="admin-order__item-meta">
+                  Size ${item.size || "&mdash;"} &middot; Qty ${item.quantity || 1}
+                </span>
+              </div>
+
+              <span class="admin-order__item-price">
+                &#8369;${item.price}
+              </span>
+
+            </div>
+          `;
+
+        }).join("")}
 
       </div>
-    `;
 
-  }).join("");
+    </div>
+  `;
 
 }
+
 
 function renderSummary(order) {
 
   const subtotal = (order.items || []).reduce(
-
     (total, item) => {
-
       return total + (
         item.price * item.quantity
       );
-
     },
-
     0
-
   );
 
   const shippingFee =
@@ -451,35 +483,32 @@ function renderSummary(order) {
     subtotal + shippingFee;
 
   return `
+    <div class="admin-order__section admin-order__summary">
 
-    <div class="admin-order__summary">
+      <p class="admin-order__section-title">
+        Totals
+      </p>
 
-      <div class="admin-order__summary-row">
+      <div class="admin-order__summary-panel">
 
-        <span>Subtotal</span>
+        <div class="admin-order__summary-row">
+          <span>Subtotal</span>
+          <span>&#8369;${subtotal}</span>
+        </div>
 
-        <span>₱${subtotal}</span>
+        <div class="admin-order__summary-row">
+          <span>Shipping</span>
+          <span>&#8369;${shippingFee}</span>
+        </div>
 
-      </div>
-
-      <div class="admin-order__summary-row">
-
-        <span>Shipping</span>
-
-        <span>₱${shippingFee}</span>
-
-      </div>
-
-      <div class="admin-order__summary-row admin-order__summary-row--total">
-
-        <span>Total</span>
-
-        <span>₱${total}</span>
+        <div class="admin-order__summary-row admin-order__summary-row--total">
+          <span>Total</span>
+          <span>&#8369;${total}</span>
+        </div>
 
       </div>
 
     </div>
-
   `;
 
 }
@@ -492,27 +521,28 @@ function renderSummary(order) {
 function renderProof(order) {
 
   if (!order.proofUrl) {
-
     return "";
-
   }
 
   return `
-    <div class="admin-order__proof">
+    <div class="admin-order__section admin-order__proof">
 
       <p class="admin-order__section-title">
         Payment Proof
       </p>
 
-      <img
-        src="${order.proofUrl}"
-        class="admin-order__proof-image"
-      />
+      <div class="admin-order__proof-frame">
+        <img
+          src="${order.proofUrl}"
+          class="admin-order__proof-image"
+        />
+      </div>
 
     </div>
   `;
 
 }
+
 
 /* ==========================
    ORDER TIMELINE
@@ -524,65 +554,58 @@ function renderTimeline(order) {
     order.logs || [];
 
   if (!logs.length) {
-
     return "";
-
   }
 
   return `
-
-    <div class="admin-order__timeline">
+    <div class="admin-order__section admin-order__timeline">
 
       <p class="admin-order__section-title">
         Timeline
       </p>
 
-      ${logs.map(log => {
+      <div class="admin-order__timeline-list">
 
-        return `
+        ${logs.map(log => {
 
-          <div class="admin-order__timeline-item">
+          return `
+            <div class="admin-order__timeline-item">
 
-            <div class="admin-order__timeline-action">
+              <div class="admin-order__timeline-dot"></div>
 
-              ${formatLogAction(log.action)}
+              <div class="admin-order__timeline-content">
 
-            </div>
-
-            <div class="admin-order__timeline-date">
-
-              ${formatLogDate(log.timestamp)}
-
-            </div>
-
-            ${log.details?.trackingNumber
-
-              ? `
-
-                <div class="admin-order__timeline-meta">
-
-                  Tracking:
-                  ${log.details.trackingNumber}
-
+                <div class="admin-order__timeline-action">
+                  ${formatLogAction(log.action)}
                 </div>
 
-              `
+                <div class="admin-order__timeline-date">
+                  ${formatLogDate(log.timestamp)}
+                </div>
 
-              : ""
+                ${log.details?.trackingNumber
+                  ? `
+                    <div class="admin-order__timeline-meta">
+                      Tracking: ${log.details.trackingNumber}
+                    </div>
+                  `
+                  : ""
+                }
 
-            }
+              </div>
 
-          </div>
+            </div>
+          `;
 
-        `;
+        }).join("")}
 
-      }).join("")}
+      </div>
 
     </div>
-
   `;
 
 }
+
 
 /* ==========================
    ACTIONS
@@ -594,10 +617,6 @@ function renderActions(order) {
     order.orderState;
 
   let buttons = "";
-
-  /* ==========================
-     PROOF UPLOADED
-  ========================== */
 
   if (
     state === "PROOF_UPLOADED"
@@ -627,11 +646,6 @@ function renderActions(order) {
 
   }
 
-
-  /* ==========================
-     PAID
-  ========================== */
-
   else if (
     state === "PAID"
   ) {
@@ -649,11 +663,6 @@ function renderActions(order) {
     `;
 
   }
-
-
-  /* ==========================
-     SHIPPED
-  ========================== */
 
   else if (
     state === "SHIPPED"
