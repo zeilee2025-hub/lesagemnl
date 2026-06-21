@@ -7,9 +7,15 @@ import { getZone } from "../services/shippingService.js";
    DELIVERY ESTIMATE
 ========================= */
 
-function getDeliveryEstimate(zone) {
+function getDeliveryEstimate(
+  region,
+  province
+) {
 
-  return zone === "NCR"
+  return (
+    region === "NCR" ||
+    province === "Metro Manila"
+  )
     ? "3–5 business days"
     : "7–10 business days";
 
@@ -63,12 +69,18 @@ function renderTotals({
 
   const zone =
     hasLocation
-      ? getZone(selectedRegion, selectedProvince)
+      ? getZone(
+          selectedRegion,
+          selectedProvince
+        )
       : null;
 
   const deliveryEstimate =
     hasLocation
-      ? getDeliveryEstimate(zone)
+      ? getDeliveryEstimate(
+          selectedRegion,
+          selectedProvince
+        )
       : null;
 
 
