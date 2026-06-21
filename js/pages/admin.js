@@ -153,6 +153,12 @@ let allOrders = [];
 
 let currentFilter = "ALL";
 
+const cancelledFilterStates = [
+  "CANCELLED",
+  "REJECTED",
+  "EXPIRED"
+];
+
 /* ==============================
    ADMIN LOGOUT
 ============================== */
@@ -263,7 +269,17 @@ function getFilteredOrders() {
 
   let filteredOrders = [...allOrders];
 
-  if (currentFilter !== "ALL") {
+  if (currentFilter === "CANCELLED") {
+
+    filteredOrders = filteredOrders.filter(order => {
+      return cancelledFilterStates.includes(
+        order.orderState
+      );
+    });
+
+  }
+
+  else if (currentFilter !== "ALL") {
 
     filteredOrders = filteredOrders.filter(order => {
       return order.orderState === currentFilter;

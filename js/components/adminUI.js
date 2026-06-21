@@ -367,6 +367,9 @@ function getStatusModifier(order) {
     COMPLETED:
       "admin-order__status--completed",
 
+    CANCELLED:
+      "admin-order__status--cancelled",
+
     REJECTED:
       "admin-order__status--rejected",
 

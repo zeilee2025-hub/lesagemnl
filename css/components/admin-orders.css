@@ -99,6 +99,11 @@
   background: rgba(220, 38, 38, 0.08);
 }
 
+.admin-order__status--cancelled {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.08);
+}
+
 .admin-order__status--expired {
 
   background:
