@@ -34,7 +34,8 @@ function renderTotals({
   const totals =
     calculateTotals(
       cartData,
-      selectedRegion
+      selectedRegion,
+      selectedProvince
     );
 
 
@@ -62,7 +63,7 @@ function renderTotals({
 
   const zone =
     hasLocation
-      ? getZone(selectedRegion)
+      ? getZone(selectedRegion, selectedProvince)
       : null;
 
   const deliveryEstimate =

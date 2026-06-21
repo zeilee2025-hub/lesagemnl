@@ -18,6 +18,10 @@ import {
 } from "../components/locationUI.js";
 
 import {
+  findRegionByProvince
+} from "../services/locationService.js";
+
+import {
   getCheckoutFormData,
   validateCheckoutForm
 } from "../core/checkoutForm.js";
@@ -515,10 +519,23 @@ async function handleCheckout() {
        TOTALS
     ========================= */
 
+    const resolvedRegion =
+      selectedRegion ||
+      await findRegionByProvince(
+        formData.province
+      ) ||
+      "NCR";
+
+    const resolvedProvince =
+      selectedProvince ||
+      formData.province ||
+      "Metro Manila";
+
     const totals =
       calculateTotals(
         cartData,
-        selectedRegion
+        resolvedRegion,
+        resolvedProvince
       );
 
 
@@ -540,7 +557,7 @@ const customer = {
     formData.email,
 
   region:
-    selectedRegion
+    resolvedRegion
 };
 
 

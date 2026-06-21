@@ -1,5 +1,7 @@
+import { getShippingFee } from "../services/shippingService.js";
+
 // ===============================
-// 💰 CALCULATE SUBTOTAL
+// CALCULATE SUBTOTAL
 // ===============================
 export function calculateSubtotal(items) {
   if (!items || items.length === 0) return 0;
@@ -10,23 +12,21 @@ export function calculateSubtotal(items) {
 }
 
 // ===============================
-// 🚚 CALCULATE TOTALS (DYNAMIC SHIPPING)
+// CALCULATE TOTALS (DYNAMIC SHIPPING)
 // ===============================
-export function calculateTotals(items, region = "Metro Manila") {
+export function calculateTotals(
+  items,
+  region = "NCR",
+  province = "Metro Manila"
+) {
   const subtotal = calculateSubtotal(items);
 
   let shipping = 0;
 
-  // 🎯 FREE SHIPPING
   if (subtotal >= 2000) {
     shipping = 0;
   } else if (subtotal > 0) {
-    // 📍 REGION LOGIC
-    if (region === "Metro Manila") {
-      shipping = 99;
-    } else {
-      shipping = 149;
-    }
+    shipping = getShippingFee(region, province);
   }
 
   const total = subtotal + shipping;
@@ -35,8 +35,6 @@ export function calculateTotals(items, region = "Metro Manila") {
     subtotal,
     shipping,
     total,
-
-    // 🧠 EXTRA (for UI)
     isFreeShipping: subtotal >= 2000,
     remainingForFree: Math.max(0, 2000 - subtotal)
   };
