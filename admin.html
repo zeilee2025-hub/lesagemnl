@@ -46,6 +46,11 @@
     href="css/components/admin-customers.css"
   />
 
+  <link
+    rel="stylesheet"
+    href="css/components/admin-analytics.css"
+  />
+
   <!-- PAGE -->
   <link
     rel="stylesheet"
@@ -636,9 +641,56 @@
             Analytics
           </h1>
           <p class="admin__subtitle">
-            Analytics will be added in a later controlled phase.
+            A focused view of sales, products, and inventory performance.
           </p>
         </div>
+
+        <section
+          class="admin-analytics__range"
+          aria-label="Analytics range"
+        >
+          <button
+            type="button"
+            data-analytics-range="7D"
+            aria-pressed="false"
+          >
+            7D
+          </button>
+
+          <button
+            type="button"
+            class="active"
+            data-analytics-range="30D"
+            aria-pressed="true"
+          >
+            30D
+          </button>
+
+          <button
+            type="button"
+            data-analytics-range="90D"
+            aria-pressed="false"
+          >
+            90D
+          </button>
+
+          <button
+            type="button"
+            data-analytics-range="ALL"
+            aria-pressed="false"
+          >
+            All Time
+          </button>
+        </section>
+
+        <section
+          id="admin-analytics"
+          class="admin-analytics"
+        >
+          <p class="admin-analytics__empty">
+            Loading analytics...
+          </p>
+        </section>
       </section>
 
       <section

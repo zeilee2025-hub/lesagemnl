@@ -19,6 +19,10 @@ import {
 } from "../services/adminCustomerService.js";
 
 import {
+  getAdminAnalytics
+} from "../services/adminAnalyticsService.js";
+
+import {
   renderOrders,
   renderOrderDetail,
   renderOverview
@@ -44,6 +48,10 @@ import {
   renderCustomerDetail,
   renderCustomerMetrics
 } from "../components/adminCustomersUI.js";
+
+import {
+  renderAnalytics
+} from "../components/adminAnalyticsUI.js";
 
 import { auth }
 from "../core/firebase.js";
@@ -209,6 +217,14 @@ const customerFilterButtons =
     "[data-customer-filter]"
   );
 
+const analyticsContainer =
+  document.getElementById("admin-analytics");
+
+const analyticsRangeButtons =
+  document.querySelectorAll(
+    "[data-analytics-range]"
+  );
+
 const filterButtons =
   document.querySelectorAll("[data-filter]");
 
@@ -311,6 +327,16 @@ let customersError = "";
 
 let customersTruncated = false;
 
+let analyticsData = null;
+
+let analyticsRange = "30D";
+
+let analyticsLoading = false;
+
+let analyticsError = "";
+
+let analyticsRequestId = 0;
+
 const cancelledFilterStates = [
   "CANCELLED",
   "REJECTED",
@@ -411,6 +437,10 @@ function setActiveAdminSection(section) {
 
   if (section === "customers") {
     loadCustomersIfNeeded();
+  }
+
+  if (section === "analytics") {
+    loadAnalytics();
   }
 
 }
@@ -818,6 +848,105 @@ function closeCustomerDetail() {
   selectedCustomerDetail = null;
   customersError = "";
   renderCustomersView();
+
+}
+
+
+/* ==========================
+   ADMIN ANALYTICS
+========================== */
+
+function renderAnalyticsView() {
+
+  renderAnalytics(
+    analyticsContainer,
+    analyticsData,
+    {
+      loading:
+        analyticsLoading,
+      error:
+        analyticsError
+    }
+  );
+
+}
+
+function updateAnalyticsRangeButtons() {
+
+  analyticsRangeButtons.forEach(button => {
+    const isActive =
+      button.dataset.analyticsRange === analyticsRange;
+
+    button.classList.toggle(
+      "active",
+      isActive
+    );
+
+    button.setAttribute(
+      "aria-pressed",
+      isActive ? "true" : "false"
+    );
+  });
+
+}
+
+async function loadAnalytics(force = false) {
+
+  if (
+    analyticsLoading &&
+    !force
+  ) {
+    renderAnalyticsView();
+    return;
+  }
+
+  if (
+    analyticsData &&
+    !force
+  ) {
+    renderAnalyticsView();
+    return;
+  }
+
+  analyticsLoading = true;
+  analyticsError = "";
+  renderAnalyticsView();
+
+  const requestId =
+    analyticsRequestId + 1;
+
+  analyticsRequestId = requestId;
+
+  try {
+    const data =
+      await getAdminAnalytics(
+        analyticsRange
+      );
+
+    if (requestId !== analyticsRequestId) {
+      return;
+    }
+
+    analyticsData = data;
+  }
+
+  catch (error) {
+    if (requestId !== analyticsRequestId) {
+      return;
+    }
+
+    analyticsData = null;
+    analyticsError =
+      error.message ||
+      "Failed to load analytics.";
+  }
+
+  finally {
+    if (requestId === analyticsRequestId) {
+      analyticsLoading = false;
+      renderAnalyticsView();
+    }
+  }
 
 }
 
@@ -1793,6 +1922,65 @@ function setupCustomerInteractions() {
 
 }
 
+function setupAnalyticsControls() {
+
+  if (analyticsRangeButtons.length) {
+    analyticsRangeButtons.forEach(button => {
+      button.addEventListener(
+        "click",
+        () => {
+          const nextRange =
+            button.dataset.analyticsRange || "30D";
+
+          if (nextRange === analyticsRange) {
+            return;
+          }
+
+          analyticsRange = nextRange;
+          analyticsData = null;
+          analyticsError = "";
+          updateAnalyticsRangeButtons();
+          loadAnalytics(true);
+        }
+      );
+    });
+  }
+
+  updateAnalyticsRangeButtons();
+
+  if (!analyticsContainer) return;
+
+  analyticsContainer.addEventListener(
+    "click",
+    (event) => {
+      const action =
+        event.target
+          .closest("[data-analytics-action]")
+          ?.dataset.analyticsAction;
+
+      if (action === "retry") {
+        analyticsData = null;
+        analyticsError = "";
+        loadAnalytics(true);
+        return;
+      }
+
+      const productRow =
+        event.target.closest(
+          "[data-analytics-product-id]"
+        );
+
+      const productId =
+        productRow?.dataset.analyticsProductId;
+
+      if (productId) {
+        openProductDetail(productId);
+      }
+    }
+  );
+
+}
+
 function setupProductInteractions() {
 
   if (!productsContainer) return;
@@ -2235,6 +2423,7 @@ async function initAdmin() {
     setupCustomerFilters();
     setupCustomerSearch();
     setupCustomerInteractions();
+    setupAnalyticsControls();
     setupProductListener();
     setupProductSearch();
     setupProductInteractions();
