@@ -7,6 +7,11 @@ const saleOrderStates = [
   "COMPLETED"
 ];
 
+const currencyDisplayOptions = {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+};
+
 export function renderOrders(container, orders) {
 
   container.innerHTML = orders.map(order => {
@@ -100,7 +105,7 @@ export function renderOverview(container, orders) {
 
   if (netSalesElement) {
     netSalesElement.textContent =
-      formatCurrency(metrics.netSales);
+      formatCurrency(metrics.netSales, currencyDisplayOptions);
   }
 
   if (ordersElement) {
@@ -110,7 +115,7 @@ export function renderOverview(container, orders) {
 
   if (aovElement) {
     aovElement.textContent =
-      formatCurrency(metrics.averageOrderValue);
+      formatCurrency(metrics.averageOrderValue, currencyDisplayOptions);
   }
 
   if (itemsSoldElement) {
@@ -160,7 +165,7 @@ export function renderOverview(container, orders) {
         </span>
 
         <span class="admin-overview-order__date">
-          ${formatDate(order, "createdAt")}
+          ${formatCompactDate(order, "createdAt")}
         </span>
       </article>
     `;
@@ -555,12 +560,12 @@ function getItemQuantity(item) {
 
 }
 
-function formatCurrency(value) {
+function formatCurrency(value, options = {}) {
 
   const amount =
     Number(value) || 0;
 
-  return `\u20b1${amount.toLocaleString()}`;
+  return `\u20b1${amount.toLocaleString(undefined, options)}`;
 
 }
 
@@ -660,6 +665,43 @@ function formatDate(order, field) {
   }
 
   return "&mdash;";
+
+}
+
+
+function formatCompactDate(order, field) {
+
+  const date =
+    field
+      ? order?.[field]
+      : order.paidAt ||
+        order.createdAt;
+
+  if (!date) return "&mdash;";
+
+  const parsedDate =
+    date?.toMillis
+      ? new Date(date.toMillis())
+      : new Date(date);
+
+  if (
+    Number.isNaN(parsedDate.getTime())
+  ) {
+    return "&mdash;";
+  }
+
+  const dateLabel = parsedDate.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
+
+  const timeLabel = parsedDate.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit"
+  });
+
+  return `${dateLabel} &middot; ${timeLabel}`;
 
 }
 
