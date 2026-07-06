@@ -34,6 +34,10 @@ function generateOrderId() {
 
 }
 
+function getManualProofTokenKey(orderId) {
+  return `manualProofToken:${orderId}`;
+}
+
 
 // ==========================
 // SAVE ORDER
@@ -175,6 +179,26 @@ if (!res.ok) {
 
   throw new Error(
     "Failed to create order in backend"
+  );
+
+}
+
+const responseData =
+  await res.json();
+
+if (
+  orderData.paymentMethod === "LOCAL"
+) {
+
+  if (!responseData?.proofToken) {
+    throw new Error(
+      "Missing manual proof token"
+    );
+  }
+
+  localStorage.setItem(
+    getManualProofTokenKey(orderId),
+    responseData.proofToken
   );
 
 }
@@ -490,20 +514,44 @@ export async function updateOrderProof(
 
   try {
 
-    const ref =
-      doc(db, "orders", orderId);
+    const proofToken =
+      localStorage.getItem(
+        getManualProofTokenKey(orderId)
+      );
 
-    await updateDoc(ref, {
+    if (!proofToken) {
+      throw new Error(
+        "Missing proof upload authorization. Please return from your checkout confirmation link or contact support."
+      );
+    }
 
-      proofUrl,
+    const response =
+      await fetch(
+        `${API_BASE_URL}/upload-order-proof`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+          body: JSON.stringify({
+            orderId,
+            proofUrl,
+            proofToken
+          })
+        }
+      );
 
-      paymentStatus:
-        "PENDING",
+    const data =
+      await response.json();
 
-      orderState:
-        "PROOF_UPLOADED"
+    if (!response.ok) {
+      throw new Error(
+        data?.error ||
+        "Failed to save proof"
+      );
+    }
 
-    });
 
     console.log(
       "Proof uploaded and saved"

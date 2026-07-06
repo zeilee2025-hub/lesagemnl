@@ -127,7 +127,7 @@ export function initManualPaymentUpload(orderId) {
 
 
         // ==========================
-        //  SAVE TO FIRESTORE
+        //  SAVE PROOF METADATA
         // ==========================
         await updateOrderProof(
           orderId,
@@ -161,6 +161,11 @@ export function initManualPaymentUpload(orderId) {
         console.error(
           "Upload failed:",
           error
+        );
+
+        alert(
+          error?.message ||
+          "Proof upload failed. Please try again."
         );
 
         submitBtn.textContent =
