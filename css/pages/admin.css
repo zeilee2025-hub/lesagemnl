@@ -327,7 +327,15 @@ body {
   }
 
   .admin-sidebar {
-    width: min(82vw, 300px);
+    justify-content: flex-start;
+
+    width: min(78vw, 280px);
+    min-height: 100dvh;
+    padding:
+      calc(22px + env(safe-area-inset-top))
+      22px
+      calc(22px + env(safe-area-inset-bottom));
+    overflow-y: auto;
 
     transform: translateX(-100%);
     transition: transform 0.24s ease;
@@ -347,6 +355,7 @@ body {
 
   .admin-sidebar__top {
     min-height: 0;
+    margin-bottom: clamp(48px, 8vh, 68px);
   }
 
   .admin-sidebar__close {
@@ -363,10 +372,29 @@ body {
 
     font: inherit;
     font-size: 13px;
+    letter-spacing: 0.02em;
   }
 
   .admin-sidebar__brand {
-    margin-bottom: 28px;
+    margin-bottom: 20px;
+  }
+
+  .admin-sidebar__nav {
+    gap: 7px;
+  }
+
+  .admin-sidebar__footer {
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 36px;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .admin-sidebar__nav-btn,
+  .admin__logout-btn {
+    min-height: 34px;
+    padding-top: 7px;
+    padding-bottom: 7px;
   }
 
   .admin__header {
