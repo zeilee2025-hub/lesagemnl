@@ -1368,12 +1368,17 @@ function setupProductInteractions() {
     "click",
     (event) => {
 
+      const actionElement =
+        event.target.closest(
+          "[data-product-action]"
+        );
+
       const action =
-        event.target.dataset.productAction;
+        actionElement?.dataset.productAction;
 
       const productCard =
         event.target.closest(
-          "[data-product-id]"
+          ".admin-product[data-product-id]"
         );
 
       if (!action && productCard) {
