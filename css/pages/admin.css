@@ -24,7 +24,7 @@ body {
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   width: 220px;
   padding: 34px 24px 24px;
@@ -40,12 +40,16 @@ body {
   flex-direction: column;
 }
 
+.admin-sidebar__top {
+  margin-bottom: 84px;
+}
+
 .admin-sidebar__brand {
   display: flex;
   flex-direction: column;
   gap: 2px;
 
-  margin-bottom: 42px;
+  margin-bottom: 0;
 
   font-size: 18px;
   font-weight: 800;
@@ -58,7 +62,10 @@ body {
 }
 
 .admin-sidebar__footer {
-  gap: 18px;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid #e4e1db;
 }
 
 .admin-sidebar__nav-btn {
@@ -329,7 +336,7 @@ body {
   .admin-sidebar {
     justify-content: flex-start;
 
-    width: min(78vw, 280px);
+    width: min(84vw, 340px);
     min-height: 100dvh;
     padding:
       calc(22px + env(safe-area-inset-top))
@@ -354,29 +361,44 @@ body {
   }
 
   .admin-sidebar__top {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 18px;
+
     min-height: 0;
-    margin-bottom: clamp(48px, 8vh, 68px);
+    margin-bottom: clamp(40px, 7vh, 56px);
   }
 
   .admin-sidebar__close {
-    display: block;
+    display: inline-grid;
+    place-items: center;
 
-    width: fit-content;
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
     padding: 0;
+    margin: -11px -12px 0 auto;
 
     border: 0;
     background: transparent;
-    color: #6f6a63;
+    color: #111;
 
     cursor: pointer;
 
     font: inherit;
-    font-size: 13px;
-    letter-spacing: 0.02em;
+    font-size: 25px;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .admin-sidebar__close:hover,
+  .admin-sidebar__close:focus-visible {
+    background: rgba(17, 17, 17, 0.05);
+    outline: none;
   }
 
   .admin-sidebar__brand {
-    margin-bottom: 20px;
+    margin-bottom: 0;
   }
 
   .admin-sidebar__nav {
@@ -385,9 +407,9 @@ body {
 
   .admin-sidebar__footer {
     gap: 8px;
-    margin-top: auto;
-    padding-top: 36px;
-    padding-bottom: env(safe-area-inset-bottom);
+    margin-top: 20px;
+    padding-top: 16px;
+    padding-bottom: 0;
   }
 
   .admin-sidebar__nav-btn,
