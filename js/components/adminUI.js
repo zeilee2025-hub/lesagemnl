@@ -1,3 +1,12 @@
+import { derivePaymentLabel }
+from "../core/orderUI.js";
+
+const saleOrderStates = [
+  "PAID",
+  "SHIPPED",
+  "COMPLETED"
+];
+
 export function renderOrders(container, orders) {
 
   container.innerHTML = orders.map(order => {
@@ -34,16 +43,16 @@ export function renderOrders(container, orders) {
           <div class="admin-order__bottom">
 
             <div>
+              <div class="admin-order__customer-preview">
+                ${formatCustomerName(order)}
+              </div>
+
               <span class="admin-order__total-preview">
                 &#8369;${calculateTotal(order)}
               </span>
 
               <div class="admin-order__payment-method">
-                ${
-                  order.paymentMethod === "PAYMONGO"
-                    ? "PayMongo"
-                    : "Manual Payment"
-                }
+                ${formatPaymentMethod(order)}
               </div>
             </div>
 
@@ -53,32 +62,13 @@ export function renderOrders(container, orders) {
 
           </div>
 
-          <div class="
-            admin-order__items
-            hidden
-          ">
-
-            <div class="admin-order__expanded-inner">
-
-              ${renderCustomer(order)}
-
-              ${renderProof(order)}
-
-              ${renderItems(order.items || [])}
-
-              ${renderSummary(order)}
-
-              ${renderTracking(order)}
-
-              ${renderTimeline(order)}
-
-              <div class="admin-order__actions">
-                ${renderActions(order)}
-              </div>
-
-            </div>
-
-          </div>
+          <button
+            type="button"
+            class="admin-order__view"
+            data-action="view"
+          >
+            View Order
+          </button>
 
         </div>
 
@@ -86,6 +76,256 @@ export function renderOrders(container, orders) {
     `;
 
   }).join("");
+
+}
+
+export function renderOverview(container, orders) {
+
+  if (!container) return;
+
+  const metrics =
+    calculateOverviewMetrics(orders);
+
+  const netSalesElement =
+    document.getElementById("overview-net-sales");
+
+  const ordersElement =
+    document.getElementById("overview-orders");
+
+  const aovElement =
+    document.getElementById("overview-aov");
+
+  const itemsSoldElement =
+    document.getElementById("overview-items-sold");
+
+  if (netSalesElement) {
+    netSalesElement.textContent =
+      formatCurrency(metrics.netSales);
+  }
+
+  if (ordersElement) {
+    ordersElement.textContent =
+      metrics.orderCount.toLocaleString();
+  }
+
+  if (aovElement) {
+    aovElement.textContent =
+      formatCurrency(metrics.averageOrderValue);
+  }
+
+  if (itemsSoldElement) {
+    itemsSoldElement.textContent =
+      metrics.itemsSold.toLocaleString();
+  }
+
+  const recentOrders =
+    getRecentOrders(orders);
+
+  if (!recentOrders.length) {
+    container.innerHTML = `
+      <p class="admin-overview__empty">
+        No recent orders yet.
+      </p>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = recentOrders.map(order => {
+
+    return `
+      <article
+        class="admin-overview-order"
+        data-overview-order-id="${order.id}"
+      >
+        <div class="admin-overview-order__main">
+          <span class="admin-overview-order__id">
+            ${order.orderNumber || order.id}
+          </span>
+
+          <span class="admin-overview-order__customer">
+            ${formatCustomerName(order)}
+          </span>
+        </div>
+
+        <span class="admin-overview-order__total">
+          ${formatCurrency(getStoredOrderTotal(order))}
+        </span>
+
+        <span class="
+          admin-order__status
+          ${getStatusModifier(order)}
+        ">
+          ${formatStatus(order)}
+        </span>
+
+        <span class="admin-overview-order__date">
+          ${formatDate(order, "createdAt")}
+        </span>
+      </article>
+    `;
+
+  }).join("");
+
+}
+
+export function renderOrderDetail(container, order) {
+
+  if (!order) {
+
+    container.innerHTML = `
+      <div class="admin-order-detail">
+        <button
+          type="button"
+          class="admin-order-detail__back"
+          data-action="back"
+        >
+          Back to Orders
+        </button>
+
+        <p class="admin-order__empty">
+          Order not found.
+        </p>
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML = `
+    <article
+      class="admin-order-detail"
+      data-id="${order.id}"
+    >
+
+      <button
+        type="button"
+        class="admin-order-detail__back"
+        data-action="back"
+      >
+        Back to Orders
+      </button>
+
+      <header class="admin-order-detail__header">
+
+        <div>
+          <span class="admin-order__eyebrow">
+            Order
+          </span>
+
+          <h2 class="admin-order-detail__title">
+            ${order.orderNumber || order.id}
+          </h2>
+        </div>
+
+        <span class="
+          admin-order__status
+          ${getStatusModifier(order)}
+        ">
+          ${formatStatus(order)}
+        </span>
+
+      </header>
+
+      <div class="admin-order-detail__meta">
+
+        <div>
+          <span class="admin-order__label">
+            Total
+          </span>
+
+          <strong>
+            &#8369;${calculateTotal(order)}
+          </strong>
+        </div>
+
+        <div>
+          <span class="admin-order__label">
+            Payment
+          </span>
+
+          <strong>
+            ${formatPaymentMethod(order)}
+          </strong>
+        </div>
+
+        <div>
+          <span class="admin-order__label">
+            Date
+          </span>
+
+          <strong>
+            ${formatDate(order)}
+          </strong>
+        </div>
+
+      </div>
+
+      <div class="admin-order-detail__body">
+
+        ${renderCustomer(order)}
+
+        ${renderPayment(order)}
+
+        ${renderProof(order)}
+
+        ${renderItems(order.items || [])}
+
+        ${renderSummary(order)}
+
+        ${renderTracking(order)}
+
+        ${renderTimeline(order)}
+
+        <div class="admin-order__actions">
+          ${renderActions(order)}
+        </div>
+
+      </div>
+
+    </article>
+  `;
+
+}
+
+export function isQualifyingSaleOrder(order) {
+
+  return saleOrderStates.includes(
+    order?.orderState
+  );
+
+}
+
+export function calculateOverviewMetrics(orders = []) {
+
+  const qualifyingOrders =
+    orders.filter(isQualifyingSaleOrder);
+
+  const netSales =
+    qualifyingOrders.reduce((sum, order) => {
+      return sum + getStoredOrderTotal(order);
+    }, 0);
+
+  const orderCount =
+    qualifyingOrders.length;
+
+  const itemsSold =
+    qualifyingOrders.reduce((sum, order) => {
+      return sum + getOrderItemQuantityTotal(order);
+    }, 0);
+
+  const averageOrderValue =
+    orderCount
+      ? netSales / orderCount
+      : 0;
+
+  return {
+    netSales,
+    orderCount,
+    averageOrderValue,
+    itemsSold
+  };
 
 }
 
@@ -139,6 +379,47 @@ function renderCustomer(order) {
           </p>
         </div>
 
+      </div>
+
+    </div>
+  `;
+
+}
+
+
+/* ==========================
+   PAYMENT
+========================== */
+
+function renderPayment(order) {
+
+  return `
+    <div class="admin-order__section admin-order__payment">
+
+      <p class="admin-order__section-title">
+        Payment
+      </p>
+
+      <div class="admin-order__customer-grid">
+        <div>
+          <span class="admin-order__label">
+            Method
+          </span>
+
+          <p>
+            ${formatPaymentMethod(order)}
+          </p>
+        </div>
+
+        <div>
+          <span class="admin-order__label">
+            Status
+          </span>
+
+          <p>
+            ${order.paymentStatus || "&mdash;"}
+          </p>
+        </div>
       </div>
 
     </div>
@@ -237,12 +518,128 @@ function calculateTotal(order) {
 
 }
 
+function getStoredOrderTotal(order) {
 
-function formatDate(order) {
+  const total =
+    Number(order?.total);
+
+  if (!Number.isFinite(total)) {
+    return 0;
+  }
+
+  return total;
+
+}
+
+function getOrderItemQuantityTotal(order) {
+
+  return (order?.items || []).reduce(
+    (sum, item) => {
+      return sum + getItemQuantity(item);
+    },
+    0
+  );
+
+}
+
+function getItemQuantity(item) {
+
+  const quantity =
+    Number(item?.quantity ?? 1);
+
+  if (!Number.isFinite(quantity)) {
+    return 1;
+  }
+
+  return quantity;
+
+}
+
+function formatCurrency(value) {
+
+  const amount =
+    Number(value) || 0;
+
+  return `\u20b1${amount.toLocaleString()}`;
+
+}
+
+function getRecentOrders(orders = []) {
+
+  return [...orders]
+    .sort((a, b) => {
+      return getCreatedTimestamp(b) -
+        getCreatedTimestamp(a);
+    })
+    .slice(0, 5);
+
+}
+
+function getCreatedTimestamp(order) {
 
   const date =
-    order.paidAt ||
-    order.createdAt;
+    order?.createdAt;
+
+  if (!date) return 0;
+
+  if (date?.toMillis) {
+    return date.toMillis();
+  }
+
+  const timestamp =
+    new Date(date).getTime();
+
+  if (!Number.isFinite(timestamp)) {
+    return 0;
+  }
+
+  return timestamp;
+
+}
+
+
+function formatCustomerName(order) {
+
+  const name = [
+    order.firstName,
+    order.lastName
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  return name || "Customer";
+
+}
+
+
+function formatPaymentMethod(order) {
+
+  const label =
+    derivePaymentLabel(order);
+
+  if (
+    !label ||
+    label === "—" ||
+    label === "LOCAL" ||
+    label === "MANUAL_PAYMENT" ||
+    label === "UNKNOWN"
+  ) {
+    return "Manual Payment";
+  }
+
+  return label;
+
+}
+
+
+function formatDate(order, field) {
+
+  const date =
+    field
+      ? order?.[field]
+      : order.paidAt ||
+        order.createdAt;
 
   if (!date) return "&mdash;";
 
@@ -444,7 +841,7 @@ function renderItems(items = []) {
                 </span>
 
                 <span class="admin-order__item-meta">
-                  Size ${item.size || "&mdash;"} &middot; Qty ${item.quantity || 1}
+                  Color ${item.color || "&mdash;"} &middot; Size ${item.size || "&mdash;"} &middot; Qty ${item.quantity || 1}
                 </span>
               </div>
 

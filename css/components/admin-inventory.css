@@ -1,0 +1,246 @@
+/* ==========================
+   ADMIN INVENTORY
+========================== */
+
+.admin-inventory__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin-bottom: 16px;
+}
+
+.admin-inventory__toolbar {
+  margin-bottom: 22px;
+}
+
+.admin-inventory {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-inventory__empty {
+  margin: 0;
+
+  color: #77716a;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.admin-inventory-row {
+  display: grid;
+  grid-template-columns:
+    62px
+    minmax(0, 1.25fr)
+    minmax(130px, 0.8fr)
+    minmax(86px, 0.35fr)
+    auto
+    auto;
+  align-items: center;
+  gap: 14px;
+
+  padding: 13px 0;
+
+  border-top: 1px solid #dedad2;
+}
+
+.admin-inventory-row__media {
+  width: 62px;
+  aspect-ratio: 3 / 4;
+
+  background: #efede8;
+
+  overflow: hidden;
+}
+
+.admin-inventory-row__media img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.admin-inventory-row__image-placeholder {
+  display: grid;
+  place-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  color: #8b867e;
+
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.admin-inventory-row__product,
+.admin-inventory-row__unit,
+.admin-inventory-row__stock {
+  min-width: 0;
+}
+
+.admin-inventory-row__eyebrow {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #8b867e;
+
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.admin-inventory-row strong {
+  display: block;
+
+  color: #111;
+
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.3;
+
+  overflow-wrap: anywhere;
+}
+
+.admin-inventory-row span {
+  overflow-wrap: anywhere;
+}
+
+.admin-inventory-row__product span:last-child,
+.admin-inventory-row__unit span:last-child,
+.admin-inventory-row__stock span:last-child {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #706b64;
+
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.admin-inventory-row__stock strong {
+  font-size: 18px;
+}
+
+.admin-inventory-row__badge {
+  justify-self: start;
+
+  padding: 5px 9px;
+
+  border: 1px solid transparent;
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.admin-inventory-row__badge--available {
+  color: #111;
+  background: #f4f4f4;
+  border-color: #ededed;
+}
+
+.admin-inventory-row__badge--low {
+  color: #a15a00;
+  background: rgba(217, 119, 6, 0.08);
+  border-color: rgba(217, 119, 6, 0.16);
+}
+
+.admin-inventory-row__badge--out {
+  color: #b91c1c;
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.16);
+}
+
+.admin-inventory-row__view {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+  color: #111;
+
+  cursor: pointer;
+
+  font: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.admin-inventory-row__view::after {
+  content: "->";
+  padding-left: 7px;
+}
+
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 860px) {
+
+  .admin-inventory-row {
+    grid-template-columns: 58px minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .admin-inventory-row__media {
+    width: 58px;
+  }
+
+  .admin-inventory-row__unit,
+  .admin-inventory-row__stock,
+  .admin-inventory-row__badge,
+  .admin-inventory-row__view {
+    grid-column: 2 / -1;
+  }
+
+}
+
+@media (max-width: 430px) {
+
+  .admin-inventory__filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+
+    padding-bottom: 4px;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .admin-inventory__filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-inventory-row {
+    grid-template-columns: 54px minmax(0, 1fr);
+  }
+
+  .admin-inventory-row__media {
+    width: 54px;
+  }
+
+}
