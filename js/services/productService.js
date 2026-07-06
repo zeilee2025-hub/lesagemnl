@@ -1,7 +1,13 @@
 // ===============================
 // 🔌 FIREBASE
 // ===============================
-import { db } from "../core/firebase.js";
+import {
+  auth,
+  db
+} from "../core/firebase.js";
+
+import { API_BASE_URL }
+from "./config/api.js";
 
 import {
   collection,
@@ -408,6 +414,118 @@ export async function updateProductStock(
 
     throw error;
   }
+}
+
+// ===============================
+// UPDATE PRODUCT DETAILS
+// ===============================
+export async function updateProductDetails(
+  productId,
+  updates
+) {
+
+  try {
+
+    if (!productId) {
+      throw new Error(
+        "Product ID is required"
+      );
+    }
+
+    if (
+      !updates ||
+      typeof updates !== "object" ||
+      Array.isArray(updates)
+    ) {
+      throw new Error(
+        "Updates must be an object"
+      );
+    }
+
+    const allowedFields = [
+      "name",
+      "price",
+      "description"
+    ];
+
+    const updateKeys =
+      Object.keys(updates);
+
+    const unsupportedFields =
+      updateKeys.filter(key => {
+        return !allowedFields.includes(key);
+      });
+
+    if (unsupportedFields.length) {
+      throw new Error(
+        `Unsupported product fields: ${unsupportedFields.join(", ")}`
+      );
+    }
+
+    if (!updateKeys.length) {
+      throw new Error(
+        "No allowed product fields to update"
+      );
+    }
+
+    const user =
+      auth.currentUser;
+
+    if (!user) {
+      throw new Error(
+        "Admin not authenticated"
+      );
+    }
+
+    const token =
+      await user.getIdToken();
+
+    const response =
+      await fetch(
+        `${API_BASE_URL}/admin/update-product`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+            Authorization:
+              `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            productId,
+            updates
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data?.error ||
+        "Failed to update product"
+      );
+    }
+
+    productCache.delete(productId);
+
+    sessionStorage.removeItem(
+      `product-${productId}`
+    );
+
+    return data;
+
+  } catch (error) {
+
+    console.error(
+      "updateProductDetails error:",
+      error
+    );
+
+    throw error;
+  }
+
 }
 
 
