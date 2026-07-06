@@ -41,6 +41,11 @@
     href="css/components/admin-inventory.css"
   />
 
+  <link
+    rel="stylesheet"
+    href="css/components/admin-customers.css"
+  />
+
   <!-- PAGE -->
   <link
     rel="stylesheet"
@@ -567,9 +572,58 @@
             Customers
           </h1>
           <p class="admin__subtitle">
-            Customer management will be added in a later controlled phase.
+            A concise customer view based on real store activity.
           </p>
         </div>
+
+        <section
+          id="customer-metrics"
+          class="admin-customers__metrics"
+        ></section>
+
+        <section class="admin__filters">
+          <button
+            type="button"
+            class="admin__filter-btn active"
+            data-customer-filter="ALL"
+          >
+            All
+          </button>
+
+          <button
+            type="button"
+            class="admin__filter-btn"
+            data-customer-filter="registered"
+          >
+            Registered
+          </button>
+
+          <button
+            type="button"
+            class="admin__filter-btn"
+            data-customer-filter="guest"
+          >
+            Guests
+          </button>
+        </section>
+
+        <section class="admin__search">
+          <input
+            type="text"
+            id="customer-search"
+            class="admin__search-input"
+            placeholder="Search customers"
+          />
+        </section>
+
+        <section
+          id="admin-customers"
+          class="admin-customers"
+        >
+          <p class="admin-customers__empty">
+            Loading customers...
+          </p>
+        </section>
       </section>
 
       <section

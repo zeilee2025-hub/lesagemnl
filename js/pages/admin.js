@@ -14,6 +14,11 @@ import {
 } from "../services/productService.js";
 
 import {
+  getAdminCustomers,
+  getAdminCustomerDetail
+} from "../services/adminCustomerService.js";
+
+import {
   renderOrders,
   renderOrderDetail,
   renderOverview
@@ -32,6 +37,13 @@ import {
   renderInventory,
   renderInventoryHistory
 } from "../components/adminInventoryUI.js";
+
+import {
+  filterCustomers,
+  renderCustomers,
+  renderCustomerDetail,
+  renderCustomerMetrics
+} from "../components/adminCustomersUI.js";
 
 import { auth }
 from "../core/firebase.js";
@@ -183,8 +195,22 @@ const inventoryViewButtons =
     "[data-inventory-view]"
   );
 
+const customersContainer =
+  document.getElementById("admin-customers");
+
+const customerMetricsContainer =
+  document.getElementById("customer-metrics");
+
+const customerSearchInput =
+  document.getElementById("customer-search");
+
+const customerFilterButtons =
+  document.querySelectorAll(
+    "[data-customer-filter]"
+  );
+
 const filterButtons =
-  document.querySelectorAll(".admin__filter-btn");
+  document.querySelectorAll("[data-filter]");
 
 const searchInput =
   document.getElementById("order-search");
@@ -266,6 +292,24 @@ let inventoryAdjustmentMessage = "";
 let inventoryAdjustments = [];
 
 let inventoryHistoryLoading = false;
+
+let allCustomers = [];
+
+let selectedCustomerKey = null;
+
+let selectedCustomerDetail = null;
+
+let customerTypeFilter = "ALL";
+
+let customersLoaded = false;
+
+let customersLoading = false;
+
+let customerDetailLoading = false;
+
+let customersError = "";
+
+let customersTruncated = false;
 
 const cancelledFilterStates = [
   "CANCELLED",
@@ -364,6 +408,10 @@ function setActiveAdminSection(section) {
   });
 
   closeMobileNavigation();
+
+  if (section === "customers") {
+    loadCustomersIfNeeded();
+  }
 
 }
 
@@ -609,6 +657,167 @@ function openOrderDetail(orderId) {
   setActiveAdminSection("orders");
 
   renderCurrentView();
+
+}
+
+
+/* ==========================
+   ADMIN CUSTOMERS
+========================== */
+
+function getFilteredCustomers() {
+
+  return filterCustomers(
+    allCustomers,
+    customerTypeFilter,
+    customerSearchInput?.value || ""
+  );
+
+}
+
+function getCustomerEmptyMessage() {
+
+  if (
+    customerSearchInput?.value?.trim()
+  ) {
+    return "No customers match your search.";
+  }
+
+  if (customerTypeFilter === "registered") {
+    return "No registered customers yet.";
+  }
+
+  if (customerTypeFilter === "guest") {
+    return "No guest customers yet.";
+  }
+
+  return "No customers yet.";
+
+}
+
+function renderCustomersView() {
+
+  renderCustomerMetrics(
+    customerMetricsContainer,
+    allCustomers
+  );
+
+  if (selectedCustomerKey) {
+    renderCustomerDetail(
+      customersContainer,
+      selectedCustomerDetail,
+      {
+        loading:
+          customerDetailLoading,
+        error:
+          customersError,
+        truncated:
+          selectedCustomerDetail?.truncated ||
+          customersTruncated
+      }
+    );
+    return;
+  }
+
+  renderCustomers(
+    customersContainer,
+    getFilteredCustomers(),
+    {
+      loading:
+        customersLoading,
+      error:
+        customersError,
+      truncated:
+        customersTruncated,
+      emptyMessage:
+        getCustomerEmptyMessage()
+    }
+  );
+
+}
+
+async function loadCustomersIfNeeded() {
+
+  if (
+    customersLoaded ||
+    customersLoading
+  ) {
+    renderCustomersView();
+    return;
+  }
+
+  customersLoading = true;
+  customersError = "";
+  renderCustomersView();
+
+  try {
+    const data =
+      await getAdminCustomers();
+
+    allCustomers =
+      Array.isArray(data.customers)
+        ? data.customers
+        : [];
+
+    customersTruncated =
+      data.truncated === true;
+
+    customersLoaded = true;
+  }
+
+  catch (error) {
+    allCustomers = [];
+    customersTruncated = false;
+    customersError =
+      error.message ||
+      "Failed to load customers.";
+  }
+
+  finally {
+    customersLoading = false;
+    renderCustomersView();
+  }
+
+}
+
+async function openCustomerDetail(customerKey) {
+
+  if (!customerKey) return;
+
+  selectedCustomerKey = customerKey;
+  selectedCustomerDetail = null;
+  customerDetailLoading = true;
+  customersError = "";
+  renderCustomersView();
+
+  try {
+    selectedCustomerDetail =
+      await getAdminCustomerDetail(customerKey);
+
+    customersTruncated =
+      selectedCustomerDetail?.truncated === true ||
+      customersTruncated;
+  }
+
+  catch (error) {
+    customersError =
+      error.message ||
+      "Failed to load customer.";
+  }
+
+  finally {
+    customerDetailLoading = false;
+    renderCustomersView();
+  }
+
+}
+
+function closeCustomerDetail() {
+
+  selectedCustomerKey = null;
+  selectedCustomerDetail = null;
+  customersError = "";
+  renderCustomersView();
 
 }
 
@@ -1481,6 +1690,109 @@ function setupOverviewInteractions() {
 
 }
 
+function setupCustomerFilters() {
+
+  if (!customerFilterButtons.length) return;
+
+  customerFilterButtons.forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        customerFilterButtons.forEach(item => {
+          item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        customerTypeFilter =
+          button.dataset.customerFilter || "ALL";
+
+        selectedCustomerKey = null;
+        selectedCustomerDetail = null;
+
+        renderCustomersView();
+      }
+    );
+  });
+
+}
+
+function setupCustomerSearch() {
+
+  if (!customerSearchInput) return;
+
+  customerSearchInput.addEventListener(
+    "input",
+    () => {
+      selectedCustomerKey = null;
+      selectedCustomerDetail = null;
+      renderCustomersView();
+    }
+  );
+
+}
+
+function setupCustomerInteractions() {
+
+  if (!customersContainer) return;
+
+  customersContainer.addEventListener(
+    "click",
+    async (event) => {
+      const actionElement =
+        event.target.closest(
+          "[data-customer-action]"
+        );
+
+      const action =
+        actionElement?.dataset.customerAction;
+
+      if (!action) return;
+
+      if (action === "retry") {
+        customersLoaded = false;
+        await loadCustomersIfNeeded();
+        return;
+      }
+
+      if (action === "back") {
+        closeCustomerDetail();
+        return;
+      }
+
+      const customerRow =
+        event.target.closest(
+          "[data-customer-key]"
+        );
+
+      if (
+        action === "view" &&
+        customerRow
+      ) {
+        await openCustomerDetail(
+          customerRow.dataset.customerKey
+        );
+        return;
+      }
+
+      const orderRow =
+        event.target.closest(
+          "[data-customer-order-id]"
+        );
+
+      if (
+        action === "open-order" &&
+        orderRow
+      ) {
+        openOrderDetail(
+          orderRow.dataset.customerOrderId
+        );
+      }
+    }
+  );
+
+}
+
 function setupProductInteractions() {
 
   if (!productsContainer) return;
@@ -1920,6 +2232,9 @@ async function initAdmin() {
     setupSearch();
     setupInteractions();
     setupOverviewInteractions();
+    setupCustomerFilters();
+    setupCustomerSearch();
+    setupCustomerInteractions();
     setupProductListener();
     setupProductSearch();
     setupProductInteractions();

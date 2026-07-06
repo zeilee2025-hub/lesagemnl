@@ -1,0 +1,213 @@
+.admin-customers__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-bottom: 24px;
+  border: 1px solid #e4e1db;
+  background: #e4e1db;
+}
+
+.admin-customers__metrics div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  background: #fbfaf8;
+}
+
+.admin-customers__metrics span,
+.admin-customer-row__identity span,
+.admin-customer-order span,
+.admin-customer-detail__meta span {
+  color: #716d67;
+  font-size: 12px;
+}
+
+.admin-customers__metrics strong {
+  font-size: 22px;
+  font-weight: 760;
+}
+
+.admin-customers__empty,
+.admin-customers__bound-notice,
+.admin-customers__notice {
+  margin: 0;
+  padding: 22px 0;
+  color: #716d67;
+  font-size: 14px;
+}
+
+.admin-customers__bound-notice {
+  padding: 0 0 14px;
+  border-bottom: 1px solid #e4e1db;
+}
+
+.admin-customers__notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid #e4e1db;
+  border-bottom: 1px solid #e4e1db;
+}
+
+.admin-customers__notice button,
+.admin-customer-row__view,
+.admin-customer-detail__back,
+.admin-customer-order button {
+  border: 0;
+  background: transparent;
+  color: #111;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+}
+
+.admin-customers-list {
+  border-top: 1px solid #e4e1db;
+}
+
+.admin-customer-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.5fr) 92px 72px 90px 120px 120px 110px;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid #e4e1db;
+}
+
+.admin-customer-row__identity {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-customer-row__identity strong,
+.admin-customer-row__identity span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-customer-row__type {
+  justify-self: start;
+  padding: 4px 7px;
+  border: 1px solid #d9d5ce;
+  color: #4d4944;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.admin-customer-row__view,
+.admin-customer-order button {
+  justify-self: end;
+}
+
+.admin-customer-detail {
+  border-top: 1px solid #e4e1db;
+}
+
+.admin-customer-detail__back {
+  margin: 18px 0 24px;
+}
+
+.admin-customer-detail__header {
+  margin-bottom: 24px;
+}
+
+.admin-customer-detail__header h2 {
+  margin: 10px 0 0;
+  font-size: 30px;
+  font-weight: 760;
+  letter-spacing: 0;
+}
+
+.admin-customer-detail__meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-bottom: 32px;
+  border: 1px solid #e4e1db;
+  background: #e4e1db;
+}
+
+.admin-customer-detail__meta div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: #fbfaf8;
+}
+
+.admin-customer-detail__meta strong {
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-customer-orders__title {
+  margin: 0 0 12px;
+  color: #716d67;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-customer-order {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.4fr) 130px 140px 110px 90px;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 1px solid #e4e1db;
+}
+
+.admin-customer-order div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-customer-order strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .admin-customers__metrics,
+  .admin-customer-detail__meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-customer-row,
+  .admin-customer-order {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .admin-customer-row__view,
+  .admin-customer-order button {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .admin-customers__metrics,
+  .admin-customer-detail__meta {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-customers__metrics div,
+  .admin-customer-detail__meta div {
+    padding: 14px;
+  }
+
+  .admin-customer-detail__header h2 {
+    font-size: 24px;
+  }
+}
