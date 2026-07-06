@@ -25,7 +25,13 @@ export function deriveInventoryRows(products = []) {
           : [];
 
       if (sizes.length) {
+        const sizeCounts =
+          getNormalizedSizeCounts(sizes);
+
         return sizes.map((size, sizeIndex) => {
+          const sizeLabel =
+            getSizeLabel(size);
+
           return createInventoryRow(
             product,
             {
@@ -35,9 +41,14 @@ export function deriveInventoryRows(products = []) {
             },
             size,
             {
-              field: null,
+              field: "sizes",
+              branchName: null,
               variantIndex: -1,
-              sizeIndex
+              sizeIndex,
+              ambiguous:
+                sizeCounts.get(
+                  normalizeInventorySizeLabel(sizeLabel)
+                ) > 1
             }
           );
         });
@@ -116,6 +127,32 @@ function getInventoryVariantSource(product) {
     field: null,
     variants: []
   };
+
+}
+
+function getNormalizedSizeCounts(sizes) {
+
+  return sizes.reduce((counts, size) => {
+    const label =
+      normalizeInventorySizeLabel(
+        getSizeLabel(size)
+      );
+
+    counts.set(
+      label,
+      (counts.get(label) || 0) + 1
+    );
+
+    return counts;
+  }, new Map());
+
+}
+
+function normalizeInventorySizeLabel(value) {
+
+  return String(value || "")
+    .trim()
+    .toUpperCase();
 
 }
 
@@ -339,7 +376,7 @@ export function renderInventoryHistory(
           </strong>
 
           <span>
-            ${escapeHtml(adjustment.branchName)}
+            ${escapeHtml(getAdjustmentBranchLabel(adjustment))}
             /
             ${escapeHtml(adjustment.size)}
           </span>
@@ -373,6 +410,16 @@ export function renderInventoryHistory(
       </article>
     `;
   }).join("");
+
+}
+
+function getAdjustmentBranchLabel(adjustment) {
+
+  if (adjustment?.branchType === "sizes") {
+    return "Default";
+  }
+
+  return adjustment?.branchName || "";
 
 }
 
@@ -423,12 +470,18 @@ function createInventoryRow(
         product?.id || "",
       variantField:
         source?.field || null,
+      branchName:
+        source?.branchName === null
+          ? null
+          : variantName,
       variantIndex:
         source?.variantIndex ?? -1,
       variantName,
       sizeIndex:
         source?.sizeIndex ?? -1,
-      sizeLabel
+      sizeLabel,
+      ambiguous:
+        source?.ambiguous === true
     },
     stockStatus,
     stockLabel: getStockLabel(stockStatus),
@@ -458,9 +511,11 @@ function canAdjustInventoryRow(
     sizeLabel &&
     sizeLabel !== "No sizes" &&
     !stockResult.malformedStock &&
+    source?.ambiguous !== true &&
     (
       source?.field === "colors" ||
-      source?.field === "variants"
+      source?.field === "variants" ||
+      source?.field === "sizes"
     )
   );
 

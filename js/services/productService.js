@@ -495,8 +495,6 @@ export async function adjustProductStock(
       adjustment.productId,
     branchType:
       adjustment.branchType,
-    branchName:
-      adjustment.branchName,
     size:
       adjustment.size,
     delta:
@@ -504,6 +502,11 @@ export async function adjustProductStock(
     reason:
       adjustment.reason
   };
+
+  if (adjustment.branchType !== "sizes") {
+    allowedPayload.branchName =
+      adjustment.branchName;
+  }
 
   if (adjustment.note) {
     allowedPayload.note =

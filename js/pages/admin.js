@@ -1713,7 +1713,7 @@ async function submitInventoryAdjustment(rowId) {
         branchType:
           row.source.variantField,
         branchName:
-          row.source.variantName,
+          row.source.branchName,
         size:
           row.source.sizeLabel,
         delta:
