@@ -1,3 +1,8 @@
+.admin-section[data-admin-panel="customers"] > .admin-section__header {
+  min-height: 0;
+  margin-bottom: 60px;
+}
+
 .admin-customers__metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -179,6 +184,10 @@
 }
 
 @media (max-width: 900px) {
+  .admin-section[data-admin-panel="customers"] > .admin-section__header {
+    margin-bottom: 48px;
+  }
+
   .admin-customers__metrics,
   .admin-customer-detail__meta {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -197,6 +206,10 @@
 }
 
 @media (max-width: 520px) {
+  .admin-section[data-admin-panel="customers"] > .admin-section__header {
+    margin-bottom: 36px;
+  }
+
   .admin-customers__metrics,
   .admin-customer-detail__meta {
     grid-template-columns: minmax(0, 1fr);
