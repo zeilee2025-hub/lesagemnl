@@ -8,6 +8,8 @@ import {
 
 import {
   listenToProducts,
+  adjustProductStock,
+  getInventoryAdjustments,
   updateProductDetails
 } from "../services/productService.js";
 
@@ -27,7 +29,8 @@ import {
 import {
   deriveInventoryRows,
   filterInventoryRows,
-  renderInventory
+  renderInventory,
+  renderInventoryHistory
 } from "../components/adminInventoryUI.js";
 
 import { auth }
@@ -175,6 +178,11 @@ const inventoryFilterButtons =
     "[data-inventory-filter]"
   );
 
+const inventoryViewButtons =
+  document.querySelectorAll(
+    "[data-inventory-view]"
+  );
+
 const filterButtons =
   document.querySelectorAll(".admin__filter-btn");
 
@@ -238,6 +246,26 @@ let productUnsubscribe = null;
 let productSaveInFlight = false;
 
 let currentInventoryFilter = "ALL";
+
+let currentInventoryView = "stock";
+
+let currentInventoryRows = [];
+
+let selectedInventoryRowId = null;
+
+let inventoryAdjustmentDraft = {
+  delta: "",
+  reason: "",
+  note: ""
+};
+
+let inventoryAdjustmentSubmitting = false;
+
+let inventoryAdjustmentMessage = "";
+
+let inventoryAdjustments = [];
+
+let inventoryHistoryLoading = false;
 
 const cancelledFilterStates = [
   "CANCELLED",
@@ -680,9 +708,35 @@ function renderInventoryView() {
       inventorySearchInput?.value || ""
     );
 
+  currentInventoryRows =
+    filteredRows;
+
+  if (currentInventoryView === "history") {
+    renderInventoryHistory(
+      inventoryContainer,
+      inventoryAdjustments,
+      {
+        loading:
+          inventoryHistoryLoading
+      }
+    );
+
+    return;
+  }
+
   renderInventory(
     inventoryContainer,
-    filteredRows
+    filteredRows,
+    {
+      selectedRowId:
+        selectedInventoryRowId,
+      adjustmentDraft:
+        inventoryAdjustmentDraft,
+      submitting:
+        inventoryAdjustmentSubmitting,
+      message:
+        inventoryAdjustmentMessage
+    }
   );
 
 }
@@ -752,6 +806,73 @@ function setupInventoryFilters() {
 
         currentInventoryFilter =
           button.dataset.inventoryFilter;
+
+        renderInventoryView();
+
+      }
+    );
+
+  });
+
+}
+
+async function loadInventoryAdjustments() {
+
+  inventoryHistoryLoading = true;
+  renderInventoryView();
+
+  try {
+    const data =
+      await getInventoryAdjustments(50);
+
+    inventoryAdjustments =
+      Array.isArray(data.adjustments)
+        ? data.adjustments
+        : [];
+  }
+
+  catch (error) {
+    console.error(
+      "Inventory history error:",
+      error
+    );
+
+    inventoryAdjustments = [];
+  }
+
+  finally {
+    inventoryHistoryLoading = false;
+    renderInventoryView();
+  }
+
+}
+
+function setupInventoryViews() {
+
+  if (!inventoryViewButtons.length) return;
+
+  inventoryViewButtons.forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        inventoryViewButtons.forEach(btn => {
+          btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        currentInventoryView =
+          button.dataset.inventoryView || "stock";
+
+        selectedInventoryRowId = null;
+        inventoryAdjustmentMessage = "";
+
+        if (currentInventoryView === "history") {
+          loadInventoryAdjustments();
+          return;
+        }
 
         renderInventoryView();
 
@@ -1454,6 +1575,179 @@ function setupProductInteractions() {
 
 }
 
+function getInventoryRowById(rowId) {
+
+  return currentInventoryRows.find(row => {
+    return row.id === rowId;
+  });
+
+}
+
+function resetInventoryAdjustmentDraft() {
+
+  inventoryAdjustmentDraft = {
+    delta: "",
+    reason: "",
+    note: ""
+  };
+
+  inventoryAdjustmentMessage = "";
+
+}
+
+function getInventoryAdjustmentValidation(row) {
+
+  const delta =
+    Number(inventoryAdjustmentDraft.delta);
+
+  if (
+    !Number.isInteger(delta) ||
+    delta === 0
+  ) {
+    return "Adjustment must be a non-zero integer.";
+  }
+
+  if (row.stock + delta < 0) {
+    return "Adjustment would create negative stock.";
+  }
+
+  if (!inventoryAdjustmentDraft.reason) {
+    return "Reason is required.";
+  }
+
+  if (
+    inventoryAdjustmentDraft.reason === "OTHER" &&
+    !String(inventoryAdjustmentDraft.note || "").trim()
+  ) {
+    return "Note is required for OTHER adjustments.";
+  }
+
+  return "";
+
+}
+
+function updateInventoryAdjustmentPreview(form, row) {
+
+  if (
+    !form ||
+    !row
+  ) {
+    return;
+  }
+
+  const delta =
+    Number(inventoryAdjustmentDraft.delta);
+
+  const validDelta =
+    Number.isInteger(delta) &&
+    delta !== 0;
+
+  const predicted =
+    validDelta
+      ? row.stock + delta
+      : row.stock;
+
+  const resultElement =
+    form.querySelector(
+      "[data-inventory-adjustment-result]"
+    );
+
+  if (resultElement) {
+    resultElement.textContent =
+      validDelta &&
+      predicted < 0
+        ? "Invalid"
+        : predicted.toLocaleString();
+  }
+
+  const submitButton =
+    form.querySelector(
+      "[data-inventory-adjustment-submit]"
+    );
+
+  if (submitButton) {
+    submitButton.disabled = Boolean(
+      inventoryAdjustmentSubmitting ||
+      getInventoryAdjustmentValidation(row)
+    );
+  }
+
+}
+
+async function submitInventoryAdjustment(rowId) {
+
+  if (inventoryAdjustmentSubmitting) return;
+
+  const row =
+    getInventoryRowById(rowId);
+
+  if (
+    !row ||
+    !row.canAdjust
+  ) {
+    inventoryAdjustmentMessage =
+      "This row cannot be adjusted safely.";
+    renderInventoryView();
+    return;
+  }
+
+  const validationMessage =
+    getInventoryAdjustmentValidation(row);
+
+  if (validationMessage) {
+    inventoryAdjustmentMessage =
+      validationMessage;
+    renderInventoryView();
+    return;
+  }
+
+  inventoryAdjustmentSubmitting = true;
+  inventoryAdjustmentMessage = "";
+  renderInventoryView();
+
+  try {
+    const data =
+      await adjustProductStock({
+        productId:
+          row.productId,
+        branchType:
+          row.source.variantField,
+        branchName:
+          row.variantName,
+        size:
+          row.sizeLabel,
+        delta:
+          Number(inventoryAdjustmentDraft.delta),
+        reason:
+          inventoryAdjustmentDraft.reason,
+        note:
+          inventoryAdjustmentDraft.note
+      });
+
+    const result =
+      data.adjustment;
+
+    selectedInventoryRowId = null;
+    resetInventoryAdjustmentDraft();
+    inventoryAdjustmentMessage =
+      result
+        ? `Saved: ${result.stockBefore} -> ${result.stockAfter}`
+        : "Stock adjustment saved.";
+  }
+
+  catch (error) {
+    inventoryAdjustmentMessage =
+      error.message ||
+      "Failed to adjust stock.";
+  }
+
+  finally {
+    inventoryAdjustmentSubmitting = false;
+    renderInventoryView();
+  }
+
+}
+
 function setupInventoryInteractions() {
 
   if (!inventoryContainer) return;
@@ -1472,14 +1766,135 @@ function setupInventoryInteractions() {
       const action =
         event.target.dataset.inventoryAction;
 
+      if (action === "adjust-stock") {
+        selectedInventoryRowId =
+          row.dataset.inventoryRowId;
+        resetInventoryAdjustmentDraft();
+        renderInventoryView();
+        return;
+      }
+
+      if (action === "cancel-adjustment") {
+        selectedInventoryRowId = null;
+        resetInventoryAdjustmentDraft();
+        renderInventoryView();
+        return;
+      }
+
       if (
         action === "view-product" ||
-        !event.target.closest("button")
+        (
+          !event.target.closest("button") &&
+          !event.target.closest("form")
+        )
       ) {
         openProductDetail(
           row.dataset.productId
         );
       }
+
+    }
+  );
+
+  inventoryContainer.addEventListener(
+    "input",
+    (event) => {
+
+      const field =
+        event.target.dataset
+          .inventoryAdjustmentField;
+
+      if (!field) return;
+
+      inventoryAdjustmentDraft = {
+        ...inventoryAdjustmentDraft,
+        [field]:
+          event.target.value
+      };
+
+      inventoryAdjustmentMessage = "";
+
+      const form =
+        event.target.closest(
+          ".admin-inventory-adjustment"
+        );
+
+      const row =
+        event.target.closest(
+          "[data-inventory-row-id]"
+        );
+
+      updateInventoryAdjustmentPreview(
+        form,
+        getInventoryRowById(
+          row?.dataset.inventoryRowId
+        )
+      );
+
+    }
+  );
+
+  inventoryContainer.addEventListener(
+    "change",
+    (event) => {
+
+      const field =
+        event.target.dataset
+          .inventoryAdjustmentField;
+
+      if (!field) return;
+
+      inventoryAdjustmentDraft = {
+        ...inventoryAdjustmentDraft,
+        [field]:
+          event.target.value
+      };
+
+      inventoryAdjustmentMessage = "";
+
+      const form =
+        event.target.closest(
+          ".admin-inventory-adjustment"
+        );
+
+      const row =
+        event.target.closest(
+          "[data-inventory-row-id]"
+        );
+
+      updateInventoryAdjustmentPreview(
+        form,
+        getInventoryRowById(
+          row?.dataset.inventoryRowId
+        )
+      );
+
+    }
+  );
+
+  inventoryContainer.addEventListener(
+    "submit",
+    async (event) => {
+
+      const form =
+        event.target.closest(
+          ".admin-inventory-adjustment"
+        );
+
+      if (!form) return;
+
+      event.preventDefault();
+
+      const row =
+        event.target.closest(
+          "[data-inventory-row-id]"
+        );
+
+      if (!row) return;
+
+      await submitInventoryAdjustment(
+        row.dataset.inventoryRowId
+      );
 
     }
   );
@@ -1508,6 +1923,7 @@ async function initAdmin() {
     setupProductListener();
     setupProductSearch();
     setupProductInteractions();
+    setupInventoryViews();
     setupInventoryFilters();
     setupInventorySearch();
     setupInventoryInteractions();

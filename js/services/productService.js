@@ -13,9 +13,7 @@ import {
   collection,
   onSnapshot,
   doc,
-  getDoc,
-  updateDoc,
-  runTransaction
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // ===============================
@@ -331,89 +329,9 @@ export async function updateProductStock(
   variantName,
   updatedSizes
 ) {
-
-  try {
-
-    if (!Array.isArray(updatedSizes)) {
-      throw new Error(
-        "Invalid sizes data"
-      );
-    }
-
-    const ref = doc(
-      db,
-      "products",
-      productId
-    );
-
-    // ===============================
-    // GET CURRENT PRODUCT
-    // ===============================
-    const snap =
-      await getDoc(ref);
-
-    if (!snap.exists()) {
-      throw new Error(
-        "Product not found"
-      );
-    }
-
-    const data =
-      snap.data();
-
-    const colors =
-      Array.isArray(data.colors)
-        ? [...data.colors]
-        : [];
-
-    // ===============================
-    // FIND TARGET VARIANT
-    // ===============================
-    const variantIndex =
-      colors.findIndex(
-        (variant) =>
-          String(variant.name)
-            .trim()
-            .toLowerCase() ===
-          String(variantName)
-            .trim()
-            .toLowerCase()
-      );
-
-    if (variantIndex === -1) {
-      throw new Error(
-        "Variant not found"
-      );
-    }
-
-    // ===============================
-    // UPDATE TARGET VARIANT
-    // ===============================
-    colors[variantIndex] = {
-      ...colors[variantIndex],
-      sizes: updatedSizes
-    };
-
-    // ===============================
-    // WRITE UPDATED COLORS
-    // ===============================
-    await updateDoc(ref, {
-      colors
-    });
-
-    console.log(
-      `Variant stock updated: ${productId}`
-    );
-
-  } catch (error) {
-
-    console.error(
-      "updateProductStock error:",
-      error
-    );
-
-    throw error;
-  }
+  throw new Error(
+    "Direct client stock writes are disabled"
+  );
 }
 
 // ===============================
@@ -528,162 +446,133 @@ export async function updateProductDetails(
 
 }
 
+async function getAdminToken() {
+
+  const user =
+    auth.currentUser;
+
+  if (!user) {
+    throw new Error(
+      "Admin not authenticated"
+    );
+  }
+
+  return user.getIdToken();
+
+}
+
+async function parseApiResponse(
+  response,
+  fallbackMessage
+) {
+
+  const data =
+    await response.json()
+      .catch(() => {
+        return {};
+      });
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error ||
+      fallbackMessage
+    );
+  }
+
+  return data;
+
+}
+
+export async function adjustProductStock(
+  adjustment
+) {
+
+  const token =
+    await getAdminToken();
+
+  const allowedPayload = {
+    productId:
+      adjustment.productId,
+    branchType:
+      adjustment.branchType,
+    branchName:
+      adjustment.branchName,
+    size:
+      adjustment.size,
+    delta:
+      adjustment.delta,
+    reason:
+      adjustment.reason
+  };
+
+  if (adjustment.note) {
+    allowedPayload.note =
+      adjustment.note;
+  }
+
+  const response =
+    await fetch(
+      `${API_BASE_URL}/admin/adjust-stock`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+          Authorization:
+            `Bearer ${token}`
+        },
+        body:
+          JSON.stringify(allowedPayload)
+      }
+    );
+
+  return parseApiResponse(
+    response,
+    "Failed to adjust stock"
+  );
+
+}
+
+export async function getInventoryAdjustments(
+  limit = 50
+) {
+
+  const token =
+    await getAdminToken();
+
+  const safeLimit =
+    Math.min(
+      Math.max(
+        Number.parseInt(limit, 10) || 50,
+        1
+      ),
+      100
+    );
+
+  const response =
+    await fetch(
+      `${API_BASE_URL}/admin/inventory-adjustments?limit=${safeLimit}`,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`
+        }
+      }
+    );
+
+  return parseApiResponse(
+    response,
+    "Failed to load inventory adjustments"
+  );
+
+}
+
 
 // ===============================
 // ATOMIC STOCK DEDUCTION
 // ===============================
 export async function deductStockTransaction(cart) {
-
-  try {
-
-    await runTransaction(
-      db,
-      async (transaction) => {
-
-        for (const item of cart) {
-
-          // ===============================
-          // PRODUCT REF
-          // ===============================
-          const productRef = doc(
-            db,
-            "products",
-            item.id
-          );
-
-          // ===============================
-          // FETCH LATEST SNAPSHOT
-          // ===============================
-          const snap =
-            await transaction.get(productRef);
-
-          if (!snap.exists()) {
-            throw new Error(
-              `${item.name} no longer exists`
-            );
-          }
-
-          const product =
-            snap.data();
-
-          // ===============================
-          // VALIDATE COLORS
-          // ===============================
-          const colors =
-            Array.isArray(product.colors)
-              ? [...product.colors]
-              : [];
-
-          // ===============================
-          // FIND VARIANT
-          // ===============================
-          const variantIndex =
-            colors.findIndex(
-              (variant) =>
-                String(variant.name)
-                  .trim()
-                  .toLowerCase() ===
-                String(item.color)
-                  .trim()
-                  .toLowerCase()
-            );
-
-          if (variantIndex === -1) {
-            throw new Error(
-              `${item.name} variant unavailable`
-            );
-          }
-
-          const variant =
-            colors[variantIndex];
-
-          // ===============================
-          // VALIDATE SIZES
-          // ===============================
-          const sizes =
-            Array.isArray(variant.sizes)
-              ? [...variant.sizes]
-              : [];
-
-          const sizeIndex =
-            sizes.findIndex(
-              (size) =>
-                String(size.size)
-                  .trim()
-                  .toUpperCase() ===
-                String(item.size)
-                  .trim()
-                  .toUpperCase()
-            );
-
-          if (sizeIndex === -1) {
-            throw new Error(
-              `${item.name} size unavailable`
-            );
-          }
-
-          const sizeData =
-            sizes[sizeIndex];
-
-          const currentStock =
-            Number(sizeData.stock) || 0;
-
-          // ===============================
-          // REVALIDATE STOCK
-          // ===============================
-          if (currentStock <= 0) {
-            throw new Error(
-              `${item.name} is sold out`
-            );
-          }
-
-          if (item.quantity > currentStock) {
-            throw new Error(
-              `${item.name} only has ${currentStock} left`
-            );
-          }
-
-          // ===============================
-          // DEDUCT STOCK
-          // ===============================
-          sizes[sizeIndex] = {
-            ...sizeData,
-            stock:
-              currentStock - item.quantity
-          };
-
-          // ===============================
-          // UPDATE VARIANT
-          // ===============================
-          colors[variantIndex] = {
-            ...variant,
-            sizes
-          };
-
-          // ===============================
-          // ATOMIC WRITE
-          // ===============================
-          transaction.update(
-            productRef,
-            { colors }
-          );
-
-        }
-
-      }
-    );
-
-    console.log(
-      "Atomic stock deduction success"
-    );
-
-  } catch (error) {
-
-    console.error(
-      "deductStockTransaction error:",
-      error
-    );
-
-    throw error;
-  }
+  throw new Error(
+    "Direct client stock deduction is disabled"
+  );
 }

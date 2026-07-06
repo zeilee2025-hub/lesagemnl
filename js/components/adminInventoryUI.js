@@ -125,7 +125,8 @@ export function filterInventoryRows(
 
 export function renderInventory(
   container,
-  rows
+  rows,
+  options = {}
 ) {
 
   if (!container) return;
@@ -140,7 +141,18 @@ export function renderInventory(
     return;
   }
 
-  container.innerHTML = rows.map(row => {
+  container.innerHTML = `
+    ${
+      options.message
+        ? `
+          <p class="admin-inventory__message">
+            ${escapeHtml(options.message)}
+          </p>
+        `
+        : ""
+    }
+
+    ${rows.map(row => {
     return `
       <article
         class="admin-inventory-row"
@@ -200,13 +212,121 @@ export function renderInventory(
           ${escapeHtml(row.stockLabel)}
         </span>
 
-        <button
-          type="button"
-          class="admin-inventory-row__view"
-          data-inventory-action="view-product"
-        >
-          View Product
-        </button>
+        <div class="admin-inventory-row__actions">
+          ${
+            row.canAdjust
+              ? `
+                <button
+                  type="button"
+                  class="admin-inventory-row__view"
+                  data-inventory-action="adjust-stock"
+                >
+                  Adjust
+                </button>
+              `
+              : `
+                <span class="admin-inventory-row__locked">
+                  Read Only
+                </span>
+              `
+          }
+
+          <button
+            type="button"
+            class="admin-inventory-row__view"
+            data-inventory-action="view-product"
+          >
+            View Product
+          </button>
+        </div>
+
+        ${
+          options.selectedRowId === row.id
+            ? renderAdjustmentPanel(
+              row,
+              options
+            )
+            : ""
+        }
+      </article>
+    `;
+  }).join("")}
+  `;
+
+}
+
+export function renderInventoryHistory(
+  container,
+  adjustments = [],
+  options = {}
+) {
+
+  if (!container) return;
+
+  if (options.loading) {
+    container.innerHTML = `
+      <p class="admin-inventory__empty">
+        Loading adjustment history...
+      </p>
+    `;
+
+    return;
+  }
+
+  if (!adjustments.length) {
+    container.innerHTML = `
+      <p class="admin-inventory__empty">
+        No stock adjustments yet.
+      </p>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = adjustments.map(adjustment => {
+    return `
+      <article class="admin-inventory-history">
+        <div>
+          <span class="admin-inventory-row__eyebrow">
+            ${escapeHtml(formatAdjustmentDate(adjustment.createdAt))}
+          </span>
+
+          <strong>
+            ${escapeHtml(adjustment.productName || adjustment.productId)}
+          </strong>
+
+          <span>
+            ${escapeHtml(adjustment.branchName)}
+            /
+            ${escapeHtml(adjustment.size)}
+          </span>
+        </div>
+
+        <div class="admin-inventory-history__delta">
+          <strong>
+            ${formatSignedNumber(adjustment.delta)}
+          </strong>
+
+          <span>
+            ${Number(adjustment.stockBefore).toLocaleString()}
+            ->
+            ${Number(adjustment.stockAfter).toLocaleString()}
+          </span>
+        </div>
+
+        <div>
+          <span class="admin-inventory-row__eyebrow">
+            Reason
+          </span>
+
+          <strong>
+            ${escapeHtml(adjustment.reason)}
+          </strong>
+
+          <span>
+            ${escapeHtml(adjustment.adminEmail || adjustment.adminUid || "Admin")}
+          </span>
+        </div>
       </article>
     `;
   }).join("");
@@ -268,8 +388,38 @@ function createInventoryRow(
       sizeLabel
     },
     stockStatus,
-    stockLabel: getStockLabel(stockStatus)
+    stockLabel: getStockLabel(stockStatus),
+    canAdjust:
+      canAdjustInventoryRow(
+        product,
+        variantName,
+        sizeLabel,
+        stockResult,
+        source
+      )
   };
+
+}
+
+function canAdjustInventoryRow(
+  product,
+  variantName,
+  sizeLabel,
+  stockResult,
+  source
+) {
+
+  return Boolean(
+    product?.id &&
+    variantName &&
+    sizeLabel &&
+    sizeLabel !== "No sizes" &&
+    !stockResult.malformedStock &&
+    (
+      source?.field === "colors" ||
+      source?.field === "variants"
+    )
+  );
 
 }
 
@@ -356,6 +506,184 @@ function compareInventoryRows(a, b) {
     a.variantName.localeCompare(b.variantName),
     a.sizeLabel.localeCompare(b.sizeLabel)
   ].find(result => result !== 0) || 0;
+
+}
+
+function renderAdjustmentPanel(
+  row,
+  options
+) {
+
+  const draft =
+    options.adjustmentDraft || {};
+
+  const deltaValue =
+    String(draft.delta || "");
+
+  const delta =
+    Number(deltaValue);
+
+  const validDelta =
+    Number.isInteger(delta) &&
+    delta !== 0;
+
+  const predicted =
+    validDelta
+      ? row.stock + delta
+      : row.stock;
+
+  const invalidResult =
+    validDelta &&
+    predicted < 0;
+
+  const disabled =
+    options.submitting ||
+    !validDelta ||
+    invalidResult ||
+    !draft.reason ||
+    (
+      draft.reason === "OTHER" &&
+      !String(draft.note || "").trim()
+    );
+
+  return `
+    <form class="admin-inventory-adjustment">
+      ${
+        options.message
+          ? `
+            <p class="admin-inventory-adjustment__message">
+              ${escapeHtml(options.message)}
+            </p>
+          `
+          : ""
+      }
+
+      <div class="admin-inventory-adjustment__context">
+        <span>
+          Current Stock:
+          <strong>${row.stock.toLocaleString()}</strong>
+        </span>
+
+        <span>
+          Result:
+          <strong>
+            <span data-inventory-adjustment-result>
+            ${
+              invalidResult
+                ? "Invalid"
+                : predicted.toLocaleString()
+            }
+            </span>
+          </strong>
+        </span>
+      </div>
+
+      <label>
+        <span>Adjustment</span>
+        <input
+          type="number"
+          name="delta"
+          step="1"
+          value="${escapeAttribute(deltaValue)}"
+          placeholder="+5 or -2"
+          data-inventory-adjustment-field="delta"
+        />
+      </label>
+
+      <label>
+        <span>Reason</span>
+        <select
+          name="reason"
+          data-inventory-adjustment-field="reason"
+        >
+          <option value="">Select reason</option>
+          ${renderReasonOption("RESTOCK", draft.reason)}
+          ${renderReasonOption("CORRECTION", draft.reason)}
+          ${renderReasonOption("DAMAGED", draft.reason)}
+          ${renderReasonOption("RETURN", draft.reason)}
+          ${renderReasonOption("OTHER", draft.reason)}
+        </select>
+      </label>
+
+      <label>
+        <span>Note</span>
+        <textarea
+          name="note"
+          maxlength="300"
+          rows="3"
+          data-inventory-adjustment-field="note"
+        >${escapeHtml(draft.note || "")}</textarea>
+      </label>
+
+      <div class="admin-inventory-adjustment__actions">
+        <button
+          type="submit"
+          data-inventory-adjustment-submit
+          ${disabled ? "disabled" : ""}
+        >
+          Save Adjustment
+        </button>
+
+        <button
+          type="button"
+          data-inventory-action="cancel-adjustment"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  `;
+
+}
+
+function renderReasonOption(
+  reason,
+  selectedReason
+) {
+
+  return `
+    <option
+      value="${reason}"
+      ${selectedReason === reason ? "selected" : ""}
+    >
+      ${reason}
+    </option>
+  `;
+
+}
+
+function formatSignedNumber(value) {
+
+  const number =
+    Number(value) || 0;
+
+  return number > 0
+    ? `+${number.toLocaleString()}`
+    : number.toLocaleString();
+
+}
+
+function formatAdjustmentDate(value) {
+
+  if (!value) return "Pending";
+
+  const date =
+    new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Pending";
+  }
+
+  return date.toLocaleString(
+    undefined,
+    {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit"
+    }
+  );
 
 }
 
