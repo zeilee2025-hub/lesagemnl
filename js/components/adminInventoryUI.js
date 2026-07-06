@@ -3,7 +3,6 @@ import {
   escapeHtml,
   getPrimaryImage,
   getProductName,
-  getProductVariantSource,
   getSizeLabel
 } from "./adminProductsUI.js";
 
@@ -14,12 +13,36 @@ export function deriveInventoryRows(products = []) {
   return products.flatMap(product => {
 
     const variantSource =
-      getProductVariantSource(product);
+      getInventoryVariantSource(product);
 
     const variants =
       variantSource.variants;
 
     if (!variants.length) {
+      const sizes =
+        Array.isArray(product?.sizes)
+          ? product.sizes
+          : [];
+
+      if (sizes.length) {
+        return sizes.map((size, sizeIndex) => {
+          return createInventoryRow(
+            product,
+            {
+              name: "Default",
+              value: "#000",
+              sizes
+            },
+            size,
+            {
+              field: null,
+              variantIndex: -1,
+              sizeIndex
+            }
+          );
+        });
+      }
+
       return [createInventoryRow(
         product,
         {
@@ -74,6 +97,25 @@ export function deriveInventoryRows(products = []) {
     });
 
   }).sort(compareInventoryRows);
+
+}
+
+function getInventoryVariantSource(product) {
+
+  if (
+    Array.isArray(product?.colors) &&
+    product.colors.length
+  ) {
+    return {
+      field: "colors",
+      variants: product.colors
+    };
+  }
+
+  return {
+    field: null,
+    variants: []
+  };
 
 }
 
@@ -143,7 +185,8 @@ export function renderInventory(
 
   container.innerHTML = `
     ${
-      options.message
+      options.message &&
+      !options.selectedRowId
         ? `
           <p class="admin-inventory__message">
             ${escapeHtml(options.message)}

@@ -1713,9 +1713,9 @@ async function submitInventoryAdjustment(rowId) {
         branchType:
           row.source.variantField,
         branchName:
-          row.variantName,
+          row.source.variantName,
         size:
-          row.sizeLabel,
+          row.source.sizeLabel,
         delta:
           Number(inventoryAdjustmentDraft.delta),
         reason:
