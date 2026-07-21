@@ -1,0 +1,188 @@
+/* ==========================
+   ADMIN PAGE LAYOUT
+========================== */
+
+.admin {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+
+/* ==========================
+   ADMIN HEADER
+========================== */
+
+.admin__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 28px;
+}
+
+.admin__title {
+  margin-bottom: 4px;
+
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.admin__subtitle {
+  font-size: 14px;
+  color: #777;
+}
+
+
+/* ==========================
+   ADMIN SEARCH
+========================== */
+
+.admin__search {
+  margin-bottom: 22px;
+}
+
+.admin__search-input {
+  width: 100%;
+  padding: 12px 14px;
+
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+
+  outline: none;
+
+  font-size: 14px;
+
+  transition: all 0.2s ease;
+}
+
+.admin__search-input:focus {
+  border-color: #111;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04);
+}
+
+
+/* ==========================
+   ADMIN FILTERS
+========================== */
+
+.admin__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin-bottom: 16px;
+}
+
+.admin__filter-btn {
+  padding: 8px 14px;
+
+  border: 1px solid #ddd;
+  border-radius: 999px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  transition: all 0.2s ease;
+}
+
+.admin__filter-btn:hover {
+  border-color: #111;
+}
+
+.admin__filter-btn.active {
+  border-color: #111;
+
+  background: #111;
+  color: #fff;
+}
+
+
+/* ==========================
+   ADMIN HEADER TOP
+========================== */
+
+.admin__header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 20px;
+}
+
+
+/* ==========================
+   LOGOUT BUTTON
+========================== */
+
+.admin__logout-btn {
+  border: 1px solid #ddd;
+  background: white;
+
+  padding: 10px 18px;
+
+  border-radius: 999px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  transition: all 0.2s ease;
+}
+
+.admin__logout-btn:hover {
+  background: #111;
+  color: white;
+}
+
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media (max-width: 768px) {
+
+  .admin {
+    padding: 28px 16px 60px;
+  }
+
+  .admin__header {
+    margin-bottom: 24px;
+  }
+
+  .admin__header-top {
+    align-items: center;
+  }
+
+  .admin__title {
+    font-size: 24px;
+  }
+
+  .admin__subtitle {
+    max-width: 220px;
+  }
+
+  .admin__filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+
+    padding-bottom: 4px;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .admin__filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin__filter-btn {
+    flex-shrink: 0;
+  }
+
+}

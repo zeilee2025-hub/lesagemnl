@@ -252,6 +252,27 @@
   font-size: 10px;
 }
 
+.product-card__sold-out-badge {
+  position: absolute;
+  top: 12px;
+  right: auto;
+  left: 12px;
+  z-index: 4;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 1px;
+  background: rgba(82, 82, 82, 0.88);
+  box-shadow: none;
+  color: var(--color-white);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
 
 /* =========================
    QUICK ADD COLORS
@@ -290,6 +311,12 @@
 ========================= */
 
 @media (max-width: 768px) {
+
+  .product-card__sold-out-badge {
+    top: 8px;
+    right: auto;
+    left: 8px;
+  }
 
   .product-card__swatches {
   gap: 10px;

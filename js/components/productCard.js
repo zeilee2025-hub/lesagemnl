@@ -25,6 +25,38 @@ export function createProductCard(product, options = {}) {
 
   const hasColors = variants.length > 1;
 
+  const hasUnambiguousStockData =
+    Array.isArray(rawVariants) &&
+    rawVariants.length > 0 &&
+    rawVariants.every(variant =>
+      Array.isArray(variant?.sizes) &&
+      variant.sizes.length > 0 &&
+      variant.sizes.every(sizeItem => {
+        const stock = sizeItem?.stock;
+
+        return (
+          sizeItem !== null &&
+          typeof sizeItem === "object" &&
+          !Array.isArray(sizeItem) &&
+          Object.prototype.hasOwnProperty.call(sizeItem, "stock") &&
+          (
+            (typeof stock === "number" && Number.isFinite(stock)) ||
+            (
+              typeof stock === "string" &&
+              stock.trim() !== "" &&
+              Number.isFinite(Number(stock))
+            )
+          )
+        );
+      })
+    );
+
+  const isSoldOut =
+    hasUnambiguousStockData &&
+    !rawVariants.some(variant =>
+      variant.sizes.some(sizeItem => sizeItem.stock > 0)
+    );
+
   const frontImage = getProductImage(product, { type: "front" });
   const backImage =
     getProductImage(product, { type: "back" }) || frontImage;
@@ -33,6 +65,11 @@ export function createProductCard(product, options = {}) {
     <div class="product-card" data-id="${product.id}">
       
       <div class="product-card__media">
+        ${
+          isSoldOut
+            ? '<span class="product-card__sold-out-badge">SOLD OUT</span>'
+            : ""
+        }
         <img
   src="${frontImage}"
   class="product-card__image product-card__image--front"
