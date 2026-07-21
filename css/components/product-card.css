@@ -148,6 +148,10 @@
   opacity: 0.7;
 }
 
+.product-card__sold-out-status {
+  display: none;
+}
+
 
 /* =========================
    SWATCHES
@@ -313,9 +317,7 @@
 @media (max-width: 768px) {
 
   .product-card__sold-out-badge {
-    top: 8px;
-    right: auto;
-    left: 8px;
+    display: none;
   }
 
   .product-card__swatches {
@@ -398,6 +400,30 @@
   margin-top: 1px;
 
   font-size: 11px;
+}
+
+.product-card:has(.product-card__sold-out-badge) .product-card__price {
+  display: none;
+}
+
+.product-card__sold-out-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  margin: 6px auto 0;
+  padding: 3px 6px;
+  border: 0;
+  border-radius: 1px;
+  background: rgba(82, 82, 82, 0.88);
+  box-shadow: none;
+  color: var(--color-white);
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
 }
 
 }

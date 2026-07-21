@@ -103,6 +103,11 @@ export function createProductCard(product, options = {}) {
       <div class="product-card__info">
         <p class="product-card__title">${product.name}</p>
         <p class="product-card__price">₱${product.price}</p>
+        ${
+          isSoldOut
+            ? '<span class="product-card__sold-out-status">SOLD OUT</span>'
+            : ""
+        }
 
         ${
           hasColors
