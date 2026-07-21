@@ -2,8 +2,20 @@
 // LOOKBOOK CAROUSEL
 // ==========================
 
+const carouselCleanups = new WeakMap();
+
 export function renderLookbookCarousel(root) {
   if (!root) return;
+
+  const previousCleanup =
+    carouselCleanups.get(root);
+
+  if (previousCleanup) {
+    previousCleanup();
+  }
+
+  const eventController =
+    new AbortController();
 
   // ==========================
 //  DATA
@@ -12,28 +24,28 @@ const slides = [
 
   [
     window.innerWidth <= 900
-      ? "/assets/images/lookbook/lb1-mobile.webp"
-      : "/assets/images/lookbook/lb1.webp"
+      ? "./assets/images/lookbook/lb1-mobile.webp"
+      : "./assets/images/lookbook/lb1.webp"
   ],
 
   [
-    "/assets/images/lookbook/lb1a.webp",
-    "/assets/images/lookbook/lb1b.webp"
+    "./assets/images/lookbook/lb1a.webp",
+    "./assets/images/lookbook/lb1b.webp"
   ],
 
   [
-    "/assets/images/lookbook/lb2a.webp",
-    "/assets/images/lookbook/lb2b.webp"
+    "./assets/images/lookbook/lb2a.webp",
+    "./assets/images/lookbook/lb2b.webp"
   ],
 
   [
-    "/assets/images/lookbook/lb3a.webp",
-    "/assets/images/lookbook/lb3b.webp"
+    "./assets/images/lookbook/lb3a.webp",
+    "./assets/images/lookbook/lb3b.webp"
   ],
 
   [
-    "/assets/images/lookbook/lb4a.webp",
-    "/assets/images/lookbook/lb4b.webp"
+    "./assets/images/lookbook/lb4a.webp",
+    "./assets/images/lookbook/lb4b.webp"
   ],
 
 ];
@@ -136,15 +148,17 @@ const slides = [
   // ==========================
   //  STATE
   // ==========================
-let currentIndex = 0;
+let currentIndex = -1;
 let autoTimer = null;
-let resumeTimer = null;
+let startTimer = null;
+let unlockTimer = null;
+let progressFrame = null;
+let progressStartFrame = null;
 let isAnimating = false;
 let hasStarted = false;
+let isCarouselVisible = false;
 
-const AUTO_DELAY = 8000;
-
-const RESUME_DELAY = 2500;
+const AUTO_DELAY = 5000;
 
   // ==========================
   //  DOTS
@@ -172,6 +186,8 @@ const RESUME_DELAY = 2500;
 
 function resetProgressBars() {
 
+  clearProgressFrames();
+
   progressBars.forEach((bar) => {
 
     bar.style.transition = "none";
@@ -186,22 +202,50 @@ function resetProgressBars() {
 
 }
 
-function startProgressBar(index) {
+function clearProgressFrames() {
+
+  if (progressFrame !== null) {
+
+    cancelAnimationFrame(progressFrame);
+    progressFrame = null;
+
+  }
+
+  if (progressStartFrame !== null) {
+
+    cancelAnimationFrame(progressStartFrame);
+    progressStartFrame = null;
+
+  }
+
+}
+
+function startProgressBar(index, onStart) {
 
   const bar =
     progressBars[index];
 
   if (!bar) return;
 
-  requestAnimationFrame(() => {
+  clearProgressFrames();
 
-    requestAnimationFrame(() => {
+  progressFrame = requestAnimationFrame(() => {
 
-      bar.style.transition =
-        `transform ${AUTO_DELAY}ms linear`;
+    progressFrame = null;
+
+    bar.style.transition =
+      `transform ${AUTO_DELAY}ms linear`;
+
+    progressStartFrame = requestAnimationFrame(() => {
+
+      progressStartFrame = null;
 
       bar.style.transform =
         "scaleX(1)";
+
+      if (onStart) {
+        onStart();
+      }
 
     });
 
@@ -211,12 +255,24 @@ function startProgressBar(index) {
 
 function goToSlide(index) {
 
-  //  prevent overlap
+  //  validate before changing state
   if (
-    isAnimating &&
-    index !== currentIndex
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= slidesEl.length ||
+    isAnimating ||
+    index === currentIndex
   ) {
-    return;
+    return false;
+  }
+
+  stopAuto(false);
+
+  if (unlockTimer) {
+
+    clearTimeout(unlockTimer);
+    unlockTimer = null;
+
   }
 
   isAnimating = true;
@@ -262,22 +318,15 @@ if (nextSlide) {
 
   dots[index].classList.add("active");
 
-  //  reset all progress bars
-  resetProgressBars();
-
-  //  don't animate final slide
-  if (index < slidesEl.length - 1) {
-
-    startProgressBar(index);
-
-  }
-
   //  unlock after transition
-  setTimeout(() => {
+  unlockTimer = setTimeout(() => {
 
     isAnimating = false;
+    unlockTimer = null;
 
   }, 700);
+
+  return true;
 
 }
 
@@ -288,26 +337,50 @@ if (nextSlide) {
 
     stopAuto(true);
 
-    autoTimer = setTimeout(() => {
+    if (
+      currentIndex < 0 ||
+      !isCarouselVisible ||
+      document.hidden
+    ) {
+      return;
+    }
 
-      //  stop forever at last slide
-      if (
-        currentIndex >= slidesEl.length - 1
-      ) {
+    const cycleIndex = currentIndex;
 
-        stopAuto();
-        return;
+    startProgressBar(
+      cycleIndex,
+      () => {
+
+        if (
+          currentIndex !== cycleIndex ||
+          !isCarouselVisible ||
+          document.hidden
+        ) {
+          return;
+        }
+
+        autoTimer = setTimeout(() => {
+
+          autoTimer = null;
+
+          const nextIndex =
+            currentIndex >= slidesEl.length - 1
+              ? 0
+              : currentIndex + 1;
+
+          if (
+            goToSlide(nextIndex)
+          ) {
+
+            //  schedule next slide
+            startAuto();
+
+          }
+
+        }, AUTO_DELAY);
 
       }
-
-      currentIndex++;
-
-      goToSlide(currentIndex);
-
-      //  schedule next slide
-      startAuto();
-
-    }, AUTO_DELAY);
+    );
 
   }
 
@@ -321,13 +394,15 @@ if (nextSlide) {
 
   }
 
-  if (resumeTimer) {
+  if (startTimer) {
 
-    clearTimeout(resumeTimer);
+    clearTimeout(startTimer);
 
-    resumeTimer = null;
+    startTimer = null;
 
   }
+
+  clearProgressFrames();
 
   //  only reset when needed
   if (resetProgress) {
@@ -340,26 +415,7 @@ if (nextSlide) {
 
 function resumeAuto() {
 
-  //  clear old resume timer
-  if (resumeTimer) {
-
-    clearTimeout(resumeTimer);
-
-  }
-
-  //  delay restart
-  resumeTimer = setTimeout(() => {
-
-    //  don't restart at final slide
-    if (
-      currentIndex >= slidesEl.length - 1
-    ) {
-      return;
-    }
-
-    startAuto();
-
-  }, RESUME_DELAY);
+  startAuto();
 
 }
 
@@ -370,15 +426,15 @@ function resumeAuto() {
 
   dot.addEventListener("click", () => {
 
-    stopAuto();
-
-    goToSlide(
+    if (goToSlide(
       Number(dot.dataset.index)
-    );
+    )) {
 
-    resumeAuto();
+      resumeAuto();
 
-  });
+    }
+
+  }, { signal: eventController.signal });
 
 });
 
@@ -387,37 +443,37 @@ function resumeAuto() {
   // ==========================
   prevBtn.addEventListener("click", () => {
 
-  stopAuto();
+  if (goToSlide(
+    Math.max(0, currentIndex - 1)
+  )) {
 
-  currentIndex =
-    Math.max(0, currentIndex - 1);
+    resumeAuto();
 
-  goToSlide(currentIndex);
+  }
 
-  resumeAuto();
-
-});
+}, { signal: eventController.signal });
 
   nextBtn.addEventListener("click", () => {
 
-  stopAuto();
-
-  currentIndex =
+  if (goToSlide(
     Math.min(
       slidesEl.length - 1,
       currentIndex + 1
-    );
+    )
+  )) {
 
-  goToSlide(currentIndex);
+    resumeAuto();
 
-  resumeAuto();
+  }
 
-});
+}, { signal: eventController.signal });
 
   // ==========================
   //  TOUCH SWIPE
   // ==========================
   let touchStartX = 0;
+  let touchStartY = 0;
+  let isTouching = false;
 
   track.addEventListener(
   "touchstart",
@@ -426,28 +482,46 @@ function resumeAuto() {
     touchStartX =
       e.touches[0].clientX;
 
-    stopAuto();
+    touchStartY =
+      e.touches[0].clientY;
+
+    isTouching = true;
 
   },
-  { passive: true }
+  {
+    passive: true,
+    signal: eventController.signal
+  }
 );
 
 track.addEventListener(
   "touchend",
   (e) => {
 
-    const diff =
+    if (!isTouching) return;
+
+    isTouching = false;
+
+    const diffX =
       e.changedTouches[0].clientX -
       touchStartX;
 
+    const diffY =
+      e.changedTouches[0].clientY -
+      touchStartY;
+
     const threshold = 70;
+    let destination = null;
 
     // ==========================
     //  PREV
     // ==========================
-    if (diff > threshold) {
+    if (
+      diffX > threshold &&
+      Math.abs(diffX) > Math.abs(diffY)
+    ) {
 
-      currentIndex =
+      destination =
         Math.max(0, currentIndex - 1);
 
     }
@@ -455,9 +529,12 @@ track.addEventListener(
     // ==========================
     //  NEXT
     // ==========================
-    else if (diff < -threshold) {
+    else if (
+      diffX < -threshold &&
+      Math.abs(diffX) > Math.abs(diffY)
+    ) {
 
-      currentIndex =
+      destination =
         Math.min(
           slidesEl.length - 1,
           currentIndex + 1
@@ -465,28 +542,32 @@ track.addEventListener(
 
     }
 
-    goToSlide(currentIndex);
+    if (
+      destination !== null &&
+      goToSlide(destination)
+    ) {
 
-    resumeAuto();
+      resumeAuto();
+
+    }
 
   },
-  { passive: true }
+  {
+    passive: true,
+    signal: eventController.signal
+  }
 );
 
-  // ==========================
-  //  HOVER PAUSE
-  // ==========================
-  root.addEventListener(
-    "mouseenter",
-    stopAuto
-  );
-
-  root.addEventListener(
-  "mouseleave",
+track.addEventListener(
+  "touchcancel",
   () => {
 
-    resumeAuto();
+    isTouching = false;
 
+  },
+  {
+    passive: true,
+    signal: eventController.signal
   }
 );
 
@@ -514,16 +595,22 @@ const observer =
           entry.intersectionRatio >= 0.55
         ) {
 
+          isCarouselVisible = true;
+
           //  only start once
           if (!hasStarted) {
 
             hasStarted = true;
 
-            setTimeout(() => {
+            stopAuto(true);
+
+            startTimer = setTimeout(() => {
+
+              startTimer = null;
 
               if (
-                currentIndex <
-                slidesEl.length - 1
+                isCarouselVisible &&
+                !document.hidden
               ) {
 
                 startAuto();
@@ -531,6 +618,10 @@ const observer =
               }
 
             }, 1200);
+
+          } else {
+
+            resumeAuto();
 
           }
 
@@ -543,7 +634,8 @@ const observer =
           entry.intersectionRatio < 0.15
         ) {
 
-          stopAuto(false);
+          isCarouselVisible = false;
+          stopAuto(true);
 
         }
 
@@ -558,5 +650,57 @@ const observer =
   );
 
 observer.observe(root);
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if (document.hidden) {
+
+      stopAuto(true);
+      return;
+
+    }
+
+    if (isCarouselVisible) {
+
+      startAuto();
+
+    }
+
+  },
+  { signal: eventController.signal }
+);
+
+const cleanupCarousel = () => {
+
+  stopAuto(true);
+
+  if (unlockTimer) {
+
+    clearTimeout(unlockTimer);
+    unlockTimer = null;
+
+  }
+
+  isAnimating = false;
+  observer.disconnect();
+  eventController.abort();
+
+  if (
+    carouselCleanups.get(root) ===
+    cleanupCarousel
+  ) {
+
+    carouselCleanups.delete(root);
+
+  }
+
+};
+
+carouselCleanups.set(
+  root,
+  cleanupCarousel
+);
 
 }
